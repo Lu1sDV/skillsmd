@@ -45,7 +45,7 @@ Fall back to keyword if AI returns few results.
 
 ## Present & Choose
 
-Show ranked table, then **use `AskUserQuestion` to let user pick** - never auto-select.
+Show **ALL** found skills in the ranked table — never truncate or omit results. Then **use `AskUserQuestion` to let user pick** - never auto-select.
 
 Always include a **"Compare to find best"** option in addition to numbered skill choices:
 
