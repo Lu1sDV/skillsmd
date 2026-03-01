@@ -2,7 +2,8 @@
 name: test-engineering
 description: >
   Use when designing test strategies, planning coverage across the test pyramid,
-  evaluating automation candidates, or improving test quality.
+  evaluating automation candidates, or improving test quality. Also use when
+  diagnosing flaky tests, slow test suites, or coverage gaps.
   Framework-agnostic strategy and automation planning.
 ---
 
@@ -228,13 +229,9 @@ Present the test strategy in this format:
 
 | When | Hand off to |
 |------|-------------|
-| Strategy approved, ready to write tests | TDD skill with test scenario list |
-| E2E browser tests needed | Playwright/Cypress framework docs |
+| Strategy approved, ready to write tests | **REQUIRED SUB-SKILL:** TDD skill with test scenario list |
+| E2E browser tests needed | **REQUIRED SUB-SKILL:** Playwright/Cypress framework docs |
 | Performance baselines needed | Load testing tools (k6, Artillery) |
 | CI pipeline configuration | Project's CI config file |
 
-## Credits
-
-Merged from community skills:
-- [testing-strategies](https://github.com/1Mangesh1/dev-skills-collection/tree/main/skills/testing-strategies) by @1Mangesh1
-- [automation-strategy](https://github.com/melodic-software/claude-code-plugins/tree/main/plugins/test-strategy/skills/automation-strategy) by @melodic-software
+<!-- Credits: Merged from testing-strategies by @1Mangesh1 and automation-strategy by @melodic-software -->

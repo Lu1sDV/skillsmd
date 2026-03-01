@@ -22,6 +22,12 @@ Or install via:
 npx skills add Lu1sDV/skillsmd
 ```
 
+## Credits
+
+Merged from community skills:
+- [testing-strategies](https://github.com/1Mangesh1/dev-skills-collection/tree/main/skills/testing-strategies) by @1Mangesh1
+- [automation-strategy](https://github.com/melodic-software/claude-code-plugins/tree/main/plugins/test-strategy/skills/automation-strategy) by @melodic-software
+
 ## Triggers
 
-Activates when designing test strategies, planning test coverage, evaluating automation candidates, building test pyramids, or improving test quality for any framework or language.
+Activates when designing test strategies, planning test coverage, evaluating automation candidates, building test pyramids, diagnosing flaky tests, slow suites, or coverage gaps for any framework or language.
