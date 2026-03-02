@@ -40,6 +40,7 @@ Response: `data.data[]` → `score` (0-1) + `skill` object. **Skip entries with 
 |------------|------|
 | Specific tech ("react testing") | Keyword, `sortBy=stars` |
 | Natural language / vague | AI semantic |
+| "newest", "latest", "recent skills" | Keyword, `sortBy=recent` |
 
 Fall back to keyword if AI returns few results.
 
