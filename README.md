@@ -31,6 +31,7 @@ Alternatively, directly install a plugin via:
 /plugin install ofelia@Lu1sDV/skillsmd
 /plugin install skillsmp-search@Lu1sDV/skillsmd
 /plugin install telethon-development@Lu1sDV/skillsmd
+/plugin install ssrf-testing@Lu1sDV/skillsmd
 ```
 
 After installing the plugin, you can use the skill by just mentioning it. For instance, if you install the `zeroclaw` plugin from the marketplace, you can ask Claude Code to do something like: "Use the zeroclaw skill to deploy my agent infrastructure"
@@ -48,6 +49,7 @@ cp -r skillsmd/web-performance-optimization ~/.claude/skills/
 cp -r skillsmd/ofelia ~/.claude/skills/
 cp -r skillsmd/metaskills/skillsmp-search ~/.claude/skills/
 cp -r skillsmd/telethon-development ~/.claude/skills/
+cp -r skillsmd/ssrf-testing ~/.claude/skills/
 ```
 
 ### npx
@@ -83,3 +85,4 @@ Or invoke directly:
 | **ofelia** | `ofelia/` | Docker job scheduler — cron for containers via INI files or Docker labels |
 | **skillsmp-search** | `metaskills/skillsmp-search/` | Search 11,000+ community skills and install them locally |
 | **telethon-development** | `telethon-development/` | Telethon MTProto client — FloodWait handling, mocking, session management, DB integration |
+| **ssrf-testing** | `ssrf-testing/` | SSRF testing and prevention — detection, cloud metadata exploitation, filter bypass, defense strategies |
