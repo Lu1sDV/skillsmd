@@ -7,6 +7,21 @@ description: Use when developing, debugging, deploying, or maintaining any CTFd 
 
 CTFd is a Python 3.11 Flask-based Capture The Flag platform. SQLAlchemy 1.4, Redis, Jinja2 themes, plugin system.
 
+## When to Use
+
+- Developing CTFd plugins (custom challenge types, scoring, auth)
+- Debugging CSRF 302 errors, API 500 responses, or session issues
+- Standing up or modifying the Docker Compose stack (nginx, MySQL, Redis)
+- Customizing Jinja2 themes or static assets
+- Writing pytest tests against CTFd's Flask test infrastructure
+- Running database migrations with SQLAlchemy 1.4
+- Diagnosing nginx reverse proxy misconfigurations
+
+## When NOT to Use
+
+- Other CTF platforms (CTFx, FBCTF) — different codebases
+- General Flask development unrelated to CTFd
+
 ## Architecture
 
 ```
@@ -15,7 +30,7 @@ nginx → ctfd (gunicorn+gevent) → MySQL/SQLite + Redis
          └── themes/           # Jinja2 theme directories
 ```
 
-## Quick Commands
+## Quick Reference
 
 ```bash
 # Docker stack

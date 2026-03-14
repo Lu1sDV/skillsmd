@@ -83,7 +83,23 @@ Source: [`docs/README.md`](https://github.com/zeroclaw-labs/zeroclaw/blob/main/d
 
 ## Install
 
-Copy `zeroclaw/` into `~/.claude/skills/`.
+### Claude Code Plugin
+
+```
+/plugin install zeroclaw@Lu1sDV/skillsmd
+```
+
+### npx
+
+```bash
+npx skills add Lu1sDV/skillsmd zeroclaw
+```
+
+### Manual
+
+```bash
+cp -r zeroclaw ~/.claude/skills/
+```
 
 ## Triggers
 

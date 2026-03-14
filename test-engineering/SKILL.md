@@ -182,6 +182,18 @@ test_loginUser_withInvalidPassword_returns401
 | Missing boundary values | Off-by-one, null bugs | Test empty, null, min, max |
 | No concurrency tests | Race conditions in prod | Test parallel access paths |
 
+## Common Mistakes
+
+| Mistake | Fix |
+|---------|-----|
+| Testing implementation details instead of behavior | Assert on outputs and side effects, not internal state |
+| 100% coverage target | Diminishing returns past 80%; focus on critical paths |
+| E2E tests for edge cases | Use unit tests for edge cases; E2E for happy paths |
+| No test naming convention | Use pattern: `should <expected> when <condition>` |
+| Flaky tests left in suite | Quarantine immediately, fix within sprint, or delete |
+| Mocking everything in integration tests | Integration tests should use real dependencies where feasible |
+| Skipping test pyramid review | Audit distribution quarterly: 70% unit / 20% integration / 10% E2E |
+
 ## Troubleshooting
 
 | Problem | Solution |

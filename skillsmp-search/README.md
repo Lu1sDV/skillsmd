@@ -9,11 +9,30 @@ A Claude Code skill that searches [SkillsMP](https://skillsmp.com)'s 11,000+ com
 - **Interactive selection** via `AskUserQuestion` — never auto-selects
 - **One-command install** — fetches SKILL.md from GitHub, saves to global or project scope
 
+## Installation
+
+### Claude Code Plugin
+
+```
+/plugin install skillsmp-search@Lu1sDV/skillsmd
+```
+
+### npx
+
+```bash
+npx skills add Lu1sDV/skillsmd skillsmp-search
+```
+
+### Manual
+
+```bash
+cp -r skillsmp-search ~/.claude/skills/
+```
+
 ## Setup
 
-1. Copy `SKILL.md` to `~/.claude/skills/skillsmp-search/SKILL.md`
-2. Place your API key in `~/.claude/skills/skillsmp-search/.skillsmp-key`
-3. Get an API key at [skillsmp.com](https://skillsmp.com)
+1. Place your API key in `~/.claude/skills/skillsmp-search/.skillsmp-key`
+2. Get an API key at [skillsmp.com](https://skillsmp.com)
 
 ## Usage
 

@@ -18,6 +18,19 @@ Production patterns and gotchas for the Telethon Telegram MTProto client library
 - Bot API (`python-telegram-bot`) — different library, different patterns
 - Telethon v2 — major API changes; verify patterns still apply
 
+## Quick Reference
+
+| Task | Code |
+|------|------|
+| Create client | `TelegramClient(StringSession(session_str), api_id, api_hash)` |
+| Connect | `await client.connect()` |
+| Get entity | `entity = await client.get_entity(identifier)` |
+| Normalize ID | `from telethon.utils import get_peer_id; get_peer_id(entity)` |
+| Iterate messages | `async for msg in client.iter_messages(chat, limit=100):` |
+| Join by invite | `await client(ImportChatInviteRequest(hash_val))` |
+| Handle flood | `except FloodWaitError as e: await asyncio.sleep(e.seconds)` |
+| Save session | `session_string = client.session.save()` |
+
 ## Critical Gotchas
 
 | Gotcha | What Breaks | Fix |

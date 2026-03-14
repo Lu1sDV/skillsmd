@@ -22,6 +22,12 @@ Claude Code skill for SSRF (Server-Side Request Forgery) testing and prevention 
 /plugin install ssrf-testing@Lu1sDV/skillsmd
 ```
 
+### npx
+
+```bash
+npx skills add Lu1sDV/skillsmd ssrf-testing
+```
+
 ### Manual
 
 ```bash

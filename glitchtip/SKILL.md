@@ -13,6 +13,20 @@ Open-source, Sentry API-compatible error tracking and uptime monitoring. Django 
 - Repo: https://gitlab.com/glitchtip/glitchtip-backend
 - License: MIT
 
+## When to Use
+
+- Deploying GlitchTip self-hosted (Docker Compose, Helm, or manual)
+- Integrating Sentry SDKs (Python, JS, Ruby, etc.) with a GlitchTip DSN
+- Configuring source maps upload via `sentry-cli`
+- Setting up uptime monitoring and alerting (email, webhooks)
+- Troubleshooting event ingestion, worker failures, or Celery issues
+- Migrating from Sentry to GlitchTip
+
+## When NOT to Use
+
+- Sentry SaaS (sentry.io) — compatible SDK-side, but different server admin
+- Application Performance Monitoring (APM) — GlitchTip is error tracking only
+
 ## Quick Reference
 
 | Resource | URL |
@@ -284,3 +298,13 @@ First run prompts for API token and instance URL. Config saved to `.env`.
 | `releases finalize` → "version required" | Skip finalize — not fully supported on GlitchTip. Use release creation + artifact upload only |
 | CLI sends to sentry.io unexpectedly | `--url` must precede subcommand; check `.sentryclirc` `defaults.url`; bundler plugin v2 ignores `.sentryclirc` |
 | Stack traces stay minified | Verify: (1) storage has files, (2) release value matches SDK init, (3) `--url-prefix` matches runtime paths |
+
+## Common Mistakes
+
+| Mistake | Fix |
+|---------|-----|
+| Using Sentry SDK features unsupported by GlitchTip | Check GlitchTip compatibility — no performance tracing, no replays |
+| Missing `GLITCHTIP_DSN` env var | SDK silently drops events without a valid DSN |
+| Source maps not matching release version | `sentry-cli releases files <release> upload-sourcemaps` must match `release` in SDK init |
+| Running without Redis/Celery workers | Events queue but never process — always run `celery-worker` service |
+| Setting `DEBUG=True` in production | Leaks secrets in error pages; use `ENVIRONMENT=production` |

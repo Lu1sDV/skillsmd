@@ -39,6 +39,12 @@ tavily-web/
 /plugin install tavily-web@Lu1sDV/skillsmd
 ```
 
+### npx
+
+```bash
+npx skills add Lu1sDV/skillsmd tavily-web
+```
+
 ### Manual
 
 ```bash

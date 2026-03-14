@@ -18,6 +18,17 @@ Systematic approach to diagnosing and fixing web performance issues across loadi
 - Setting up performance monitoring or budgets
 - Implementing View Transitions, Speculation Rules, Server Components, Islands Architecture
 
+## Quick Reference
+
+| Metric | Target | Tool |
+|--------|--------|------|
+| LCP | < 2.5s | Lighthouse, CrUX |
+| CLS | < 0.1 | Lighthouse, Layout Shift Debugger |
+| INP | < 200ms | Chrome DevTools Performance |
+| TBT | < 200ms | Lighthouse |
+| TTFB | < 800ms | WebPageTest, `curl -w` |
+| FCP | < 1.8s | Lighthouse |
+
 ## Which Reference Do I Need?
 
 ```dot
@@ -123,6 +134,17 @@ Stop and reconsider if:
 - Zalando: 0.1s improvement = 0.7% revenue increase
 - AutoAnything: 50% faster load = 12-13% sales increase
 - Core Web Vitals are Google ranking factors (June 2021+)
+
+## Common Mistakes
+
+| Mistake | Fix |
+|---------|-----|
+| Optimizing before measuring | Always profile first with Lighthouse/DevTools |
+| Lazy-loading above-the-fold images | Only lazy-load below-fold; eager-load LCP image |
+| Bundling unused CSS/JS | Use coverage tab in DevTools, then code-split |
+| Missing `width`/`height` on images | Causes CLS — always set dimensions or use `aspect-ratio` |
+| Blocking render with synchronous JS | Use `defer` or `async` on non-critical scripts |
+| Ignoring server response time (TTFB) | Frontend optimization can't fix a slow backend |
 
 ## References
 

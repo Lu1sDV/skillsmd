@@ -42,7 +42,23 @@ Source: [glitchtip.com/documentation](https://glitchtip.com/documentation)
 
 ## Install
 
-Copy `glitchtip/` into `~/.claude/skills/`.
+### Claude Code Plugin
+
+```
+/plugin install glitchtip@Lu1sDV/skillsmd
+```
+
+### npx
+
+```bash
+npx skills add Lu1sDV/skillsmd glitchtip
+```
+
+### Manual
+
+```bash
+cp -r glitchtip ~/.claude/skills/
+```
 
 ## Triggers
 

@@ -27,7 +27,23 @@ Claude Code skill for working with [CTFd](https://github.com/CTFd/CTFd) — a Py
 
 ## Install
 
-Copy `ctfd/` into `~/.claude/skills/`.
+### Claude Code Plugin
+
+```
+/plugin install ctfd@Lu1sDV/skillsmd
+```
+
+### npx
+
+```bash
+npx skills add Lu1sDV/skillsmd ctfd
+```
+
+### Manual
+
+```bash
+cp -r ctfd ~/.claude/skills/
+```
 
 ## Triggers
 

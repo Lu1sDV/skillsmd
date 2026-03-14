@@ -1,6 +1,6 @@
 ---
 name: zeroclaw
-description: This skill should be used when building, configuring, deploying, or troubleshooting ZeroClaw AI agent infrastructure — including provider setup, channel binding, memory backends, config.toml authoring, CLI usage, Docker/native runtime, and migration from other agent frameworks
+description: Use when building, configuring, deploying, or troubleshooting ZeroClaw AI agent infrastructure — including provider setup, channel binding, memory backends, config.toml authoring, CLI usage, Docker/native runtime, and migration from other agent frameworks
 ---
 
 # ZeroClaw
@@ -9,6 +9,20 @@ Rust-based autonomous AI assistant infrastructure. Runtime OS for agentic workfl
 
 - Repo: https://github.com/zeroclaw-labs/zeroclaw
 - Docs: https://github.com/zeroclaw-labs/zeroclaw/blob/main/docs/README.md
+
+## When to Use
+
+- Setting up ZeroClaw from scratch (install, bootstrap, onboard)
+- Authoring or debugging `config.toml` (providers, channels, memory, security)
+- Binding channels (Matrix, Discord, Slack, IRC, webhooks)
+- Troubleshooting CLI errors, auth failures, or daemon issues
+- Migrating from OpenClaw or other agent frameworks
+- Deploying via Docker, native binary, or webhook gateway
+
+## When NOT to Use
+
+- Other agent frameworks (LangChain, AutoGPT) — different architecture
+- General Rust development unrelated to ZeroClaw
 
 ## Quick Reference
 
@@ -161,6 +175,16 @@ zeroclaw migrate openclaw               # execute migration
 | Memory search poor | Check embedding provider config, run reindex |
 | Config schema JSON parse fails | `zeroclaw config schema` mixes INFO log lines with JSON — save to file and strip the log line first |
 | Config changes not applied | `zeroclaw service restart` (or `zeroclaw service stop && zeroclaw service start`) then `zeroclaw doctor` |
+
+## Common Mistakes
+
+| Mistake | Fix |
+|---------|-----|
+| Editing config while daemon is running | Stop daemon first: `zeroclaw daemon stop` |
+| Missing provider API key in config | Set via `zeroclaw auth add <provider>` or env var |
+| Using file paths in channel webhooks | Use full URLs with protocol (`https://...`) |
+| Skipping `zeroclaw onboard` | Required for initial profile + provider setup |
+| Running without memory backend configured | Defaults work but set explicit backend for production |
 
 ## Security
 
