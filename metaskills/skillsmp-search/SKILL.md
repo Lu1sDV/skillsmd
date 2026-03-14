@@ -1,6 +1,6 @@
 ---
 name: skillsmp-search
-description: Use when the user wants to find, browse, or install community skills, or needs a capability that might exist as a marketplace skill. Triggers on "find a skill", "search skills", "install skill", "skillsmp", or "marketplace".
+description: Use when finding, browsing, or installing community skills, or when a needed capability might exist as a marketplace skill. Triggers on "find a skill", "search skills", "install skill", "skillsmp", or "marketplace".
 ---
 
 # SkillsMP Search & Installer
@@ -13,6 +13,15 @@ Search 11,000+ community skills and install them locally.
 - User needs a capability that likely exists as a community skill
 
 **Not for:** Project-specific conventions (CLAUDE.md), already-installed skills.
+
+## Quick Reference
+
+| Step | Action |
+|------|--------|
+| Search | `GET https://skillsmp.com/api/skills?q=<query>&sortBy=recent` |
+| Present | Show top 3-5 results with name, author, description, install count |
+| Install | `npx skills add <author>/<repo>` or copy to `~/.claude/skills/` |
+| Verify | Ask Claude "What skills are available?" |
 
 ## API Config
 
@@ -64,16 +73,22 @@ AskUserQuestion options: numbered skills + **"Compare to find best"**
 
 When user selects "Compare to find best":
 
-1. **Gather criteria**: Ask user to expand needs/priorities (optional - they may just confirm)
-2. **Load standards**: Read `external/anthropic-skills-best-practices.md` for the quality checklist
-3. **Fetch & evaluate**: Download SKILL.md from top candidates, score each against:
-   - Description quality & trigger specificity
-   - Conciseness & token efficiency
-   - Progressive disclosure structure
-   - Workflow clarity & feedback loops
-   - Code quality (if applicable)
-4. **Present comparison**: Show strengths/weaknesses table for each candidate
-5. **Final decision**: Use `AskUserQuestion` to let user pick the winner
+1. **Gather criteria**: Ask user to expand needs/priorities (optional)
+2. **Fetch & evaluate**: Download SKILL.md from top candidates, score each 0-2 per dimension:
+
+| Dimension | Strong (2) | Red flags (0-1) |
+|---|---|---|
+| **Trigger precision** | WHAT + WHEN in description, specific trigger phrases, third-person voice, ≤1024 chars | Vague ("helps with projects"), missing triggers, first/second person voice |
+| **Token efficiency** | Body ≤500 lines, assumes Claude's baseline knowledge, large content split to references/ | Verbose explanations of basics, everything inlined |
+| **Progressive disclosure** | References one level deep, TOC on 100+ line files, domain-organized refs | Nested refs (A→B→C), no TOC on long files, flat dump |
+| **Workflow clarity** | Clear steps, validation/feedback loops, freedom matched to task fragility | No validation gates, ambiguous ordering, over-constraining creative tasks |
+| **Domain value** | Non-obvious gotchas, silent-error warnings, version-specific traps, troubleshooting beyond official docs | Only restates what Claude already knows or what official docs cover |
+| **Practical quality** | Error handling in scripts, consistent terminology, deps listed, forward-slash paths | Magic constants, Windows paths, too many tool options without a default |
+
+3. **Present comparison**: Side-by-side table with per-dimension scores (total /12), SKILL.md token length, and 1-sentence key finding per candidate
+4. **Final decision**: Use `AskUserQuestion` to let user pick the winner
+
+Consult `external/anthropic-skills-best-practices.md` for edge-case evaluation details only.
 
 ## Install
 
@@ -94,3 +109,13 @@ After user picks:
 | 401 | Check `.skillsmp-key` file |
 | 429 | Daily quota hit, retry tomorrow |
 | Curl exit 56 | Transient network error, retry |
+
+## Common Mistakes
+
+| Mistake | Fix |
+|---------|-----|
+| Installing without checking existing skills | Run "What skills are available?" first |
+| Using wrong install path | Skills go in `~/.claude/skills/<skill-name>/SKILL.md` |
+| Searching too broadly ("testing") | Be specific: "playwright e2e testing" |
+| Installing multiple overlapping skills | Check descriptions for overlap before installing |
+| Forgetting to verify after install | Always confirm skill loaded with a test prompt |
