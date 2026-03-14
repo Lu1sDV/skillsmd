@@ -199,13 +199,16 @@ If any answer is **No** → move to Observations section (not confirmed vulnerab
 Every reported vulnerability MUST include:
 
 1. **Confidence Score (1-10)** — exploitability certainty
-2. **Intent Analysis** — is this an intended feature or actual bug?
-3. **Justification** — who has access? Is this expected for that role?
-4. **Exact payload** — copy-pasteable, not screenshots
-5. **Server response** — proving impact
-6. **Video recording** — full exploit chain end-to-end
+2. **Exploitability Likelihood (High/Medium/Low)** — how likely is real-world exploitation given attack complexity, auth requirements, and conditions
+3. **Auth Level** — Unauthenticated / Authenticated (specify minimum role) / Multi-level (specify each)
+4. **Intent Verification Gate** — double-check this is NOT an intended feature (admin RCE via plugin upload = intended; editor accessing admin plugin upload = real bug). See full gate in `audit-poc-report.md`
+5. **Intent Classification** — Actual bug / Intended feature / Design weakness
+6. **Justification** — who has access? Is this expected for that role? Would fixing it break legitimate workflows?
+7. **Exact payload** — copy-pasteable, not screenshots
+8. **Server response** — proving impact
+9. **Video recording** — full exploit chain end-to-end
 
-Low-confidence findings (score <= 3) → **Observations** section, separate from confirmed vulns.
+Low-confidence findings (score <= 3) → **Observations** section. Intended features flagged as design weaknesses → also Observations.
 
 Full proof methodology and report template in `references/audit-poc-report.md` (load when writing reports).
 

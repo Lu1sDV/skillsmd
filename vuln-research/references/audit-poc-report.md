@@ -359,15 +359,44 @@ docker compose -f docker-compose.poc.yml down -v
 Every reported vulnerability MUST include:
 
 1. **Confidence Score (1-10)** — how confident you are this is a real, exploitable issue
-2. **Intent Analysis** — classify each finding as:
-   - **Intended feature**: functionality working as designed (e.g., admin uploading plugins, superuser SSH access, debug endpoints behind auth). Do NOT report these as vulnerabilities.
-   - **Actual bug**: unintended behavior that violates security assumptions
-3. **Justification** — brief reasoning for the intent classification, considering:
-   - Who has access? (admin vs. unprivileged user vs. unauthenticated)
-   - Is this a documented/expected capability of that role?
-   - Would "fixing" it break legitimate functionality?
+2. **Exploitability Likelihood (High/Medium/Low)** + 1-2 sentence justification — how likely is real-world exploitation?
+   - **High**: no auth needed, publicly reachable, low complexity, known exploit patterns
+   - **Medium**: requires auth or specific conditions, moderate complexity
+   - **Low**: requires privileged access, rare conditions, or complex multi-step chain
+   - Example: `High — unauthenticated endpoint with no rate limiting, public PoC exists for this CVE`
+3. **Auth Level** — required access to trigger the vulnerability:
+   - **Unauthenticated** — no credentials needed
+   - **Authenticated** — specify the minimum role required (viewer, editor, user, admin, superadmin)
+   - **Multi-level** — affects multiple auth levels differently (specify each)
+4. **Intent Verification Gate** — double-check that the finding is NOT an intended feature:
 
-Low-confidence findings (score <= 3) go under a separate **Observations** section, not mixed in with confirmed vulnerabilities.
+   | Question | If YES → likely intended feature |
+   |----------|--------------------------------|
+   | Does the application documentation describe this as expected functionality? | Admin plugin upload in WordPress, superuser SSH access, debug endpoints behind auth |
+   | Is the "attacker" already at the privilege level where this action is expected? | Admin executing code via plugin, root user accessing system files |
+   | Would "fixing" this break legitimate workflows? | Removing admin code execution breaks plugin system |
+   | Is this a well-known trade-off the platform explicitly accepts? | CMS admin RCE via theme editor, CI/CD pipeline command execution |
+
+   **If all answers are NO → actual bug. If any answer is YES → investigate further:**
+   - Is the feature accessible at a LOWER privilege level than intended? (admin feature reachable by editor = real bug)
+   - Can it be triggered WITHOUT the expected authentication? (intended admin feature reachable unauthenticated = real bug)
+   - Does it expose MORE than the intended scope? (admin file read intended for config but reaches `/etc/shadow` = real bug)
+
+   **Common false positive examples:**
+   - WordPress admin uploading a malicious plugin → intended feature (admin has full control by design)
+   - Jenkins admin configuring a build step with `sh` → intended feature
+   - Grafana admin adding a data source with SSRF potential → intended feature (admin configures integrations)
+   - SSH access as root user → intended feature (root has full system access)
+   - **BUT**: WordPress *editor* uploading a plugin → real bug (privilege escalation)
+   - **BUT**: Jenkins *anonymous* triggering builds → real bug (missing auth)
+
+5. **Intent Classification** — based on the gate above, classify as:
+   - **Actual bug**: unintended behavior that violates security assumptions
+   - **Intended feature**: functionality working as designed — do NOT report as vulnerability
+   - **Design weakness**: intended but represents poor security design — report as Observation with recommendation
+6. **Justification** — brief reasoning for the classification
+
+Low-confidence findings (score <= 3) go under a separate **Observations** section, not mixed in with confirmed vulnerabilities. Intended features flagged as design weaknesses also go under Observations.
 
 Additionally, every exploited vulnerability needs:
 - Video recording showing the full exploit chain end-to-end
@@ -406,7 +435,9 @@ For each finding:
 **CWE:** CWE-XXX
 **CVSS:** X.X (AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N)
 **Confidence:** X/10
-**Intent:** Actual bug / Intended feature
+**Exploitability Likelihood:** High / Medium / Low — [1-2 sentence justification: why this likelihood rating, considering attack complexity, required conditions, and public exploit availability]
+**Auth Level:** Unauthenticated / Authenticated (specify role: viewer, editor, admin, superadmin) / Multi-level (specify which levels affected)
+**Intent:** Actual bug / Intended feature / Design weakness (see Intent Verification Gate in Proof Collection above)
 
 **Description:**
 [What the vulnerability is, where it exists]
@@ -436,6 +467,7 @@ For each finding:
 
 ### Observations
 - Low-confidence findings (score <= 3) with reasoning
+- Design weaknesses (intended features with poor security design — include recommendation)
 - Potential issues requiring further investigation
 - Informational notes about security posture
 
