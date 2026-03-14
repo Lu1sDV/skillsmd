@@ -33,6 +33,7 @@ Alternatively, directly install a plugin via:
 /plugin install tavily-web@Lu1sDV/skillsmd
 /plugin install telethon-development@Lu1sDV/skillsmd
 /plugin install ssrf-testing@Lu1sDV/skillsmd
+/plugin install vuln-research@Lu1sDV/skillsmd
 ```
 
 After installing the plugin, you can use the skill by just mentioning it. For instance, if you install the `zeroclaw` plugin from the marketplace, you can ask Claude Code to do something like: "Use the zeroclaw skill to deploy my agent infrastructure"
@@ -52,6 +53,7 @@ cp -r skillsmd/skillsmp-search ~/.claude/skills/
 cp -r skillsmd/tavily-web ~/.claude/skills/
 cp -r skillsmd/telethon-development ~/.claude/skills/
 cp -r skillsmd/ssrf-testing ~/.claude/skills/
+cp -r skillsmd/vuln-research ~/.claude/skills/
 ```
 
 ### npx
@@ -89,3 +91,4 @@ Or invoke directly:
 | **tavily-web** | `tavily-web/` | Web search, extraction, crawling, and AI-powered research via Tavily API (curl only) |
 | **telethon-development** | `telethon-development/` | Telethon MTProto client — FloodWait handling, mocking, session management, DB integration |
 | **ssrf-testing** | `ssrf-testing/` | SSRF testing and prevention — detection, cloud metadata exploitation, filter bypass, defense strategies |
+| **vuln-research** | `vuln-research/` | Vulnerability research, security auditing, code analysis — 30+ attack domains, 12-language sink catalog, SAST/DAST, chaining, PoC/report |
