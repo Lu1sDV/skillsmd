@@ -61,10 +61,25 @@
 - Force browsing: directly accessing `/admin/dashboard`, `/api/v1/internal/*`, `/debug/*`
 - Referrer-based access control (trivially spoofed)
 - IP-based access control bypass via `X-Forwarded-For`, `X-Real-IP`, `X-Original-URL`, `X-Rewrite-URL`
+- Hop-by-hop header abuse: inject `Connection: X-Custom-IP-Authorization` — proxy strips the authorization header before it reaches backend, or inject `X-Custom-IP-Authorization: 127.0.0.1` that reaches backend when proxy doesn't strip it
+- Common IP authorization headers to test: `X-Custom-IP-Authorization`, `X-Originating-IP`, `True-Client-IP`, `CF-Connecting-IP`, `X-Client-IP`, `Forwarded`, `X-Forwarded`, `X-Cluster-Client-IP`
 - Nginx `$uri` vs `$request_uri` leading to ACL bypass with encoded chars
 - GraphQL: batch queries to bypass rate limiting, mutation without authz, nested relationship traversal leaking data
 - REST API mass assignment: sending `isAdmin: true` in profile update
 - Insecure direct object reference via UUID guessing (v1 UUIDs contain timestamp + MAC)
+
+### Mass Assignment Sinks by Framework
+
+| Framework | Vulnerable Pattern | Safe Pattern |
+|-----------|-------------------|--------------|
+| Rails | `User.new(params[:user])` without `permit()` | `params.require(:user).permit(:name, :email)` |
+| Django | `User(**request.POST.dict())` | Explicit field assignment or serializer with `fields` |
+| Spring | `@ModelAttribute User user` binding all fields | `@InitBinder` with `setAllowedFields()` |
+| Laravel | Empty `$guarded` or missing `$fillable` | `$fillable = ['name', 'email']` |
+| Mongoose | `new User(req.body)` | Schema-level `select: false` + explicit fields |
+| Express | `Object.assign(user, req.body)` | Destructure only allowed fields |
+
+Impact: attackers set `is_admin=true`, `role=admin`, `email_verified=true`, `password=attacker_value`.
 
 ---
 
@@ -77,8 +92,10 @@
 - **Token leakage:** access token in URL fragment leaked via Referrer header, browser history, logs
 - **Scope escalation:** request elevated scopes after initial limited authorization
 - **IdP confusion:** mix identity providers to impersonate users across services
-- **SAML signature wrapping:** move signed assertion, insert attacker assertion in unsigned location
-- **SAML comment injection:** `admin@evil.com<!---->.legit.com` → NameID parsed as `admin@evil.com` by SP but validated against `legit.com` by IdP
+- **SAML signature wrapping (XSW):** move signed assertion to unsigned position, insert attacker-controlled assertion where the application reads it
+- **SAML comment injection:** `admin@evil.com<!---->.legit.com` → NameID parsed as `admin@evil.com` by SP but validated against `legit.com` by IdP (after comment removal)
+- **SAML assertion replay:** if assertion lacks audience restriction or timestamp check, replay captured assertion to authenticate as victim
+- **SAML signature exclusion:** strip the `<Signature>` element entirely — SP authenticates without verifying signature if it doesn't enforce signature presence
 - **PKCE bypass:** downgrade from S256 to plain, or strip `code_verifier` entirely
 - **Client secret exposure:** in mobile apps, SPAs, JavaScript bundles, `.env` files in public repos
 - **Token substitution:** swap tokens between different OAuth clients to access unauthorized resources
@@ -99,6 +116,7 @@
 - Business logic: negative quantities, price manipulation, workflow step skipping, currency rounding abuse
 - Integer overflow/underflow (especially in C-backed extensions, 32-bit systems)
 - Double-spend / double-claim via concurrent requests (use threading/async to send N requests simultaneously)
+- **HTTP/2 Single-Packet Attack:** send all parallel requests in a single TCP segment, eliminating network jitter and achieving true simultaneous server processing (~90% success rate vs ~5% with HTTP/1.1 for limit-overrun attacks). HTTP/1.1 equivalent: last-byte synchronization — send all but the last byte of N parallel requests, then flush final byte across all connections simultaneously. Tool: Turbo Intruder with `THREADED` engine. WebSocket variant: Turbo Intruder THREADED mode on N simultaneous WS connections.
 - Missing idempotency on critical operations
 - Time-of-check to time-of-use (TOCTOU) generalized across all resource types
 - Inconsistent state across microservices: operation succeeds on service A, fails on service B, no rollback

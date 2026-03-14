@@ -119,6 +119,23 @@ Layer automated tools over manual analysis:
 - Subdomain enumeration (subfinder, amass, crt.sh)
 - JavaScript analysis: extract endpoints from bundled JS, find secrets in source maps, identify client-side prototype pollution
 
+### Hidden Parameter Discovery
+
+Tools: `Arjun`, `ParamMiner` (Burp extension), `x8`, `GAP-Burp-Extension`
+
+High-value hidden parameters to fuzz:
+| Parameter | Effect |
+|-----------|--------|
+| `debug=1`, `_debug=true` | Verbose error output, stack traces |
+| `test=true`, `testing=1` | Bypass rate limits, skip auth |
+| `admin=1`, `role=admin` | Privilege escalation |
+| `internal=true` | Expose internal endpoints |
+| `verbose=1`, `trace=1` | Detailed logging in response |
+| `source=true` | Source code disclosure |
+| `callback=` | JSONP endpoint, potential XSS |
+
+Technique: compare response length/status/timing with and without parameter to detect reflected or behavior-changing params.
+
 Automated tools supplement, never replace, manual source review.
 
 ---
@@ -164,3 +181,11 @@ Before declaring "done", verify you tested:
 - Not testing Fastjson cache poisoning (`java.lang.Class` → bypass autoType)
 - Forgetting `pearcmd.php` exploitation for LFI→RCE when PEAR is installed
 - Not testing OPcache poisoning when `validate_timestamps=off`
+- [ ] Not testing hop-by-hop header abuse for IP-based ACL bypass (`Connection: X-Custom-IP-Authorization`)
+- [ ] Not testing argument injection via leading hyphen in `execFile`/`spawn` calls (no shell metacharacters needed — `curl -o`, `tar --checkpoint-action`, `ssh -o ProxyCommand`)
+- [ ] Not testing SSRF with IPv6 zone identifiers (`http://[fe80::1%25eth0]/`)
+- [ ] Not testing `jar:http://internal!/` for SSRF protocol filter bypass (Java)
+- [ ] Not fuzzing for hidden parameters (`debug=1`, `admin=1`, `test=true`) with Arjun/ParamMiner
+- [ ] Not testing mass assignment with framework-specific payloads (`is_admin=true`, `role=admin`, `email_verified=true`)
+- [ ] Not testing `postMessage` receivers for missing origin validation (check `getEventListeners(window)`)
+- [ ] Not testing CSTI in Angular/Vue/Handlebars client-side templates (distinct from XSS — uses `{{}}` interpolation, no HTML tags)

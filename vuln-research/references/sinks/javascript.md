@@ -38,3 +38,9 @@
 - **XSS:** `res.send()` with unsanitized user input, `innerHTML` assignments in SSR (Next.js, Nuxt), `dangerouslySetInnerHTML` in React SSR
 - **NoSQL Injection:** `mongoose.find()` / `findOne()` with `$gt`, `$ne`, `$regex` from req.body, `mongodb` native driver with unsanitized query objects
 - **ReDoS:** `new RegExp(user_input)`, `String.prototype.match()` / `.replace()` / `.search()` with user-controlled patterns
+- **Module injection:** `require(userInput)` — dynamic module loading with attacker-controlled path; can load arbitrary native addons or reach `node_modules` gadgets
+- **Prototype pollution via parse+merge:** `JSON.parse(userInput)` result spread/merged without sanitization introduces `__proto__` keys; pair with any recursive merge utility
+- **WebSocket URL poisoning:** `new WebSocket(userInput)` — attacker controls WS endpoint, enables data exfiltration or connection to malicious server
+- **Cookie injection / session fixation:** `document.cookie = userInput` — unsanitized value can set arbitrary cookies including `session` or `auth` tokens
+- **WebSQL (deprecated, still present in Chromium-based apps):** `db.executeSql(userInput)` — SQL injection in client-side SQLite
+- **Storage-based persistent XSS:** `localStorage.setItem(key, userInput)` — benign on write but creates a persistent XSS source if the stored value is later read and rendered unsanitized into the DOM

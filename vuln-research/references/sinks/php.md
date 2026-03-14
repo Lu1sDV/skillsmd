@@ -16,7 +16,7 @@ Comprehensive PHP dangerous function catalog. Extracted from real CTF challenges
 `array_diff_uassoc()`, `array_diff_ukey()`, `array_intersect_uassoc()`, `array_intersect_ukey()`, `array_udiff()`, `array_udiff_assoc()`, `array_udiff_uassoc()`, `array_uintersect()`, `array_uintersect_assoc()`, `array_uintersect_uassoc()`, `iterator_apply()`, `preg_replace_callback()`, `mb_ereg_replace_callback()`, `xml_set_character_data_handler()`, `xml_set_default_handler()`, `xml_set_element_handler()`, `xml_set_end_namespace_decl_handler()`, `xml_set_external_entity_ref_handler()`, `xml_set_notation_decl_handler()`, `xml_set_processing_instruction_handler()`, `xml_set_start_namespace_decl_handler()`, `xml_set_unparsed_entity_decl_handler()`, `stream_filter_register()`, `sqlite_create_function()`, `sqlite_create_aggregate()`, `spl_autoload_register()`, `session_set_save_handler()`
 
 **Dynamic inclusion:**
-`include`, `include_once`, `require`, `require_once` with variable path
+`include`, `include_once`, `require`, `require_once` with variable path — also exploitable via PHP stream wrappers: `php://input`, `php://filter`, `data://text/plain;base64,<b64>`, `expect://id` (RCE via expect extension), `zip://archive.zip#shell.php`, `phar://upload.jpg/shell.php`
 
 **Variable manipulation to code exec:**
 `extract()` (variable overwrite leading to control flow hijack), `parse_str()` without second arg (register_globals-like), `$$var` variable variables, `compact()` with tainted keys

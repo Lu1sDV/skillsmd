@@ -36,11 +36,11 @@ Load references on-demand based on the active testing domain. **Do not load all 
 
 | Domain | Reference File | Load When |
 |--------|---------------|-----------|
-| SQLi, NoSQL, SSTI, CRLF, LDAP, XPath | `references/injection-attacks.md` | Testing injection vectors |
-| XSS, Prototype Pollution, CORS | `references/client-side-attacks.md` | Testing client-side attacks |
+| SQLi, NoSQL, SSTI, CRLF, LDAP, XPath, LaTeX Injection, CSV Injection, XSLT Injection | `references/injection-attacks.md` | Testing injection vectors |
+| XSS, Prototype Pollution, CORS, XS-Leaks, CSTI, postMessage | `references/client-side-attacks.md` | Testing client-side attacks |
 | RCE, SSRF, XXE, File Ops, Deserialization | `references/server-side-attacks.md` | Testing server-side attacks |
 | Auth, Access Control, OAuth, Logic, Race, Crypto | `references/auth-access-logic.md` | Testing auth & business logic |
-| Smuggling, Cache, WebSocket, GraphQL, DNS, Cloud, Encoding, ReDoS, Supply Chain | `references/protocol-infra-attacks.md` | Testing protocols & infrastructure |
+| Smuggling, Cache, WebSocket, GraphQL, DNS, Cloud, Encoding, ReDoS, Supply Chain, HTML Smuggling, Prompt Injection | `references/protocol-infra-attacks.md` | Testing protocols & infrastructure |
 | Sinks router + SAST/DAST rules | `references/sinks-catalog.md` | Code audit entry point — routes to per-language sink files |
 | PHP sinks | `references/sinks/php.md` | PHP code audit (exec, callbacks, type juggling, phar deser) |
 | Python sinks | `references/sinks/python.md` | Python code audit (exec, pickle, SSTI, subprocess) |

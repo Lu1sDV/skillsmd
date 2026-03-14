@@ -46,3 +46,6 @@
 - **Path Traversal:** `new File(base, userInput)`, `Paths.get()`, `Files.readAllBytes()` with unsanitized path, `ClassLoader.getResourceAsStream()`
 - **LDAP:** `DirContext.search()` with string-concatenated filter, `SpringLdapTemplate.search()`
 - **SSRF via Log4j:** `${jndi:ldap://...}` in any logged string (Log4Shell — CVE-2021-44228)
+- **Reflection sinks:** `Class.forName(userInput).newInstance()` — instantiates arbitrary classes by name; `Method.invoke(null, userInput)` — invokes arbitrary static methods; both enable gadget chain abuse when combined with classpath classes
+- **GWT-RPC deserialization:** `//GWT-RPC//` serialized request bodies parsed by `AbstractRemoteServiceServlet` — same ysoserial gadget chains apply; often overlooked in Java app assessments
+- **EL engine sinks:** `Ognl.getValue(userInput, context)` (Apache Commons, Struts2 CVE-2017-5638 family), `MVEL.eval(userInput)`, `JexlEngine.createExpression(userInput).evaluate()` — all provide full Java runtime access

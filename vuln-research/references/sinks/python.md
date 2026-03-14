@@ -10,7 +10,7 @@
 
 ## Deserialization
 
-`pickle.loads()`, `pickle.load()`, `shelve.open()`, `yaml.load()` (without `Loader=SafeLoader`), `yaml.unsafe_load()`, `jsonpickle.decode()`, `dill.loads()`, `cloudpickle.loads()`, `marshal.loads()`, `cPickle.loads()` (Python 2)
+`pickle.loads()`, `pickle.load()`, `shelve.open()`, `yaml.load()` (without `Loader=SafeLoader`), `yaml.unsafe_load()`, `jsonpickle.decode()`, `dill.loads()`, `cloudpickle.loads()`, `marshal.loads()`, `cPickle.loads()` (Python 2), `_pickle.loads()` (C-accelerated pickle, same risk as `pickle.loads()`)
 
 ---
 
