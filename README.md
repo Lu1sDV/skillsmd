@@ -30,6 +30,7 @@ Alternatively, directly install a plugin via:
 /plugin install web-performance-optimization@Lu1sDV/skillsmd
 /plugin install ofelia@Lu1sDV/skillsmd
 /plugin install skillsmp-search@Lu1sDV/skillsmd
+/plugin install tavily-web@Lu1sDV/skillsmd
 /plugin install telethon-development@Lu1sDV/skillsmd
 /plugin install ssrf-testing@Lu1sDV/skillsmd
 ```
@@ -47,7 +48,8 @@ cp -r skillsmd/photon-geocoder ~/.claude/skills/
 cp -r skillsmd/test-engineering ~/.claude/skills/
 cp -r skillsmd/web-performance-optimization ~/.claude/skills/
 cp -r skillsmd/ofelia ~/.claude/skills/
-cp -r skillsmd/metaskills/skillsmp-search ~/.claude/skills/
+cp -r skillsmd/skillsmp-search ~/.claude/skills/
+cp -r skillsmd/tavily-web ~/.claude/skills/
 cp -r skillsmd/telethon-development ~/.claude/skills/
 cp -r skillsmd/ssrf-testing ~/.claude/skills/
 ```
@@ -83,6 +85,7 @@ Or invoke directly:
 | **test-engineering** | `test-engineering/` | Framework-agnostic test strategy, automation planning, coverage analysis |
 | **web-performance-optimization** | `web-performance-optimization/` | Lighthouse scores, Core Web Vitals, page load and rendering optimization |
 | **ofelia** | `ofelia/` | Docker job scheduler — cron for containers via INI files or Docker labels |
-| **skillsmp-search** | `metaskills/skillsmp-search/` | Search 11,000+ community skills and install them locally |
+| **skillsmp-search** | `skillsmp-search/` | Search 11,000+ community skills and install them locally |
+| **tavily-web** | `tavily-web/` | Web search, extraction, crawling, and AI-powered research via Tavily API (curl only) |
 | **telethon-development** | `telethon-development/` | Telethon MTProto client — FloodWait handling, mocking, session management, DB integration |
 | **ssrf-testing** | `ssrf-testing/` | SSRF testing and prevention — detection, cloud metadata exploitation, filter bypass, defense strategies |
