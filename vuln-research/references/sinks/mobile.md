@@ -63,3 +63,34 @@
 ### SQLi
 
 `sqlite3_exec()` via C bridge with string interpolation, `GRDB.Database.execute()` with string building, `FMDB` `executeQuery()` with string concat
+
+---
+
+## Mobile Attack Techniques (2024-2025)
+
+### Android
+
+**Snowblind (seccomp Bypass):**
+Abuse Linux seccomp filters to intercept syscalls on Android — bypass app integrity checks, SSL pinning, root detection, and tamper detection at kernel level. Unlike Frida (userspace hooking), Snowblind operates at syscall level, evading all userspace-based detection mechanisms.
+
+**FjordPhantom (Virtualization Attack):**
+Run target banking app inside a virtualized Android environment on the same device. Inject code, intercept all function calls, bypass all runtime protections (root detection, integrity checks, SSL pinning). Used in real-world banking fraud campaigns in Southeast Asia (2023-2024).
+
+**Dirty Stream (Content Provider Path Traversal):**
+Malicious app sends crafted content via Android `FileProvider` → path traversal in receiving app's `ContentProvider` handling → overwrite arbitrary files in victim app's private sandbox. CVE-2024-23692 and others. Affects apps using `openFile()` or `ContentResolver.openInputStream()` without path validation.
+
+**NFC Ghost Tap:**
+Relay NFC payment data over network in real-time — clone contactless payment session to remote device for unauthorized transactions. Combines NFC card emulation with low-latency network relay to complete payment at a different physical location.
+
+### iOS
+
+**Coruna (iOS Exploit Kit):**
+Zero-day iOS exploitation framework — WebKit vulnerability + kernel exploit chained for zero-click device compromise. Delivered via malicious links or iMessage attachments. Used in targeted surveillance campaigns.
+
+**iMessage Zero-Click Exploitation:**
+Malformed iMessage attachment triggers parsing vulnerability in IMTranscoderAgent or ImageIO — no user interaction required. Payload executes before message appears in notification. Chain: initial code execution → sandbox escape → kernel exploit → full device compromise.
+
+### Cross-Platform
+
+**Reverse Tabnabbing via Deep Links:**
+Custom URL scheme handlers (`myapp://`) that open external URLs without `noopener` — opened page navigates app's WebView to phishing URL via `window.opener`.

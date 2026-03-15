@@ -81,6 +81,22 @@
 
 Impact: attackers set `is_admin=true`, `role=admin`, `email_verified=true`, `password=attacker_value`.
 
+### Java Matrix Parameter ACL Bypass
+
+Java frameworks (Spring, Tomcat) parse `;param=value` as matrix parameters, stripping them from the path for routing:
+- `/admin;foo=bar` → routed to `/admin` handler
+- Path-based ACL checks literal string `/admin;foo=bar` — doesn't match `/admin` rule → access granted
+- **Affected:** Spring Security path matchers, Apache Tomcat, custom servlet filters using `getRequestURI()` (includes matrix params) vs `getServletPath()` (strips them)
+- **Bypass:** `/admin;.css` may bypass both ACL (doesn't match `/admin`) and cache rules (ends in `.css`)
+
+### mTLS Authentication Logic Flaws
+
+Client certificate validation that checks certificate validity but not authorization:
+- Server verifies certificate is cryptographically valid and not expired
+- **Missing:** verification that the certificate's subject/CN/SAN matches an authorized identity
+- Any valid client certificate (including self-signed if trust store is misconfigured) is accepted regardless of identity
+- **Common in:** API gateways, service mesh (Istio/Linkerd), microservice-to-microservice authentication
+
 ---
 
 ## OAuth / SSO Attacks
@@ -119,6 +135,44 @@ Impact: attackers set `is_admin=true`, `role=admin`, `email_verified=true`, `pas
 - Replay captured assertions within the validity window
 - Some SPs don't check `NotOnOrAfter` at all
 
+### SAML Parser Differential Attacks
+
+Different XML libraries parse SAML assertions differently (libxml2 vs Java DOM vs .NET System.Xml). Craft assertions that validate on the IdP's parser but extract different identity on the SP's parser.
+
+**Variants:**
+- **Namespace prefix confusion:** different parsers resolve namespace prefixes differently — signature covers one interpretation, SP reads another
+- **Comment injection in NameID:** `admin@evil.com<!--comment-->@legit.com` — some parsers strip comments before evaluation, others after
+- **XML canonicalization differential:** C14N vs exc-C14N handle whitespace, namespaces, and comments differently — content removed by canonicalization before signing is preserved by SP's parser
+- **XSW (XML Signature Wrapping) variants 1-8:** move signed assertion to unsigned position, insert attacker-controlled assertion where SP reads it
+
+### Silver SAML
+
+Compromise of the SAML signing certificate from AD FS or similar IdP infrastructure. With the signing key:
+1. Forge arbitrary SAML assertions for any user
+2. All federated services trust the forged assertions
+3. Persistent access — survives password resets, MFA changes
+4. **Detection:** monitor for SAML assertions signed with the same key but from unexpected sources; rotate signing certificates regularly
+
+### WebAuthn Credential Binding Swap
+
+Race condition during WebAuthn registration flow:
+1. Victim initiates `navigator.credentials.create()` for their account
+2. Attacker races to swap the credential public key between the browser's creation response and server verification
+3. Server binds attacker's authenticator to victim's account
+4. Attacker can now authenticate as victim using their own FIDO2 key
+
+**Conditions:** server doesn't bind the challenge to a specific session atomically, or registration endpoint lacks proper CSRF protection.
+
+### Okta bcrypt 72-Byte Truncation (CVE-2024-56167)
+
+bcrypt truncates input at 72 bytes. Okta's authentication combined `username + delimiter + password` before hashing. If username ≥ 52 characters, the password portion is truncated or absent from the hash → authentication succeeds with **any password**.
+
+**Impact:** Targeted account takeover for users with long usernames (email addresses with long domain names).
+
+### Okta FastPass Phishing Bypass
+
+Authentication flow manipulation in Okta Verify FastPass — skip device verification step via direct API request modification. Attacker intercepts the FastPass flow and modifies the authentication response to bypass the device binding check, completing authentication without possessing the registered device.
+
 - **PKCE bypass:** downgrade from S256 to plain, or strip `code_verifier` entirely
 - **Client secret exposure:** in mobile apps, SPAs, JavaScript bundles, `.env` files in public repos
 - **Token substitution:** swap tokens between different OAuth clients to access unauthorized resources
@@ -129,6 +183,19 @@ Impact: attackers set `is_admin=true`, `role=admin`, `email_verified=true`, `pas
 - **Redirect scheme hijacking (mobile):** multiple apps register identical custom URI schemes (`myapp://callback`) — malicious app intercepts authorization code; defense: PKCE + App Links (`autoVerify` + `/.well-known/assetlinks.json`)
 - **Device code phishing:** attacker initiates device code flow, socially engineers victim to authorize at `https://provider.com/device`
 - **redirect_uri bypass techniques expanded:** subdomain matching (`*.legit.com`), path bypass (`/callback/../attacker`), regex misconfiguration (`evil.com.example.com`), origin-only validation (checks domain not path)
+
+### IPv6 Multi-@ Userinfo OAuth Redirect Bypass
+
+IPv6 URL syntax combined with multi-`@` userinfo creates parser differentials:
+- `https://attacker.com@[::1]/callback`
+- OAuth validator parses host as `[::1]` (loopback — whitelisted)
+- Browser interprets first `@` as userinfo delimiter → routes to `attacker.com`
+- Authorization code exfiltrated to attacker infrastructure
+
+**Variants:**
+- `https://attacker.com%40[::1]/callback` (URL-encoded `@`)
+- `https://user:pass@attacker.com@[::1]/callback` (nested userinfo)
+- Combine with IPv6 zone ID: `https://attacker.com@[fe80::1%25lo]/callback`
 
 ### OAuth Device Code Phishing — Real-World Campaigns
 

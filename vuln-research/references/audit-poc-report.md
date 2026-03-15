@@ -320,6 +320,23 @@ export default defineConfig({
 - Deserialization — python/java script generating serialized payload
 - API-level auth bypass — curl with modified headers/tokens
 
+#### PoC Script Anti-Patterns
+
+Common mistakes that make PoCs fail silently or produce misleading results:
+
+| Anti-Pattern | What Goes Wrong | Fix |
+|-------------|----------------|-----|
+| **`docker exec` quoting** | `docker exec target sh -c "echo $VAR"` — host shell expands `$VAR` before it reaches the container | Use single quotes for the outer shell: `docker exec target sh -c 'echo $VAR'`, or escape: `\$VAR` |
+| **Playwright dialog timing** | `page.on('dialog')` registered AFTER the action that triggers `alert()`/`confirm()` — dialog fires before handler is ready, blocks all further events | Register the dialog handler BEFORE the triggering action: `page.on('dialog', d => d.accept())` then `page.click('#trigger')` |
+| **Container network isolation** | PoC uses `localhost` to reach the callback container from within the target container — fails because `localhost` inside a container refers to itself | Use Docker Compose service names: `http://callback:9999/proof` not `http://localhost:9999/proof` |
+| **Race between containers** | PoC script runs immediately after `docker compose up -d` — target app hasn't finished starting | Add a health check loop: `until curl -sf http://localhost:8080/health; do sleep 1; done` |
+| **Hardcoded sleep instead of wait** | `sleep 10` hoping the server is ready — either too short (flaky) or too long (wastes time) | Use health check endpoints, `wait-for-it.sh`, or Playwright's `waitForResponse()` / `waitForSelector()` |
+| **Missing `--network` in standalone docker run** | `docker run` PoC container can't reach compose network services | Use `--network=<project>_internal` or add the PoC container to `docker-compose.poc.yml` |
+| **Playwright `page.setContent()` + fetch to relative URL** | `setContent()` sets origin to `about:blank` — relative fetches and cookie-based CSRF fail | Use `page.goto()` to an actual URL first, or use absolute URLs in injected HTML |
+| **Curl follows redirects silently** | `curl` without `-L` misses the redirect; with `-L` follows it but loses POST body and auth headers on cross-origin redirect | Use `-L` for GET, but for POST use `-L --post301 --post302` to preserve method; check `-v` output to verify headers survive |
+| **Payload encoding mismatch** | URL-encoded payload sent in JSON body, or JSON payload sent as form-encoded — server rejects or misparses | Match `Content-Type` to payload format: `application/json` for JSON, `application/x-www-form-urlencoded` for form data |
+| **Stale cookies/tokens** | PoC hardcodes a session cookie that expires — works once, fails on replay | Script the auth flow: login → capture cookie → use in subsequent requests, all in one script run |
+
 #### Evidence Collection Protocol
 
 After reproduction, collect:

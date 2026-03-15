@@ -66,6 +66,7 @@ Identify the full technology stack before touching anything:
 - File upload support, allowed types, size limits
 - API style (REST, GraphQL, SOAP, JSON-RPC, gRPC-Web, WebSocket)
 - Debug mode status, verbose error pages, stack traces
+- PHP version (5.x / 7.x / 8.x) — gates which sinks are exploitable: `assert()` evals strings only in < 8.0, `preg_replace /e` only in < 7.0, loose type juggling `0 == "string"` only in < 8.0, `libxml_disable_entity_loader()` removed in 8.0 (XXE defaults safe), hex numeric strings `"0x1A" == 26` only in < 7.0. **Always qualify PHP findings with the version gate.**
 - PHP config: `allow_url_include`, `allow_url_fopen`, `disable_functions`, `open_basedir`, `display_errors`, `file_uploads`, `session.upload_progress.enabled`
 - Node.js: `--inspect` port, `NODE_ENV`, prototype pollution surface
 - Python: debug mode (Werkzeug debugger PIN), pickle usage, SSTI surface
@@ -148,7 +149,35 @@ Three strategies — choose based on codebase size:
 - **Low**: Input is significantly constrained but still partially controllable
 - **Needs verification**: Theoretical path exists, requires dynamic confirmation
 
+**Output filter internals:** When a template engine or framework marks output as "safe" or "escaped", verify HOW it escapes. Django's `|safe`, Twig's `|raw`, Rails' `html_safe`, React's `dangerouslySetInnerHTML`, and Jinja2's `|safe` all disable auto-escaping — but even auto-escaped output can be vulnerable in non-HTML contexts (JavaScript strings, CSS `url()`, HTML attributes without quotes). A filter labeled `is_safe` in Django means "this filter's output doesn't need further escaping" — it does NOT mean the output IS safe. Trace through the filter chain to confirm the escaping matches the output context.
+
 Load `references/sinks-catalog.md` for the language router and SAST/DAST integration rules. It routes to per-language sink files — load only the language(s) matching the target codebase.
+
+---
+
+## Phase 4.5: Static Analysis False Positive Calibration
+
+SAST tools generate noise. Calibrate expectations before triaging:
+
+| Severity | Typical False Positive Rate | Action |
+|----------|---------------------------|--------|
+| **P0/P1** (Critical/High) | 30–50% | Triage every finding manually — high FP rate but high impact when real |
+| **P2** (Medium) | 50–70% | Batch triage, prioritize sinks with direct user input |
+| **P3** (Low) | 70–90% | Skim for patterns, don't chase individual findings |
+
+**Common false positive patterns:**
+- **Dead code sinks**: Function exists but is never called from a reachable route
+- **Framework-sanitized paths**: SAST flags `innerHTML` but React's JSX auto-escapes; flags `query()` but ORM parameterizes
+- **Test file hits**: SAST scanning test fixtures, mock data, or example payloads
+- **Vendor/third-party code**: Flagging sinks in `node_modules/`, `vendor/`, or vendored dependencies
+- **Constant inputs**: Sink reached only with hardcoded/constant values, not user input
+
+**Calibration workflow:**
+1. Run SAST, sort by severity descending
+2. For P0/P1: manually verify each — trace source to sink, confirm controllability
+3. For P2/P3: sample 10 findings, measure FP rate, extrapolate to decide effort allocation
+4. Suppress confirmed false positives with inline comments or tool-specific ignore rules
+5. Track FP rate per rule — disable rules consistently above 90% FP in your stack
 
 ---
 
@@ -184,13 +213,14 @@ Single bugs are starting points. Real impact comes from chains.
 
 ## Phase 7: Exploitability Gate
 
-Before reporting ANY finding, answer these three questions:
+Before reporting ANY finding, answer these four questions:
 
 1. **Can I control the input?** — Is user input actually controllable, or is it server-generated/hardcoded?
 2. **Does it reach the sink?** — Does the tainted data survive all transforms, sanitizers, and WAF rules?
 3. **Can I prove impact?** — Do I have a working payload that demonstrates real-world consequences?
+4. **Where is the defense layer?** — Is the mitigation in the vulnerable code itself, in a framework layer (e.g. Django auto-escaping, Rails CSRF tokens), in runtime config (e.g. `disable_functions`, WAF rules), or in the deployment environment (e.g. network segmentation, read-only filesystem)? Framework and runtime defenses can be bypassed or misconfigured — verify the defense is actually active, not just assumed.
 
-If any answer is **No** → move to Observations section (not confirmed vulnerabilities).
+If any answer to questions 1-3 is **No** → move to Observations section (not confirmed vulnerabilities). For question 4, if a defense exists but you can bypass it, document the bypass as part of the finding.
 
 ---
 
@@ -228,6 +258,10 @@ Before declaring "done", verify you tested:
 - [ ] Cloud metadata during SSRF testing
 - [ ] ORM raw query methods (ORM != no SQLi)
 - [ ] Race conditions on ALL state-changing operations
+- [ ] RSS/Atom/XML feed parsers (CDATA blocks bypass HTML sanitizers — `<![CDATA[<script>alert(1)</script>]]>` renders as HTML when feed content is displayed)
+- [ ] Archive extraction endpoints (Zip Slip via `../` in filenames — `ZipArchive`, `PclZip`, `tar`, `unzip` without path validation)
+- [ ] Runtime/language version gates (PHP < 8.0 type juggling, PHP < 7.0 `/e` modifier, Python 2 `input()` = `eval()`, Node.js `--inspect` open debugger)
+- [ ] Template output filter internals (`|safe`, `|raw`, `html_safe`, `is_safe` — verify escaping matches the output context, not just that a filter is applied)
 
 Full blind spots list in `references/chaining-advanced-techniques.md`.
 

