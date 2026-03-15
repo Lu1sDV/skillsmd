@@ -70,6 +70,42 @@ Single bugs are starting points. Real impact comes from chains.
 - Pause-based desync + first-request routing → access internal admin panels
 - Client-side desync + cache poisoning → persist XSS via CDN
 
+**iconv CVE-2024-2961 Chains:**
+- PHP file read (LFI, XXE, SSRF) → `php://filter` with `convert.iconv.UTF-8.ISO-2022-CN-EXT` → heap overflow → RCE
+- XXE on Magento (CVE-2024-34102) → file read → iconv → RCE (full chain demonstrated)
+- Roundcube file read → iconv → RCE
+- Key insight: ANY PHP file read is now a Critical RCE vector
+
+**CSPT → CSRF Chains:**
+- Client-Side Path Traversal source (user-controlled value in `fetch()` URL) → `../` traversal to state-changing endpoint → authenticated CSRF without traditional CSRF bypass
+- CSPT + encoding bypass → WAF evasion → CSRF on protected endpoints
+- Jupyter CSPT (CVE-2023-39968 + CVE-2024-22421) → auth token leakage → full access
+
+**Web Cache Deception → Account Takeover Chains:**
+- WCD via delimiter confusion (`;`, `%23`, `%3f`) + static extension → cache authenticated response → attacker retrieves session/tokens → ATO
+- ChatGPT WCD: `session.css` cached by CDN → session token exposed → full ATO
+- Path normalization differential (CDN normalizes, origin doesn't) → cache dynamic auth response under static key → mass ATO
+
+**CSS Injection Exfiltration Chains:**
+- HTML injection (limited, no JS) → CSS `cross-fade()` nested exfiltration → leak CSRF token/session → CSRF/ATO
+- CSS `@import` recursive chain → server-controlled delay → character-by-character secret extraction
+- `:has()` selector + attribute prefix matching → extract hidden input values without JavaScript
+- CSS injection in email client → `cross-fade()` → leak blob URLs (Proton Mail research)
+
+**DOM Clobbering Chains:**
+- HTML injection (sanitized, no scripts) → DOM clobbering `document.currentScript.src` → library loads from attacker URL → XSS
+- DOM clobbering `form.attributes` → sanitizer bypass (DOMPurify) → stored XSS
+- DOM clobbering + Webpack/Vite dev server → XSS in development environment → credential theft
+
+**DoubleClickjacking Chains:**
+- DoubleClickjacking on OAuth authorize endpoint → attacker app gains victim's access token → ATO
+- DoubleClickjacking on account settings → change email/password → ATO
+- DoubleClickjacking + OAuth device flow → authorize malicious device without victim awareness
+
+**CPDoS Chains:**
+- CPDoS + targeted resource selection → deny access to login page, password reset, or critical API endpoints
+- CPDoS + social engineering → cache error on competitor's product page during launch
+
 ### Impact Amplifiers
 
 Re-score severity in chain context:
@@ -82,6 +118,12 @@ Re-score severity in chain context:
 - A **Medium** cache poisoning becomes **Critical** with delimiter path confusion caching auth responses
 - A **Low** DOM clobbering becomes **High** when it bypasses DOMPurify `attributes` enumeration → stored XSS
 - A **Medium** XSLT injection becomes **Critical** when PHP `php:function()` reaches `system()`
+- A **Low** file read (PHP) becomes **Critical** via iconv CVE-2024-2961 heap overflow → reliable RCE
+- A **Low** HTML injection becomes **High** via CSS `cross-fade()` exfiltration → CSRF token theft → ATO
+- A **Low** CSPT becomes **High** when traversal reaches state-changing API → authenticated CSRF
+- A **Medium** WCD becomes **Critical** when caching session tokens → mass ATO (ChatGPT pattern)
+- A **Low** DOM clobbering becomes **Critical** via `document.currentScript` → library hijack → stored XSS
+- A **Low** DoubleClickjacking becomes **Critical** on OAuth authorize → access token theft → ATO
 
 ### Composite Risk Scoring
 
@@ -189,3 +231,17 @@ Before declaring "done", verify you tested:
 - [ ] Not testing mass assignment with framework-specific payloads (`is_admin=true`, `role=admin`, `email_verified=true`)
 - [ ] Not testing `postMessage` receivers for missing origin validation (check `getEventListeners(window)`)
 - [ ] Not testing CSTI in Angular/Vue/Handlebars client-side templates (distinct from XSS — uses `{{}}` interpolation, no HTML tags)
+- [ ] Not testing DoubleClickjacking on OAuth authorize and account settings pages (bypasses X-Frame-Options, SameSite, CSP frame-ancestors)
+- [ ] Not testing Client-Side Path Traversal (CSPT) — `../` in frontend `fetch()` URLs leading to CSRF
+- [ ] Not testing iconv CVE-2024-2961 on PHP file read primitives (ANY file read → RCE via ISO-2022-CN-EXT)
+- [ ] Not testing Web Cache Deception with delimiter confusion (`;`, `%23`, `%3f`, `%00`) + static extensions
+- [ ] Not testing CPDoS (Cache Poisoned Denial of Service) via oversized headers, metacharacters, or response splitting
+- [ ] Not testing CSS exfiltration via `cross-fade()` nesting in HTML injection contexts
+- [ ] Not testing DOM clobbering of `document.currentScript` / `document.scripts` in frontend build tools
+- [ ] Not testing GraphQL alias overloading and directive overloading for rate limit bypass and DoS
+- [ ] Not testing Zip Slip in archive extraction (file upload → path traversal in archive entries)
+- [ ] Not testing OAuth device code flow abuse (victim authorizes on legitimate provider page)
+- [ ] Not testing SAML self-signed certificate acceptance (SP validates signature but not certificate chain)
+- [ ] Not testing ORM smuggling (Beego filter overwrite, Prisma type confusion, Sequelize operator aliasing)
+- [ ] Not testing reverse tabnabbing via `window.opener` in `window.open()` calls without `noopener`
+- [ ] Not testing web timing attacks for hidden parameter discovery and SSRF confirmation

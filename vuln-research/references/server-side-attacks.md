@@ -24,6 +24,61 @@
 - Go: `os/exec.Command`, `syscall.Exec`
 - .NET: `Process.Start`, `CodeDom`, Roslyn scripting, PowerShell runspace
 
+### iconv CVE-2024-2961 (glibc Buffer Overflow → PHP RCE)
+
+A 24-year-old buffer overflow in glibc's `iconv()` implementation, exploitable through PHP's charset conversion functions. Discovered by Ambionics/LEXFO (Charles Fol, 2024).
+
+**Root cause:** When converting to `ISO-2022-CN-EXT` charset, `iconv()` writes up to 4 bytes beyond the output buffer boundary. The bug exists in glibc since 2000.
+
+**PHP exploitation chain:**
+1. Any PHP file read primitive (LFI, `file_get_contents()`, `php://filter`) triggers `iconv()` internally
+2. Attacker uses `php://filter` with `convert.iconv.UTF-8.ISO-2022-CN-EXT` to trigger the heap overflow
+3. Heap corruption → controlled write → overwrite PHP internal structures → RCE
+4. Tool: `ambionics/cnext-exploits` on GitHub
+
+**Key properties:**
+- 100% reliable exploitation (no brute force, no ASLR bypass needed)
+- Works on PHP 7.0 through 8.3 (all maintained versions at disclosure)
+- Payload is < 1000 bytes
+- Only requires a file read primitive — `allow_url_include` not needed
+- No file write needed — pure memory corruption
+
+**Real-world chains:**
+- Roundcube Webmail: file read → iconv → RCE
+- Magento/Adobe Commerce: CVE-2024-34102 (XXE) → file read → iconv → RCE
+- Any LFI via `php://filter` → iconv → RCE (replaces need for filter chain generator)
+
+**Detection:** Look for `convert.iconv` in `php://filter` chains, especially with `ISO-2022-CN-EXT` target charset. Any file read sink in PHP is now a potential RCE vector.
+
+**Impact:** Elevates ALL PHP file read vulnerabilities to Critical (RCE). Previously, file read without `allow_url_include` was often scored as High — now it's Critical due to reliable RCE chain.
+
+### Bash Arithmetic Evaluation RCE
+
+Bash `$(( ))` arithmetic expansion evaluates arbitrary expressions, including command substitution within array index references.
+
+**Exploitation:** In CGI scripts, RewriteMap programs, or any context where user input reaches bash arithmetic:
+```bash
+# If user input reaches: echo $(( $input ))
+# Payload: input = "a]};id;{b["
+# Or via array indexing: input = "a[$(id)]"
+```
+
+**Targets:**
+- Apache `RewriteMap` with `prg:` handler using bash scripts
+- CGI scripts that perform arithmetic on user input
+- Shell scripts invoked by web applications via `system()` / `exec()`
+- Docker entrypoint scripts processing environment variables
+
+**Key insight:** Unlike command injection via `;` or `|`, arithmetic evaluation bypasses many input filters that only check for shell metacharacters. The `$((` ... `))` context allows `$(command)` substitution within array indices.
+
+### React Server Components RCE (React2Shell, CVE-2025-55182)
+
+Unauthenticated RCE in applications using React Server Components (RSC) with Next.js — server-side rendering of user-controlled component trees.
+
+**Mechanism:** React Server Components deserialize component props on the server. If user input controls component names or prop values that reach `eval`-like sinks during server-side rendering, arbitrary code execution is possible.
+
+**Detection:** Look for Next.js apps using `"use server"` directive with user-controlled data flowing into server actions or component props.
+
 ---
 
 ## SSRF (Server-Side Request Forgery)

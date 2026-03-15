@@ -96,6 +96,29 @@ Impact: attackers set `is_admin=true`, `role=admin`, `email_verified=true`, `pas
 - **SAML comment injection:** `admin@evil.com<!---->.legit.com` → NameID parsed as `admin@evil.com` by SP but validated against `legit.com` by IdP (after comment removal)
 - **SAML assertion replay:** if assertion lacks audience restriction or timestamp check, replay captured assertion to authenticate as victim
 - **SAML signature exclusion:** strip the `<Signature>` element entirely — SP authenticates without verifying signature if it doesn't enforce signature presence
+
+### SAML Implementation Weaknesses — Expanded
+
+**Self-signed certificate acceptance (Zscaler-style, CVE-2025-54982):**
+- SP accepts SAML assertions signed with any certificate (including attacker-generated self-signed certs)
+- Attacker forges entire SAML assertion with victim's NameID, signs with own key
+- SP validates signature cryptographically (it's valid!) but doesn't verify the signing certificate is from the trusted IdP
+- Root cause: SP validates signature math but not certificate chain/thumbprint
+
+**XML canonicalization attacks:**
+- Different XML canonicalization methods (C14N, exc-C14N) handle whitespace, namespaces, and comments differently
+- Attacker inserts content in areas that get removed by canonicalization before signing but preserved by the SP's XML parser
+- Related: XML signature wrapping (XSW) with 8+ known variants (XSW1-XSW8)
+
+**NameID format confusion:**
+- IdP sends `email` format NameID but SP interprets as `persistent` identifier
+- Attacker registers `admin@attacker.com` on IdP, SP maps `admin` as username
+
+**Clock skew exploitation:**
+- SP allows generous `NotBefore`/`NotOnOrAfter` window (often 5-10 minutes)
+- Replay captured assertions within the validity window
+- Some SPs don't check `NotOnOrAfter` at all
+
 - **PKCE bypass:** downgrade from S256 to plain, or strip `code_verifier` entirely
 - **Client secret exposure:** in mobile apps, SPAs, JavaScript bundles, `.env` files in public repos
 - **Token substitution:** swap tokens between different OAuth clients to access unauthorized resources
@@ -107,6 +130,26 @@ Impact: attackers set `is_admin=true`, `role=admin`, `email_verified=true`, `pas
 - **Device code phishing:** attacker initiates device code flow, socially engineers victim to authorize at `https://provider.com/device`
 - **redirect_uri bypass techniques expanded:** subdomain matching (`*.legit.com`), path bypass (`/callback/../attacker`), regex misconfiguration (`evil.com.example.com`), origin-only validation (checks domain not path)
 
+### OAuth Device Code Phishing — Real-World Campaigns
+
+**ShinyHunters / UNC6040 (2024-2025):** Large-scale campaign exploiting the OAuth 2.0 Device Authorization Grant:
+1. Attacker initiates device code flow with Microsoft/Google, receives `device_code` + `user_code`
+2. Phishing email or message instructs victim to visit `microsoft.com/devicelogin` and enter the user code
+3. Victim authenticates normally on the legitimate provider's page — no credential theft, no fake login page
+4. Attacker polls token endpoint with `device_code` and receives victim's access token + refresh token
+5. Refresh token provides persistent access even after password change
+
+**Why it works:**
+- Victim interacts only with legitimate OAuth provider pages (not phishing)
+- Device code flow designed for input-constrained devices (TVs, IoT) — no redirect_uri validation
+- Most users don't recognize that authorizing a "device" grants token access
+- Refresh tokens often have long/infinite lifetime
+
+**Detection indicators:**
+- Unusual device code flow requests from non-device user agents
+- Token grants from device flow for users who don't use input-constrained devices
+- Bulk device code requests from same IP
+
 ---
 
 ## Logic & Race Conditions
@@ -117,6 +160,23 @@ Impact: attackers set `is_admin=true`, `role=admin`, `email_verified=true`, `pas
 - Integer overflow/underflow (especially in C-backed extensions, 32-bit systems)
 - Double-spend / double-claim via concurrent requests (use threading/async to send N requests simultaneously)
 - **HTTP/2 Single-Packet Attack:** send all parallel requests in a single TCP segment, eliminating network jitter and achieving true simultaneous server processing (~90% success rate vs ~5% with HTTP/1.1 for limit-overrun attacks). HTTP/1.1 equivalent: last-byte synchronization — send all but the last byte of N parallel requests, then flush final byte across all connections simultaneously. Tool: Turbo Intruder with `THREADED` engine. WebSocket variant: Turbo Intruder THREADED mode on N simultaneous WS connections.
+
+### Race Condition Exploitation Patterns
+
+**Limit-overrun:** Send N identical requests simultaneously to bypass server-side limits (coupon redemption, transfer, vote). Single-packet attack achieves ~1ms spread across 20-30 requests vs ~30ms with last-byte sync.
+
+**Multi-endpoint races:** Different endpoints that read-then-write the same resource:
+- `/transfer` + `/withdraw` on same balance
+- `/apply-coupon` + `/checkout` (apply coupon after price calculated)
+- `/update-email` + `/send-reset` (change email between check and send)
+
+**Sub-state exploitation:** Attack the brief window (~1ms) when a single request transitions through intermediate states:
+- Password reset: token generated → stored → email sent (race between token generation and sending)
+- File upload: file written → validation → move/delete (access file before validation completes)
+- Account creation: user created → role assigned (access with default/no role)
+
+**Time-sensitive verification bypass:** Rate limits that use `timestamp > last_attempt + delay` — single-packet attack sends all requests at same timestamp, all pass the check.
+
 - Missing idempotency on critical operations
 - Time-of-check to time-of-use (TOCTOU) generalized across all resource types
 - Inconsistent state across microservices: operation succeeds on service A, fails on service B, no rollback

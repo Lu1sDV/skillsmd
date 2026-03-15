@@ -62,6 +62,8 @@ LD_PRELOAD via `putenv()` + `mail()`/`mb_send_mail()`/`error_log()`, FFI, Shells
 
 **Gadget chain triggers:** `__wakeup()`, `__destruct()`, `__toString()`, `__call()`, `__callStatic()`, `__get()`, `__set()`, `__isset()`, `__unset()`, `__invoke()`, `__debugInfo()`, `__serialize()` / `__unserialize()` (PHP 7.4+), `Serializable::unserialize()`
 
+**Phar + iconv chain:** `phar://` triggers deserialization AND can chain to iconv if the gadget chain reaches a file read with `convert.iconv` filter → double RCE vector from single Phar trigger.
+
 ---
 
 ## Type Juggling Traps
@@ -99,6 +101,25 @@ LD_PRELOAD via `putenv()` + `mail()`/`mb_send_mail()`/`error_log()`, FFI, Shells
 ## Process Control Sinks
 
 `proc_open()`, `proc_close()`, `proc_terminate()`, `proc_nice()`, `proc_get_status()`, `apache_child_terminate()`, `posix_kill()`, `posix_setuid()`, `posix_setsid()`, `posix_setpgid()`, `pcntl_signal()`, `pcntl_fork()`, `pcntl_alarm()`
+
+---
+
+## iconv Sinks (CVE-2024-2961)
+
+**Critical:** glibc `iconv()` buffer overflow when converting to `ISO-2022-CN-EXT` charset. Exploitable through any PHP function that triggers charset conversion.
+
+**Direct iconv sinks:**
+`iconv()`, `iconv_mime_decode()`, `iconv_mime_decode_headers()`, `mb_convert_encoding()` (when using iconv backend), `iconv_strpos()`, `iconv_strrpos()`, `iconv_strlen()`, `iconv_substr()`
+
+**Indirect iconv sinks (via php://filter):**
+Any file read function combined with `php://filter/convert.iconv.UTF-8.ISO-2022-CN-EXT`:
+`file_get_contents()`, `readfile()`, `include`/`require`, `fopen()`, `file()`, `SplFileObject`, `highlight_file()`, `show_source()`, `finfo->file()`, `getimagesize()`, `exif_read_data()`, `hash_file()`, `md5_file()`, `sha1_file()`
+
+**Exploitation:** `php://filter/convert.iconv.UTF-8.ISO-2022-CN-EXT/resource=/etc/passwd` triggers heap overflow → controlled write → RCE. Tool: `ambionics/cnext-exploits`.
+
+**Impact:** Elevates ALL PHP file read vulnerabilities from High (information disclosure) to Critical (RCE). No `allow_url_include` needed, no file write needed, 100% reliable, works PHP 7.0-8.3.
+
+**SAST detection:** Semgrep rule `php.lang.security.iconv-usage` (custom), grep for `ISO-2022-CN-EXT` or `convert.iconv` in filter chains.
 
 ---
 

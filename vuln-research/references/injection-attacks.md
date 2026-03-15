@@ -37,6 +37,16 @@
 
 **MSSQL specific:** `xp_cmdshell`, `sp_OACreate` + `sp_OAMethod`, `OPENROWSET`, stacked queries for chaining, `WAITFOR DELAY` for time-based blind, `xp_dirtree` for OOB DNS, `fn_xe_file_target_read_file`, linked servers for pivoting
 
+### SQL Injection via Prepared Statement Edge Cases
+
+**PDO emulated prepares (PHP):** When `PDO::ATTR_EMULATE_PREPARES` is `true` (default in many configs), PDO performs client-side escaping instead of true server-side prepared statements. Combined with charset mismatch (e.g., GBK encoding), `addslashes()` escaping can be bypassed with multibyte characters like `%bf%27`.
+
+**Parameterized ORDER BY:** Most prepared statement APIs don't support parameterized column names in `ORDER BY`, `GROUP BY`, or table names — these must be whitelisted, not parameterized.
+
+**IN clause expansion:** `WHERE id IN (?)` with array input — many drivers expand this unsafely. Libraries like `sqlstring` in Node.js or manual array joins create injection vectors.
+
+**Stored procedure output:** Parameterized input to stored procedures that internally use dynamic SQL (`EXEC`, `sp_executesql` with concat) — injection happens inside the procedure.
+
 ---
 
 ## NoSQL Injection
@@ -84,6 +94,20 @@
 - Very common in Node.js (Mongoose, Sequelize) and PHP (Laravel Eloquent with array filters) when `req.query` is spread directly into a find/where call
 - MongoDB operator injection: `{"username": {"$gt": ""}, "password": {"$gt": ""}}` in JSON body — auth bypass without knowing credentials
 - Sequelize operator injection via aliased operators: `{[Op.gt]: 0}` constructed from user input when `operatorsAliases` enabled (deprecated but present in legacy apps)
+
+### ORM Smuggling
+
+Framework-specific ORM behaviors that bypass authorization or validation logic:
+
+| Framework | Technique | Impact |
+|-----------|-----------|--------|
+| **Beego ORM** | Filter-expression segment-overwrite: inject filter conditions via query parameter parsing that overwrite existing WHERE clauses | Auth bypass — attacker controls query predicates |
+| **Prisma** | Type confusion in filter arguments: passing object where string expected bypasses type-level validation | Auth bypass — e.g., `where: {email: {contains: ""}}` returns all records |
+| **Sequelize** | Operator aliasing (deprecated `$gt`, `$ne` operators): `operatorsAliases: true` allows query operator injection from user input | Data extraction, auth bypass |
+| **Mongoose** | Buffer type confusion: passing `Buffer` where `String` expected in comparison operations | Comparison bypass |
+| **TypeORM** | `Like()`, `Raw()` with string interpolation in `find()` options | SQLi through ORM |
+
+**Key insight:** ORMs provide a false sense of security. Any ORM method that accepts complex objects from user input (nested filters, operators, raw expressions) can be smuggled past the ORM's query builder.
 
 ---
 
