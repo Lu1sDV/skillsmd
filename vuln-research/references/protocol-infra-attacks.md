@@ -204,6 +204,30 @@ Three attack variants that poison web caches with error pages, denying access to
 
 **Field suggestion exploitation:** Query `{user{passwor}}` → error: "Did you mean 'password'?" — enumerate all fields via typo-based fuzzing without introspection.
 
+### GraphQL Authorization Bypass Patterns
+
+**Multiple `doc_id` exposing private fields:**
+- Persisted queries map `doc_id` → query text. Some apps expose multiple `doc_id` values for the same type, where one includes fields the user shouldn't see
+- `POST /graphql {"doc_id": "12345"}` returns public fields; `POST /graphql {"doc_id": "12346"}` returns the same type with internal/admin fields
+- **Detection:** enumerate `doc_id` values incrementally, diff response schemas
+
+**`actor_id` not validated against session:**
+- GraphQL resolvers accept `actor_id` (or `viewer_id`, `user_id`) as an input argument rather than deriving it from the session/token
+- `{user(actor_id: "victim_id") { email, phone }}` — resolver trusts the argument instead of the authenticated identity
+- **Impact:** horizontal privilege escalation — access any user's data by changing the actor ID
+
+**Batch API result interpolation:**
+- Batch endpoints (`/graphql/batch`) execute multiple queries atomically
+- If server-side variable interpolation shares state across queries in a batch, results from query N can leak into query N+1
+- **Exploitation:** first query fetches attacker's data (populates server-side cache/context), second query fetches victim's data but receives attacker's cached values — or vice versa
+- Race condition variant: concurrent batch queries with overlapping variable names
+
+**Mutations accepting `application/x-www-form-urlencoded` = CSRF:**
+- GraphQL mutations typically require `Content-Type: application/json` (which triggers CORS preflight)
+- If the server also accepts `application/x-www-form-urlencoded`, mutations can be submitted via HTML `<form>` — no preflight, cookies automatically attached
+- `<form action="https://target.com/graphql" method="POST"><input name="query" value="mutation{deleteAccount}"></form>`
+- **Detection:** replay mutation requests with `Content-Type: application/x-www-form-urlencoded` — if server processes them, CSRF is possible
+
 ---
 
 ## WebSocket Attacks
@@ -333,6 +357,39 @@ Systematic WAF bypass class exploiting different Unicode normalization forms (NF
 **Visual confusables:** Characters from different Unicode blocks visually identical but distinct codepoints — WAF pattern `<script>` won't match `＜script＞` (fullwidth).
 
 **Tools:** ActiveScan++ (updated for Unicode normalization testing), Ryan & Isabella Barnett's Black Hat USA 2025 research.
+
+### Parser Differentials & MIME Confusion
+
+Exploits divergent parsing behavior between security controls (WAF, sanitizer, validator) and the consuming application.
+
+**Content-Type multi-value confusion:**
+- `Content-Type: application/json;,text/html` — some parsers pick first value (JSON), others pick last (HTML)
+- WAF validates body as JSON (benign), browser renders as HTML (XSS)
+- Affects any pipeline where Content-Type is checked by one component and consumed by another
+
+**"Validate then use original" anti-pattern:**
+```
+1. Validator: parse(input) → normalized_form → check(normalized_form) → PASS
+2. Application: process(input)  ← uses ORIGINAL un-normalized input
+```
+- Validation operates on a normalized/decoded copy, but the application processes the raw input
+- Common in URL validation (validator normalizes `%2e%2e`, app receives `..`), XML validation, JSON schema checks
+
+**Missing nosniff + user-controlled Content-Type:**
+- Response lacks `X-Content-Type-Options: nosniff`
+- User-controlled data echoed in response body with attacker-influenced Content-Type
+- Browser MIME-sniffs response as HTML despite application intending JSON/text → XSS
+- Example: API endpoint echoes error message containing user input, serves as `text/plain` without nosniff → browser sniffs as HTML
+
+**JSON echo without HTML encoding:**
+- API returns user input in JSON response: `{"error": "Invalid value: <script>alert(1)</script>"}`
+- If response is served with `Content-Type: text/html` (misconfiguration) or browser sniffs it as HTML → XSS
+- Even with `application/json`, direct browser navigation to the endpoint may trigger HTML rendering in older browsers
+
+**MIME boundary confusion in multipart:**
+- Two `Content-Type` headers with different boundaries → WAF parses with one boundary, backend with another
+- Payload hidden in the "gap" between the two parsing interpretations
+- `Content-Type: multipart/form-data; boundary=X; boundary=Y` — first vs last wins depends on parser
 
 ### Apache HTTP Server Confusion Attacks (Orange Tsai, 2024)
 

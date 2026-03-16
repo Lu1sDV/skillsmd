@@ -135,6 +135,35 @@ Single bugs are starting points. Real impact comes from chains.
 **Next.js Cache Poisoning Chains:**
 - Internal header injection (`x-now-route-matches`) → SSR misclassified as SSG → CDN caches authenticated response → data leak or stored XSS for all visitors
 
+### A→B Bug Signal (Systematic Chain Hunting)
+
+When you find bug A, systematically hunt for related bugs B and C that chain with it. Single bugs pay baseline bounties; chains pay 3-10x.
+
+**Method:**
+1. **Find bug A** (e.g., open redirect on `login.example.com`)
+2. **Ask: what does A enable?** Map every attack that becomes possible with A as a primitive:
+   - Open redirect → OAuth token theft? SSRF filter bypass? Cache poisoning source?
+3. **Hunt for B** — the vulnerability that A unlocks or amplifies:
+   - A = open redirect → B = OAuth flow on same domain with `redirect_uri` validation → chain = ATO
+   - A = SSRF (blind) → B = cloud metadata endpoint reachable → chain = credential theft
+   - A = XSS (self, low-impact) → B = cookie tossing to parent domain → chain = OAuth state hijack → ATO
+4. **Iterate:** does A+B enable C? Keep extending the chain.
+
+**Signal patterns — when you find A, look for B:**
+
+| Bug A Found | Hunt for Bug B | Potential Chain |
+|-------------|---------------|-----------------|
+| Open redirect | OAuth flow on same origin | A→B = token theft → ATO |
+| Blind SSRF | Cloud metadata / internal services | A→B = credential exfil → infra compromise |
+| Self-XSS | Cookie tossing, login CSRF, clickjacking | A→B = deliver payload → stored XSS impact |
+| Path traversal (read) | Config files with credentials, iconv (PHP) | A→B = cred theft → auth bypass, or A→B = RCE |
+| HTML injection (no JS) | CSS exfiltration (`cross-fade()`, `:has()`) | A→B = CSRF token theft → CSRF → state change |
+| Prototype pollution | Template engine gadget, child_process gadget | A→B = RCE |
+| Cache poisoning source | High-traffic cacheable resource | A→B = mass XSS via cached JS |
+| IDOR (low-value data) | Missing ACL on related mutation | A→B = data read + write = full account control |
+
+**Economic insight:** programs pay for *impact*, not technique count. A Low + Low chain demonstrating ATO pays more than three isolated Mediums. Always look for the chain before submitting a standalone low-severity finding.
+
 ### Impact Amplifiers
 
 Re-score severity in chain context:

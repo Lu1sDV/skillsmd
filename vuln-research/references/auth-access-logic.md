@@ -184,6 +184,20 @@ Authentication flow manipulation in Okta Verify FastPass — skip device verific
 - **Device code phishing:** attacker initiates device code flow, socially engineers victim to authorize at `https://provider.com/device`
 - **redirect_uri bypass techniques expanded:** subdomain matching (`*.legit.com`), path bypass (`/callback/../attacker`), regex misconfiguration (`evil.com.example.com`), origin-only validation (checks domain not path)
 
+### OAuth redirect_uri Bypass Patterns (Detailed)
+
+| # | Pattern | Bypass Technique | Example |
+|---|---------|-----------------|---------|
+| 1 | `startsWith()` check | Append `../` or path traversal | `https://legit.com/callback/../attacker.com` |
+| 2 | Hostname-only validation (no pathname) | Append arbitrary path | `https://legit.com/callback/../../attacker-controlled-path` |
+| 3 | `fallback_redirect_uri` parameter | Some OAuth implementations accept a secondary redirect param when primary fails | `?redirect_uri=https://legit.com&fallback_redirect_uri=https://attacker.com` |
+| 4 | Redirect from cookie | App reads redirect destination from cookie instead of `redirect_uri` param — cookie tossing from subdomain overwrites it | Set cookie `redirect=https://attacker.com` via subdomain XSS |
+| 5 | `response_type=token` chain | Implicit flow puts token in fragment — combine with open redirect on `redirect_uri` domain to leak fragment to attacker | `redirect_uri=https://legit.com/open-redirect?url=https://attacker.com` |
+| 6 | HTTP Parameter Pollution | `redirect_uri=https://legit.com&redirect_uri=https://attacker.com` — validator checks first, server uses last (or vice versa) | Framework-dependent: PHP uses last, ASP.NET uses first |
+| 7 | Login CSRF as chain enabler | CSRF on login endpoint → force victim to authenticate as attacker → OAuth flow binds victim's IdP to attacker's session | Missing `state` param + login CSRF = ATO via OAuth binding |
+
+**Key insight:** `redirect_uri` validation is a string matching problem with dozens of edge cases. Validators that do anything less than exact string comparison (===) are likely bypassable. Test all 7 patterns against any OAuth implementation.
+
 ### IPv6 Multi-@ Userinfo OAuth Redirect Bypass
 
 IPv6 URL syntax combined with multi-`@` userinfo creates parser differentials:

@@ -230,6 +230,61 @@ Origin validation bypasses:
 
 Tools: Posta (Chrome extension), DOM Invader (Burp), manual DevTools: `getEventListeners(window)`.
 
+### postMessage Deep Exploitation Patterns
+
+**Inverted origin check (deny-list instead of allow-list):**
+```javascript
+// VULNERABLE: blocks known attacker but accepts attacker.com.evil.com
+if (e.origin !== 'https://attacker.com') { processMessage(e.data); }
+// CORRECT: allow-list exact match
+if (e.origin === 'https://trusted.com') { processMessage(e.data); }
+```
+
+**Regex domain bypass patterns:**
+- `e.origin.match(/trusted\.com/)` → matches `trusted.com.evil.com` (no anchoring)
+- `/^https:\/\/.*trusted\.com$/.test(e.origin)` → matches `https://evil-trusted.com`
+- `/trusted\.com$/.test(e.origin)` → matches `https://nottrusted.com`
+- Fix: exact string match `e.origin === 'https://trusted.com'` — never regex for origin validation
+
+**Origin stored then used as script.src:**
+```javascript
+window.addEventListener('message', function(e) {
+  var config = { origin: e.origin, data: e.data };
+  // Later in code — attacker-controlled origin becomes script source
+  var s = document.createElement('script');
+  s.src = config.origin + '/api/widget.js';
+  document.body.appendChild(s);
+});
+```
+Origin validated at receipt but stored and reused later without re-validation — deferred trust.
+
+**Type confusion via Array.toString():**
+```javascript
+// Handler expects string, receives array
+postMessage(['<img src=x onerror=alert(1)>'], '*');
+// Array.toString() joins with comma: '<img src=x onerror=alert(1)>'
+// If handler does: element.innerHTML = e.data → XSS
+```
+
+**MessageChannel port reuse:**
+- Sender creates `MessageChannel`, sends `port2` to victim window via `postMessage`
+- Victim stores port and sends sensitive data back (tokens, user data)
+- If port ownership isn't validated, attacker intercepts responses meant for trusted sender
+- Attack: attacker sends own `MessageChannel` port before trusted sender → victim responds to attacker
+
+**Math.random() PRNG reconstruction via Z3:**
+- Application generates CSRF tokens or session identifiers using `Math.random()`
+- `postMessage` leaks random values to cross-origin observers
+- Mersenne Twister (V8's PRNG) state recoverable from ~625 observed outputs
+- Tool: Z3 SMT solver constrains MT19937 state from observed values → predict future tokens
+- Impact: CSRF token prediction, session ID prediction
+
+**window.name persistence across navigations:**
+- `window.name` survives cross-origin navigations (unlike most DOM properties)
+- Attacker sets `window.name = '<img src=x onerror=alert(1)>'` on controlled page
+- Redirects victim to target page that reads `window.name` without sanitization
+- Persists until tab is closed — survives page reloads and same-tab navigations
+
 ---
 
 ## CORS Misconfiguration
@@ -301,6 +356,26 @@ Evolved Magecart skimming technique using Google Tag Manager as a living-off-the
 - WebSocket exfil bypasses network-level content inspection
 
 Source: Recorded Future H1-2025 Malware Trends.
+
+## Supply-Chain XSS via Shared Analytics Scripts
+
+Third-party analytics scripts (Facebook Pixel `fbevents.js`, Google Analytics, Segment, Mixpanel) loaded on thousands of sites create a shared execution context exploitable for mass XSS.
+
+**Server-side code generation pattern:**
+```javascript
+// Server generates JS code embedding user-controlled values via string concatenation
+// Backend: res.send(`fbq('track', 'Purchase', {value: '${req.query.amount}'});`);
+// Attacker: ?amount=0'});alert(document.cookie);//
+// Rendered: fbq('track', 'Purchase', {value: '0'});alert(document.cookie);//'});
+```
+
+**Attack vectors:**
+- **User-controlled values in server-rendered analytics calls:** form inputs, URL parameters, or stored data string-concatenated into `<script>` blocks that configure analytics — no client-side sanitization because the code is generated server-side
+- **Shared script compromise:** a single compromised analytics script (CDN-hosted, cached at edge) executes in the origin context of every site loading it — CSP `script-src` typically allowlists these domains
+- **Tag manager injection:** GTM/Adobe Launch containers loading user-configurable tags — inject arbitrary JS via tag configuration without touching source code
+- **Data layer pollution:** push attacker-controlled values into `window.dataLayer` → analytics scripts read and eval/interpolate them
+
+**Detection:** grep for server-side string concatenation of user input into `<script>` blocks, especially analytics configuration. Look for `fbq(`, `ga(`, `gtag(`, `analytics.track(` with interpolated variables.
 
 ---
 
@@ -551,6 +626,31 @@ Libraries like `jshttp/etag` encode response size in hex: `W/"[size_hex]-[timest
 ### Chrome Connection Pool Ordering Oracle
 
 Chrome limits connections to 256 total, 6 per origin. Pending requests sorted alphabetically by port/scheme/host. Exhaust pool → observe completion order to infer cross-origin redirect destinations (e.g., `a.target.com` vs `z.target.com`) without reading response. Leaks redirect targets, revealing auth state or user identity.
+
+### Oracle Patterns for XS-Leak Exploitation
+
+**CORB (Cross-Origin Read Blocking) oracle:**
+- Browser blocks cross-origin responses with `Content-Type: text/html` from being loaded as images/scripts
+- If response Content-Type varies by authentication state (HTML when logged in, JSON/204 when not), the CORB block/allow difference is observable
+- `<script src="https://target.com/profile">` → CORB error (HTML) vs successful load (non-HTML) leaks auth state
+- Works even with proper CORS headers — CORB operates independently
+
+**X-Frame-Options oracle:**
+- Target page sets `X-Frame-Options: DENY` conditionally (e.g., only for authenticated users, only for certain content)
+- `<iframe>` load success/failure observable via `onload`/`onerror` events
+- Combine with URL parameters to create binary oracle: does resource X exist for this user?
+- Frame counting (`window.frames.length`) reveals whether framed page loaded subframes
+
+**Prototype pollution as XS-Leak gadget:**
+- Pollute `Object.prototype` with properties that alter cross-origin request behavior
+- Example: `Object.prototype.timeout = 1` causes `XMLHttpRequest` to timeout after 1ms — timing differential reveals response size
+- Polluting `constructor` or `toString` on objects passed to `postMessage` → observable side effects in receiver
+
+**Error-vs-success status oracle:**
+- Cross-origin `<img>`, `<script>`, `<link>` fire `onload` (2xx) vs `onerror` (4xx/5xx)
+- `fetch()` with `mode: 'no-cors'` → `response.type === 'opaque'` but timing still observable
+- Redirect count detection: `performance.getEntriesByType('resource')` reveals `redirectCount` for same-origin, timing for cross-origin
+- Status code groups distinguishable via response timing (200 fast from cache, 403 triggers error handler, 302 adds redirect latency)
 
 ### Impact
 - Detect authentication state (logged in vs. logged out)

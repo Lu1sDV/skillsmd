@@ -184,6 +184,20 @@ Key payloads:
 - Local file: `<iframe src="file:///etc/passwd" width="100%" height="500">` — content rendered into PDF
 - Internal port scan: embed many `<img>` tags with different internal ports; render time differences reveal open ports
 
+**HTML-to-PDF double-decode vulnerability:**
+User input is HTML-encoded at submission (e.g., `<` → `&lt;`), stored safely. When rendered to PDF, the HTML-to-PDF engine HTML-decodes the stored content as part of normal HTML rendering — sanitization is undone, and the original payload executes in the PDF engine's context.
+
+```
+1. User submits: <script>fetch('http://169.254.169.254/...')</script>
+2. App stores: &lt;script&gt;fetch(...)&lt;/script&gt;  (HTML-encoded, "safe")
+3. PDF engine renders HTML: decodes entities → <script>fetch(...)</script> executes
+```
+
+- Affects any pipeline where data is sanitized for HTML display but later fed to a PDF renderer (invoices, reports, export features)
+- wkhtmltopdf and Puppeteer both execute JavaScript during rendering — SSRF and LFI via `file://` are the primary impacts
+- The encoding/decoding mismatch means XSS-safe storage is NOT PDF-safe storage
+- **Detection:** look for shared data paths between web display (HTML-encoded) and PDF generation (re-rendered as HTML)
+
 ---
 
 ## XXE (XML External Entities)

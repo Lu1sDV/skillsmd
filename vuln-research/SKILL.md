@@ -6,7 +6,9 @@ description: >
   Covers source audit across 30+ attack domains, sink analysis for 12 languages,
   SAST/DAST integration, vulnerability chaining, and proof-of-concept development.
   Triggers: vuln assessment, pentest, bug bounty, security audit, find vulns,
-  exploit, ctf, code audit, hunt bugs, 0-day, SAST, DAST, taint analysis.
+  exploit, ctf, code audit, hunt bugs, 0-day, SAST, DAST, taint analysis,
+  CI/CD pipeline security, GitHub Actions, Terraform, Traefik,
+  n8n workflow, OpenTelemetry, supply chain attack.
 ---
 
 # Vulnerability Research
@@ -40,7 +42,11 @@ Load references on-demand based on the active testing domain. **Do not load all 
 | XSS, Prototype Pollution, CORS, XS-Leaks, CSTI, postMessage | `references/client-side-attacks.md` | Testing client-side attacks |
 | RCE, SSRF, XXE, File Ops, Deserialization | `references/server-side-attacks.md` | Testing server-side attacks |
 | Auth, Access Control, OAuth, Logic, Race, Crypto | `references/auth-access-logic.md` | Testing auth & business logic |
-| Smuggling, Cache, WebSocket, GraphQL, DNS, Cloud, Encoding, ReDoS, Supply Chain, HTML Smuggling, Prompt Injection | `references/protocol-infra-attacks.md` | Testing protocols & infrastructure |
+| Smuggling, Cache, WebSocket, GraphQL, DNS, Cloud, Encoding, ReDoS, HTML Smuggling, Prompt Injection | `references/protocol-infra-attacks.md` | Testing protocols & infrastructure |
+| CI/CD Pipelines, GitHub Actions, Supply Chain, Runner Security, Workflow Poisoning | `references/cicd-supply-chain.md` | Testing CI/CD and supply chain attacks |
+| n8n, Zapier, Make.com, Power Automate, iPaaS, Webhooks, Workflow RCE, Credential Theft | `references/automation-platform-attacks.md` | Testing automation/iPaaS platforms |
+| Traefik, Nginx, HAProxy, Reverse Proxy Bypass, Terraform State, Docker Socket, Container Escape | `references/infra-misconfig-attacks.md` | Testing infrastructure misconfigurations (proxy, IaC, containers) |
+| OpenTelemetry, Prometheus, Grafana, Log Pipelines, Telemetry Poisoning, Collector SSRF, Cardinality Bombs | `references/observability-telemetry-attacks.md` | Testing observability/monitoring infrastructure |
 | Sinks router + SAST/DAST rules | `references/sinks-catalog.md` | Code audit entry point — routes to per-language sink files |
 | PHP sinks | `references/sinks/php.md` | PHP code audit (exec, callbacks, type juggling, phar deser) |
 | Python sinks | `references/sinks/python.md` | Python code audit (exec, pickle, SSTI, subprocess) |
@@ -239,6 +245,22 @@ Every reported vulnerability MUST include:
 9. **Video recording** — full exploit chain end-to-end
 
 Low-confidence findings (score <= 3) → **Observations** section. Intended features flagged as design weaknesses → also Observations.
+
+### Always-Rejected Findings (Do Not Report)
+
+These are commonly submitted findings that bug bounty programs universally reject. Do not waste time reporting them unless they are part of a demonstrated exploit chain with proven impact:
+
+| Finding | Why It's Rejected | When It Becomes Valid |
+|---------|-------------------|---------------------|
+| Missing security headers alone (`X-Frame-Options`, `X-Content-Type-Options`, `Strict-Transport-Security`) | No demonstrated impact — headers are defense-in-depth | Only if missing header is a **required prerequisite** in a working exploit chain (e.g., missing `X-Frame-Options` + clickjacking PoC with state change) |
+| CORS wildcard (`Access-Control-Allow-Origin: *`) without credential exfiltration | Browsers block `*` + `withCredentials` — no cookie/token leakage | Only if combined with `Access-Control-Allow-Credentials: true` AND sensitive data exfiltrated in PoC |
+| GraphQL introspection enabled alone | Introspection is a development feature, not a vulnerability | Only if introspection reveals mutations/fields that lead to demonstrated auth bypass or data leak |
+| Open redirects without OAuth/auth chaining | Low impact — redirect to phishing page is social engineering, not a technical vuln | Only when chained: open redirect → OAuth token theft → ATO, or open redirect → SSRF filter bypass |
+| SSRF with DNS-only callbacks (no response, no internal access) | Proves DNS resolution but not exploitability — most programs require demonstrated internal access or data exfil | Only if callback proves access to internal network (response data, cloud metadata, or internal service interaction) |
+| Self-XSS (requires victim to paste payload in their own browser) | Attacker cannot trigger it remotely — requires social engineering the victim | Only when chained with cookie tossing, login CSRF, or clickjacking to deliver the payload without victim cooperation |
+| Server/technology banner disclosure (`Server: Apache/2.4.51`, `X-Powered-By: PHP/8.1`) | Version information alone is not exploitable | Only if the disclosed version has a known, exploitable CVE AND you demonstrate the exploit working |
+
+**Rule of thumb:** if the finding requires the phrase "an attacker could theoretically..." without a working PoC, it belongs in Observations, not Vulnerabilities.
 
 Full proof methodology and report template in `references/audit-poc-report.md` (load when writing reports).
 

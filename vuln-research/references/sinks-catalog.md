@@ -32,6 +32,37 @@ Load the file matching the target codebase language. **Do not load all language 
 
 **Custom taint rules:** `pattern-sources` -> `pattern-sinks` -> `pattern-sanitizers` in Semgrep YAML.
 
+### Third-Party Semgrep Rule Packs
+
+Community-maintained rule packs that catch vulnerabilities the official `p/` packs miss:
+
+| Rule Pack | Repository | Focus Area | Key Differentiator |
+|-----------|------------|------------|-------------------|
+| **Trail of Bits** | `trailofbits/semgrep-rules` | Go, Python, JS, Rust, C | Smart contract security, crypto misuse, unsafe FFI, concurrency bugs — written by audit team with real-world exploit experience |
+| **0xdea** | `0xdea/semgrep-rules` | C/C++, Java, PHP, Python, JS | Vuln research-oriented rules: format strings, integer overflows, use-after-free patterns, deserialization sinks missed by official packs |
+| **Decurity** | `Decurity/semgrep-smart-contracts` | Solidity, Vyper | Smart contract vulnerabilities: reentrancy, access control, oracle manipulation — if auditing Web3 |
+
+**Usage:**
+```bash
+# Run third-party rules alongside official packs
+semgrep --config p/python --config "https://semgrep.dev/r/trailofbits.python" .
+# Or clone and run locally
+semgrep --config ~/semgrep-rules/python/ .
+```
+
+**When to use:** Always layer third-party packs on top of official `p/` packs during code audits. Official packs optimize for low FP rate (conservative); third-party packs from security researchers optimize for coverage (catch more true positives, accept higher FP rate).
+
+### Semgrep Pro Cross-File Taint Analysis
+
+Semgrep OSS performs single-file analysis only. **Semgrep Pro** (formerly Semgrep Supply Chain) adds cross-file and cross-function taint tracking:
+
+- Traces taint across function calls, module imports, and class hierarchies — catches ~250% more true positives than OSS on real codebases
+- Supports inter-procedural analysis: `source → function_a() → function_b() → sink` detected even when functions are in different files
+- Critical for frameworks with request/handler separation (Express routes → controller → model, Django views → forms → ORM)
+- **Limitation:** requires Semgrep Pro license; OSS users can approximate with manual cross-file grep but will miss complex data flows
+
+**Practical implication for audits:** if running Semgrep OSS and finding few results, it does NOT mean the codebase is clean — it means single-file analysis couldn't trace the taint. Either upgrade to Pro or supplement with manual cross-file taint tracing from the sink files.
+
 ### CodeQL Query Packs
 
 | Language | Pack | Key Queries |
