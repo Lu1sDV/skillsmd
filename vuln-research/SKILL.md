@@ -8,7 +8,8 @@ description: >
   Triggers: vuln assessment, pentest, bug bounty, security audit, find vulns,
   exploit, ctf, code audit, hunt bugs, 0-day, SAST, DAST, taint analysis,
   CI/CD pipeline security, GitHub Actions, Terraform, Traefik,
-  n8n workflow, OpenTelemetry, supply chain attack.
+  n8n workflow, OpenTelemetry, supply chain attack, agent sweep,
+  find me zero days, sweep everything, automated vuln discovery.
 ---
 
 # Vulnerability Research
@@ -28,7 +29,70 @@ description: >
 
 Find the bug. Prove the bug. Chain the bug. Every claim needs a working exploit or it's noise.
 
+**The Bitter Lesson, applied:** Vulnerability research has historically been 20% computer science and 80% solving giant, domain-specific jigsaw puzzles — learning font internals, memory allocator behavior, protocol edge cases. LLMs are universal jigsaw solvers. They encode the complete library of documented bug classes and vast correlations across source code. The structured methodology below channels this capability; the Agent Sweep mode unleashes it. Use both.
+
+**Attention was load-bearing:** Much of the Internet's security has rested not on sound engineering alone, but on the scarcity of elite attention. Most code has never been seriously audited. Agent sweep economics change this — you can aim at everything, not just high-status targets.
+
 The phases below are a **recommended workflow, not a rigid sequence** — skip, reorder, or loop as the target demands. The sink catalogs are **representative, not exhaustive** — new frameworks ship new dangerous functions daily. If you find a sink not listed here, it's still a sink. The checklists exist to prevent forgetting the obvious, not to replace thinking.
+
+---
+
+## Mode Selection
+
+Choose a mode based on scope and intent before starting work:
+
+| Mode | When to Use | Flow |
+|------|-------------|------|
+| **Targeted Audit** | Scoped engagement, specific components, compliance-driven | Phases 1–7 below (existing workflow) |
+| **Agent Sweep** | Full source tree available, maximize coverage, "find me everything" | Phases S1–S4 → feeds into Phase 6 (Chaining) + Phase 7 (Gate) |
+| **Hybrid** | Best of both — sweep for discovery, structured for exploitation | Agent Sweep for discovery → Crown Jewel Mapping on findings → Phases 5–7 |
+
+**Default routing:**
+- "audit this codebase" / "find vulns" (unscoped) → **Hybrid**
+- "check the auth module" / specific component → **Targeted Audit**
+- "find me zero days" / "sweep everything" → **Agent Sweep**
+
+---
+
+## Agent Sweep Mode (Phases S1–S4)
+
+> Load `references/agent-sweep.md` for full prompt templates, scoring rubrics, and integration details.
+
+When the goal is maximum coverage across a full source tree, use file-iteration with independent verification instead of domain-partitioned analysis. This is the Carlini methodology adapted for Claude Code.
+
+### Phase S1: Source Tree Segmentation
+
+1. **Enumerate** all source files — exclude vendored/generated code (`node_modules/`, `vendor/`, `dist/`, generated protobuf)
+2. **Partition** into work units by directory/module (not by attack domain — that's Targeted mode)
+3. **Prioritize** by Attention Deficit Score (see Phase 2 addition below) — least-examined, highest-exposure code first
+4. **Include test files** — they reveal expected invariants that may not be enforced
+
+### Phase S2: Discovery Loop
+
+For each source file (or small cluster), spawn a parallel agent:
+
+> "You are performing a security audit. Find exploitable vulnerabilities starting from `${FILE}`. Consider all bug classes — memory corruption, injection, logic flaws, auth bypass, deserialization, race conditions, type confusion, integer mishandling. Trace inputs from this file's entry points through the program. Write findings to `${FILE}.vuln.md` with: vuln type, affected function, source→sink trace, exploitability assessment, suggested payload."
+
+**Design properties:**
+- **File-anchored, not domain-anchored** — each agent starts from a file, not "look for SQLi." The LLM's latent bug-class knowledge drives discovery, not a checklist
+- **Stochastic by construction** — different starting files produce different inference paths; running the same file twice may surface different bugs due to sampling
+- **Follow imports** — agents aren't limited to their starting file; the file is the *anchor* that seeds exploration direction
+- **Parallelizable** — agents are independent; scale linearly with compute
+
+### Phase S3: Verification Loop
+
+Feed each `.vuln.md` back through a **fresh agent** (not the discoverer — avoids confirmation bias):
+
+> "You received an inbound vulnerability report in `${FILE}.vuln.md`. Verify this is actually exploitable. Trace the source→sink path yourself. Confirm controllability. Identify defense layers that might block it. Classify: **Confirmed** / **Plausible-Needs-Dynamic** / **False Positive**."
+
+Expected filtration: ~40–60% of discovery findings survive verification.
+
+### Phase S4: Dedup, Cluster, Feed Forward
+
+1. **Deduplicate** findings pointing to the same root cause from different starting files
+2. **Cluster** by bug class and affected component
+3. **Feed verified findings** into Phase 6 (Chaining) and Phase 7 (Exploitability Gate)
+4. The sweep finds the raw bugs; the existing methodology scores, chains, and proves them
 
 ---
 
@@ -58,6 +122,7 @@ Load references on-demand based on the active testing domain. **Do not load all 
 | Mobile sinks (Android/iOS) | `references/sinks/mobile.md` | Mobile code audit (WebView, intents, URL schemes) |
 | Vulnerability chaining, scanning tools, blind spots | `references/chaining-advanced-techniques.md` | Building exploit chains, tool augmentation |
 | Formal audit, PoC development, report writing | `references/audit-poc-report.md` | **On-demand only** — when asked for audit/PoC/report |
+| Agent sweep methodology, file iteration, verification loops | `references/agent-sweep.md` | Running Agent Sweep or Hybrid mode |
 
 ---
 
@@ -108,6 +173,25 @@ Before testing, identify maximum-damage targets:
 
 Attack the highest-value targets first.
 
+### Attention Deficit Mapping
+
+After identifying crown jewels, identify the **least-examined** code — where bugs survive because nobody looked, not because the code is sound:
+
+| Signal | High Attention (lower bug probability) | Low Attention (higher bug probability) |
+|--------|---------------------------------------|---------------------------------------|
+| **Security commits** | Has `fix: security`, CVE references, audit comments | No security-related commits in history |
+| **Fuzzing/testing** | Fuzz targets exist, high test coverage | No fuzz corpus, low/no test coverage |
+| **Code glamour** | Auth module, crypto, payment processing | Parser, format handler, protocol adapter, config loader, migration script |
+| **External exposure** | Behind auth wall, internal-only | Processes attacker-controlled input (uploads, webhooks, public API) |
+| **Code age** | Recently written/reviewed | Legacy code, "don't touch" modules, vendored-then-forgotten |
+
+**Prioritize: high exposure + low attention.** These are the targets that have never seen a fuzzer. The crown jewels approach finds the highest-*impact* targets; attention deficit mapping finds the highest-*probability* targets. Use both.
+
+Quick heuristics:
+- `git log --format='%s' -- <path> | grep -ic 'secur\|vuln\|cve\|xss\|sqli\|inject'` — zero hits = never audited
+- Check for adjacent `*_test.*`, `*_spec.*`, `fuzz_*` files — absence = untested
+- `git log --diff-filter=M --since="2 years ago" -- <path>` — no recent changes = stale, possibly forgotten
+
 ---
 
 ## Phase 3: Source Audit
@@ -148,6 +232,7 @@ Three strategies — choose based on codebase size:
 | **Source-forward** | Small codebase, few entry points | Trace from user input → through transforms → to sinks |
 | **Sink-backward** | Large codebase, known dangerous functions | Start at sinks (see `sinks-catalog.md`) → trace backward to find controllable inputs |
 | **Hybrid** | Medium codebase, complex data flow | Combine both: forward from sources AND backward from sinks, meet in the middle |
+| **Circulatory tracing** | Any codebase, complement to other strategies | Map the full journey of every input through *all* program domains — not just to known sinks, but through every transformation and domain crossing |
 
 **Controllability classification** for each sink parameter:
 - **High**: Direct user input reaches sink with no sanitization
@@ -156,6 +241,14 @@ Three strategies — choose based on codebase size:
 - **Needs verification**: Theoretical path exists, requires dynamic confirmation
 
 **Output filter internals:** When a template engine or framework marks output as "safe" or "escaped", verify HOW it escapes. Django's `|safe`, Twig's `|raw`, Rails' `html_safe`, React's `dangerouslySetInnerHTML`, and Jinja2's `|safe` all disable auto-escaping — but even auto-escaped output can be vulnerable in non-HTML contexts (JavaScript strings, CSS `url()`, HTML attributes without quotes). A filter labeled `is_safe` in Django means "this filter's output doesn't need further escaping" — it does NOT mean the output IS safe. Trace through the filter chain to confirm the escaping matches the output context.
+
+**Circulatory tracing insight:** Vulnerabilities hide not in the obvious "security" parts of programs but where inputs cross into unexpected domains. Trace inputs through *every* domain boundary — not just to known sinks:
+- HTTP parameter → YAML parser → object instantiation → method dispatch (Rails YAML RCE)
+- Uploaded image → image library → font rendering subsystem → memory allocator (browser RCE)
+- User string → template engine → compilation → code execution (SSTI)
+- Config value → DNS resolver → network request → internal service (SSRF via config)
+
+The domain knowledge needed is "arbitrary" — font internals, serialization formats, protocol edge cases. The LLM already encodes this. **Ask about every code path the input touches**, not just paths that look security-relevant.
 
 Load `references/sinks-catalog.md` for the language router and SAST/DAST integration rules. It routes to per-language sink files — load only the language(s) matching the target codebase.
 
@@ -227,6 +320,17 @@ Before reporting ANY finding, answer these four questions:
 4. **Where is the defense layer?** — Is the mitigation in the vulnerable code itself, in a framework layer (e.g. Django auto-escaping, Rails CSRF tokens), in runtime config (e.g. `disable_functions`, WAF rules), or in the deployment environment (e.g. network segmentation, read-only filesystem)? Framework and runtime defenses can be bypassed or misconfigured — verify the defense is actually active, not just assumed.
 
 If any answer to questions 1-3 is **No** → move to Observations section (not confirmed vulnerabilities). For question 4, if a defense exists but you can bypass it, document the bypass as part of the finding.
+
+### Defense Layer Iteration
+
+When a defense layer blocks exploitation, don't stop — treat it as **a new iteration of the same problem**:
+
+1. **Identify the defense boundary** — sandbox, hardened allocator, kernel separation, WAF, hypervisor
+2. **Treat the defense itself as a new attack surface** — it's software too, with its own bugs
+3. **Apply the same methodology recursively** — sweep or audit the defense layer's code for bypasses
+4. **Chain across boundaries** — vuln in app + sandbox escape + kernel bug = full-chain exploit
+
+Layered defenses (hardened allocators, sandboxes, user/kernel barriers, virtualization) are iterated versions of the same problem. Agents can generate full-chain exploits by solving each layer independently and composing the results.
 
 ---
 

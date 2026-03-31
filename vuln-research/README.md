@@ -2,7 +2,7 @@
 
 Comprehensive vulnerability research skill for Claude Code. Covers source audit across 30+ attack domains, sink analysis for 12 programming languages, SAST/DAST integration, vulnerability chaining, and proof-of-concept development.
 
-Built from real CTF challenges, bug bounty writeups, PayloadsAllTheThings, HackTricks, Web-CTF-Cheatsheet, PortSwigger Research, and 50+ community cheatsheets/repositories.
+Built from real CTF challenges, bug bounty writeups, PayloadsAllTheThings, HackTricks, Web-CTF-Cheatsheet, PortSwigger Research, 50+ community cheatsheets/repositories, and Thomas Ptacek's [Vulnerability Research Is Cooked](https://sockpuppet.org/blog/2026/03/30/vulnerability-research-is-cooked/) (Agent Sweep mode, Carlini methodology).
 
 ## What It Does
 
@@ -27,6 +27,7 @@ vuln-research/
     ├── protocol-infra-attacks.md               # Smuggling, Browser Desync, Cache Poisoning, GraphQL, WebSocket, DNS, Cloud
     ├── sinks-catalog.md                        # Language router + SAST/DAST integration layer
     ├── chaining-advanced-techniques.md         # Chain patterns, scanning augmentation, blind spots checklist
+    ├── agent-sweep.md                          # Agent Sweep methodology: Carlini discovery/verification loops
     ├── audit-poc-report.md                     # On-demand: formal audit, PoC development, report template
     └── sinks/                                  # Per-language sink catalogs (loaded on demand)
         ├── php.md                              # PHP — exec, callbacks, type juggling, phar deser, magic hashes
