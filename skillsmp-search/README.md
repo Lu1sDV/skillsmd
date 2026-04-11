@@ -31,8 +31,12 @@ cp -r skillsmp-search ~/.claude/skills/
 
 ## Setup
 
-1. Place your API key in `~/.claude/skills/skillsmp-search/.skillsmp-key`
-2. Get an API key at [skillsmp.com](https://skillsmp.com)
+1. Get an API key at [skillsmp.com](https://skillsmp.com)
+2. Export it as an environment variable:
+   ```bash
+   echo 'export SKILLSMP_API_KEY="your-key-here"' >> ~/.zshrc
+   source ~/.zshrc
+   ```
 
 ## Usage
 
