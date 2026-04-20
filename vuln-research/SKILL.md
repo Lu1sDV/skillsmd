@@ -43,9 +43,11 @@ Choose a mode based on scope and intent before starting work:
 
 | Mode | When to Use | Flow |
 |------|-------------|------|
-| **Targeted Audit** | Scoped engagement, specific components, compliance-driven | Phases 1–7 below (existing workflow) |
-| **Agent Sweep** | Full source tree available, maximize coverage, "find me everything" | Phases S1–S4 → feeds into Phase 6 (Chaining) + Phase 7 (Gate) |
-| **Hybrid** | Best of both — sweep for discovery, structured for exploitation | Agent Sweep for discovery → Crown Jewel Mapping on findings → Phases 5–7 |
+| **Targeted Audit** | Scoped engagement, specific components, compliance-driven | Phase 0 → Phases 1–7 below (existing workflow) |
+| **Agent Sweep** | Full source tree available, maximize coverage, "find me everything" | Phase 0 → Phases S1–S4 → feeds into Phase 6 (Chaining) + Phase 7 (Gate) |
+| **Hybrid** | Best of both — sweep for discovery, structured for exploitation | Phase 0 → Agent Sweep for discovery → Crown Jewel Mapping on findings → Phases 5–7 |
+
+**Phase 0 (Latest Commits Security Review)** runs first in every mode whenever the target has git history — a brownfield-only recency pass executed by a single focused subagent before the broader audit begins. See Phase 0 below.
 
 **Default routing:**
 - "audit this codebase" / "find vulns" (unscoped) → **Hybrid**
@@ -123,6 +125,45 @@ Load references on-demand based on the active testing domain. **Do not load all 
 | Vulnerability chaining, scanning tools, blind spots | `references/chaining-advanced-techniques.md` | Building exploit chains, tool augmentation |
 | Formal audit, PoC development, report writing | `references/audit-poc-report.md` | **On-demand only** — when asked for audit/PoC/report |
 | Agent sweep methodology, file iteration, verification loops | `references/agent-sweep.md` | Running Agent Sweep or Hybrid mode |
+
+---
+
+## Phase 0: Latest Commits Security Review
+
+Before the broad audit begins, **spawn one focused subagent** to perform a narrow-scope security review of the repository's most recent commits. Recent diffs are the highest-signal starting surface in a brownfield target: they concentrate attacker-reachable new code, often touch security-adjacent paths (auth, routing, input parsing, config), and receive less scrutiny than older, stable modules. Reviewing them first primes the rest of the audit with concrete findings and calibrates the attack surface before Phase 1 (Recon) runs.
+
+This is intentionally **single-agent and narrow-scope** — whole-tree coverage belongs in Agent Sweep (Phases S1–S4). Phase 0 exploits the recency signal without drifting into full-sweep territory. A swarm would dilute focus across the small commit surface and produce duplicated, low-signal findings.
+
+### Subagent Prompt
+
+Spawn exactly one agent with this prompt:
+
+> You are performing a **focused, narrow-scope** security review of this repository's most recent commits. Inspect repo signals first — tag recency, branch divergence from `main`/`master`, commit cadence, CHANGELOG or release notes — then choose the most informative commit range yourself (e.g., last N commits, since last tag, or branch diff against main). **State the chosen range and justification before reviewing.**
+>
+> For every file touched by the selected commits, analyze **only the changed hunks and their immediate call graph**. Do not audit code the commits did not touch — that is Phase 3's and Agent Sweep's job, not yours. Consider all bug classes — injection, memory corruption, auth bypass, deserialization, race conditions, type confusion, logic flaws, missing authorization, unsafe defaults, exposed secrets, regressions that reintroduce previously-fixed CVEs, and weakened security controls (removed validators, loosened regex, new `@ts-ignore`/`# type: ignore` on security-adjacent code).
+>
+> For each finding write: vuln type, affected function/file, source→sink trace, controllability, exploitability assessment (High/Medium/Low), and a suggested payload or PoC direction. Flag commits that touch security-adjacent paths (auth, crypto, input parsing, session handling, access control, deser, SSRF-prone callers) even when no bug is found — the auditor needs to know where recent changes raise risk.
+>
+> Stay **very accurate and very focused**: no speculation, no "theoretical" findings without a controllability trace, no drift into untouched code. If the chosen range surfaces no real vulnerabilities, say so explicitly and list which security-adjacent files were examined so the rest of the audit can trust the recency pass.
+
+### Fallbacks
+
+| Condition | Behavior |
+|-----------|----------|
+| No `.git` directory / no git history | Skip Phase 0, proceed to Phase 1 |
+| Fewer than 3 commits in history | Skip Phase 0, proceed to Phase 1 |
+| Recent commits are docs-only or generated files only | Record `NO_CODE_CHANGES` with touched paths, proceed to Phase 1 |
+| Subagent fails or times out | Log the failure, proceed to Phase 1 — do not retry inline |
+
+### Feed-Forward
+
+Phase 0 findings plug into the same downstream pipeline as Agent Sweep output:
+
+1. **Dedup** against later Phase 3 (Source Audit) and any Agent Sweep results
+2. **Feed** surviving findings into **Phase 6: Vulnerability Chaining**
+3. **Gate** each finding through **Phase 7: Exploitability Gate** before reporting
+
+Do not promote a Phase 0 finding to a reported vulnerability without passing Phase 7 — the exploitability gate applies equally to commit-sourced findings.
 
 ---
 
