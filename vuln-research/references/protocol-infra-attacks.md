@@ -312,6 +312,15 @@ Attacker initiates device code flow, socially engineers victim to authorize at `
 
 **Audience (`aud`) confusion:** token issued for Service A replayed against Service B in same trust domain — exploitable when `aud` not validated per-service.
 
+### Client-side crypto fallback ladder (TOFU key + Bearer on failure)
+
+Common in AV-proxies, content scanners, and federation adapters:
+1. Client fetches an unauthenticated `/public_key` endpoint (TOFU — no pin, no signature).
+2. Client encrypts request body with that key using a crypto method promoted to public by a downstream patch (`pkEncryptString`, `encryptAndSend`).
+3. On any failure (non-200, JSON-decode error, library exception), the code falls back to POSTing the plaintext body **with the user's `Authorization: Bearer <access_token>`** — no prompt, no telemetry, no UI signal.
+
+Every failure path that still transmits the access token or plaintext body is a Bearer-exfil sink. Audit pattern: for each outbound fetch inside a "secure" client, grep the `catch` / non-200 / `try{...}finally{...}` branches for `Authorization:` and for the plaintext of the original body variable.
+
 ---
 
 ## Encoding & Parser Differential Attacks

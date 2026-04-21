@@ -386,6 +386,12 @@ steps:
 - A compromised dependency (via npm/PyPI account takeover, typosquatting) executes in the cron workflow context
 - Cron workflows have full repository permissions and secret access
 
+### `jq` filter interpolation in Docker entrypoints
+
+`jq ".modules += [\"/modules/$MODULE/$ENTRYPOINT\"]" config.json | sponge config.json` — when `$MODULE` / `$ENTRYPOINT` are derived from content on a volume mount (another `jq -r '.main'` on a module-supplied `package.json`), any value containing `"`, `]`, `}` breaks the filter string and injects arbitrary top-level keys into the runtime config. This is container-insider from a repository-audit standpoint, but becomes network-reachable whenever the module directory is served publicly (see nginx `/modules` alias) or writable via supply chain.
+
+Always require `jq --arg` / `jq --argjson` for every env-var or file-content interpolation; shell-concatenated filters are a finding.
+
 ---
 
 ## Pipeline Credential Theft (General CI/CD)

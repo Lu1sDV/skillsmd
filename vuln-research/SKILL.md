@@ -219,6 +219,7 @@ Identify the full technology stack before touching anything:
 - CDN / WAF fingerprint (Cloudflare, Akamai, ModSecurity rules — know what you're bypassing)
 - Client-side: JS frameworks (React, Angular, Vue), bundler (webpack, vite), source maps available
 - Dependency manifest: `package.json`, `composer.json`, `requirements.txt`, `Gemfile`, `pom.xml`, `go.mod`, `Cargo.toml`, `mix.exs`
+- `patch-package` / `pnpm patch` / `yarn patch` overlays (`patches/*.patch`, `patches_*/*.patch`): read every patch in the tree and treat each removed/added hunk as security-relevant by default. Overlays silently mutate vendored SDK invariants (scoring rules, crypto surface, consent UX) and do not show up in dependency scanners. A patch that `export`s a previously-private crypto method, adjusts an auth scoreFlow, or deletes a `Confirm*` modal is a finding-generator by itself.
 - Known CVEs in detected versions (check NVD, Snyk DB, GitHub Advisories)
 
 Map every user input vector:
@@ -278,6 +279,8 @@ Run parallel agents, each focused on one attack domain. Every agent traces **sou
 | **Server-Side** (RCE, SSRF, XXE, File Ops, Deser) | Command exec, URL fetching, XML parsing, file I/O, object deser | `server-side-attacks.md` |
 | **Auth & Logic** (Auth, ACL, OAuth, Race, Crypto) | Session mgmt, role checks, token flows, concurrent ops, key mgmt | `auth-access-logic.md` |
 | **Protocol & Infra** (Smuggling, Cache, WS, GraphQL, DNS, Cloud) | HTTP parsing, cache keys, WS handlers, query depth, metadata | `protocol-infra-attacks.md` |
+
+Every module agent MUST conclude its report with a **Blind Spots** block: files it did not read, components absent from the repo but referenced elsewhere (other-repo Rust halves, dynamically-fetched configs, production-only artifacts), runtime states it could not observe (OIDC discovery docs, feature-flag evaluation), and dependencies whose behavior gates its findings' severity. Blind spots are first-class output, not footnotes. Phase 6 chain synthesis consumes this list to flag findings whose severity depends on external evidence.
 
 ---
 
@@ -436,6 +439,8 @@ These are commonly submitted findings that bug bounty programs universally rejec
 | SSRF with DNS-only callbacks (no response, no internal access) | Proves DNS resolution but not exploitability — most programs require demonstrated internal access or data exfil | Only if callback proves access to internal network (response data, cloud metadata, or internal service interaction) |
 | Self-XSS (requires victim to paste payload in their own browser) | Attacker cannot trigger it remotely — requires social engineering the victim | Only when chained with cookie tossing, login CSRF, or clickjacking to deliver the payload without victim cooperation |
 | Server/technology banner disclosure (`Server: Apache/2.4.51`, `X-Powered-By: PHP/8.1`) | Version information alone is not exploitable | Only if the disclosed version has a known, exploitable CVE AND you demonstrate the exploit working |
+| Shell/exec sink where the "user-controlled" arg is a hardcoded string constant | Grep for the interpolated symbol; if it is assigned once to a string literal and never reassigned, the finding is a false positive. Dead-code guards (`if (false) { ... }`) that share a filename with a live sink are a common conflation trap | Only when dynamic user input is confirmed to flow into the sink at runtime |
+| Regex-chain across modules where each link uses a different regex | Do not assume two regex constants "feed" each other just because they target the same domain. Confirm the data-flow path: source → regex A → transform → regex B. If A's output is not literally B's input, there is no chain | Only when the actual data-flow path source → regex A → regex B is traced end-to-end |
 
 **Rule of thumb:** if the finding requires the phrase "an attacker could theoretically..." without a working PoC, it belongs in Observations, not Vulnerabilities.
 

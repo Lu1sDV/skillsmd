@@ -36,6 +36,7 @@
 
 - **SQLi:** `mysql.query()` / `mysql2` with string concat, `sequelize.query()` with raw SQL, `knex.raw()`, `pg` `client.query()` with string interpolation
 - **XSS:** `res.send()` with unsanitized user input, `innerHTML` assignments in SSR (Next.js, Nuxt), `dangerouslySetInnerHTML` in React SSR
+- **`commonmark`/`marked`/`remark` → `dangerouslySetInnerHTML` without `sanitize-html`**: `new commonmark.HtmlRenderer().render(parser.parse(body))` returns raw HTML — any `<script>`, `<iframe>`, `on*=` attribute, `javascript:` URL in a commonmark extension flows through. A sanitize-html pass is mandatory; its absence is a finding regardless of whether the input is "trusted user content" (moderator views render other users' content).
 - **NoSQL Injection:** `mongoose.find()` / `findOne()` with `$gt`, `$ne`, `$regex` from req.body, `mongodb` native driver with unsanitized query objects
 - **ReDoS:** `new RegExp(user_input)`, `String.prototype.match()` / `.replace()` / `.search()` with user-controlled patterns
 - **Module injection:** `require(userInput)` — dynamic module loading with attacker-controlled path; can load arbitrary native addons or reach `node_modules` gadgets
@@ -44,6 +45,13 @@
 - **Cookie injection / session fixation:** `document.cookie = userInput` — unsanitized value can set arbitrary cookies including `session` or `auth` tokens
 - **WebSQL (deprecated, still present in Chromium-based apps):** `db.executeSql(userInput)` — SQL injection in client-side SQLite
 - **Storage-based persistent XSS:** `localStorage.setItem(key, userInput)` — benign on write but creates a persistent XSS source if the stored value is later read and rendered unsanitized into the DOM
+- **`window.location.replace(osUrl)` from a native deep-link handler**: Tauri `onOpenUrl`, Electron `app.on('open-url', ...)`, and mobile custom-scheme intents deliver an arbitrary URL to renderer JS. Any `location.replace(urls[0])` or `location.href = urls[0]` without scheme/host validation means the SPA router receives attacker-controlled query params (`loginToken`, OAuth `code`/`state`, feature-flag overrides). Must validate scheme is the app's own, host matches an allowlist, and no `loginToken` / auth-completion param is respected from deep-link origin.
+
+---
+
+## IPC / postMessage Sinks
+
+- **`window.postMessage(data, "*")`** — wildcard target origin delivers `data` to every frame in the window. Anything sensitive (auth state, recovery key, IPC relay tokens) leaks to every iframe. Treat the second argument as a data-exfil parameter: if it is `"*"`, a dynamic variable, or any non-literal string, the call is a sink. Correct form is a literal origin constant (`window.location.origin`, a hardcoded `"https://trusted.example"`).
 
 ---
 
@@ -76,6 +84,12 @@ HTML elements with `id` or `name` attributes create global variables that can ov
 
 ---
 
+## Global window Bindings as XSS-to-ATO Amplifiers
+
+- **Global mutable window bindings exporting privileged functions** (`window.mxLoginWithAccessToken`, `window.__APP_STATE__`, `window.store`, `window.debugClient`): grep for `window\.\w\+ = ` outside vendor files. Every privileged function on `window` is an XSS-to-full-capability amplifier and converts otherwise-Medium XSS into Critical ATO. Dev-only debugging hooks must be stripped at build (`if (process.env.NODE_ENV === 'development')` gate verified in the production bundle).
+
+---
+
 ## Prototype Pollution Gadgets — Extended
 
 **jQuery gadgets:**
@@ -100,3 +114,9 @@ HTML elements with `id` or `name` attributes create global variables that can ov
 **React/Next.js gadgets:**
 - `dangerouslySetInnerHTML` via polluted props → XSS
 - Server Component prop deserialization → potential RCE (React2Shell, CVE-2025-55182)
+
+---
+
+## React Security-UX Anti-patterns
+
+- **Security-warning dialog computed in `componentDidMount` via instance-field mutation**: `componentDidMount() { this.currentRoomType = computeType() }` followed by `render() { return this.currentRoomType === X ? <Warn/> : <OK/> }` — the first render runs before `componentDidMount`, so the warning is blank / stale on the initial paint. Users who click through fast (Enter, auto-focus) never see the warning. Any dialog gating a destructive action on `this.<field>` set outside `setState` / props is suppressing its own security prompt. Equivalent hook-era bug: `useEffect(() => { ref.current = ... }, [])` read during render.

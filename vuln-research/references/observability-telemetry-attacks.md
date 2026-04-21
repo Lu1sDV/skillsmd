@@ -173,6 +173,10 @@
 
 **Impact:** Telemetry pipelines become a covert exfiltration channel — data leaves through an approved, monitored, and firewall-allowed path (the telemetry export endpoint).
 
+### IPC-args Verbatim Logging
+
+**IPC-args verbatim logging**: desktop wrappers (Tauri, Electron) often instrument IPC with `logger.info("calling <cmd>", args)` or `logger.debug("response", result)`. Because the arg tuple is the native-to-renderer boundary, it carries pickle keys, passphrases, decrypted events, OIDC codes, and recovery secrets. The scrubber never sees structured argument names; it sees the serialized string. Flag every `logger.*(..., ...args)` / `logger.*(label, obj)` where the second positional is not a whitelisted string constant.
+
 ---
 
 ## Silent Telemetry Failures as Attack Surface
