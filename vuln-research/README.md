@@ -17,8 +17,10 @@ Built from real CTF challenges, bug bounty writeups, PayloadsAllTheThings, HackT
 
 ```
 vuln-research/
-├── SKILL.md                                    # Orchestrator (~247 lines) — routing + methodology
+├── SKILL.md                                    # Orchestrator — routing + methodology
 ├── README.md                                   # This file
+├── commands/
+│   └── vuln-swarm.md                           # Swarm Pipeline slash command (orchestration)
 └── references/
     ├── injection-attacks.md                    # SQLi, NoSQL, SSTI, XSLT injection, CRLF, LDAP, XPath
     ├── client-side-attacks.md                  # XSS, Prototype Pollution, DOM Clobbering, CSS Exfiltration, CORS
@@ -28,6 +30,7 @@ vuln-research/
     ├── sinks-catalog.md                        # Language router + SAST/DAST integration layer
     ├── chaining-advanced-techniques.md         # Chain patterns, scanning augmentation, blind spots checklist
     ├── agent-sweep.md                          # Agent Sweep methodology: Carlini discovery/verification loops
+    ├── swarm-pipeline.md                       # Swarm Pipeline methodology: module decomposition, 3-stage pass, analog cascade, weighted scoring, Phase 4
     ├── audit-poc-report.md                     # On-demand: formal audit, PoC development, report template
     └── sinks/                                  # Per-language sink catalogs (loaded on demand)
         ├── php.md                              # PHP — exec, callbacks, type juggling, phar deser, magic hashes
@@ -118,6 +121,26 @@ Run a formal security audit using OWASP methodology
 ```
 
 This loads `audit-poc-report.md` with OWASP/STRIDE/PASTA frameworks, red team personas, PoC script templates, proof collection requirements, and structured report format with CVSS scoring.
+
+## Swarm Pipeline Command
+
+For deep, structured, multi-agent audits with a continuous-learning feedback loop, the skill ships a companion slash command:
+
+```
+/vuln-swarm <target-repo-path>
+```
+
+The command drives a 5-phase SAST pipeline:
+
+1. **Recency pass + patch-seed extraction** — Phase 0 plus a hypothesis-template list for downstream agents
+2. **Holistic map + module decomposition** — 8–15 modules drive parallel fan-out
+3. **Parallel narrow analysis** — module agents (orthogonal strategies, three-stage internal pass) + a sink-hunter lane
+4. **2-check verification** — every finding re-traced AND semantically judged in separate agent calls
+5. **Synthesis** — dedup → analog cascade → weighted scoring → chaining → exploitability gate → split into `confirmed.md` / `candidates.md`
+
+A final Phase 4 pass proposes evidence-grounded additions back to the skill itself.
+
+The command owns pipeline shape and the handoff contract; the skill owns taxonomy (sinks, bug classes, gates). Full methodology lives in `references/swarm-pipeline.md`. This is distinct from Agent Sweep mode (`references/agent-sweep.md`) — Agent Sweep is file-iteration with single-check verification; the Swarm Pipeline is module-structured with two-check verification, analog cascade, and the Phase 4 learning loop. Both coexist.
 
 ## Languages Covered
 

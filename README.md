@@ -25,6 +25,14 @@ A collection of Claude Code skills — self-contained markdown files that give C
 | [zero-dof](zero-dof/) | Zero-DOF programming — executable oracles, opposing constraints, mandatory playbooks, gaming prevention for LLM coding agents |
 | [zeroclaw](zeroclaw/) | Build, configure, deploy ZeroClaw AI agent infrastructure |
 
+## Commands
+
+Some skills ship companion slash commands that orchestrate multi-phase agent pipelines. Commands own pipeline shape and handoff contracts; the paired skill owns taxonomy and judgment.
+
+| Command | Ships With | Purpose |
+|---------|-----------|---------|
+| [/vuln-swarm](vuln-research/commands/vuln-swarm.md) | [vuln-research](vuln-research/) | 5-phase SAST swarm with recency + patch seeds, module decomposition, orthogonal-strategy fan-out, 2-check verification, analog cascade + weighted scoring synthesis, and a continuous-learning feedback pass |
+
 ## Installation
 
 ### Claude Code Plugin (recommended)

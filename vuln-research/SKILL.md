@@ -89,6 +89,21 @@ Feed each `.vuln.md` back through a **fresh agent** (not the discoverer — avoi
 
 Expected filtration: ~40–60% of discovery findings survive verification.
 
+#### 2-check variant (higher-confidence audits)
+
+For audits that warrant stronger verification, upgrade the single-agent check to **two distinct checks executed as separate agent calls with separate prompts**. The two agents must not share a context window, and must not be told of each other's verdicts.
+
+1. **RE-TRACE** — an independent source→sink walk. The agent receives the finding's location and is asked: *does the path exist as claimed? Can the source be controlled? Does the taint survive the transforms?* The agent produces its own trace from scratch without trusting the report's.
+
+2. **JUDGE** — a semantic-correctness review. The agent receives the finding and its claimed root cause and is asked: *is the diagnosis correct? Is the bug class label accurate? Is the alleged data flow actually reachable in practice? Is the impact as stated, or over/under-claimed?*
+
+Combine the two verdicts:
+- **pass BOTH** → `Confirmed`
+- **pass ONE** → `Candidate` (flag the disagreement in the report)
+- **fail BOTH** → `False Positive`
+
+Keeping the checks as **separate agent calls with separate prompts** is load-bearing. A single agent asked both questions collapses them into one mental pass and loses the independence that gives 2-check its precision. The full richer treatment — including how this plugs into weighted scoring — is in `references/swarm-pipeline.md` § Weighted Scoring.
+
 ### Phase S4: Dedup, Cluster, Feed Forward
 
 1. **Deduplicate** findings pointing to the same root cause from different starting files
@@ -125,6 +140,7 @@ Load references on-demand based on the active testing domain. **Do not load all 
 | Vulnerability chaining, scanning tools, blind spots | `references/chaining-advanced-techniques.md` | Building exploit chains, tool augmentation |
 | Formal audit, PoC development, report writing | `references/audit-poc-report.md` | **On-demand only** — when asked for audit/PoC/report |
 | Agent sweep methodology, file iteration, verification loops | `references/agent-sweep.md` | Running Agent Sweep or Hybrid mode |
+| Swarm pipeline: module decomposition, orthogonal strategies, three-stage pass, analog cascade, weighted scoring, Phase 4 continuous-learning | `references/swarm-pipeline.md` | Running the Swarm Pipeline command / hypothesis-driven multi-agent audit |
 
 ---
 
@@ -145,6 +161,22 @@ Spawn exactly one agent with this prompt:
 > For each finding write: vuln type, affected function/file, source→sink trace, controllability, exploitability assessment (High/Medium/Low), and a suggested payload or PoC direction. Flag commits that touch security-adjacent paths (auth, crypto, input parsing, session handling, access control, deser, SSRF-prone callers) even when no bug is found — the auditor needs to know where recent changes raise risk.
 >
 > Stay **very accurate and very focused**: no speculation, no "theoretical" findings without a controllability trace, no drift into untouched code. If the chosen range surfaces no real vulnerabilities, say so explicitly and list which security-adjacent files were examined so the rest of the audit can trust the recency pass.
+
+### Optional Deliverable: PATCH SEEDS
+
+When a downstream phase will fan out parallel agents (Agent Sweep, Swarm Pipeline, or any multi-agent audit that benefits from hypothesis templates), Phase 0 can emit a second artifact alongside the findings: a **PATCH SEEDS** list extracted from the same commit range. Each seed is a recently-fixed bug or tightened control that downstream agents use as a hypothesis template — "is an unfixed variant of this pattern present elsewhere in the tree?"
+
+Each PATCH SEED record:
+
+| Field | Content |
+|-------|---------|
+| `affected_file` | Path touched by the fix commit |
+| `affected_hunk` | Hunk range or line numbers of the actual fix |
+| `fix_summary` | One sentence describing what the patch changed and why |
+| `bug_class` | Canonical class label (e.g., `sql-injection`, `missing-authz`, `path-traversal`) |
+| `variant_query` | A grep-friendly or structural-search-friendly string downstream agents can use to locate analogous sites |
+
+Emit seeds only for commits that actually fix a bug or tighten a control — not refactors, not style changes, not dependency bumps unless the bump closes a CVE. A seed without a clear `variant_query` is low-value; drop it rather than weaken the set.
 
 ### Fallbacks
 
