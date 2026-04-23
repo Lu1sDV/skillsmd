@@ -104,6 +104,8 @@ Combine the two verdicts:
 
 Keeping the checks as **separate agent calls with separate prompts** is load-bearing. A single agent asked both questions collapses them into one mental pass and loses the independence that gives 2-check its precision. The full richer treatment — including how this plugs into weighted scoring — is in `references/swarm-pipeline.md` § Weighted Scoring.
 
+**Structured JUDGE variant.** Instead of asking JUDGE "is this finding correct?" in free text, instruct it to build a DAG from scratch against the cited code: extract source nodes, build intermediate nodes with parent IDs and primitives, run the 12-pattern check, converge on a sink. A JUDGE pass that cannot close the graph from an untrusted source to a `verified_sink` is a **False Positive** verdict — no hedging. See `references/dag-reasoning.md` § "Phase S3 — Agent-Sweep Verification" for the exact prompt.
+
 ### Phase S4: Dedup, Cluster, Feed Forward
 
 1. **Deduplicate** findings pointing to the same root cause from different starting files
@@ -141,6 +143,7 @@ Load references on-demand based on the active testing domain. **Do not load all 
 | Formal audit, PoC development, report writing | `references/audit-poc-report.md` | **On-demand only** — when asked for audit/PoC/report |
 | Agent sweep methodology, file iteration, verification loops | `references/agent-sweep.md` | Running Agent Sweep or Hybrid mode |
 | Swarm pipeline: module decomposition, orthogonal strategies, three-stage pass, analog cascade, weighted scoring, Phase 4 continuous-learning | `references/swarm-pipeline.md` | Running the Swarm Pipeline command / hypothesis-driven multi-agent audit |
+| DAG-structured vulnerability reasoning (DAGVul): source/intermediate/sink nodes, 12 failure-pattern taxonomy, logical closure | `references/dag-reasoning.md` | Writing a finding's source→sink trace, running the Swarm JUDGE check, or mechanically answering Phase 7 Exploitability Gate Q1–Q3 |
 
 ---
 
@@ -328,6 +331,8 @@ The domain knowledge needed is "arbitrary" — font internals, serialization for
 
 Load `references/sinks-catalog.md` for the language router and SAST/DAST integration rules. It routes to per-language sink files — load only the language(s) matching the target codebase.
 
+**DAG-structured trace (for high-stakes findings).** Free-prose source→sink narration is the single highest source of hallucinated findings — the DAGVul paper measured 36.4% of correct LLM vulnerability verdicts as supported by *incorrect* reasoning. When a finding will be reported (not just observed), restate its trace as a DAG: ground-truth source nodes with line refs → intermediate inference nodes that cite parent IDs and name the program-analysis primitive (taint, def-use, CFG, constraint, API contract) → a `verified_sink` or `sanitized_sink`. If the graph does not close from an untrusted source to a verified sink, the finding is not exploitable — move it to Observations rather than hedging. Load `references/dag-reasoning.md` for the framework, the 12 failure patterns to screen each intermediate node against, and worked examples.
+
 ---
 
 ## Phase 4.5: Static Analysis False Positive Calibration
@@ -396,6 +401,8 @@ Before reporting ANY finding, answer these four questions:
 4. **Where is the defense layer?** — Is the mitigation in the vulnerable code itself, in a framework layer (e.g. Django auto-escaping, Rails CSRF tokens), in runtime config (e.g. `disable_functions`, WAF rules), or in the deployment environment (e.g. network segmentation, read-only filesystem)? Framework and runtime defenses can be bypassed or misconfigured — verify the defense is actually active, not just assumed.
 
 If any answer to questions 1-3 is **No** → move to Observations section (not confirmed vulnerabilities). For question 4, if a defense exists but you can bypass it, document the bypass as part of the finding.
+
+**Mechanical gate via DAG.** Questions 1–3 map one-to-one onto a closed DAG: Q1 is "at least one source node typed as untrusted input", Q2 is "a complete path of intermediate nodes from source to sink", Q3 is "a `verified_sink` with a stated triggering condition". When a finding keeps shifting its controllability story, build the DAG — if it does not close, Q2 is **No** and the finding drops to Observations. Reference: `references/dag-reasoning.md`.
 
 ### Defense Layer Iteration
 
