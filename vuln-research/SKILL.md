@@ -9,7 +9,9 @@ description: >
   exploit, ctf, code audit, hunt bugs, 0-day, SAST, DAST, taint analysis,
   CI/CD pipeline security, GitHub Actions, Terraform, Traefik,
   n8n workflow, OpenTelemetry, supply chain attack, agent sweep,
-  find me zero days, sweep everything, automated vuln discovery.
+  find me zero days, sweep everything, automated vuln discovery,
+  binary analysis, reverse engineering, firmware audit, kernel driver,
+  memory corruption, ROP, fuzzing harness, patch diffing.
 ---
 
 # Vulnerability Research
@@ -139,6 +141,7 @@ Load references on-demand based on the active testing domain. **Do not load all 
 | .NET sinks | `references/sinks/dotnet.md` | .NET code audit (Process.Start, BinaryFormatter, Json.NET) |
 | Systems sinks (Go/Rust/C/Elixir) | `references/sinks/systems.md` | Systems code audit (memory corruption, os/exec, ETF deser) |
 | Mobile sinks (Android/iOS) | `references/sinks/mobile.md` | Mobile code audit (WebView, intents, URL schemes) |
+| Binary / RE / firmware / kernel: triage, static RE, fuzzing, memory-corruption classes, binary-level races, patch diffing, exploit primitives, mitigations | `references/binary-code-analysis.md` (thin index → `binary-triage-and-re.md`, `binary-bug-classes.md`, `binary-exploit-and-specialties.md`) | Target is a compiled binary, firmware image, kernel/driver, closed-source blob, or native source whose ABI/compiler/ordering behavior matters. Load only the lifecycle file the active trigger cites (see Phase 3.5). |
 | Vulnerability chaining, scanning tools, blind spots | `references/chaining-advanced-techniques.md` | Building exploit chains, tool augmentation |
 | Formal audit, PoC development, report writing | `references/audit-poc-report.md` | **On-demand only** — when asked for audit/PoC/report |
 | Agent sweep methodology, file iteration, verification loops | `references/agent-sweep.md` | Running Agent Sweep or Hybrid mode |
@@ -299,6 +302,28 @@ Before taint analysis, identify **every language and framework in the stack** �
 **Example**: a Laravel app with React SSR and a Python ML microservice → load `sinks/php.md` + `sinks/javascript.md` + `sinks/python.md`
 
 Do not skip minor languages in the stack — the weakest link is often the least-reviewed service.
+
+**Binary / native artifacts in the stack — tiered loading across three lifecycle files.** Source-level sinks stop at the compiler; ABI, memory ordering, calling conventions, packers, and machine-level race windows require binary audit. The binary reference is split into three lifecycle files — **orient**, **find bugs**, **prove and report** — plus a thin routing index at `references/binary-code-analysis.md`. Load only what the trigger cites; never the whole triad by default.
+
+| Trigger (any match → load) | File(s) and section(s) to read first |
+|---|---|
+| Target artifact is ELF / PE / Mach-O / WASM / dex / firmware blob / kernel module / bootloader / TEE payload | `references/binary-triage-and-re.md` § 1 → § 2 → § 2b |
+| Source audit hit a `.so` / `.dll` / `.dylib` / static `.a` with no matching source | `references/binary-triage-and-re.md` § 2–4, then `references/binary-bug-classes.md` § 10 |
+| Source is present but contains C / C++ / Rust `unsafe` / Go `cgo` / Zig / Objective-C / inline `asm!` where ABI or ordering changes semantics | `references/binary-bug-classes.md` § 6 + § 7 + § 15 |
+| Hypothesis involves memory layout, stack alignment, calling convention, endianness, signal delivery mid-instruction, syscall atomicity, double-fetch, weak memory model | `references/binary-bug-classes.md` § 7 + § 8 + § 15 |
+| N-day work: public advisory + patched vs. unpatched binary, no source diff | `references/binary-exploit-and-specialties.md` § 11 |
+| Crash found but no source explanation — the bug may live in compiler output / linker glue / TLS callback / `.init_array` | `references/binary-triage-and-re.md` § 4 + `references/binary-bug-classes.md` § 15 |
+| Packed, VM-protected, anti-debug, or otherwise obfuscated sample | `references/binary-exploit-and-specialties.md` § 13b |
+| Building or claiming an exploit primitive (ROP/SROP/ret2dlresolve/JOP/heap grooming) | `references/binary-exploit-and-specialties.md` § 13 + § 14 |
+| Firmware image / IoT / router / printer / camera / automotive ECU | `references/binary-exploit-and-specialties.md` § 12.1 |
+| Kernel / driver / hypervisor / TEE target | `references/binary-exploit-and-specialties.md` § 12.2–12.5 + § 14 |
+| Writing a fuzz harness or running dynamic analysis | `references/binary-bug-classes.md` § 5 |
+| Building a binary-level taint DAG | `references/binary-bug-classes.md` § 10 |
+| Writing a binary finding report | `references/binary-exploit-and-specialties.md` § 16 (DAG block required — ties back to Phase 7 Gate) |
+
+**Do not load the whole triad by default.** On targets with no native component, none of the above triggers fire and these files stay off the token budget. On triggered targets, load only the subfile(s) the matched trigger cites. When no single trigger dominates, start with `references/binary-code-analysis.md` (thin index, ~60 lines) and fan out from there.
+
+**Binary findings integrate with the source pipeline unchanged:** they feed **Phase 6 Chaining** as primitives (info-leak / arb-read / arb-write / control-flow) and pass **Phase 7 Exploitability Gate** via the same DAG form as source findings — with `primitive ∈ {taint, cfg, alias, constraint, abi}` and `abi` nodes citing the calling convention / register / struct layout being relied on. See `references/binary-bug-classes.md` § 10 (Binary-Level Taint Framework) and `references/binary-exploit-and-specialties.md` § 16 (Output Format) for the binary-specific DAG vocabulary.
 
 ---
 
