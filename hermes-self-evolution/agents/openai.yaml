@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hermes Self Evolution"
+  short_description: "Replicate Hermes Agent self-evolving memory and skill loop."
+  default_prompt: "Apply the Hermes-style self-evolving loop to this agent workflow."
