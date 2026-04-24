@@ -48,6 +48,7 @@ Choose a mode based on scope and intent before starting work:
 | **Targeted Audit** | Scoped engagement, specific components, compliance-driven | Phase 0 → Phases 1–7 below (existing workflow) |
 | **Agent Sweep** | Full source tree available, maximize coverage, "find me everything" | Phase 0 → Phases S1–S4 → feeds into Phase 6 (Chaining) + Phase 7 (Gate) |
 | **Hybrid** | Best of both — sweep for discovery, structured for exploitation | Phase 0 → Agent Sweep for discovery → Crown Jewel Mapping on findings → Phases 5–7 |
+| **Swarm Pipeline** | Multi-agent SAST with effort tiers; invoked via `/vuln-swarm <path> [--effort=low\|medium\|deep] [--freeform=detached\|grounded]` | See `references/swarm-pipeline.md` § Effort Tiers. LOW = Phase 0 + freeform + Phase 3-lite; MEDIUM = full module fan-out + 2-check; DEEP = static-first lane + slice-type fan-out + 3-check + cross-slice reconciliation. |
 
 **Phase 0 (Latest Commits Security Review)** runs first in every mode whenever the target has git history — a brownfield-only recency pass executed by a single focused subagent before the broader audit begins. See Phase 0 below.
 
@@ -324,6 +325,21 @@ Do not skip minor languages in the stack — the weakest link is often the least
 **Do not load the whole triad by default.** On targets with no native component, none of the above triggers fire and these files stay off the token budget. On triggered targets, load only the subfile(s) the matched trigger cites. When no single trigger dominates, start with `references/binary-code-analysis.md` (thin index, ~60 lines) and fan out from there.
 
 **Binary findings integrate with the source pipeline unchanged:** they feed **Phase 6 Chaining** as primitives (info-leak / arb-read / arb-write / control-flow) and pass **Phase 7 Exploitability Gate** via the same DAG form as source findings — with `primitive ∈ {taint, cfg, alias, constraint, abi}` and `abi` nodes citing the calling convention / register / struct layout being relied on. See `references/binary-bug-classes.md` § 10 (Binary-Level Taint Framework) and `references/binary-exploit-and-specialties.md` § 16 (Output Format) for the binary-specific DAG vocabulary.
+
+### Tool-Integration Matrix (CPG / SAST / AST tooling)
+
+For DEEP-tier Swarm Pipeline runs and any audit where a mechanical pre-pass is available, select in priority order:
+
+| Priority | Tool | Representation | When to use |
+|----------|------|----------------|-------------|
+| 1 | **Joern** | Code Property Graph (AST + CFG + DFG + call graph) | Full inter-procedural taint, PDG cuts, call-chain slicing. Best when a queryable graph justifies indexing cost (large C/C++/Java/JS/Python targets). |
+| 2 | **CodeQL** | Relational AST + dataflow library | Path queries from stdlib sources to sinks. SARIF output. Use when a pre-built query pack matches the stack. |
+| 3 | **Semgrep + ast-grep** | Semantic patterns (Semgrep) + structural AST matching (ast-grep) | Cheapest rule-writing path. Semgrep for dataflow-aware rules; ast-grep for language-agnostic structural hunts. |
+| 4 | **Fallback: `sinks/<lang>.md` grep** | Plain text | No CPG/SAST tooling available — the per-language sink files are ripgrep-ready. |
+
+Outputs from layers 1–3 are packaged as SecuritySlice input packets (see `references/dag-reasoning.md` § SecuritySlice Input Packet) for LLM consumption. LLM agents treat tool hits as **hypotheses to verify**, never as findings to rubber-stamp.
+
+**Why CPG over AST-first:** Raw AST lacks the security-relevant edges — data dependencies, control dependencies, call targets, aliasing. A CPG merges all four, which means one query answers "does untrusted input reach this sink under these guards?" without re-implementing dataflow per rule. See `references/swarm-pipeline.md` § Slice Types for the 11 slice cuts the tooling can emit.
 
 ---
 

@@ -23,6 +23,36 @@ Use this reference alongside `agent-sweep.md`. Agent Sweep is the "spray everyth
 
 ---
 
+## § Effort Tiers
+
+The pipeline runs at one of three effort levels, selected via `/vuln-swarm --effort=low|medium|deep` (default: `medium`). Tiers differ on **which phases run** and **how deeply each runs**, not on the taxonomy applied — the skill's sinks, gates, and always-rejected list govern every tier.
+
+| Phase | LOW | MEDIUM | DEEP |
+|-------|-----|--------|------|
+| P0 recency + seeds | ✅ | ✅ | ✅ |
+| P1 holistic map + module decomposition | ❌ skipped | ✅ | ✅ |
+| P2a module agents (Stage 0 context + 3-stage pass, ≥ 2 orthogonal strategies) | ❌ skipped | ✅ | ✅ expanded (every applicable slice-type × promoted modules) |
+| P2b sink-hunter | ❌ skipped | ✅ | ✅ seeded by Static-First Lane (Semgrep/CodeQL/Joern) |
+| P2.5 verification | Single re-check only | 2-check (re-trace + judge) | 3-check (re-trace + judge + DAG-independent) |
+| P3 synthesis | Trimmed — dedup + skill §P6 chain + skill §P7 gate only (no analog cascade, no weighted scoring) | Full — dedup + analog cascade + weighted scoring + chain + gate + split | Full + Cross-Slice Reconciliation |
+| P4 skill-improvement | ❌ skipped | ✅ | ✅ |
+
+**LOW design intent.** Fast-path audit for time-boxed scans, small repos, or "smell tests". Runs P0 (recency + seeds) followed by 1–2 freeform detached agents over the whole tree, then a single re-check per finding, then a trimmed Phase 3 (dedup → chain → gate → always-rejected filter). No module decomposition, no orthogonal-strategy discipline, no analog cascade, no continuous-learning. Still applies skill §Phase 7 gate: findings that pass Q1–3 in prose go to `candidates.md`; findings that *also* pass a DAG-mechanical gate (`references/dag-reasoning.md`) go to `confirmed.md`. LOW's confirmed-tier bar is deliberately raised because the rest of the pipeline is lighter.
+
+**MEDIUM design intent.** The current pipeline, unchanged. Default tier. Every module gets ≥ 2 slice-types per applicability matrix, 3-stage pass inside each agent, 2-check verification, full synthesis with analog cascade and weighted scoring.
+
+**DEEP design intent.** Exhaustive audit for flagship targets. Runs MEDIUM plus four additions: (1) Static-First Lane seeding Phase 2b; (2) every promoted module fans out to one agent per applicable slice-type rather than ≥ 2; (3) 3-check verification adds a DAG-independent replication agent; (4) Cross-Slice Reconciliation pairs findings by `file:line` across slice-types to catch PDG-level guard errors.
+
+**DEEP module promotion rule.** To bound cost, DEEP applies its full matrix only to **promoted modules**; non-promoted modules degrade to MEDIUM behavior per-module. Compute `promotion_score` for each module from `1-map.json`:
+
+- Crown-jewel hit (PII / auth / payment / admin / trust-transition surface per skill §Phase 2) → **+2**
+- Attention-deficit signal (no security commits + no fuzz + low test coverage + public-facing per skill §Phase 2 Attention Deficit Mapping) → **+2**
+- PATCH SEED match filters to this module → **+1**
+
+Modules with `promotion_score ≥ 2` are promoted. **Floor rule:** if fewer than 2 modules promote (e.g. a pure CLI tool with no crown jewels), the top-2 modules by raw attention-deficit score are promoted anyway — DEEP never degrades uniformly to MEDIUM. Record `promotion_score` and promotion decision in `1-decomposition.json` alongside each module entry.
+
+---
+
 ## § Module Decomposition
 
 Phase 1 ends by emitting a **module-level decomposition** of the target — a structured partition of the codebase into 8–15 modules that drives Phase 2a fan-out. Fewer than 8 modules under-parallelizes; more than 15 fragments context and dilutes per-agent signal.
@@ -102,6 +132,87 @@ Across the pool of N module agents spawned in Phase 2a, **at least 2 distinct an
 
 ---
 
+## § Slice Types
+
+**Strategy vs. slice type — two different axes.** Strategy = where the agent starts (source, sink, seed, free-form, trust-boundary, state-machine). Slice type = what graph cut the agent reasons over. A single strategy can reason over multiple slice types; a single slice type can be entered from multiple strategies. MEDIUM requires ≥ 2 orthogonal **strategies** across the agent pool AND ≥ 2 applicable **slice types** per module. DEEP applies every applicable slice type to every promoted module.
+
+### Catalog
+
+| Slice type | Definition | CWE family | Preferred construction |
+|------------|-----------|------------|------------------------|
+| `taint-slice` | Source → ... → sink, value-preserving and taint-propagating. | Injection, XSS, SSRF, SSTI, path traversal, CRLF | CodeQL `DataFlow::Configuration` / Joern `reachableByFlows` / grep + manual DAG |
+| `sink-backward-slice` | Start at a dangerous sink, walk def-use backward to find controllable inputs. | RCE, deserialization, crypto misuse, memory corruption | Joern `cpg.call.name(<SINK>).argument.reachableBy(<source>)` / grep sink → walk callers |
+| `source-forward-slice` | Start at an untrusted input, walk forward without targeting a specific sink (discovery, not verification). | Attack-surface mapping, unknown-unknowns | Joern forward walk / manual |
+| `control-dependence-slice` | Dominators / post-dominators / guard ancestry for a given node. | Authz bypass, missing guards, feature-flag gating | Joern `controlledBy` / manual if/while/try ancestor trace |
+| `pdg-slice` | Data dependencies + control dependencies combined. | Memory safety, TOCTOU, business-logic, auth bypass where guard variable ≠ checked variable | Joern PDG / CodeQL DataFlow + ControlFlow composition / manual |
+| `changed-code-impact-slice` | Code reachable from or reaching a recent commit hunk; targets of PATCH SEEDS. | Recency audits, variant hunting | `git log -p` + call-graph walk / Joern with diff overlay |
+| `auth-check-slice` | Entrypoint → sensitive operation, extract authn/authz checks on every path. | BOLA, IDOR, privilege escalation, tenant breach | Manual route walk + guard grep / custom Joern query |
+| `bounds-check-slice` | Size/index value flow plus check-variable *identity* (is the checked variable the one actually used?). | CWE-787 OOB Write, CWE-125 OOB Read, integer mishandling | Joern with constraint primitive / manual `len`-vs-`sizeof(dest)` audit |
+| `allocator-free-slice` | `malloc`/`free` (or equivalent) pairs per pointer, ownership and lifetime. | CWE-416 UAF, CWE-415 double-free, memory leaks | Joern ownership query / Clang static analyzer / manual |
+| `lock-unlock-slice` | Lock acquisition/release pairs plus shared-state accesses. | Race conditions, TOCTOU, concurrent privilege escalation | Joern call-graph with lock APIs / manual thread audit |
+| `crypto-use-slice` | Key source → algorithm/mode → nonce/IV → MAC/signature verification. | Nonce reuse, weak RNG, missing verify, ECB, hardcoded keys | Crypto API grep + manual audit |
+
+### Applicability matrix
+
+Not every slice type fires on every module. Phase 2a agent allocation consults this matrix before spawning:
+
+| Module character | Slice types that apply |
+|------------------|------------------------|
+| Every module | `taint-slice`, `source-forward-slice`, `control-dependence-slice` |
+| HTTP edge / routing | + `auth-check-slice` |
+| Auth / session / access control | + `auth-check-slice`, + `control-dependence-slice` (deeper) |
+| Persistence / ORM / template | + `sink-backward-slice`, + `taint-slice` (deeper) |
+| C / C++ / Rust `unsafe` / Go `cgo` | + `bounds-check-slice`, + `allocator-free-slice`, + `lock-unlock-slice` |
+| Crypto / signing / key management | + `crypto-use-slice` |
+| Any module touched by recent commits | + `changed-code-impact-slice` |
+| Business logic / state machines / workflows | + `pdg-slice` |
+
+### Tier interaction
+
+| Tier | Slice-type allocation per module |
+|------|-----------------------------------|
+| **LOW** | N/A — no P2a agents; freeform agents operate slice-free over whole tree |
+| **MEDIUM** | ≥ 2 applicable slice types per module (chosen for strategy-fit and module character) |
+| **DEEP** (promoted modules) | Every applicable slice type per the matrix above; one agent per (module × slice-type) cell |
+| **DEEP** (non-promoted) | Same as MEDIUM (≥ 2 applicable) |
+
+### Slice-type tagging on findings
+
+Every finding JSON MUST carry a `discoverer_slice_type` field (value = one of the catalog entries, or `freeform` when discovered by a detached freeform agent with no slice-type anchor). This field feeds Cross-Slice Reconciliation (DEEP) and the `strategy_diversity` signal in Weighted Scoring.
+
+---
+
+## § Context Profiling (Stage 0)
+
+**Goal:** prevent context dilution before the three-stage pass runs. Raw module bytes appended to a prompt degrade LLM performance on large modules (CPRVul, 2026) — selecting context beats appending context.
+
+**When it runs:** mandatory in MEDIUM and DEEP, for every Phase 2a agent, before Stage 1 (Briefing). LOW skips Stage 0 (no module agents exist in LOW).
+
+**Prompt injection:**
+
+> Before briefing, enumerate candidate context for this module:
+> - Callers and callees of every function defined in the module
+> - Globals and types referenced by the module
+> - Imports / depended-on modules
+> - Control-flow guards (authn, authz, role checks, feature flags) present on module entrypoints
+> - Tests covering the module (presence and coverage)
+> - Config flags and runtime gates that affect the module's behavior
+> - Sinks, sources, and sanitizers already identified by Phase 0 / Phase 1 / sink-hunter as relevant to this module
+>
+> For each candidate context item, compute a relevance score:
+>
+> `relevance = touches_untrusted_input × reaches_sensitive_sink × (1 - test_coverage_fraction)`
+>
+> Keep only the top-K items (K = 20 default, override via `--context-k=<N>`). Emit the selected set to `0-context-${MODULE}.json` with fields `{item_type, location, relevance_score, rationale}`.
+>
+> Subsequent stages reason **only** over the selected context plus the module's own source. Do NOT re-fetch raw bytes from discarded context items.
+
+**Exit criterion:** `0-context-${MODULE}.json` exists with at least 5 items and a justification for why each was kept. If the module is trivially small (< 200 LOC), Stage 0 may emit "context-profiling-skipped: module-small" and pass the full module through to Stage 1.
+
+**Failure mode:** agents that skip Stage 0 and grab the whole module wholesale under-perform on modules > 1k LOC. Prompt must be enforced; synthesis agent checks that `0-context-${MODULE}.json` exists before accepting a `2a-${MODULE}.{md,json}` pair.
+
+---
+
 ## § Three-Stage Pass
 
 Every Phase 2a agent runs a **three-stage internal pass** before emitting candidates. Stages execute sequentially inside the same agent; only candidates surviving all three reach `2a-<module>.{md,json}`.
@@ -165,6 +276,8 @@ Every Phase 2a agent runs a **three-stage internal pass** before emitting candid
 
 Phase 3 synthesis applies an **analog cascade** to every Confirmed finding. The idea: a confirmed bug in module X is prior evidence that structurally analogous bugs exist in modules Y, Z that Phase 2a missed.
 
+**Tier gating:** does **not** fire in LOW (no Phase 2a module fan-out exists to cascade across). Fires in MEDIUM and DEEP. In DEEP, cascade consumes the cross-slice reconciliation output as an additional sibling-search surface.
+
 ### Procedure
 
 For each Confirmed finding `F` emerging from Phase 2.5:
@@ -220,8 +333,10 @@ Every finding surviving Phase 2.5 accumulates a **weighted confidence score**. T
 | `skill_severity` | Mapped from finding's bug class via SKILL.md Phase 5 priority tiers (P0–P3) | 0.15 | Skill-level priors — P0 sinks tend to be real when the trace exists. |
 | `strategy_diversity` | Was the finding discovered by ≥ 2 orthogonal strategies? | 0.10 | Cross-strategy agreement is a strong signal. Binary 0/1 * 0.10. |
 | `seed_match` | Finding matches a PATCH SEED variant_query | 0.05 | Seed-hypothesis precision boost. |
+| `dag_independent_verdict` *(DEEP only)* | Third verification agent: independent DAG reconstruction confirms mechanical reachability | 0.10 | Only active in DEEP's 3-check verification. |
+| `cross_slice_agreement` *(DEEP only)* | Finding emerges from ≥ 2 distinct slice types (e.g., taint + sink-backward) | 0.05 | Independent graph cuts reaching the same site is the strongest DEEP-specific prior. |
 
-**Total possible score:** 1.00. Weights are a starting distribution; the synthesis agent may adjust them with explicit justification recorded in `REPORT.md` if target characteristics warrant (e.g., memory-corruption findings might uprate `taint_trace_depth` because shallow traces dominate in that bug class).
+**Total possible score:** 1.00. In DEEP, the two new signals (0.15 combined) are accommodated by rebalancing: `re_trace_verdict` 0.25→0.20, `judge_verdict` 0.20→0.15, `taint_trace_depth` 0.10→0.05. All other MEDIUM weights are unchanged. DEEP sum: 0.15 + 0.20 + 0.15 + 0.05 + 0.15 + 0.10 + 0.05 + 0.10 + 0.05 = 1.00. Weights are a starting distribution; the synthesis agent may adjust them with explicit justification recorded in `REPORT.md` if target characteristics warrant (e.g., memory-corruption findings might uprate `taint_trace_depth` because shallow traces dominate in that bug class).
 
 ### Thresholds
 
@@ -261,6 +376,73 @@ Record the full signal vector alongside the score in `findings.json` so reviewer
 
 ---
 
+## § Static-First Lane (DEEP only)
+
+DEEP runs a deterministic **static-first lane** before any LLM agent touches a promoted module. Rationale: CPRVul evidence shows naive context append degrades LLM performance; front-loading a mechanical pass produces cheap, high-precision seeds and narrows LLM scope to residual cases.
+
+### Tooling priority
+
+Per the Tool-Integration Matrix (see `vuln-research/SKILL.md` § Phase 3.5), pick in order of availability:
+
+| Priority | Tool | Output |
+|----------|------|--------|
+| 1 | Joern (CPG) | Call-chain slices, PDG cuts, taint paths for promoted module(s) |
+| 2 | CodeQL | Path queries from standard-library sources to sinks; SARIF sidecar |
+| 3 | Semgrep + ast-grep (combined) | Semantic pattern hits + structural matches per language pack |
+| 4 | Fallback: skill's `sinks/<lang>.md` grep catalog | Plain-text sink enumeration |
+
+### Inputs
+
+- Promoted modules (`promotion_score ≥ threshold` per § Effort Tiers) plus floor set
+- Stack-detected language list from Phase 1
+- PATCH SEEDS from `0-seeds.json`
+
+### Outputs
+
+- `2-static/<module>.sarif` (or tool-native equivalent) — raw mechanical hits
+- `2-static/<module>.slices.json` — one entry per candidate slice: `{slice_id, slice_type, entrypoint, source_nodes[], sink_node, path[], control_guards[], sanitizers_seen[], confidence_prior}`
+
+### Handoff to Phase 2a
+
+Each promoted module-agent receives the static-first output for **its module only**, packaged as pre-built slices in the SecuritySlice input-packet format (see `references/dag-reasoning.md` § SecuritySlice Input Packet). Module-agents treat static hits as *hypotheses to verify*, not as findings to rubber-stamp — the three-stage pass still applies.
+
+### Why static-first is gated to DEEP
+
+- LOW has no module fan-out; a single freeform pass does not benefit from per-module slice prep.
+- MEDIUM already delivers acceptable precision at its cost profile; adding a static pre-pass inflates setup cost without matching the verification depth DEEP pairs it with.
+- DEEP's 3-check verification and cross-slice reconciliation are what make static-first's extra noise tolerable — the downstream filters catch the false positives the static lane produces.
+
+---
+
+## § Cross-Slice Reconciliation (DEEP only)
+
+After every promoted module has run every applicable slice type, DEEP spawns a **reconciliation agent** per module to reconcile findings *across slice types within the module* before Phase 2.5.
+
+### Purpose
+
+A real bug often surfaces through multiple slice types (e.g., a command-injection shows up under `taint`, `sink-backward`, and `control-dependence` cuts). Naive merging by `file:line` under-counts this; structural reconciliation preserves the `cross_slice_agreement` signal feeding Weighted Scoring.
+
+### Procedure
+
+1. **Collect** all findings for the module across slice-type runs into a single working set.
+2. **Group** by `{sink_node, root_source_class}`; within a group, tally distinct `discoverer_slice_type` values.
+3. **Emit one reconciled finding per group** with:
+   - merged trace (pick the shortest/highest-confidence path, record the others as `alternate_paths[]`)
+   - `slice_types_agreeing[]` array
+   - `cross_slice_agreement = len(slice_types_agreeing) >= 2`
+4. **Drop** groups consisting entirely of static-lane hits that no slice-type LLM pass picked up — these likely represent tool false positives that the skill's bug-class filters already reject. Log them in `2-static-rejected/<module>.json` for Phase 4 learning.
+
+### Output
+
+- `2c-reconciled-<module>.json` — reconciled findings feeding Phase 2.5 verification (3-check in DEEP)
+
+### Interaction with Phase 2.5 and analog cascade
+
+- Phase 2.5 verifies the **reconciled** finding, not each slice-type emission separately. This keeps verification cost linear in reconciled count, not slice-type count.
+- Analog cascade (§ Analog Cascade) treats the reconciled finding as the sibling-search anchor; `slice_types_agreeing[]` is propagated into analog candidates' metadata so reviewers can see which slice-type cut caught the analog.
+
+---
+
 ## § Phase 4 Methodology
 
 Phase 4 is a **continuous-learning pass**: after the audit completes, a final agent proposes evidence-grounded improvements to the `vuln-research` skill itself.
@@ -281,7 +463,7 @@ Phase 4 proposes additions to:
 ### Out of scope — DO NOT propose
 
 - New phases, new modes, or pipeline reorderings
-- Rewrites of Philosophy, Mode Selection, or Domain Reference Map structure
+- Rewrites of Philosophy, Mode Sel  ection, or Domain Reference Map structure
 - Ex-novo architectural changes
 - Opinions unsupported by an audit moment
 - Deletions — Phase 4 is additive; deletion proposals go to a human reviewer through the normal skill-maintenance path, not through the pipeline

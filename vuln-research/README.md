@@ -159,6 +159,23 @@ The command owns pipeline shape and the handoff contract; the skill owns taxonom
 | Kotlin/Android | `sinks/mobile.md` | WebView bridges, intent injection, exported components, data storage |
 | Swift/iOS | `sinks/mobile.md` | WKWebView, URL scheme handling, Keychain, ATS exceptions |
 
+## CFG / AST / CPG Tooling
+
+For deep-tier audits (`/vuln-swarm --effort=deep`) the pipeline runs a **static-first lane** that front-loads a mechanical CPG/PDG/taint pass before any LLM agent inspects a promoted module. The skill integrates four tool layers in priority order:
+
+| Priority | Tool | Representation | Use Case |
+|----------|------|----------------|----------|
+| 1 | **[Joern](https://joern.io/)** | Code Property Graph (AST + CFG + DFG + call graph) | Full-program inter-procedural taint, PDG cuts, call-chain slicing. Best for C/C++/Java/JS/Python when a queryable graph is worth the indexing cost. |
+| 2 | **[CodeQL](https://codeql.github.com/)** | Relational AST + dataflow library | Path queries from standard-library sources to sinks. SARIF output. Best when a pre-built query pack matches the stack (`javascript-security-and-quality`, `python-security-extended`, etc.). |
+| 3 | **[Semgrep](https://semgrep.dev/) + [ast-grep](https://ast-grep.github.io/)** | Semantic patterns (Semgrep) + structural AST matching (ast-grep) | Cheapest rule-writing path. Combine for coverage: Semgrep for dataflow-aware rules, ast-grep for language-agnostic structural hunts. |
+| 4 | **Fallback: `sinks/<lang>.md` grep catalog** | Plain text | When no CPG/SAST tooling is available — the per-language sink files are ripgrep-ready and enumerate every documented dangerous API. |
+
+Outputs from layers 1–3 are consumed as **pre-built slices** packaged in the SecuritySlice input-packet format (source nodes, sink node, path, control guards, sanitizers seen) — LLM agents treat them as hypotheses to verify, not findings to rubber-stamp.
+
+**Why CPG over AST-first?** For security analysis, raw AST lacks the edges that matter: data dependencies, control dependencies, call targets, and aliasing. A CPG merges all four, which means a single query answers "does untrusted input reach this sink under these guards?" without re-implementing dataflow per rule. The skill's `references/swarm-pipeline.md` § Slice Types documents 11 security-relevant slice cuts the tooling can emit (taint, sink-backward, source-forward, control-dependence, pdg, changed-code, auth-check, bounds-check, allocator-free, lock-unlock, crypto-use).
+
+LOW and MEDIUM tiers do **not** require CFG/CPG tooling — they operate on source reads and the skill's sink catalogs directly. DEEP tier uses whichever layer is available and records the choice in `2-static/<module>.sarif` (or tool-native equivalent).
+
 ## SAST/DAST Integration
 
 The `sinks-catalog.md` router includes cross-language tooling references:

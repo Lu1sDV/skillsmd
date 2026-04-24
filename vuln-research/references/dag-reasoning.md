@@ -279,6 +279,83 @@ controllability story keeps shifting.
 
 ---
 
+## § SecuritySlice Input Packet
+
+The **SecuritySlice** is the structured input format module-agents receive from the DEEP-tier static-first lane (`references/swarm-pipeline.md` § Static-First Lane). It is the structural mirror of the DAG output format — a pre-built hypothesis with enough mechanical content that the LLM can focus on *judging* reachability and exploitability rather than reconstructing the graph from raw source.
+
+### Packet schema
+
+```json
+{
+  "slice_id": "string — stable id, e.g., joern-<hash> or codeql-<query>-<result>",
+  "target_cwe_hypothesis": "string — tool's guess, e.g., CWE-89 SQL injection",
+  "slice_type": "taint | sink-backward | source-forward | control-dependence | pdg | changed-code | auth-check | bounds-check | allocator-free | lock-unlock | crypto-use",
+  "entrypoints": ["file:line — how execution reaches this slice (HTTP handler, IPC, CLI parse, etc.)"],
+  "source_nodes": [
+    {"file:line": "...", "kind": "http_param | cookie | header | file | db_row | env | ipc | ...", "symbol": "name of var / field"}
+  ],
+  "candidate_sink_nodes": [
+    {"file:line": "...", "api": "e.g., mysql_query / os.system / eval", "arity": "int", "tainted_arg_index": "int"}
+  ],
+  "dataflow_path_fragments": [
+    {"from": "file:line", "to": "file:line", "edge_kind": "assign | call-arg | return | field-read | field-write | alias", "transform": "optional — sanitizer / cast / format"}
+  ],
+  "control_guards_on_path": [
+    {"file:line": "...", "predicate": "e.g., isAuthenticated(user) / strlen(x) < 256", "must_be_true_for_reach": "bool"}
+  ],
+  "sanitizers_seen": [
+    {"file:line": "...", "api": "e.g., htmlspecialchars / prepare / escapeshellarg", "adequate_for_sink": "bool | unknown"}
+  ],
+  "relevant_code_spans": [
+    {"file": "path", "start_line": "int", "end_line": "int", "why": "one-line justification — why this span matters to the slice"}
+  ],
+  "assumptions": ["string — unresolved facts the tool could not prove, e.g., 'assumes config.DEBUG=false'"],
+  "discoverer_strategy": "joern | codeql | semgrep | ast-grep | fallback-grep",
+  "confidence_prior": "float in [0,1] — tool's own confidence before LLM review"
+}
+```
+
+### Relationship to the output DAG
+
+A SecuritySlice packet is **input** to the LLM; the reasoning DAG (§ The Framework above) is the LLM's **output**. The mapping is near-isomorphic:
+
+| SecuritySlice field | DAG counterpart |
+|---------------------|-----------------|
+| `source_nodes[]` | DAG source nodes |
+| `dataflow_path_fragments[]` + `control_guards_on_path[]` | DAG intermediate nodes with `pa(v)` edges |
+| `sanitizers_seen[]` | DAG sanitizer-node candidates (LLM must judge adequacy, producing `sanitized_sink` if adequate) |
+| `candidate_sink_nodes[]` | DAG `verified_sink` or `sanitized_sink` (LLM decides) |
+| `assumptions[]` | DAG assumption leaves that cap certainty |
+| `control_guards_on_path[]` with `must_be_true_for_reach: false` | 12-pattern failure risk — wrong-condition check (LLM must verify) |
+
+### Required LLM response shape
+
+Given a SecuritySlice packet, the LLM emits:
+
+1. A full DAG per § The Framework (sources → intermediates → verified_sink or sanitized_sink)
+2. An explicit **verdict on each assumption**: promoted to fact (with evidence), downgraded to unresolved (capping certainty), or refuted (killing the slice)
+3. A **sanitizer-adequacy judgment** for every `sanitizers_seen` entry
+4. A **12-pattern check pass** (per § The 12 Failure Patterns) — enumerate each pattern and declare "not present" or "present → node invalidated"
+5. Final classification: `VERIFIED | SANITIZED | UNREACHABLE | ASSUMPTION_BOUNDED`
+
+### Use across tiers
+
+| Tier | SecuritySlice packet source |
+|------|------------------------------|
+| LOW | Not used — freeform agents work from raw source |
+| MEDIUM | Optional — agents receive call-chain slices but not the full structured packet |
+| DEEP | **Required** — static-first lane produces one packet per candidate slice; module-agents consume packets as primary input |
+
+### Why a structured packet over raw code
+
+Per CPRVul: naive context append (dumping call graphs and raw files into the LLM context) degrades performance. A structured SecuritySlice lets the LLM:
+
+- Skip rediscovering the path (already traced by the tool)
+- Focus tokens on *judgment* (sanitizer adequacy, guard correctness, assumption validity) rather than *retrieval*
+- Produce a DAG that structurally mirrors the packet, making mechanical verification (Phase 2.5 DAG-independent check) tractable
+
+---
+
 ## Reference
 
 - **Paper:** Li Lu, Yanjie Zhao, Hongzhou Rao, Kechi Zhang, Haoyu Wang. *Evaluating
