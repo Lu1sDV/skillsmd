@@ -59,6 +59,18 @@ Choose a mode based on scope and intent before starting work:
 
 ---
 
+## Tooling Constraints
+
+**LSP for understanding, Grep/Glob for discovery.**
+
+When tracing where a symbol is defined or finding all references to it, use LSP (`goToDefinition`, `findReferences`, `hover`) instead of Grep. LSP gives exact results; Grep gives text matches.
+
+Use Grep/Glob for discovery (finding files, searching patterns). Use LSP for understanding (definitions, references, type info).
+
+After locating a file with Grep/Glob, use LSP to navigate within it rather than reading the whole file.
+
+---
+
 ## Agent Sweep Mode (Phases S1–S4)
 
 > Load `references/agent-sweep.md` for full prompt templates, scoring rubrics, and integration details.
