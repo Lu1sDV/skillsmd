@@ -182,6 +182,18 @@ Every finding JSON MUST carry a `discoverer_slice_type` field (value = one of th
 
 ---
 
+## § Priors, Not Constraints
+
+Every reference the pipeline hands an analysis agent — sink catalogs, bug-class lenses, PATCH SEEDS, static-lane slices, skill taxonomy entries, suspected-risk hints, "best-for" strategy tables — is a **prior to accelerate search, not a fence that bounds it**. Agents are expected to apply their own security knowledge alongside these inputs: novel sinks the catalog doesn't list, bug classes the skill hasn't enumerated, attack patterns specific to the stack, and anything the agent can reason about from first principles are all in scope.
+
+Every prompt injection that loads external guidance into an agent ends with an explicit reminder of this. The phrasing below is the canonical form and appears verbatim in each stage's prompt:
+
+> **These references are priors, not a checklist.** Use them to accelerate discovery, but also draw on your own knowledge of the language, stack, and bug classes. Sinks, seeds, and suggested strategies do not bound what you are allowed to find — if you see a plausible bug outside the provided lens, pursue it and emit it with a rationale.
+
+This reminder is **mandatory** at the tail of every Stage-0, Stage-1, Stage-2, and Static-First handoff prompt. Synthesis-phase reviewers should treat a finding tagged `outside-provided-lens: true` as a positive signal for `strategy_diversity`, not as an anomaly to be filtered out.
+
+---
+
 ## § Context Profiling (Stage 0)
 
 **Goal:** prevent context dilution before the three-stage pass runs. Raw module bytes appended to a prompt degrade LLM performance on large modules (CPRVul, 2026) — selecting context beats appending context.
@@ -206,6 +218,8 @@ Every finding JSON MUST carry a `discoverer_slice_type` field (value = one of th
 > Keep only the top-K items (K = 20 default, override via `--context-k=<N>`). Emit the selected set to `0-context-${MODULE}.json` with fields `{item_type, location, relevance_score, rationale}`.
 >
 > Subsequent stages reason **only** over the selected context plus the module's own source. Do NOT re-fetch raw bytes from discarded context items.
+>
+> **These references are priors, not a checklist.** Use them to accelerate discovery, but also draw on your own knowledge of the language, stack, and bug classes. Sinks, seeds, and suggested strategies do not bound what you are allowed to find — if you see a plausible bug outside the provided lens, pursue it and emit it with a rationale.
 
 **Exit criterion:** `0-context-${MODULE}.json` exists with at least 5 items and a justification for why each was kept. If the module is trivially small (< 200 LOC), Stage 0 may emit "context-profiling-skipped: module-small" and pass the full module through to Stage 1.
 
@@ -230,6 +244,8 @@ Every Phase 2a agent runs a **three-stage internal pass** before emitting candid
 > 4. For each PATCH SEED filtered to this module, state whether an analogous unfixed site is structurally plausible.
 >
 > Do not emit candidate findings yet. Emit only the briefing.
+>
+> **These references are priors, not a checklist.** Use them to accelerate discovery, but also draw on your own knowledge of the language, stack, and bug classes. Sinks, seeds, and suggested strategies do not bound what you are allowed to find — if you see a plausible bug outside the provided lens, pursue it and emit it with a rationale.
 
 **Exit criterion:** a briefing that names concrete entry points and concrete assumed invariants. Vague briefings ("handles HTTP things") fail; regenerate once before proceeding.
 
@@ -245,6 +261,8 @@ Every Phase 2a agent runs a **three-stage internal pass** before emitting candid
 > 3. For each site, assess controllability (High/Medium/Low/Needs-verification) and note defense layers.
 >
 > Emit candidates in draft form. Do not self-filter yet — include weak candidates.
+>
+> **These references are priors, not a checklist.** Use them to accelerate discovery, but also draw on your own knowledge of the language, stack, and bug classes. Sinks, seeds, and suggested strategies do not bound what you are allowed to find — if you see a plausible bug outside the provided lens, pursue it and emit it with a rationale. Tag such candidates with `outside-provided-lens: true` in the draft record.
 
 **Exit criterion:** a draft list of candidates with traces, each naming a specific bug class and sink. Candidates without traces are invalid drafts; the stage must produce traces before handing off.
 
@@ -405,6 +423,8 @@ Per the Tool-Integration Matrix (see `vuln-research/SKILL.md` § Phase 3.5), pic
 ### Handoff to Phase 2a
 
 Each promoted module-agent receives the static-first output for **its module only**, packaged as pre-built slices in the SecuritySlice input-packet format (see `references/dag-reasoning.md` § SecuritySlice Input Packet). Module-agents treat static hits as *hypotheses to verify*, not as findings to rubber-stamp — the three-stage pass still applies.
+
+**These references are priors, not a checklist.** The static-lane slices do not enumerate every bug reachable in the module; they are a seed set. Agents must also draw on their own knowledge of the language, stack, and bug classes, and are expected to surface plausible bugs the static lane missed. Findings discovered outside the provided slices are tagged `outside-provided-lens: true` and carry full standing in Phase 2.5 and synthesis.
 
 ### Why static-first is gated to DEEP
 
