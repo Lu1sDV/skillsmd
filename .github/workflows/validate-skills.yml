@@ -1,0 +1,57 @@
+name: Validate Skills
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**/SKILL.md'
+      - 'sink-research-orchestrator/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - '**/SKILL.md'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check skill frontmatter
+        run: |
+          echo "Checking all SKILL.md files for valid YAML frontmatter..."
+          find . -name "SKILL.md" -not -path "./.claude/*" | while read f; do
+            echo "--- $f ---"
+            # Check it starts with ---
+            head -1 "$f" | grep -q "^---$" || { echo "FAIL: missing opening ---"; exit 1; }
+            # Check it has a name: field
+            grep -q "^name:" "$f" || { echo "FAIL: missing name field"; exit 1; }
+            # Check it has a description: field
+            grep -q "^description:" "$f" || { echo "FAIL: missing description field"; exit 1; }
+            echo "PASS"
+          done
+
+  manifest:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate skills manifest
+        run: |
+          mkdir -p dist
+          echo '{' > dist/skills-manifest.json
+          echo '  "generated": "'$(date -Iseconds)'",' >> dist/skills-manifest.json
+          echo '  "skills": {' >> dist/skills-manifest.json
+          first=true
+          find . -name "SKILL.md" -not -path "./.claude/*" | sort | while read f; do
+            name=$(grep "^name:" "$f" | head -1 | sed 's/name: *//')
+            dir=$(dirname "$f" | sed 's|^\./||')
+            [ "$first" = true ] && first=false || echo "," >> dist/skills-manifest.json
+            echo "    \"$name\": \"$dir\"" >> dist/skills-manifest.json
+          done
+          echo '  }' >> dist/skills-manifest.json
+          echo '}' >> dist/skills-manifest.json
+      - name: Upload manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: skills-manifest
+          path: dist/skills-manifest.json
