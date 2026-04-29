@@ -44,3 +44,22 @@
 - **LDAP:** `python-ldap` `search_s()`, `ldap3` `connection.search()` with unsanitized filters
 - **XSS:** `markupsafe.Markup()` wrapping user input, `jinja2` `|safe` filter on tainted data, Django `mark_safe()`
 - **Path Traversal:** `os.path.join(base, user_input)` (does NOT prevent `../`), `send_file()`/`send_from_directory()` in Flask without validation
+
+---
+
+## Niche Research Lanes
+
+Use these lanes when expanding beyond common Python sinks into under-tested bug classes.
+
+| ID | Lane | Seeds |
+|----|------|-------|
+| A1 | Class Confusion | `__class__.__init__.__globals__`, metaclass abuse, MRO manipulation |
+| A2 | Prototype Pollution | `setattr` chains, `__globals__` traversal, pydash/pymongo variants |
+| A3 | Race Conditions | `filelock` TOCTOU, `tempfile.mktemp`, `shutil.move` atomicity |
+| A4 | Async/Generator | `gi_frame.f_globals`, coroutine frame escape, `asyncio.Task` UAF |
+| A5 | Stdlib Hidden Sinks | `ast.literal_eval`, `ctypes` overflow, `http.server` redirect |
+| A6 | CTF Tricks | Decorator AST bypass, ZIP polyglots, `breakpoint()` abuse |
+| A7 | Type Confusion | `isinstance` fast-path, ABC cache corruption, `register()` bypass |
+| A8 | Serialization | `memoryview` UAF, `pandas.eval()`, protobuf recursion |
+| A9 | Numeric/String | `statistics.stdev()` infinity, `re` catastrophic backtracking |
+| A10 | Obscure Internals | `_posixsubprocess.fork_exec`, `antigravity` hijack, `/proc/self/mem` |
