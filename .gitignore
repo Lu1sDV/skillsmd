@@ -39,5 +39,5 @@ CLAUDE.md
 .agents/
 .claude/
 .sisyphus/
-.codex/
+.codex
 CTF_AI_Agent_Intelligence_Brief.md
