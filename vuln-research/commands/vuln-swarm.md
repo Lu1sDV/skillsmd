@@ -218,6 +218,7 @@ See `references/swarm-pipeline.md` § Phase 4 Methodology for full proposal reco
 - Every finding: **file:line + source→sink trace**
 - Every narrow-agent compressed handoff: **≤ own module entry + sibling one-line index + filtered seeds + call-chain slices** (no raw file dumps, no cross-module blobs)
 - Mode: **SAST only** — no running instance, no rule engines. The skill decides everything else.
+- **Tooling discipline (every subagent):** Prefer LSP (`goToDefinition`, `findReferences`, `hover`) when available for symbol resolution, callers, and type info. Use Grep/Glob for discovery (locating files, searching patterns), then read the local context needed for decorators, route registration, middleware, guards, module config, and dynamic dispatch. Grep text matches conflate same-named symbols across scopes and inflate false-positive rates in source→sink traces.
 
 ## Final deliverable set (all under `$ARGUMENTS/.vuln-swarm/`)
 

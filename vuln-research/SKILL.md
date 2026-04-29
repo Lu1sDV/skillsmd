@@ -63,11 +63,11 @@ Choose a mode based on scope and intent before starting work:
 
 **LSP for understanding, Grep/Glob for discovery.**
 
-When tracing where a symbol is defined or finding all references to it, use LSP (`goToDefinition`, `findReferences`, `hover`) instead of Grep. LSP gives exact results; Grep gives text matches.
+When tracing where a symbol is defined or finding all references to it, prefer LSP (`goToDefinition`, `findReferences`, `hover`) when available. LSP gives exact results; Grep gives text matches.
 
-Use Grep/Glob for discovery (finding files, searching patterns). Use LSP for understanding (definitions, references, type info).
+Use Grep/Glob for discovery (finding files, searching patterns). Use LSP for understanding (definitions, references, type info), then read the surrounding source needed to understand framework wiring, guards, decorators, module configuration, and dynamic dispatch.
 
-After locating a file with Grep/Glob, use LSP to navigate within it rather than reading the whole file.
+Avoid raw whole-repo dumps; do not avoid local file context that affects exploitability.
 
 ---
 
@@ -88,7 +88,9 @@ When the goal is maximum coverage across a full source tree, use file-iteration 
 
 For each source file (or small cluster), spawn a parallel agent:
 
-> "You are performing a security audit. Find exploitable vulnerabilities starting from `${FILE}`. Consider all bug classes — memory corruption, injection, logic flaws, auth bypass, deserialization, race conditions, type confusion, integer mishandling. Trace inputs from this file's entry points through the program. Write findings to `${FILE}.vuln.md` with: vuln type, affected function, source→sink trace, exploitability assessment, suggested payload."
+> "You are performing a security audit. Find exploitable vulnerabilities starting from `${FILE}`. Consider all bug classes — memory corruption, injection, logic flaws, auth bypass, deserialization, race conditions, type confusion, integer mishandling. Trace inputs from this file's entry points through the program. Write findings to `${FILE}.vuln.md` with: vuln type, affected function, source→sink trace, exploitability assessment, suggested payload.
+>
+> **Tooling:** Prefer LSP (`goToDefinition`, `findReferences`, `hover`) when available for symbol definitions, callers, and type info — exact resolution reduces same-name false positives from Grep text matches. Use Grep/Glob for discovery (locating files, searching patterns), then read the local file context needed for decorators, route registration, middleware, guards, module config, and dynamic dispatch."
 
 **Design properties:**
 - **File-anchored, not domain-anchored** — each agent starts from a file, not "look for SQLi." The LLM's latent bug-class knowledge drives discovery, not a checklist
@@ -100,7 +102,9 @@ For each source file (or small cluster), spawn a parallel agent:
 
 Feed each `.vuln.md` back through a **fresh agent** (not the discoverer — avoids confirmation bias):
 
-> "You received an inbound vulnerability report in `${FILE}.vuln.md`. Verify this is actually exploitable. Trace the source→sink path yourself. Confirm controllability. Identify defense layers that might block it. Classify: **Confirmed** / **Plausible-Needs-Dynamic** / **False Positive**."
+> "You received an inbound vulnerability report in `${FILE}.vuln.md`. Verify this is actually exploitable. Trace the source→sink path yourself. Confirm controllability. Identify defense layers that might block it. Classify: **Confirmed** / **Plausible-Needs-Dynamic** / **False Positive**.
+>
+> **Tooling:** Prefer LSP (`goToDefinition`, `findReferences`, `hover`) when available to verify symbol definitions and callers. Use Grep/Glob for discovery, then read enough surrounding file context to confirm guards, framework wiring, and dynamic behavior."
 
 Expected filtration: ~40–60% of discovery findings survive verification.
 
@@ -180,6 +184,8 @@ Spawn exactly one agent with this prompt:
 > For each finding write: vuln type, affected function/file, source→sink trace, controllability, exploitability assessment (High/Medium/Low), and a suggested payload or PoC direction. Flag commits that touch security-adjacent paths (auth, crypto, input parsing, session handling, access control, deser, SSRF-prone callers) even when no bug is found — the auditor needs to know where recent changes raise risk.
 >
 > Stay **very accurate and very focused**: no speculation, no "theoretical" findings without a controllability trace, no drift into untouched code. If the chosen range surfaces no real vulnerabilities, say so explicitly and list which security-adjacent files were examined so the rest of the audit can trust the recency pass.
+>
+> **Tooling:** Prefer LSP (`goToDefinition`, `findReferences`, `hover`) when available for resolving the call graph of changed hunks — recency review is high-signal precisely because it stays anchored to actually-touched call sites. Use Grep/Glob for discovery (locating files, finding string patterns), then read enough surrounding context to validate framework wiring, guards, and dynamic dispatch.
 
 ### Optional Deliverable: PATCH SEEDS
 
