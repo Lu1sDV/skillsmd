@@ -27,6 +27,29 @@
 - **Sequelize:** `sequelize.query()`, `$literal`, operator injection via `$gt`, `$ne`
 - **ActiveRecord:** `where("col = '#{params[:x]}'")`, `order()`, `pluck()`, `calculate()`
 
+### ORM Leaking — Data Extraction via Search/Filter (2025)
+
+Beyond classic SQL injection, ORM query builders expose data through sort/filter/search constructions that don't use raw SQL but still leak information.
+
+**Mechanism:**
+1. ORM builds WHERE/SORT clauses from structured input (JSON objects, field names)
+2. Attacker probes field existence via sort timing: `?sort[email]` vs `?sort[nonexistent]`
+3. Attacker extracts data via conditional sorting: `?sort[SUBSTRING(email,1,1)=a]` reveals boolean
+4. Works on GraphQL, REST APIs, and OData endpoints using ORM-backed querying
+
+**Affected patterns:**
+- `ORDER BY` from user-controlled column names
+- Filter operators: `$startsWith`, `$contains`, `$regex`, `$gt`, `$lt`, `$ne`
+- Nested relation traversal in filters: `?filter[address.city]=NYC`
+- Pagination cursors leaking ordering data
+
+**Detection:**
+- Probe for field enumeration via sort/order parameters: does `?sort=email` change response order?
+- Test for boolean extraction: does `?filter[email__startswith]=a` return different results than `?filter[email__startswith]=b`?
+- Timing differential between matching vs non-matching filters
+
+Source: Alex Brown / elttam, PortSwigger Top 10 Web Hacking Techniques of 2025 #2.
+
 ### SQLi Beyond Basics (Database-Specific)
 
 **MySQL specific:** `GROUP_CONCAT()`, `LOAD_FILE()`, `INTO OUTFILE`/`DUMPFILE`, `@@version`, `information_schema` enumeration, `binary` keyword for case-sensitive comparison, `/*!50000 UNION*/` version-gated comments for WAF bypass, `HANDLER` for alternative table reads, `JSON_ARRAYAGG()`, `BENCHMARK()` for time-based blind, `SLEEP()`, `hex()/unhex()` for encoding
@@ -47,13 +70,29 @@
 
 **Stored procedure output:** Parameterized input to stored procedures that internally use dynamic SQL (`EXEC`, `sp_executesql` with concat) — injection happens inside the procedure.
 
-### SQL Protocol-Level Smuggling
+### SQL Protocol-Level Smuggling (2024)
 
-Exploit differences between SQL wire protocol parsing and application-level query building. Injection occurs at the protocol layer rather than the SQL text layer:
-- MySQL COM_QUERY vs COM_STMT_EXECUTE handling differences
-- PostgreSQL extended query protocol: separate Parse/Bind/Execute messages can be manipulated
-- ODBC/JDBC driver-level escaping inconsistencies vs server-side parsing
-- **Impact:** Bypasses application-level parameterization when the driver constructs protocol messages unsafely
+Paul Gerste's DEF CON 32 research bridges memory corruption and SQL injection — exploiting the SQL wire protocol itself rather than application query construction.
+
+**Mechanism:**
+1. Database drivers communicate via binary protocol (e.g., PostgreSQL `libpq`, MySQL `libmysqlclient`)
+2. Integer overflow in protocol length fields can corrupt query boundaries
+3. Heap spray technique: allocate fake query objects at predictable addresses
+4. Driver processes attacker-controlled "query" instead of legitimate one
+
+**Protocol-level exploitation primitives:**
+- **Length overflow:** protocol field like `Int32 len` overflowed via signed/unsigned mismatch → driver reads beyond intended buffer
+- **Type confusion:** statement types confused at protocol level — execute/describe/prepare boundaries blurred
+- **Message smuggling:** extra protocol messages injected inside legitimate query data
+
+**Impact:** Bypasses ALL application-level input sanitization because the injection happens at the protocol level, below the application's SQL parser.
+
+**Detection:** Requires binary protocol analysis — standard SQLi detection won't find these. Look for:
+- Integer handlings in database driver source that could overflow
+- Length-then-data protocol structures without proper bounds checking
+- Custom or forked database drivers with protocol-level patches
+
+Source: Paul Gerste, DEF CON 32 / PortSwigger Top 10 Web Hacking Techniques of 2024 #2.
 
 ### PDO Null Byte Smuggling (PHP)
 
@@ -244,6 +283,30 @@ Inject `{{7*7}}`, `${7*7}`, `<%= 7*7 %>`, `#{7*7}`, `{7*7}`, `${{7*7}}` — resp
 **Smarty — writeFile gadget:** `{Smarty_Internal_Write_File::writeFile($SCRIPT_NAME,"<?php passthru($_GET['cmd']); ?>",self::clearConfig())}`
 
 **Elixir EEx — System.shell:** `<%= elem(System.shell("id"), 0) %>`
+
+### Successful Errors — Blind SSTI via Error Oracle (2025)
+
+Vladislav Korchagin's research introduces error-based techniques for exploiting blind Server-Side Template Injection, adapting SQL injection error-based techniques to SSTI.
+
+**Error oracle detection:**
+Different template engines produce distinct error messages when evaluating expressions:
+- Jinja2: `jinja2.exceptions.UndefinedError: 'x' is undefined`
+- Twig: `Twig_Error_Loader: Template "x" is not defined`
+- FreeMarker: `FreeMarker template error: The following variable is not defined: "x"`
+- Pug/Slim: `SyntaxError: Unexpected token`
+- Handlebars/Mustache: `Error: Missing helper: "x"`
+
+**Polyglot SSTI payload (engine-agnostic detection):**
+`{{7*7}}${7*7}<%=7*7%>${{7*7}}#{7*7}` — send once, check response for `49`, `14`, or evaluation artifacts to confirm SSTI without knowing the engine.
+
+**Error-based blind exploitation:**
+1. Trigger template engine expression that causes conditional error based on secret value
+2. Use `SSTImap` or `tplmap` for automated error-based extraction
+3. Engine-specific error oracles: Jinja2 `{% if secret.startswith('a') %}{{ 1/0 }}{% endif %}`, FreeMarker `<#if secret?starts_with("a")><#attempt>${1/0}<#recover>...</#attempt></#if>`
+
+**Open-source toolkit:** Vladislav Korchagin's SSTI detection toolkit integrates error-based + polyglot detection.
+
+Source: Vladislav Korchagin, PortSwigger Top 10 Web Hacking Techniques of 2025 #1.
 
 ---
 

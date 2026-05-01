@@ -1,0 +1,1802 @@
+
+
+
+
+
+
+<!DOCTYPE html>
+<html
+  lang="en"
+  
+  data-color-mode="auto" data-light-theme="light" data-dark-theme="dark"
+  data-a11y-animated-images="system" data-a11y-link-underlines="true"
+  
+  >
+
+
+
+
+  <head>
+    <meta charset="utf-8">
+  <link rel="dns-prefetch" href="https://github.githubassets.com">
+  <link rel="dns-prefetch" href="https://avatars.githubusercontent.com">
+  <link rel="dns-prefetch" href="https://github-cloud.s3.amazonaws.com">
+  <link rel="dns-prefetch" href="https://user-images.githubusercontent.com/">
+  <link rel="preconnect" href="https://github.githubassets.com" crossorigin>
+  <link rel="preconnect" href="https://avatars.githubusercontent.com">
+
+  
+
+  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light-2ff56e1b36116ee2.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light_high_contrast-f7f95d7633592089.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark-2d1fe43dbc9adf1f.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark_high_contrast-d530ee188d165539.css" /><link data-color-theme="light" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light-2ff56e1b36116ee2.css" /><link data-color-theme="light_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_high_contrast-f7f95d7633592089.css" /><link data-color-theme="light_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind-e4bbc49fc7b82570.css" /><link data-color-theme="light_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind_high_contrast-cc3f126b45166b83.css" /><link data-color-theme="light_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia-652ca611ea4e33fe.css" /><link data-color-theme="light_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia_high_contrast-9e82d635cb6c3f49.css" /><link data-color-theme="dark" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark-2d1fe43dbc9adf1f.css" /><link data-color-theme="dark_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_high_contrast-d530ee188d165539.css" /><link data-color-theme="dark_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind-3ad0ec21150df75b.css" /><link data-color-theme="dark_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind_high_contrast-5691ff467f71a3f6.css" /><link data-color-theme="dark_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia-abee7710893cd168.css" /><link data-color-theme="dark_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia_high_contrast-eafcf6cd46158360.css" /><link data-color-theme="dark_dimmed" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed-c7974682a1a84c8d.css" /><link data-color-theme="dark_dimmed_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed_high_contrast-f8dab3e04f94c501.css" />
+
+  <style type="text/css">
+    :root {
+      --tab-size-preference: 4;
+    }
+
+    pre, code {
+      tab-size: var(--tab-size-preference);
+    }
+  </style>
+
+    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-7f694b60439d06c0.css" />
+    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-b48faa60c69660fa.css" />
+    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/global-b40ec823a1a6a1af.css" />
+    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/github-f825c0edd7ad57f8.css" />
+  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/repository-0751f482f5210958.css" />
+
+  
+
+  <script type="application/json" id="client-env">{"locale":"en","featureFlags":["actions_custom_images_storage_billing_ui_visibility","actions_image_version_event","actions_workflow_language_service_allow_concurrency_queue","agent_conflict_resolution","alternate_user_config_repo","arianotify_comprehensive_migration","billing_discount_threshold_notification","code_scanning_dfa_degraded_experience_notice","codespaces_prebuild_region_target_update","codespaces_tab_react","coding_agent_model_selection","coding_agent_model_selection_all_skus","comment_viewer_copy_raw_markdown","contentful_primer_code_blocks","copilot_agent_snippy","copilot_api_agentic_issue_marshal_yaml","copilot_ask_mode_dropdown","copilot_automation_session_author","copilot_chat_attach_multiple_images","copilot_chat_category_rate_limit_messages","copilot_chat_clear_model_selection_for_default_change","copilot_chat_contextual_suggestions_updated","copilot_chat_enable_tool_call_logs","copilot_chat_file_redirect","copilot_chat_input_commands","copilot_chat_opening_thread_switch","copilot_chat_prettify_pasted_code","copilot_chat_reduce_quota_checks","copilot_chat_search_bar_redirect","copilot_chat_selection_attachments","copilot_chat_vision_in_claude","copilot_chat_vision_preview_gate","copilot_custom_copilots","copilot_custom_copilots_feature_preview","copilot_diff_explain_conversation_intent","copilot_diff_reference_context","copilot_duplicate_thread","copilot_extensions_hide_in_dotcom_chat","copilot_extensions_removal_on_marketplace","copilot_features_sql_server_logo","copilot_file_block_ref_matching","copilot_ftp_hyperspace_upgrade_prompt","copilot_icebreakers_experiment_dashboard","copilot_icebreakers_experiment_hyperspace","copilot_immersive_code_block_transition_wrap","copilot_immersive_embedded","copilot_immersive_embedded_deferred_payload","copilot_immersive_embedded_draggable","copilot_immersive_embedded_header_button","copilot_immersive_embedded_implicit_references","copilot_immersive_file_block_transition_open","copilot_immersive_file_preview_keep_mounted","copilot_immersive_job_result_preview","copilot_immersive_structured_model_picker","copilot_immersive_task_hyperlinking","copilot_immersive_task_within_chat_thread","copilot_mc_cli_resume_any_users_task","copilot_mission_control_always_send_integration_id","copilot_mission_control_cli_session_status","copilot_mission_control_initial_data_spinner","copilot_mission_control_logs_incremental","copilot_mission_control_task_alive_updates","copilot_org_policy_page_focus_mode","copilot_redirect_header_button_to_agents","copilot_resource_panel","copilot_scroll_preview_tabs","copilot_share_active_subthread","copilot_spaces_ga","copilot_spaces_individual_policies_ga","copilot_spaces_pagination","copilot_spark_empty_state","copilot_spark_handle_nil_friendly_name","copilot_swe_agent_hide_model_picker_if_only_auto","copilot_swe_agent_pr_comment_model_picker","copilot_swe_agent_use_subagents","copilot_task_api_github_rest_style","copilot_unconfigured_is_inherited","copilot_upgrade_freeze","copilot_usage_metrics_ga","copilot_workbench_slim_line_top_tabs","custom_instructions_file_references","dashboard_indexeddb_caching","dashboard_lists_max_age_filter","dashboard_universe_2025_feedback_dialog","dotgithub_fork_warning","flex_cta_groups_mvp","global_nav_react","hyperspace_2025_logged_out_batch_1","hyperspace_2025_logged_out_batch_2","hyperspace_2025_logged_out_batch_3","ipm_global_transactional_message_agents","ipm_global_transactional_message_copilot","ipm_global_transactional_message_issues","ipm_global_transactional_message_prs","ipm_global_transactional_message_repos","ipm_global_transactional_message_spaces","issue_cca_modal_open","issue_cca_multi_assign_modal","issue_cca_task_side_panel","issue_cca_visualization","issue_cca_visualization_session_panel","issue_fields_global_search","issues_expanded_file_types","issues_lazy_load_comment_box_suggestions","issues_react_bots_timeline_pagination","issues_react_chrome_container_query_fix","issues_search_type_gql","landing_pages_ninetailed","landing_pages_web_vitals_tracking","lifecycle_label_name_updates","low_quality_classifier","marketing_pages_search_explore_provider","memex_default_issue_create_repository","memex_live_update_hovercard","memex_mwl_filter_field_delimiter","memex_remove_deprecated_type_issue","merge_status_header_feedback","notifications_menu_defer_labels","oauth_authorize_clickjacking_protection","octocaptcha_origin_optimization","prs_conversations_react","prs_css_anchor_positioning","rules_insights_filter_bar_created","sample_network_conn_type","secret_scanning_pattern_alerts_link","security_center_artifact_filters_popover","session_logs_ungroup_reasoning_text","site_features_copilot_universe","site_homepage_collaborate_video","spark_prompt_secret_scanning","spark_server_connection_status","suppress_automated_browser_vitals","ui_skip_on_anchor_click","viewscreen_sandbox","warn_inaccessible_attachments","webp_support","workbench_store_readonly"],"copilotApiOverrideUrl":"https://api.githubcopilot.com"}</script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/high-contrast-cookie-218067197ba03c91.js"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/wp-runtime-d7310dc770a7ac2d.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/fetch-utilities-3140609b5732710f.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/28839-7adfdde5afeb1a03.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/85924-ac5602ef611dc506.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/34646-4c7883eb242d5210.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/environment-a12df3cf35884818.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/runtime-helpers-cb4dfbc9d23f30be.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/2966-d68f2b4558d86113.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/96232-540ff5f81016a9ca.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/41013-647932573fc130af.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/51210-45dfb7dd106f6b96.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/64247-73a9861fe185671f.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/81683-382ccc88e034ea1d.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/9338-f6bee5a8d66d930f.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/46740-5a373320e5ef9c01.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/67466-79abcbf599986a00.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/github-elements-61af8f0198be4afd.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/element-registry-161b4fbd68395409.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/react-core-1bf2dfbca21efd20.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/react-lib-1353f2cef82bcdc0.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/58889-5b136bc717e57a8b.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/79039-69acf717ffc901a4.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/61110-073153e0413daf3a.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/2887-91b9c645d570616a.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/26533-f22c29ae5e9b1ed2.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/86483-c3a819d46503a3da.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/37460-fcd4830a1194eace.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/60481-24b13ea726837f7b.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/46287-853bfcb69bb5b3f9.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/2498-f0375ed070e22e54.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/61025-5b1312da907b4074.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/89627-40275597692dc855.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/79087-4f706db8aa2ec0fb.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/49029-42bd0899fca05960.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/99328-a2c6b180d25cb160.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/behaviors-05170beef7088f93.js" defer="defer"></script>
+<link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/react-core.f25ad6e4b6a65cba.module.css" />
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/4244-97fb660009234136.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/notifications-global-442a23b66c306470.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/primer-react-ed05dc3d91bca0bd.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/octicons-react-60e727d7a1b6f52c.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/89960-3369b8943362e07e.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/37869-3811d0fa923a406d.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/68751-830b37204cdf7847.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/7463-30e02617b93e1c07.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/15272-0fca7ba11b03440f.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/41167-9d7086519f9ef4b7.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/32769-abc9916acf2cd4f1.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/73449-84f6039b29854149.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/70247-e8566061f7697493.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/25164-8ca756647c71bc06.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/28819-537db0fbb4d636b3.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/62094-a0c781f8be696b93.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/46903-da8c953d62c506b6.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/60939-74e045d52567f304.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/54206-8dbbe0dd1dff1dd2.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/25388-41c130407fc33f84.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/36505-9798da05fe2143ec.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/46148-264173ef30e2e838.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/40058-9247dfd4ab747b08.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/48860-cd0847f2fbc1a654.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/59207-5cdbd77265e278c2.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/98144-f9072be737aa5208.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/49937-4aa8d38605d1f6eb.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/63991-466700d8cea41498.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/59852-fc77b3df0a08d405.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/66488-ffb65e6b35d5f9a7.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/3624-fdb7d4ead672734b.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/17298-18c200a5ed7d8437.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/66231-9febf100ccdfe155.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/71001-7431ccad12c501aa.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/35644-547560ee9d79efa2.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/33684-bbaee6839ab84dd8.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/15917-70c4cbfe2ca8afdc.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/46040-cdfd0d1df49cd78b.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/73024-6967426a72b29bae.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/18222-8b85d637a2041072.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/96755-770967b1236437cd.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/86436-3651bf350d948ee2.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/4916-0bb8c44ba1b3d0f7.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/62874-3d2222bc674b9dc9.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/44880-19ccbe0338b6a5a6.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/97685-a7f0389a59bf2678.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/29139-0b3348d160a93154.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/71482-fd6e9237ee5b572b.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/56074-e57fe73221dc7d74.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/81042-c6412d9ad2719c3a.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/77440-a0496f63c5d86021.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/10764-e0584490ca0bb035.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/51730-3e0037043893119c.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/15151-d2f36fb3dcbc55b4.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/64910-82e2723f8637cbf7.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/38184-1e8a3a630d385487.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/56790-7f5c7be401d6c379.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/42829-99f9ee318c6ce745.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/90620-dc2db18399417fa1.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/80070-efaa60516012b0a3.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/15716-58123af41344c325.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/11722-82acadfe877c9a50.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/47965-eb8dbec1ca3c0974.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/90025-5245aef280f327ee.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/58829-ac3b6a9730cb4dd4.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/issues-react-49e4c00199de7e93.js" defer="defer"></script>
+<link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-react-css.00ba154d21e54e53.module.css" />
+<link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/15917.7ec50cf998ce87eb.module.css" />
+<link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/81042.098b88595b720f87.module.css" />
+<link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/42829.bc471ac1abf9d38f.module.css" />
+<link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/15716.1e4e71f09d87b4e0.module.css" />
+<link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/47965.6e46d142750eb947.module.css" />
+<link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/58829.fbc6d259c682dade.module.css" />
+<link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/issues-react.abbac15f5f331ad2.module.css" />
+  
+  <script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/70234-1ee48b3a4eebdc7d.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/32639-b4f0cdce4bef4ac5.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/notifications-subscriptions-menu-8cd581c0af350d7f.js" defer="defer"></script>
+<link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/notifications-subscriptions-menu.f6fd17c299e8bb6c.module.css" />
+
+
+  <title>Use-after-free in `memoryview` slicing via re-entrant `__index__` · Issue #142665 · python/cpython · GitHub</title>
+
+
+
+  <meta name="route-pattern" content="/_view_fragments/issues/show/:user_id/:repository/:id/issue_layout(.:format)" data-turbo-transient>
+  <meta name="route-controller" content="voltron_issues_fragments" data-turbo-transient>
+  <meta name="route-action" content="issue_layout" data-turbo-transient>
+  <meta name="fetch-nonce" content="v2:6ce7c804-68aa-e50f-6bfa-8617199b75cd">
+
+    
+  <meta name="current-catalog-service-hash" content="81bb79d38c15960b92d99bca9288a9108c7a47b18f2423d0f6438c5b7bcd2114">
+
+
+  <meta name="request-id" content="8174:250385:60E8C3B:4A86B07:69F1911C" data-pjax-transient="true"/><meta name="html-safe-nonce" content="d12c1aea88a35002a9fc2562dba63e9ff39ef708bb66fd4e10ab0d0683a5dc72" data-pjax-transient="true"/><meta name="visitor-payload" content="eyJyZWZlcnJlciI6IiIsInJlcXVlc3RfaWQiOiI4MTc0OjI1MDM4NTo2MEU4QzNCOjRBODZCMDc6NjlGMTkxMUMiLCJ2aXNpdG9yX2lkIjoiNDgxMTEyNDYzMDQ4MDg1MTIyOCIsInJlZ2lvbl9lZGdlIjoiZnJhIiwicmVnaW9uX3JlbmRlciI6ImZyYSJ9" data-pjax-transient="true"/><meta name="visitor-hmac" content="bdf3b03167ee0e193144b0d0bf236c8db74af4bb2b15edb1ca7527573b90c149" data-pjax-transient="true"/>
+
+
+    <meta name="hovercard-subject-tag" content="issue:3726036182" data-turbo-transient>
+
+
+  <meta name="github-keyboard-shortcuts" content="repository,issues,copilot" data-turbo-transient="true" />
+  
+
+  <meta name="selected-link" value="repo_issues" data-turbo-transient>
+  <link rel="assets" href="https://github.githubassets.com/">
+
+    <meta name="google-site-verification" content="Apib7-x98H0j5cPqHWwSMm6dNU4GmODRoqxLiDzdx9I">
+
+<meta name="octolytics-url" content="https://collector.github.com/github/collect" />
+
+
+
+
+
+  <meta name="analytics-location" content="/&lt;user-name&gt;/&lt;repo-name&gt;/voltron/issues_fragments/issue_layout" data-turbo-transient="true" />
+
+  
+
+
+
+
+    <meta name="user-login" content="">
+
+  
+
+    <meta name="viewport" content="width=device-width">
+
+    
+
+      <meta name="description" content="What happened? memory_subscript() creates a new view (mbuf_add_view) before parsing slice indices. If a slice bound’s __index__ releases/truncates the underlying buffer (e.g., mv.release(); ftruncate()), the newly created subview keeps a...">
+
+      <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="GitHub">
+
+    <link rel="fluid-icon" href="https://github.com/fluidicon.png" title="GitHub">
+    <meta property="fb:app_id" content="1401488693436528">
+    <meta name="apple-itunes-app" content="app-id=1477376905, app-argument=https://github.com/_view_fragments/issues/show/python/cpython/142665/issue_layout" />
+
+      <meta name="twitter:image" content="https://opengraph.githubassets.com/42635bbff5d113b7bb37a08d36176899dd647089ece534af091c46fcebc63493/python/cpython/issues/142665" /><meta name="twitter:site" content="@github" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="Use-after-free in `memoryview` slicing via re-entrant `__index__` · Issue #142665 · python/cpython" /><meta name="twitter:description" content="What happened? memory_subscript() creates a new view (mbuf_add_view) before parsing slice indices. If a slice bound’s __index__ releases/truncates the underlying buffer (e.g., mv.release(); ftrunca..." />
+  <meta property="og:image" content="https://opengraph.githubassets.com/42635bbff5d113b7bb37a08d36176899dd647089ece534af091c46fcebc63493/python/cpython/issues/142665" /><meta property="og:image:alt" content="What happened? memory_subscript() creates a new view (mbuf_add_view) before parsing slice indices. If a slice bound’s __index__ releases/truncates the underlying buffer (e.g., mv.release(); ftrunca..." /><meta property="og:image:width" content="1200" /><meta property="og:image:height" content="600" /><meta property="og:site_name" content="GitHub" /><meta property="og:type" content="object" /><meta property="og:title" content="Use-after-free in `memoryview` slicing via re-entrant `__index__` · Issue #142665 · python/cpython" /><meta property="og:url" content="https://github.com/python/cpython/issues/142665" /><meta property="og:description" content="What happened? memory_subscript() creates a new view (mbuf_add_view) before parsing slice indices. If a slice bound’s __index__ releases/truncates the underlying buffer (e.g., mv.release(); ftrunca..." /><meta property="og:author:username" content="jackfromeast" />
+  
+
+
+
+
+      <meta name="hostname" content="github.com">
+
+
+
+        <meta name="expected-hostname" content="github.com">
+
+
+  <meta http-equiv="x-pjax-version" content="d7f61b46e9f3584a69e68e90407407147bb81e66d129e466b37a2596ec1733b5" data-turbo-track="reload">
+  <meta http-equiv="x-pjax-csp-version" content="568c098497d98702bac1642a2a853732a047a6ced28eabd3e15d50041a890235" data-turbo-track="reload">
+  <meta http-equiv="x-pjax-css-version" content="87721d1504a187fb3fcbfa6e98526d058edf6fa1163680dbb36bf70525df6ac4" data-turbo-track="reload">
+  <meta http-equiv="x-pjax-js-version" content="d19c7384fc11f41c248a1f6fd323e0667dd556e14bc2dea777f4817668066de7" data-turbo-track="reload">
+
+  <meta name="turbo-cache-control" content="no-preview" data-turbo-transient="">
+
+      <meta name="voltron-timing" value="757">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"DiscussionForumPosting","headline":"Use-after-free in `memoryview` slicing via re-entrant `__index__`","articleBody":"### What happened?\n\n`memory_subscript()` creates a new view (`mbuf_add_view`) **before** parsing slice indices. If a slice bound’s `__index__` releases/truncates the underlying buffer (e.g., `mv.release(); ftruncate()`), the newly created subview keeps a dangling pointer. Subsequent access (e.g., `sub[0]`) dereferences freed/invalid memory, crashing in `unpack_single`.\n\n**Proof of Concept:**\n```python\nimport mmap, os, tempfile\n\nfd, path = tempfile.mkstemp()\nos.write(fd, b\"A\" * 4096)\nmm = mmap.mmap(fd, 4096, access=mmap.ACCESS_WRITE)\nmv = memoryview(mm)\n\nclass Trigger:\n    def __index__(self):\n        mv.release()\n        os.ftruncate(fd, 0)\n        return 0\n\ntry:\n    sub = mv[slice(Trigger(), None, None)]\n    sub[0] # Trigger the slicing to call __index__\nfinally:\n    mm.close()\n    os.close(fd)\n    os.unlink(path)\n```\n\n**Related Code Snippet**\n\n\u003cdetails\u003e\n\n```c\nstatic PyObject *\nmemory_subscript(PyObject *_self, PyObject *key)\n{\n    PyMemoryViewObject *self = (PyMemoryViewObject *)_self;\n    Py_buffer *view;\n    view = \u0026(self-\u003eview);\n\n    CHECK_RELEASED(self);\n\n    if (view-\u003endim == 0) {\n        if (PyTuple_Check(key) \u0026\u0026 PyTuple_GET_SIZE(key) == 0) {\n            const char *fmt = adjust_fmt(view);\n            if (fmt == NULL)\n                return NULL;\n            return unpack_single(self, view-\u003ebuf, fmt);\n        }\n        else if (key == Py_Ellipsis) {\n            return Py_NewRef(self);\n        }\n        else {\n            PyErr_SetString(PyExc_TypeError,\n                \"invalid indexing of 0-dim memory\");\n            return NULL;\n        }\n    }\n\n    if (_PyIndex_Check(key)) {\n        Py_ssize_t index;\n        index = PyNumber_AsSsize_t(key, PyExc_IndexError);\n        if (index == -1 \u0026\u0026 PyErr_Occurred())\n            return NULL;\n        return memory_item((PyObject *)self, index);\n    }\n    else if (PySlice_Check(key)) {\n        CHECK_RESTRICTED(self);\n        PyMemoryViewObject *sliced;\n\n        sliced = (PyMemoryViewObject *)mbuf_add_view(self-\u003embuf, view);\n        if (sliced == NULL)\n            return NULL;\n\t\t\t\t\n\t\t// Call __index__ method which close the mmap memory while sliced still holds its pointer\n        if (init_slice(\u0026sliced-\u003eview, key, 0) \u003c 0) {\n            Py_DECREF(sliced);\n            return NULL;\n        }\n        init_len(\u0026sliced-\u003eview);\n        init_flags(sliced);\n\n        return (PyObject *)sliced;\n    }\n    else if (is_multiindex(key)) {\n        return memory_item_multi(self, key);\n    }\n    else if (is_multislice(key)) {\n        PyErr_SetString(PyExc_NotImplementedError,\n            \"multi-dimensional slicing is not implemented\");\n        return NULL;\n    }\n\n    PyErr_SetString(PyExc_TypeError, \"memoryview: invalid slice key\");\n    return NULL;\n}\n```\n\n\u003c/details\u003e\n\n**Affected Versions:**\n\u003cdetails\u003e\n\n| Python Version | Status | Exit Code |\n|---|---|---|\n| `Python 3.9.24+ (heads/3.9:9c4638d, Oct 17 2025, 11:19:30) ` | ASAN | 1 |\n| `Python 3.10.19+ (heads/3.10:0142619, Oct 17 2025, 11:20:05) [GCC 13.3.0]` | ASAN | 1 |\n| `Python 3.11.14+ (heads/3.11:88f3f5b, Oct 17 2025, 11:20:44) [GCC 13.3.0]` | ASAN | 1 |\n| `Python 3.12.12+ (heads/3.12:8cb2092, Oct 17 2025, 11:21:35) [GCC 13.3.0]` | ASAN | 1 |\n| `Python 3.13.9+ (heads/3.13:0760a57, Oct 17 2025, 11:22:25) [GCC 13.3.0]` | ASAN | 1 |\n| `Python 3.14.0+ (heads/3.14:889e918, Oct 17 2025, 11:23:02) [GCC 13.3.0]` | ASAN | 1 |\n| `Python 3.15.0a1+ (heads/main:fbf0843, Oct 17 2025, 11:23:37) [GCC 13.3.0]` | ASAN | 1 |\n\n\u003c/details\u003e\n\n**Sanitizer Output**\n\u003cdetails\u003e\n\n```python\n=================================================================\n==1532703==ERROR: AddressSanitizer: BUS on unknown address (pc 0x5ae17c7bd8ce bp 0x7fffb3a81570 sp 0x7fffb3a814b0 T0)\n==1532703==The signal is caused by a READ memory access.\n==1532703==Hint: this fault was caused by a dereference of a high value address (see register values below).  Disassemble the provided pc to learn which register was used.\n    #0 0x5ae17c7bd8ce in unpack_single Objects/memoryobject.c:1842\n    #1 0x5ae17c7be2c2 in memory_item Objects/memoryobject.c:2474\n    #2 0x5ae17c7c31d6 in memory_subscript Objects/memoryobject.c:2610\n    #3 0x5ae17c6e5393 in PyObject_GetItem Objects/abstract.c:163\n    #4 0x5ae17c98a8f8 in _PyEval_EvalFrameDefault Python/generated_cases.c.h:62\n    #5 0x5ae17c9d7e54 in _PyEval_EvalFrame Include/internal/pycore_ceval.h:121\n    #6 0x5ae17c9d8148 in _PyEval_Vector Python/ceval.c:2001\n    #7 0x5ae17c9d83f8 in PyEval_EvalCode Python/ceval.c:884\n    #8 0x5ae17cacf507 in run_eval_code_obj Python/pythonrun.c:1365\n    #9 0x5ae17cacf723 in run_mod Python/pythonrun.c:1459\n    #10 0x5ae17cad057a in pyrun_file Python/pythonrun.c:1293\n    #11 0x5ae17cad3220 in _PyRun_SimpleFileObject Python/pythonrun.c:521\n    #12 0x5ae17cad34f6 in _PyRun_AnyFileObject Python/pythonrun.c:81\n    #13 0x5ae17cb2474d in pymain_run_file_obj Modules/main.c:410\n    #14 0x5ae17cb249b4 in pymain_run_file Modules/main.c:429\n    #15 0x5ae17cb261b2 in pymain_run_python Modules/main.c:691\n    #16 0x5ae17cb26842 in Py_RunMain Modules/main.c:772\n    #17 0x5ae17cb26a2e in pymain_main Modules/main.c:802\n    #18 0x5ae17cb26db3 in Py_BytesMain Modules/main.c:826\n    #19 0x5ae17c5aa645 in main Programs/python.c:15\n    #20 0x715a34c2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #21 0x715a34c2a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #22 0x5ae17c5aa574 in _start (/home/jackfromeast/Desktop/entropy/tasks/grammar-afl++-latest/targets/cpython/python+0x2dd574) (BuildId: ff3dc40ea460bd4beb2c3a72283cca525b319bf0)\n\nAddressSanitizer can not provide additional info.\nSUMMARY: AddressSanitizer: BUS Objects/memoryobject.c:1842 in unpack_single\n==1532703==ABORTING\n```\n\u003c/details\u003e\n\n\n\n\u003c!-- gh-linked-prs --\u003e\n### Linked PRs\n* gh-143324\n\u003c!-- /gh-linked-prs --\u003e\n","author":{"url":"https://github.com/jackfromeast","@type":"Person","name":"jackfromeast"},"datePublished":"2025-12-13T14:35:27.000Z","interactionStatistic":{"@type":"InteractionCounter","interactionType":"https://schema.org/CommentAction","userInteractionCount":0},"url":"https://github.com/142665/cpython/issues/142665"}</script> 
+  <meta name="go-import" content="github.com/python/cpython git https://github.com/python/cpython.git">
+
+  <meta name="octolytics-dimension-user_id" content="1525981" /><meta name="octolytics-dimension-user_login" content="python" /><meta name="octolytics-dimension-repository_id" content="81598961" /><meta name="octolytics-dimension-repository_nwo" content="python/cpython" /><meta name="octolytics-dimension-repository_public" content="true" /><meta name="octolytics-dimension-repository_is_fork" content="false" /><meta name="octolytics-dimension-repository_network_root_id" content="81598961" /><meta name="octolytics-dimension-repository_network_root_nwo" content="python/cpython" />
+  
+
+
+
+      <link rel="canonical" href="https://github.com/python/cpython/issues/142665" data-turbo-transient>
+
+
+    <meta name="turbo-body-classes" content="logged-out env-production page-responsive">
+  <meta name="disable-turbo" content="false">
+
+
+  <meta name="browser-stats-url" content="https://api.github.com/_private/browser/stats">
+
+  <meta name="browser-errors-url" content="https://api.github.com/_private/browser/errors">
+
+  <meta name="release" content="aa7e481e529b8bf86e4ab4c175dd8ba8b590f9e9">
+  <meta name="ui-target" content="full">
+
+  <link rel="mask-icon" href="https://github.githubassets.com/assets/pinned-octocat-093da3e6fa40.svg" color="#000000">
+  <link rel="alternate icon" class="js-site-favicon" type="image/png" href="https://github.githubassets.com/favicons/favicon.png">
+  <link rel="icon" class="js-site-favicon" type="image/svg+xml" href="https://github.githubassets.com/favicons/favicon.svg" data-base-href="https://github.githubassets.com/favicons/favicon">
+
+<meta name="theme-color" content="#1e2327">
+<meta name="color-scheme" content="light dark" />
+
+
+  <link rel="manifest" href="/manifest.json" crossOrigin="use-credentials">
+
+  </head>
+
+  <body class="logged-out env-production page-responsive" style="word-wrap: break-word;" >
+    <div data-turbo-body class="logged-out env-production page-responsive" style="word-wrap: break-word;" >
+      <div id="__primerPortalRoot__" role="region" style="z-index: 1000; position: absolute; width: 100%;" data-turbo-permanent></div>
+      
+
+    <div class="position-relative header-wrapper js-header-wrapper ">
+      <a href="#start-of-content" data-skip-target-assigned="false" class="px-2 tmp-py-4 color-bg-accent-emphasis color-fg-on-emphasis show-on-focus js-skip-to-content">Skip to content</a>
+
+      <span data-view-component="true" class="progress-pjax-loader Progress position-fixed width-full">
+    <span style="width: 0%;" data-view-component="true" class="Progress-item progress-pjax-loader-bar left-0 top-0 color-bg-accent-emphasis"></span>
+</span>      
+      
+      <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/keyboard-shortcuts-dialog.1ac5611d6700bff4.module.css" />
+
+<react-partial
+  partial-name="keyboard-shortcuts-dialog"
+  data-ssr="false"
+  data-attempted-ssr="false"
+  data-react-profiling="false"
+>
+  
+  <script type="application/json" data-target="react-partial.embeddedData">{"props":{"docsUrl":"https://docs.github.com/get-started/accessibility/keyboard-shortcuts"}}</script>
+  <div data-target="react-partial.reactRoot"></div>
+</react-partial>
+
+
+
+
+
+      
+
+          
+
+              
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/46752-7bd8967216f7ea42.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/90350-89ca7e5359af8f77.js" defer="defer"></script>
+<script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/sessions-e0da6ce03532723c.js" defer="defer"></script>
+
+<style>
+  /* Override primer focus outline color for marketing header dropdown links for better contrast */
+  [data-color-mode="light"] .HeaderMenu-dropdown-link:focus-visible,
+  [data-color-mode="light"] .HeaderMenu-trailing-link a:focus-visible {
+    outline-color: var(--color-accent-fg);
+  }
+</style>
+
+<header class="HeaderMktg header-logged-out js-details-container js-header Details f4 tmp-py-3" role="banner" data-is-top="true" data-color-mode=auto data-light-theme=light data-dark-theme=dark>
+  <h2 class="sr-only">Navigation Menu</h2>
+
+  <button type="button" class="HeaderMktg-backdrop d-lg-none border-0 position-fixed top-0 left-0 width-full height-full js-details-target" aria-label="Toggle navigation">
+    <span class="d-none">Toggle navigation</span>
+  </button>
+
+  <div class="d-flex flex-column flex-lg-row flex-items-center tmp-px-3 tmp-px-md-4 tmp-px-lg-5 height-full position-relative z-1">
+    <div class="d-flex flex-justify-between flex-items-center width-full width-lg-auto">
+      <div class="flex-1">
+        <button aria-label="Toggle navigation" aria-expanded="false" type="button" data-view-component="true" class="js-details-target js-nav-padding-recalculate js-header-menu-toggle Button--link Button--medium Button d-lg-none color-fg-inherit p-1 tmp-p-1">  <span class="Button-content">
+    <span class="Button-label"><div class="HeaderMenu-toggle-bar rounded my-1"></div>
+            <div class="HeaderMenu-toggle-bar rounded my-1"></div>
+            <div class="HeaderMenu-toggle-bar rounded my-1"></div></span>
+  </span>
+</button>
+      </div>
+
+      <a class="tmp-mr-lg-3 color-fg-inherit flex-order-2 js-prevent-focus-on-mobile-nav"
+        href="/"
+        aria-label="Homepage"
+        data-analytics-event="{&quot;category&quot;:&quot;Marketing nav&quot;,&quot;action&quot;:&quot;click to go to homepage&quot;,&quot;label&quot;:&quot;ref_page:Marketing;ref_cta:Logomark;ref_loc:Header&quot;}">
+        <svg height="32" aria-hidden="true" viewBox="0 0 24 24" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github">
+    <path d="M10.226 17.284c-2.965-.36-5.054-2.493-5.054-5.256 0-1.123.404-2.336 1.078-3.144-.292-.741-.247-2.314.09-2.965.898-.112 2.111.36 2.83 1.01.853-.269 1.752-.404 2.853-.404 1.1 0 1.999.135 2.807.382.696-.629 1.932-1.1 2.83-.988.315.606.36 2.179.067 2.942.72.854 1.101 2 1.101 3.167 0 2.763-2.089 4.852-5.098 5.234.763.494 1.28 1.572 1.28 2.807v2.336c0 .674.561 1.056 1.235.786 4.066-1.55 7.255-5.615 7.255-10.646C23.5 6.188 18.334 1 11.978 1 5.62 1 .5 6.188.5 12.545c0 4.986 3.167 9.12 7.435 10.669.606.225 1.19-.18 1.19-.786V20.63a2.9 2.9 0 0 1-1.078.224c-1.483 0-2.359-.808-2.987-2.313-.247-.607-.517-.966-1.034-1.033-.27-.023-.359-.135-.359-.27 0-.27.45-.471.898-.471.652 0 1.213.404 1.797 1.235.45.651.921.943 1.483.943.561 0 .92-.202 1.437-.719.382-.381.674-.718.944-.943"></path>
+</svg>
+      </a>
+
+      <div class="d-flex flex-1 flex-order-2 text-right d-lg-none gap-2 flex-justify-end">
+          <a
+            href="/login?return_to=https%3A%2F%2Fgithub.com%2Fpython%2Fcpython%2Fissues%2F142665"
+            class="HeaderMenu-link HeaderMenu-button d-inline-flex f5 no-underline border color-border-default rounded-2 px-2 py-1 color-fg-inherit js-prevent-focus-on-mobile-nav"
+            data-hydro-click="{&quot;event_type&quot;:&quot;authentication.click&quot;,&quot;payload&quot;:{&quot;location_in_page&quot;:&quot;site header menu&quot;,&quot;repository_id&quot;:null,&quot;auth_type&quot;:&quot;SIGN_UP&quot;,&quot;originating_url&quot;:&quot;https://github.com/python/cpython/issues/142665&quot;,&quot;user_id&quot;:null}}" data-hydro-click-hmac="53f807f4fdbfd3dfb8cc069a820f873e5c73f98333f5e46a48eed5aba5f2baed"
+            data-analytics-event="{&quot;category&quot;:&quot;Marketing nav&quot;,&quot;action&quot;:&quot;click to Sign in&quot;,&quot;label&quot;:&quot;ref_page:Marketing;ref_cta:Sign in;ref_loc:Header&quot;}"
+          >
+            Sign in
+          </a>
+              <div class="AppHeader-appearanceSettings">
+    <react-partial-anchor>
+      <button data-target="react-partial-anchor.anchor" id="icon-button-5821753f-59c6-4a77-ae00-20bb01c8b93a" aria-labelledby="tooltip-85c14cea-90a7-4f82-8ecc-0ac6d9e002fd" type="button" disabled="disabled" data-view-component="true" class="Button Button--iconOnly Button--invisible Button--medium AppHeader-button HeaderMenu-link border cursor-wait">  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-sliders Button-visual">
+    <path d="M15 2.75a.75.75 0 0 1-.75.75h-4a.75.75 0 0 1 0-1.5h4a.75.75 0 0 1 .75.75Zm-8.5.75v1.25a.75.75 0 0 0 1.5 0v-4a.75.75 0 0 0-1.5 0V2H1.75a.75.75 0 0 0 0 1.5H6.5Zm1.25 5.25a.75.75 0 0 0 0-1.5h-6a.75.75 0 0 0 0 1.5h6ZM15 8a.75.75 0 0 1-.75.75H11.5V10a.75.75 0 1 1-1.5 0V6a.75.75 0 0 1 1.5 0v1.25h2.75A.75.75 0 0 1 15 8Zm-9 5.25v-2a.75.75 0 0 0-1.5 0v1.25H1.75a.75.75 0 0 0 0 1.5H4.5v1.25a.75.75 0 0 0 1.5 0v-2Zm9 0a.75.75 0 0 1-.75.75h-6a.75.75 0 0 1 0-1.5h6a.75.75 0 0 1 .75.75Z"></path>
+</svg>
+</button><tool-tip id="tooltip-85c14cea-90a7-4f82-8ecc-0ac6d9e002fd" for="icon-button-5821753f-59c6-4a77-ae00-20bb01c8b93a" popover="manual" data-direction="s" data-type="label" data-view-component="true" class="sr-only position-absolute">Appearance settings</tool-tip>
+
+      <template data-target="react-partial-anchor.template">
+        <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/appearance-settings.babbb060397858d0.module.css" />
+
+<react-partial
+  partial-name="appearance-settings"
+  data-ssr="false"
+  data-attempted-ssr="false"
+  data-react-profiling="false"
+>
+  
+  <script type="application/json" data-target="react-partial.embeddedData">{"props":{}}</script>
+  <div data-target="react-partial.reactRoot"></div>
+</react-partial>
+
+
+      </template>
+    </react-partial-anchor>
+  </div>
+
+      </div>
+    </div>
+
+
+    <div class="HeaderMenu js-header-menu height-fit position-lg-relative d-lg-flex flex-column flex-auto top-0">
+      <div class="HeaderMenu-wrapper d-flex flex-column flex-self-start flex-lg-row flex-auto rounded rounded-lg-0">
+            <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/marketing-navigation.958ac27fcac2300c.module.css" />
+
+<react-partial
+  partial-name="marketing-navigation"
+  data-ssr="true"
+  data-attempted-ssr="true"
+  data-react-profiling="false"
+>
+  
+  <script type="application/json" data-target="react-partial.embeddedData">{"props":{"should_use_dotcom_links":true}}</script>
+  <div data-target="react-partial.reactRoot"><nav class="MarketingNavigation-module__nav__W0KYY" aria-label="Global"><ul class="MarketingNavigation-module__list__tFbMb"><li><div class="NavDropdown-module__container__l2YeI js-details-container js-header-menu-item"><button type="button" class="NavDropdown-module__button__PEHWX js-details-target" aria-expanded="false">Platform<svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-chevron-right NavDropdown-module__buttonIcon__Tkl8_" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg></button><div class="NavDropdown-module__dropdown__xm1jd"><ul class="NavDropdown-module__list__zuCgG"><li><div class="NavGroup-module__group__W8SqJ"><span class="NavGroup-module__title__Wzxz2">AI CODE CREATION</span><ul class="NavGroup-module__list__UCOFy"><li><a href="https://github.com/features/copilot" data-analytics-event="{&quot;action&quot;:&quot;github_copilot&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;platform&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;github_copilot_link_platform_navbar&quot;}" class="NavLink-module__link__EG3d4"><div class="NavLink-module__text__XvpLQ"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-copilot NavLink-module__icon__ltGNM" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M23.922 16.992c-.861 1.495-5.859 5.023-11.922 5.023-6.063 0-11.061-3.528-11.922-5.023A.641.641 0 0 1 0 16.736v-2.869a.841.841 0 0 1 .053-.22c.372-.935 1.347-2.292 2.605-2.656.167-.429.414-1.055.644-1.517a10.195 10.195 0 0 1-.052-1.086c0-1.331.282-2.499 1.132-3.368.397-.406.89-.717 1.474-.952 1.399-1.136 3.392-2.093 6.122-2.093 2.731 0 4.767.957 6.166 2.093.584.235 1.077.546 1.474.952.85.869 1.132 2.037 1.132 3.368 0 .368-.014.733-.052 1.086.23.462.477 1.088.644 1.517 1.258.364 2.233 1.721 2.605 2.656a.832.832 0 0 1 .053.22v2.869a.641.641 0 0 1-.078.256ZM12.172 11h-.344a4.323 4.323 0 0 1-.355.508C10.703 12.455 9.555 13 7.965 13c-1.725 0-2.989-.359-3.782-1.259a2.005 2.005 0 0 1-.085-.104L4 11.741v6.585c1.435.779 4.514 2.179 8 2.179 3.486 0 6.565-1.4 8-2.179v-6.585l-.098-.104s-.033.045-.085.104c-.793.9-2.057 1.259-3.782 1.259-1.59 0-2.738-.545-3.508-1.492a4.323 4.323 0 0 1-.355-.508h-.016.016Zm.641-2.935c.136 1.057.403 1.913.878 2.497.442.544 1.134.938 2.344.938 1.573 0 2.292-.337 2.657-.751.384-.435.558-1.15.558-2.361 0-1.14-.243-1.847-.705-2.319-.477-.488-1.319-.862-2.824-1.025-1.487-.161-2.192.138-2.533.529-.269.307-.437.808-.438 1.578v.021c0 .265.021.562.063.893Zm-1.626 0c.042-.331.063-.628.063-.894v-.02c-.001-.77-.169-1.271-.438-1.578-.341-.391-1.046-.69-2.533-.529-1.505.163-2.347.537-2.824 1.025-.462.472-.705 1.179-.705 2.319 0 1.211.175 1.926.558 2.361.365.414 1.084.751 2.657.751 1.21 0 1.902-.394 2.344-.938.475-.584.742-1.44.878-2.497Z"></path><path d="M14.5 14.25a1 1 0 0 1 1 1v2a1 1 0 0 1-2 0v-2a1 1 0 0 1 1-1Zm-5 0a1 1 0 0 1 1 1v2a1 1 0 0 1-2 0v-2a1 1 0 0 1 1-1Z"></path></svg><span class="NavLink-module__title__Q7t0p">GitHub Copilot</span><span class="NavLink-module__subtitle__X4gkW">Write better code with AI</span></div></a></li><li><a href="https://github.com/features/spark" data-analytics-event="{&quot;action&quot;:&quot;github_spark&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;platform&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;github_spark_link_platform_navbar&quot;}" class="NavLink-module__link__EG3d4"><div class="NavLink-module__text__XvpLQ"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-sparkle-fill NavLink-module__icon__ltGNM" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M11.296 1.924c.24-.656 1.168-.656 1.408 0l.717 1.958a11.25 11.25 0 0 0 6.697 6.697l1.958.717c.657.24.657 1.168 0 1.408l-1.958.717a11.25 11.25 0 0 0-6.697 6.697l-.717 1.958c-.24.657-1.168.657-1.408 0l-.717-1.958a11.25 11.25 0 0 0-6.697-6.697l-1.958-.717c-.656-.24-.656-1.168 0-1.408l1.958-.717a11.25 11.25 0 0 0 6.697-6.697l.717-1.958Z"></path></svg><span class="NavLink-module__title__Q7t0p">GitHub Spark</span><span class="NavLink-module__subtitle__X4gkW">Build and deploy intelligent apps</span></div></a></li><li><a href="https://github.com/features/models" data-analytics-event="{&quot;action&quot;:&quot;github_models&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;platform&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;github_models_link_platform_navbar&quot;}" class="NavLink-module__link__EG3d4"><div class="NavLink-module__text__XvpLQ"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-ai-model NavLink-module__icon__ltGNM" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M19.375 8.5a3.25 3.25 0 1 1-3.163 4h-3a3.252 3.252 0 0 1-4.443 2.509L7.214 17.76a3.25 3.25 0 1 1-1.342-.674l1.672-2.957A3.238 3.238 0 0 1 6.75 12c0-.907.371-1.727.97-2.316L6.117 6.846A3.253 3.253 0 0 1 1.875 3.75a3.25 3.25 0 1 1 5.526 2.32l1.603 2.836A3.25 3.25 0 0 1 13.093 11h3.119a3.252 3.252 0 0 1 3.163-2.5ZM10 10.25a1.75 1.75 0 1 0-.001 3.499A1.75 1.75 0 0 0 10 10.25ZM5.125 2a1.75 1.75 0 1 0 0 3.5 1.75 1.75 0 0 0 0-3.5Zm12.5 9.75a1.75 1.75 0 1 0 3.5 0 1.75 1.75 0 0 0-3.5 0Zm-14.25 8.5a1.75 1.75 0 1 0 3.501-.001 1.75 1.75 0 0 0-3.501.001Z"></path></svg><span class="NavLink-module__title__Q7t0p">GitHub Models</span><span class="NavLink-module__subtitle__X4gkW">Manage and compare prompts</span></div></a></li><li><a href="https://github.com/mcp" data-analytics-event="{&quot;action&quot;:&quot;mcp_registry&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;platform&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;mcp_registry_link_platform_navbar&quot;}" class="NavLink-module__link__EG3d4"><div class="NavLink-module__text__XvpLQ"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-mcp NavLink-module__icon__ltGNM" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M9.795 1.694a4.287 4.287 0 0 1 6.061 0 4.28 4.28 0 0 1 1.181 3.819 4.282 4.282 0 0 1 3.819 1.181 4.287 4.287 0 0 1 0 6.061l-6.793 6.793a.249.249 0 0 0 0 .353l2.617 2.618a.75.75 0 1 1-1.061 1.061l-2.617-2.618a1.75 1.75 0 0 1 0-2.475l6.793-6.793a2.785 2.785 0 1 0-3.939-3.939l-5.9 5.9a.734.734 0 0 1-.249.165.749.749 0 0 1-.812-1.225l5.9-5.901a2.785 2.785 0 1 0-3.939-3.939L2.931 10.68A.75.75 0 1 1 1.87 9.619l7.925-7.925Z"></path><path d="M12.42 4.069a.752.752 0 0 1 1.061 0 .752.752 0 0 1 0 1.061L7.33 11.28a2.788 2.788 0 0 0 0 3.94 2.788 2.788 0 0 0 3.94 0l6.15-6.151a.752.752 0 0 1 1.061 0 .752.752 0 0 1 0 1.061l-6.151 6.15a4.285 4.285 0 1 1-6.06-6.06l6.15-6.151Z"></path></svg><span class="NavLink-module__title__Q7t0p">MCP Registry<sup class="NavLink-module__label__bil7n">New</sup></span><span class="NavLink-module__subtitle__X4gkW">Integrate external tools</span></div></a></li></ul></div></li><li><div class="NavGroup-module__group__W8SqJ"><span class="NavGroup-module__title__Wzxz2">DEVELOPER WORKFLOWS</span><ul class="NavGroup-module__list__UCOFy"><li><a href="https://github.com/features/actions" data-analytics-event="{&quot;action&quot;:&quot;actions&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;platform&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;actions_link_platform_navbar&quot;}" class="NavLink-module__link__EG3d4"><div class="NavLink-module__text__XvpLQ"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-workflow NavLink-module__icon__ltGNM" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M1 3a2 2 0 0 1 2-2h6.5a2 2 0 0 1 2 2v6.5a2 2 0 0 1-2 2H7v4.063C7 16.355 7.644 17 8.438 17H12.5v-2.5a2 2 0 0 1 2-2H21a2 2 0 0 1 2 2V21a2 2 0 0 1-2 2h-6.5a2 2 0 0 1-2-2v-2.5H8.437A2.939 2.939 0 0 1 5.5 15.562V11.5H3a2 2 0 0 1-2-2Zm2-.5a.5.5 0 0 0-.5.5v6.5a.5.5 0 0 0 .5.5h6.5a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5ZM14.5 14a.5.5 0 0 0-.5.5V21a.5.5 0 0 0 .5.5H21a.5.5 0 0 0 .5-.5v-6.5a.5.5 0 0 0-.5-.5Z"></path></svg><span class="NavLink-module__title__Q7t0p">Actions</span><span class="NavLink-module__subtitle__X4gkW">Automate any workflow</span></div></a></li><li><a href="https://github.com/features/codespaces" data-analytics-event="{&quot;action&quot;:&quot;codespaces&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;platform&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;codespaces_link_platform_navbar&quot;}" class="NavLink-module__link__EG3d4"><div class="NavLink-module__text__XvpLQ"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-codespaces NavLink-module__icon__ltGNM" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M3.5 3.75C3.5 2.784 4.284 2 5.25 2h13.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 18.75 13H5.25a1.75 1.75 0 0 1-1.75-1.75Zm-2 12c0-.966.784-1.75 1.75-1.75h17.5c.966 0 1.75.784 1.75 1.75v4a1.75 1.75 0 0 1-1.75 1.75H3.25a1.75 1.75 0 0 1-1.75-1.75ZM5.25 3.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h13.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Zm-2 12a.25.25 0 0 0-.25.25v4c0 .138.112.25.25.25h17.5a.25.25 0 0 0 .25-.25v-4a.25.25 0 0 0-.25-.25Z"></path><path d="M10 17.75a.75.75 0 0 1 .75-.75h6.5a.75.75 0 0 1 0 1.5h-6.5a.75.75 0 0 1-.75-.75Zm-4 0a.75.75 0 0 1 .75-.75h.5a.75.75 0 0 1 0 1.5h-.5a.75.75 0 0 1-.75-.75Z"></path></svg><span class="NavLink-module__title__Q7t0p">Codespaces</span><span class="NavLink-module__subtitle__X4gkW">Instant dev environments</span></div></a></li><li><a href="https://github.com/features/issues" data-analytics-event="{&quot;action&quot;:&quot;issues&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;platform&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;issues_link_platform_navbar&quot;}" class="NavLink-module__link__EG3d4"><div class="NavLink-module__text__XvpLQ"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-issue-opened NavLink-module__icon__ltGNM" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M12 1c6.075 0 11 4.925 11 11s-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1ZM2.5 12a9.5 9.5 0 0 0 9.5 9.5 9.5 9.5 0 0 0 9.5-9.5A9.5 9.5 0 0 0 12 2.5 9.5 9.5 0 0 0 2.5 12Zm9.5 2a2 2 0 1 1-.001-3.999A2 2 0 0 1 12 14Z"></path></svg><span class="NavLink-module__title__Q7t0p">Issues</span><span class="NavLink-module__subtitle__X4gkW">Plan and track work</span></div></a></li><li><a href="https://github.com/features/code-review" data-analytics-event="{&quot;action&quot;:&quot;code_review&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;platform&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;code_review_link_platform_navbar&quot;}" class="NavLink-module__link__EG3d4"><div class="NavLink-module__text__XvpLQ"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-code NavLink-module__icon__ltGNM" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M15.22 4.97a.75.75 0 0 1 1.06 0l6.5 6.5a.75.75 0 0 1 0 1.06l-6.5 6.5a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L21.19 12l-5.97-5.97a.75.75 0 0 1 0-1.06Zm-6.44 0a.75.75 0 0 1 0 1.06L2.81 12l5.97 5.97a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-6.5-6.5a.75.75 0 0 1 0-1.06l6.5-6.5a.75.75 0 0 1 1.06 0Z"></path></svg><span class="NavLink-module__title__Q7t0p">Code Review</span><span class="NavLink-module__subtitle__X4gkW">Manage code changes</span></div></a></li></ul></div></li><li><div class="NavGroup-module__group__W8SqJ"><span class="NavGroup-module__title__Wzxz2">APPLICATION SECURITY</span><ul class="NavGroup-module__list__UCOFy"><li><a href="https://github.com/security/advanced-security" data-analytics-event="{&quot;action&quot;:&quot;github_advanced_security&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;platform&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;github_advanced_security_link_platform_navbar&quot;}" class="NavLink-module__link__EG3d4"><div class="NavLink-module__text__XvpLQ"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-shield-check NavLink-module__icon__ltGNM" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M16.53 9.78a.75.75 0 0 0-1.06-1.06L11 13.19l-1.97-1.97a.75.75 0 0 0-1.06 1.06l2.5 2.5a.75.75 0 0 0 1.06 0l5-5Z"></path><path d="m12.54.637 8.25 2.675A1.75 1.75 0 0 1 22 4.976V10c0 6.19-3.771 10.704-9.401 12.83a1.704 1.704 0 0 1-1.198 0C5.77 20.705 2 16.19 2 10V4.976c0-.758.489-1.43 1.21-1.664L11.46.637a1.748 1.748 0 0 1 1.08 0Zm-.617 1.426-8.25 2.676a.249.249 0 0 0-.173.237V10c0 5.46 3.28 9.483 8.43 11.426a.199.199 0 0 0 .14 0C17.22 19.483 20.5 15.461 20.5 10V4.976a.25.25 0 0 0-.173-.237l-8.25-2.676a.253.253 0 0 0-.154 0Z"></path></svg><span class="NavLink-module__title__Q7t0p">GitHub Advanced Security</span><span class="NavLink-module__subtitle__X4gkW">Find and fix vulnerabilities</span></div></a></li><li><a href="https://github.com/security/advanced-security/code-security" data-analytics-event="{&quot;action&quot;:&quot;code_security&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;platform&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;code_security_link_platform_navbar&quot;}" class="NavLink-module__link__EG3d4"><div class="NavLink-module__text__XvpLQ"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-code-square NavLink-module__icon__ltGNM" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M10.3 8.24a.75.75 0 0 1-.04 1.06L7.352 12l2.908 2.7a.75.75 0 1 1-1.02 1.1l-3.5-3.25a.75.75 0 0 1 0-1.1l3.5-3.25a.75.75 0 0 1 1.06.04Zm3.44 1.06a.75.75 0 1 1 1.02-1.1l3.5 3.25a.75.75 0 0 1 0 1.1l-3.5 3.25a.75.75 0 1 1-1.02-1.1l2.908-2.7-2.908-2.7Z"></path><path d="M2 3.75C2 2.784 2.784 2 3.75 2h16.5c.966 0 1.75.784 1.75 1.75v16.5A1.75 1.75 0 0 1 20.25 22H3.75A1.75 1.75 0 0 1 2 20.25Zm1.75-.25a.25.25 0 0 0-.25.25v16.5c0 .138.112.25.25.25h16.5a.25.25 0 0 0 .25-.25V3.75a.25.25 0 0 0-.25-.25Z"></path></svg><span class="NavLink-module__title__Q7t0p">Code security</span><span class="NavLink-module__subtitle__X4gkW">Secure your code as you build</span></div></a></li><li><a href="https://github.com/security/advanced-security/secret-protection" data-analytics-event="{&quot;action&quot;:&quot;secret_protection&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;platform&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;secret_protection_link_platform_navbar&quot;}" class="NavLink-module__link__EG3d4"><div class="NavLink-module__text__XvpLQ"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-lock NavLink-module__icon__ltGNM" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M6 9V7.25C6 3.845 8.503 1 12 1s6 2.845 6 6.25V9h.5a2.5 2.5 0 0 1 2.5 2.5v8a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 19.5v-8A2.5 2.5 0 0 1 5.5 9Zm-1.5 2.5v8a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-13a1 1 0 0 0-1 1Zm3-4.25V9h9V7.25c0-2.67-1.922-4.75-4.5-4.75-2.578 0-4.5 2.08-4.5 4.75Z"></path></svg><span class="NavLink-module__title__Q7t0p">Secret protection</span><span class="NavLink-module__subtitle__X4gkW">Stop leaks before they start</span></div></a></li></ul></div></li><li><div class="NavGroup-module__group__W8SqJ NavGroup-module__hasSeparator__FnMrN"><span class="NavGroup-module__title__Wzxz2">EXPLORE</span><ul class="NavGroup-module__list__UCOFy"><li><a href="https://github.com/why-github" data-analytics-event="{&quot;action&quot;:&quot;why_github&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;platform&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;why_github_link_platform_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Why GitHub</span></a></li><li><a href="https://docs.github.com" data-analytics-event="{&quot;action&quot;:&quot;documentation&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;platform&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;documentation_link_platform_navbar&quot;}" class="NavLink-module__link__EG3d4" target="_blank" rel="noreferrer"><span class="NavLink-module__title__Q7t0p">Documentation</span><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-link-external NavLink-module__externalIcon__eWIry" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1Z"></path></svg></a></li><li><a href="https://github.blog" data-analytics-event="{&quot;action&quot;:&quot;blog&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;platform&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;blog_link_platform_navbar&quot;}" class="NavLink-module__link__EG3d4" target="_blank" rel="noreferrer"><span class="NavLink-module__title__Q7t0p">Blog</span><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-link-external NavLink-module__externalIcon__eWIry" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1Z"></path></svg></a></li><li><a href="https://github.blog/changelog" data-analytics-event="{&quot;action&quot;:&quot;changelog&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;platform&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;changelog_link_platform_navbar&quot;}" class="NavLink-module__link__EG3d4" target="_blank" rel="noreferrer"><span class="NavLink-module__title__Q7t0p">Changelog</span><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-link-external NavLink-module__externalIcon__eWIry" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1Z"></path></svg></a></li><li><a href="https://github.com/marketplace" data-analytics-event="{&quot;action&quot;:&quot;marketplace&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;platform&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;marketplace_link_platform_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Marketplace</span></a></li></ul></div></li></ul><div class="NavDropdown-module__trailingLinkContainer__VgJGL"><a href="https://github.com/features" data-analytics-event="{&quot;action&quot;:&quot;view_all_features&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;platform&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;view_all_features_link_platform_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">View all features</span><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-chevron-right NavLink-module__arrowIcon__amekg" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg></a></div></div></div></li><li><div class="NavDropdown-module__container__l2YeI js-details-container js-header-menu-item"><button type="button" class="NavDropdown-module__button__PEHWX js-details-target" aria-expanded="false">Solutions<svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-chevron-right NavDropdown-module__buttonIcon__Tkl8_" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg></button><div class="NavDropdown-module__dropdown__xm1jd"><ul class="NavDropdown-module__list__zuCgG"><li><div class="NavGroup-module__group__W8SqJ"><span class="NavGroup-module__title__Wzxz2">BY COMPANY SIZE</span><ul class="NavGroup-module__list__UCOFy"><li><a href="https://github.com/enterprise" data-analytics-event="{&quot;action&quot;:&quot;enterprises&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;solutions&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;enterprises_link_solutions_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Enterprises</span></a></li><li><a href="https://github.com/team" data-analytics-event="{&quot;action&quot;:&quot;small_and_medium_teams&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;solutions&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;small_and_medium_teams_link_solutions_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Small and medium teams</span></a></li><li><a href="https://github.com/enterprise/startups" data-analytics-event="{&quot;action&quot;:&quot;startups&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;solutions&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;startups_link_solutions_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Startups</span></a></li><li><a href="https://github.com/solutions/industry/nonprofits" data-analytics-event="{&quot;action&quot;:&quot;nonprofits&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;solutions&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;nonprofits_link_solutions_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Nonprofits</span></a></li></ul></div></li><li><div class="NavGroup-module__group__W8SqJ"><span class="NavGroup-module__title__Wzxz2">BY USE CASE</span><ul class="NavGroup-module__list__UCOFy"><li><a href="https://github.com/solutions/use-case/app-modernization" data-analytics-event="{&quot;action&quot;:&quot;app_modernization&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;solutions&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;app_modernization_link_solutions_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">App Modernization</span></a></li><li><a href="https://github.com/solutions/use-case/devsecops" data-analytics-event="{&quot;action&quot;:&quot;devsecops&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;solutions&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;devsecops_link_solutions_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">DevSecOps</span></a></li><li><a href="https://github.com/solutions/use-case/devops" data-analytics-event="{&quot;action&quot;:&quot;devops&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;solutions&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;devops_link_solutions_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">DevOps</span></a></li><li><a href="https://github.com/solutions/use-case/ci-cd" data-analytics-event="{&quot;action&quot;:&quot;ci/cd&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;solutions&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;ci/cd_link_solutions_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">CI/CD</span></a></li><li><a href="https://github.com/solutions/use-case" data-analytics-event="{&quot;action&quot;:&quot;view_all_use_cases&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;solutions&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;view_all_use_cases_link_solutions_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">View all use cases</span><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-chevron-right NavLink-module__arrowIcon__amekg" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg></a></li></ul></div></li><li><div class="NavGroup-module__group__W8SqJ"><span class="NavGroup-module__title__Wzxz2">BY INDUSTRY</span><ul class="NavGroup-module__list__UCOFy"><li><a href="https://github.com/solutions/industry/healthcare" data-analytics-event="{&quot;action&quot;:&quot;healthcare&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;solutions&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;healthcare_link_solutions_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Healthcare</span></a></li><li><a href="https://github.com/solutions/industry/financial-services" data-analytics-event="{&quot;action&quot;:&quot;financial_services&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;solutions&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;financial_services_link_solutions_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Financial services</span></a></li><li><a href="https://github.com/solutions/industry/manufacturing" data-analytics-event="{&quot;action&quot;:&quot;manufacturing&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;solutions&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;manufacturing_link_solutions_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Manufacturing</span></a></li><li><a href="https://github.com/solutions/industry/government" data-analytics-event="{&quot;action&quot;:&quot;government&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;solutions&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;government_link_solutions_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Government</span></a></li><li><a href="https://github.com/solutions/industry" data-analytics-event="{&quot;action&quot;:&quot;view_all_industries&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;solutions&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;view_all_industries_link_solutions_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">View all industries</span><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-chevron-right NavLink-module__arrowIcon__amekg" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg></a></li></ul></div></li></ul><div class="NavDropdown-module__trailingLinkContainer__VgJGL"><a href="https://github.com/solutions" data-analytics-event="{&quot;action&quot;:&quot;view_all_solutions&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;solutions&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;view_all_solutions_link_solutions_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">View all solutions</span><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-chevron-right NavLink-module__arrowIcon__amekg" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg></a></div></div></div></li><li><div class="NavDropdown-module__container__l2YeI js-details-container js-header-menu-item"><button type="button" class="NavDropdown-module__button__PEHWX js-details-target" aria-expanded="false">Resources<svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-chevron-right NavDropdown-module__buttonIcon__Tkl8_" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg></button><div class="NavDropdown-module__dropdown__xm1jd"><ul class="NavDropdown-module__list__zuCgG"><li><div class="NavGroup-module__group__W8SqJ"><span class="NavGroup-module__title__Wzxz2">EXPLORE BY TOPIC</span><ul class="NavGroup-module__list__UCOFy"><li><a href="https://github.com/resources/articles?topic=ai" data-analytics-event="{&quot;action&quot;:&quot;ai&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;resources&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;ai_link_resources_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">AI</span></a></li><li><a href="https://github.com/resources/articles?topic=software-development" data-analytics-event="{&quot;action&quot;:&quot;software_development&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;resources&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;software_development_link_resources_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Software Development</span></a></li><li><a href="https://github.com/resources/articles?topic=devops" data-analytics-event="{&quot;action&quot;:&quot;devops&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;resources&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;devops_link_resources_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">DevOps</span></a></li><li><a href="https://github.com/resources/articles?topic=security" data-analytics-event="{&quot;action&quot;:&quot;security&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;resources&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;security_link_resources_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Security</span></a></li><li><a href="https://github.com/resources/articles" data-analytics-event="{&quot;action&quot;:&quot;view_all_topics&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;resources&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;view_all_topics_link_resources_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">View all topics</span><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-chevron-right NavLink-module__arrowIcon__amekg" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg></a></li></ul></div></li><li><div class="NavGroup-module__group__W8SqJ"><span class="NavGroup-module__title__Wzxz2">EXPLORE BY TYPE</span><ul class="NavGroup-module__list__UCOFy"><li><a href="https://github.com/customer-stories" data-analytics-event="{&quot;action&quot;:&quot;customer_stories&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;resources&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;customer_stories_link_resources_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Customer stories</span></a></li><li><a href="https://github.com/resources/events" data-analytics-event="{&quot;action&quot;:&quot;events__webinars&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;resources&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;events__webinars_link_resources_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Events &amp; webinars</span></a></li><li><a href="https://github.com/resources/whitepapers" data-analytics-event="{&quot;action&quot;:&quot;ebooks__reports&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;resources&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;ebooks__reports_link_resources_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Ebooks &amp; reports</span></a></li><li><a href="https://github.com/solutions/executive-insights" data-analytics-event="{&quot;action&quot;:&quot;business_insights&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;resources&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;business_insights_link_resources_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Business insights</span></a></li><li><a href="https://skills.github.com" data-analytics-event="{&quot;action&quot;:&quot;github_skills&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;resources&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;github_skills_link_resources_navbar&quot;}" class="NavLink-module__link__EG3d4" target="_blank" rel="noreferrer"><span class="NavLink-module__title__Q7t0p">GitHub Skills</span><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-link-external NavLink-module__externalIcon__eWIry" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1Z"></path></svg></a></li></ul></div></li><li><div class="NavGroup-module__group__W8SqJ"><span class="NavGroup-module__title__Wzxz2">SUPPORT &amp; SERVICES</span><ul class="NavGroup-module__list__UCOFy"><li><a href="https://docs.github.com" data-analytics-event="{&quot;action&quot;:&quot;documentation&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;resources&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;documentation_link_resources_navbar&quot;}" class="NavLink-module__link__EG3d4" target="_blank" rel="noreferrer"><span class="NavLink-module__title__Q7t0p">Documentation</span><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-link-external NavLink-module__externalIcon__eWIry" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1Z"></path></svg></a></li><li><a href="https://support.github.com" data-analytics-event="{&quot;action&quot;:&quot;customer_support&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;resources&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;customer_support_link_resources_navbar&quot;}" class="NavLink-module__link__EG3d4" target="_blank" rel="noreferrer"><span class="NavLink-module__title__Q7t0p">Customer support</span><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-link-external NavLink-module__externalIcon__eWIry" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1Z"></path></svg></a></li><li><a href="https://github.com/orgs/community/discussions" data-analytics-event="{&quot;action&quot;:&quot;community_forum&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;resources&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;community_forum_link_resources_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Community forum</span></a></li><li><a href="https://github.com/trust-center" data-analytics-event="{&quot;action&quot;:&quot;trust_center&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;resources&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;trust_center_link_resources_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Trust center</span></a></li><li><a href="https://github.com/partners" data-analytics-event="{&quot;action&quot;:&quot;partners&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;resources&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;partners_link_resources_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Partners</span></a></li></ul></div></li></ul><div class="NavDropdown-module__trailingLinkContainer__VgJGL"><a href="https://github.com/resources" data-analytics-event="{&quot;action&quot;:&quot;view_all_resources&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;resources&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;view_all_resources_link_resources_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">View all resources</span><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-chevron-right NavLink-module__arrowIcon__amekg" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg></a></div></div></div></li><li><div class="NavDropdown-module__container__l2YeI js-details-container js-header-menu-item"><button type="button" class="NavDropdown-module__button__PEHWX js-details-target" aria-expanded="false">Open Source<svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-chevron-right NavDropdown-module__buttonIcon__Tkl8_" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg></button><div class="NavDropdown-module__dropdown__xm1jd"><ul class="NavDropdown-module__list__zuCgG"><li><div class="NavGroup-module__group__W8SqJ"><span class="NavGroup-module__title__Wzxz2">COMMUNITY</span><ul class="NavGroup-module__list__UCOFy"><li><a href="https://github.com/sponsors" data-analytics-event="{&quot;action&quot;:&quot;github_sponsors&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;open_source&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;github_sponsors_link_open_source_navbar&quot;}" class="NavLink-module__link__EG3d4"><div class="NavLink-module__text__XvpLQ"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-sponsor-tiers NavLink-module__icon__ltGNM" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M16.004 1.25C18.311 1.25 20 3.128 20 5.75c0 2.292-1.23 4.464-3.295 6.485-.481.47-.98.909-1.482 1.31l.265 1.32 1.375 7.5a.75.75 0 0 1-.982.844l-3.512-1.207a.75.75 0 0 0-.488 0L8.37 23.209a.75.75 0 0 1-.982-.844l1.378-7.512.261-1.309c-.5-.4-1-.838-1.481-1.31C5.479 10.215 4.25 8.043 4.25 5.75c0-2.622 1.689-4.5 3.996-4.5 1.55 0 2.947.752 3.832 1.967l.047.067.047-.067a4.726 4.726 0 0 1 3.612-1.962l.22-.005ZM13.89 14.531c-.418.285-.828.542-1.218.77l-.18.103a.75.75 0 0 1-.734 0l-.071-.04-.46-.272c-.282-.173-.573-.36-.868-.562l-.121.605-1.145 6.239 2.3-.79a2.248 2.248 0 0 1 1.284-.054l.18.053 2.299.79-1.141-6.226-.125-.616ZM16.004 2.75c-1.464 0-2.731.983-3.159 2.459-.209.721-1.231.721-1.44 0-.428-1.476-1.695-2.459-3.16-2.459-1.44 0-2.495 1.173-2.495 3 0 1.811 1.039 3.647 2.844 5.412a19.624 19.624 0 0 0 3.734 2.84l-.019-.011-.184-.111.147-.088a19.81 19.81 0 0 0 3.015-2.278l.37-.352C17.46 9.397 18.5 7.561 18.5 5.75c0-1.827-1.055-3-2.496-3Z"></path></svg><span class="NavLink-module__title__Q7t0p">GitHub Sponsors</span><span class="NavLink-module__subtitle__X4gkW">Fund open source developers</span></div></a></li></ul></div></li><li><div class="NavGroup-module__group__W8SqJ"><span class="NavGroup-module__title__Wzxz2">PROGRAMS</span><ul class="NavGroup-module__list__UCOFy"><li><a href="https://securitylab.github.com" data-analytics-event="{&quot;action&quot;:&quot;security_lab&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;open_source&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;security_lab_link_open_source_navbar&quot;}" class="NavLink-module__link__EG3d4" target="_blank" rel="noreferrer"><span class="NavLink-module__title__Q7t0p">Security Lab</span><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-link-external NavLink-module__externalIcon__eWIry" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1Z"></path></svg></a></li><li><a href="https://maintainers.github.com" data-analytics-event="{&quot;action&quot;:&quot;maintainer_community&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;open_source&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;maintainer_community_link_open_source_navbar&quot;}" class="NavLink-module__link__EG3d4" target="_blank" rel="noreferrer"><span class="NavLink-module__title__Q7t0p">Maintainer Community</span><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-link-external NavLink-module__externalIcon__eWIry" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1Z"></path></svg></a></li><li><a href="https://github.com/accelerator" data-analytics-event="{&quot;action&quot;:&quot;accelerator&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;open_source&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;accelerator_link_open_source_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Accelerator</span></a></li><li><a href="https://stars.github.com" data-analytics-event="{&quot;action&quot;:&quot;github_stars&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;open_source&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;github_stars_link_open_source_navbar&quot;}" class="NavLink-module__link__EG3d4" target="_blank" rel="noreferrer"><span class="NavLink-module__title__Q7t0p">GitHub Stars</span><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-link-external NavLink-module__externalIcon__eWIry" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1Z"></path></svg></a></li><li><a href="https://archiveprogram.github.com" data-analytics-event="{&quot;action&quot;:&quot;archive_program&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;open_source&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;archive_program_link_open_source_navbar&quot;}" class="NavLink-module__link__EG3d4" target="_blank" rel="noreferrer"><span class="NavLink-module__title__Q7t0p">Archive Program</span><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-link-external NavLink-module__externalIcon__eWIry" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1Z"></path></svg></a></li></ul></div></li><li><div class="NavGroup-module__group__W8SqJ"><span class="NavGroup-module__title__Wzxz2">REPOSITORIES</span><ul class="NavGroup-module__list__UCOFy"><li><a href="https://github.com/topics" data-analytics-event="{&quot;action&quot;:&quot;topics&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;open_source&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;topics_link_open_source_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Topics</span></a></li><li><a href="https://github.com/trending" data-analytics-event="{&quot;action&quot;:&quot;trending&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;open_source&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;trending_link_open_source_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Trending</span></a></li><li><a href="https://github.com/collections" data-analytics-event="{&quot;action&quot;:&quot;collections&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;open_source&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;collections_link_open_source_navbar&quot;}" class="NavLink-module__link__EG3d4"><span class="NavLink-module__title__Q7t0p">Collections</span></a></li></ul></div></li></ul></div></div></li><li><div class="NavDropdown-module__container__l2YeI js-details-container js-header-menu-item"><button type="button" class="NavDropdown-module__button__PEHWX js-details-target" aria-expanded="false">Enterprise<svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-chevron-right NavDropdown-module__buttonIcon__Tkl8_" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg></button><div class="NavDropdown-module__dropdown__xm1jd"><ul class="NavDropdown-module__list__zuCgG"><li><div class="NavGroup-module__group__W8SqJ"><span class="NavGroup-module__title__Wzxz2">ENTERPRISE SOLUTIONS</span><ul class="NavGroup-module__list__UCOFy"><li><a href="https://github.com/enterprise" data-analytics-event="{&quot;action&quot;:&quot;enterprise_platform&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;enterprise&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;enterprise_platform_link_enterprise_navbar&quot;}" class="NavLink-module__link__EG3d4"><div class="NavLink-module__text__XvpLQ"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-stack NavLink-module__icon__ltGNM" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M11.063 1.456a1.749 1.749 0 0 1 1.874 0l8.383 5.316a1.751 1.751 0 0 1 0 2.956l-8.383 5.316a1.749 1.749 0 0 1-1.874 0L2.68 9.728a1.751 1.751 0 0 1 0-2.956Zm1.071 1.267a.25.25 0 0 0-.268 0L3.483 8.039a.25.25 0 0 0 0 .422l8.383 5.316a.25.25 0 0 0 .268 0l8.383-5.316a.25.25 0 0 0 0-.422Z"></path><path d="M1.867 12.324a.75.75 0 0 1 1.035-.232l8.964 5.685a.25.25 0 0 0 .268 0l8.964-5.685a.75.75 0 0 1 .804 1.267l-8.965 5.685a1.749 1.749 0 0 1-1.874 0l-8.965-5.685a.75.75 0 0 1-.231-1.035Z"></path><path d="M1.867 16.324a.75.75 0 0 1 1.035-.232l8.964 5.685a.25.25 0 0 0 .268 0l8.964-5.685a.75.75 0 0 1 .804 1.267l-8.965 5.685a1.749 1.749 0 0 1-1.874 0l-8.965-5.685a.75.75 0 0 1-.231-1.035Z"></path></svg><span class="NavLink-module__title__Q7t0p">Enterprise platform</span><span class="NavLink-module__subtitle__X4gkW">AI-powered developer platform</span></div></a></li></ul></div></li><li><div class="NavGroup-module__group__W8SqJ"><span class="NavGroup-module__title__Wzxz2">AVAILABLE ADD-ONS</span><ul class="NavGroup-module__list__UCOFy"><li><a href="https://github.com/security/advanced-security" data-analytics-event="{&quot;action&quot;:&quot;github_advanced_security&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;enterprise&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;github_advanced_security_link_enterprise_navbar&quot;}" class="NavLink-module__link__EG3d4"><div class="NavLink-module__text__XvpLQ"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-shield-check NavLink-module__icon__ltGNM" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M16.53 9.78a.75.75 0 0 0-1.06-1.06L11 13.19l-1.97-1.97a.75.75 0 0 0-1.06 1.06l2.5 2.5a.75.75 0 0 0 1.06 0l5-5Z"></path><path d="m12.54.637 8.25 2.675A1.75 1.75 0 0 1 22 4.976V10c0 6.19-3.771 10.704-9.401 12.83a1.704 1.704 0 0 1-1.198 0C5.77 20.705 2 16.19 2 10V4.976c0-.758.489-1.43 1.21-1.664L11.46.637a1.748 1.748 0 0 1 1.08 0Zm-.617 1.426-8.25 2.676a.249.249 0 0 0-.173.237V10c0 5.46 3.28 9.483 8.43 11.426a.199.199 0 0 0 .14 0C17.22 19.483 20.5 15.461 20.5 10V4.976a.25.25 0 0 0-.173-.237l-8.25-2.676a.253.253 0 0 0-.154 0Z"></path></svg><span class="NavLink-module__title__Q7t0p">GitHub Advanced Security</span><span class="NavLink-module__subtitle__X4gkW">Enterprise-grade security features</span></div></a></li><li><a href="https://github.com/features/copilot/copilot-business" data-analytics-event="{&quot;action&quot;:&quot;copilot_for_business&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;enterprise&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;copilot_for_business_link_enterprise_navbar&quot;}" class="NavLink-module__link__EG3d4"><div class="NavLink-module__text__XvpLQ"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-copilot NavLink-module__icon__ltGNM" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M23.922 16.992c-.861 1.495-5.859 5.023-11.922 5.023-6.063 0-11.061-3.528-11.922-5.023A.641.641 0 0 1 0 16.736v-2.869a.841.841 0 0 1 .053-.22c.372-.935 1.347-2.292 2.605-2.656.167-.429.414-1.055.644-1.517a10.195 10.195 0 0 1-.052-1.086c0-1.331.282-2.499 1.132-3.368.397-.406.89-.717 1.474-.952 1.399-1.136 3.392-2.093 6.122-2.093 2.731 0 4.767.957 6.166 2.093.584.235 1.077.546 1.474.952.85.869 1.132 2.037 1.132 3.368 0 .368-.014.733-.052 1.086.23.462.477 1.088.644 1.517 1.258.364 2.233 1.721 2.605 2.656a.832.832 0 0 1 .053.22v2.869a.641.641 0 0 1-.078.256ZM12.172 11h-.344a4.323 4.323 0 0 1-.355.508C10.703 12.455 9.555 13 7.965 13c-1.725 0-2.989-.359-3.782-1.259a2.005 2.005 0 0 1-.085-.104L4 11.741v6.585c1.435.779 4.514 2.179 8 2.179 3.486 0 6.565-1.4 8-2.179v-6.585l-.098-.104s-.033.045-.085.104c-.793.9-2.057 1.259-3.782 1.259-1.59 0-2.738-.545-3.508-1.492a4.323 4.323 0 0 1-.355-.508h-.016.016Zm.641-2.935c.136 1.057.403 1.913.878 2.497.442.544 1.134.938 2.344.938 1.573 0 2.292-.337 2.657-.751.384-.435.558-1.15.558-2.361 0-1.14-.243-1.847-.705-2.319-.477-.488-1.319-.862-2.824-1.025-1.487-.161-2.192.138-2.533.529-.269.307-.437.808-.438 1.578v.021c0 .265.021.562.063.893Zm-1.626 0c.042-.331.063-.628.063-.894v-.02c-.001-.77-.169-1.271-.438-1.578-.341-.391-1.046-.69-2.533-.529-1.505.163-2.347.537-2.824 1.025-.462.472-.705 1.179-.705 2.319 0 1.211.175 1.926.558 2.361.365.414 1.084.751 2.657.751 1.21 0 1.902-.394 2.344-.938.475-.584.742-1.44.878-2.497Z"></path><path d="M14.5 14.25a1 1 0 0 1 1 1v2a1 1 0 0 1-2 0v-2a1 1 0 0 1 1-1Zm-5 0a1 1 0 0 1 1 1v2a1 1 0 0 1-2 0v-2a1 1 0 0 1 1-1Z"></path></svg><span class="NavLink-module__title__Q7t0p">Copilot for Business</span><span class="NavLink-module__subtitle__X4gkW">Enterprise-grade AI features</span></div></a></li><li><a href="https://github.com/premium-support" data-analytics-event="{&quot;action&quot;:&quot;premium_support&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;enterprise&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;premium_support_link_enterprise_navbar&quot;}" class="NavLink-module__link__EG3d4"><div class="NavLink-module__text__XvpLQ"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-comment-discussion NavLink-module__icon__ltGNM" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M1.75 1h12.5c.966 0 1.75.784 1.75 1.75v9.5A1.75 1.75 0 0 1 14.25 14H8.061l-2.574 2.573A1.458 1.458 0 0 1 3 15.543V14H1.75A1.75 1.75 0 0 1 0 12.25v-9.5C0 1.784.784 1 1.75 1ZM1.5 2.75v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25Z"></path><path d="M22.5 8.75a.25.25 0 0 0-.25-.25h-3.5a.75.75 0 0 1 0-1.5h3.5c.966 0 1.75.784 1.75 1.75v9.5A1.75 1.75 0 0 1 22.25 20H21v1.543a1.457 1.457 0 0 1-2.487 1.03L15.939 20H10.75A1.75 1.75 0 0 1 9 18.25v-1.465a.75.75 0 0 1 1.5 0v1.465c0 .138.112.25.25.25h5.5a.75.75 0 0 1 .53.22l2.72 2.72v-2.19a.75.75 0 0 1 .75-.75h2a.25.25 0 0 0 .25-.25v-9.5Z"></path></svg><span class="NavLink-module__title__Q7t0p">Premium Support</span><span class="NavLink-module__subtitle__X4gkW">Enterprise-grade 24/7 support</span></div></a></li></ul></div></li></ul></div></div></li><li><a href="https://github.com/pricing" data-analytics-event="{&quot;action&quot;:&quot;pricing&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;pricing&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;pricing_link_pricing_navbar&quot;}" class="NavLink-module__link__EG3d4 MarketingNavigation-module__navLink__hUomM"><span class="NavLink-module__title__Q7t0p">Pricing</span></a></li></ul></nav><script type="application/json" id="__PRIMER_DATA__R_0___">{"resolvedServerColorMode":"day"}</script></div>
+</react-partial>
+
+
+
+        <div class="d-flex flex-column flex-lg-row width-full flex-justify-end flex-lg-items-center text-center tmp-mt-3 tmp-mt-lg-0 text-lg-left tmp-ml-lg-3">
+                
+
+
+<qbsearch-input class="search-input" data-scope="repo:python/cpython" data-custom-scopes-path="/search/custom_scopes" data-delete-custom-scopes-csrf="ny5oqfQ0fU0bEDcHPK0_a9QrgRXg7P9khksfO0n2P4sXC8R3JKVzAgHYPl-eozjpWRg1d-O0cSUqImu2xF7eGg" data-max-custom-scopes="10" data-header-redesign-enabled="false" data-initial-value="" data-blackbird-suggestions-path="/search/suggestions" data-jump-to-suggestions-path="/_graphql/GetSuggestedNavigationDestinations" data-current-repository="python/cpython" data-current-org="python" data-current-owner="" data-logged-in="false" data-copilot-chat-enabled="false" data-nl-search-enabled="false" data-retain-scroll-position="true">
+  <div
+    class="search-input-container search-with-dialog position-relative d-flex flex-row flex-items-center tmp-mr-4 rounded"
+    data-action="click:qbsearch-input#searchInputContainerClicked"
+  >
+      <button
+        type="button"
+        class="header-search-button placeholder  input-button form-control d-flex flex-1 flex-self-stretch flex-items-center no-wrap width-full py-0 pl-2 pr-0 text-left border-0 box-shadow-none"
+        data-target="qbsearch-input.inputButton"
+        aria-label="Search or jump to…"
+        aria-haspopup="dialog"
+        placeholder="Search or jump to..."
+        data-hotkey=s,/
+        autocapitalize="off"
+        data-analytics-event="{&quot;location&quot;:&quot;navbar&quot;,&quot;action&quot;:&quot;searchbar&quot;,&quot;context&quot;:&quot;global&quot;,&quot;tag&quot;:&quot;input&quot;,&quot;label&quot;:&quot;searchbar_input_global_navbar&quot;}"
+        data-action="click:qbsearch-input#handleExpand"
+      >
+        <div class="mr-2 color-fg-muted">
+          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-search">
+    <path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path>
+</svg>
+        </div>
+        <span class="flex-1" data-target="qbsearch-input.inputButtonText">Search or jump to...</span>
+          <div class="d-flex" data-target="qbsearch-input.hotkeyIndicator">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" aria-hidden="true" class="mr-1"><path fill="none" stroke="#979A9C" opacity=".4" d="M3.5.5h12c1.7 0 3 1.3 3 3v13c0 1.7-1.3 3-3 3h-12c-1.7 0-3-1.3-3-3v-13c0-1.7 1.3-3 3-3z"></path><path fill="#979A9C" d="M11.8 6L8 15.1h-.9L10.8 6h1z"></path></svg>
+          </div>
+      </button>
+
+    <input type="hidden" name="type" class="js-site-search-type-field">
+
+    
+<div class="Overlay--hidden " data-modal-dialog-overlay>
+  <modal-dialog data-action="close:qbsearch-input#handleClose cancel:qbsearch-input#handleClose" data-target="qbsearch-input.searchSuggestionsDialog" role="dialog" id="search-suggestions-dialog" aria-modal="true" aria-labelledby="search-suggestions-dialog-header" data-view-component="true" class="Overlay Overlay--width-large Overlay--height-auto">
+      <h1 id="search-suggestions-dialog-header" class="sr-only">Search code, repositories, users, issues, pull requests...</h1>
+    <div class="Overlay-body Overlay-body--paddingNone">
+      
+          <div data-view-component="true">        <div class="search-suggestions position-fixed width-full color-shadow-large border color-fg-default color-bg-default overflow-hidden d-flex flex-column query-builder-container"
+          style="border-radius: 12px;"
+          data-target="qbsearch-input.queryBuilderContainer"
+          hidden
+        >
+          <!-- '"` --><!-- </textarea></xmp> --></option></form><form id="query-builder-test-form" action="" accept-charset="UTF-8" method="get">
+  <query-builder data-target="qbsearch-input.queryBuilder" id="query-builder-query-builder-test" data-filter-key=":" data-view-component="true" class="QueryBuilder search-query-builder">
+    <div class="FormControl FormControl--fullWidth">
+      <label id="query-builder-test-label" for="query-builder-test" class="FormControl-label sr-only">
+        Search
+      </label>
+      <div
+        class="QueryBuilder-StyledInput width-fit "
+        data-target="query-builder.styledInput"
+      >
+          <span id="query-builder-test-leadingvisual-wrap" class="FormControl-input-leadingVisualWrap QueryBuilder-leadingVisualWrap">
+            <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-search FormControl-input-leadingVisual">
+    <path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path>
+</svg>
+          </span>
+        <div data-target="query-builder.styledInputContainer" class="QueryBuilder-StyledInputContainer">
+          <div
+            aria-hidden="true"
+            class="QueryBuilder-StyledInputContent"
+            data-target="query-builder.styledInputContent"
+          ></div>
+          <div class="QueryBuilder-InputWrapper">
+            <div aria-hidden="true" class="QueryBuilder-Sizer" data-target="query-builder.sizer"></div>
+            <input id="query-builder-test" name="query-builder-test" value="" autocomplete="off" type="text" role="combobox" spellcheck="false" aria-expanded="false" aria-describedby="validation-311a72d4-0c8c-491b-8d8f-ed5b70382efc" data-target="query-builder.input" data-action="
+          input:query-builder#inputChange
+          blur:query-builder#inputBlur
+          keydown:query-builder#inputKeydown
+          focus:query-builder#inputFocus
+        " data-view-component="true" class="FormControl-input QueryBuilder-Input FormControl-medium" />
+          </div>
+        </div>
+          <span data-target="query-builder.clearButton" hidden>
+            <span class="sr-only" id="query-builder-test-clear">Clear</span>
+            <button role="button" id="query-builder-test-clear-button" aria-labelledby="query-builder-test-clear query-builder-test-label" data-action="
+                  click:query-builder#clear
+                  focus:query-builder#clearButtonFocus
+                  blur:query-builder#clearButtonBlur
+                " variant="small" type="button" data-view-component="true" class="Button Button--iconOnly Button--invisible Button--medium mr-1 tmp-mr-1 px-2 tmp-px-2 py-0 tmp-py-0 d-flex flex-items-center rounded-1 color-fg-muted">  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x-circle-fill Button-visual">
+    <path d="M2.343 13.657A8 8 0 1 1 13.658 2.343 8 8 0 0 1 2.343 13.657ZM6.03 4.97a.751.751 0 0 0-1.042.018.751.751 0 0 0-.018 1.042L6.94 8 4.97 9.97a.749.749 0 0 0 .326 1.275.749.749 0 0 0 .734-.215L8 9.06l1.97 1.97a.749.749 0 0 0 1.275-.326.749.749 0 0 0-.215-.734L9.06 8l1.97-1.97a.749.749 0 0 0-.326-1.275.749.749 0 0 0-.734.215L8 6.94Z"></path>
+</svg>
+</button>
+
+          </span>
+      </div>
+      <template id="search-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-search">
+    <path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path>
+</svg>
+</template>
+
+<template id="code-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-code">
+    <path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path>
+</svg>
+</template>
+
+<template id="file-code-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-file-code">
+    <path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0Zm1.72 4.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734l1.47-1.47-1.47-1.47a.75.75 0 0 1 0-1.06ZM3.28 7.78 1.81 9.25l1.47 1.47a.751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Zm8.22-6.218V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"></path>
+</svg>
+</template>
+
+<template id="history-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-history">
+    <path d="m.427 1.927 1.215 1.215a8.002 8.002 0 1 1-1.6 5.685.75.75 0 1 1 1.493-.154 6.5 6.5 0 1 0 1.18-4.458l1.358 1.358A.25.25 0 0 1 3.896 6H.25A.25.25 0 0 1 0 5.75V2.104a.25.25 0 0 1 .427-.177ZM7.75 4a.75.75 0 0 1 .75.75v2.992l2.028.812a.75.75 0 0 1-.557 1.392l-2.5-1A.751.751 0 0 1 7 8.25v-3.5A.75.75 0 0 1 7.75 4Z"></path>
+</svg>
+</template>
+
+<template id="repo-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-repo">
+    <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"></path>
+</svg>
+</template>
+
+<template id="bookmark-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-bookmark">
+    <path d="M3 2.75C3 1.784 3.784 1 4.75 1h6.5c.966 0 1.75.784 1.75 1.75v11.5a.75.75 0 0 1-1.227.579L8 11.722l-3.773 3.107A.751.751 0 0 1 3 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.91l3.023-2.489a.75.75 0 0 1 .954 0l3.023 2.49V2.75a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+</template>
+
+<template id="plus-circle-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-plus-circle">
+    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm7.25-3.25v2.5h2.5a.75.75 0 0 1 0 1.5h-2.5v2.5a.75.75 0 0 1-1.5 0v-2.5h-2.5a.75.75 0 0 1 0-1.5h2.5v-2.5a.75.75 0 0 1 1.5 0Z"></path>
+</svg>
+</template>
+
+<template id="circle-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-dot-fill">
+    <path d="M8 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z"></path>
+</svg>
+</template>
+
+<template id="trash-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-trash">
+    <path d="M11 1.75V3h2.25a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1 0-1.5H5V1.75C5 .784 5.784 0 6.75 0h2.5C10.216 0 11 .784 11 1.75ZM4.496 6.675l.66 6.6a.25.25 0 0 0 .249.225h5.19a.25.25 0 0 0 .249-.225l.66-6.6a.75.75 0 0 1 1.492.149l-.66 6.6A1.748 1.748 0 0 1 10.595 15h-5.19a1.75 1.75 0 0 1-1.741-1.575l-.66-6.6a.75.75 0 1 1 1.492-.15ZM6.5 1.75V3h3V1.75a.25.25 0 0 0-.25-.25h-2.5a.25.25 0 0 0-.25.25Z"></path>
+</svg>
+</template>
+
+<template id="team-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-people">
+    <path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4 4 0 0 0-7.9 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5ZM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.885.954.752.752 0 0 1-.549-.514 3.507 3.507 0 0 0-2.522-2.372.75.75 0 0 1-.574-.73v-.352a.75.75 0 0 1 .416-.672A1.5 1.5 0 0 0 11 5.5.75.75 0 0 1 11 4Zm-5.5-.5a2 2 0 1 0-.001 3.999A2 2 0 0 0 5.5 3.5Z"></path>
+</svg>
+</template>
+
+<template id="project-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-project">
+    <path d="M1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25V1.75C0 .784.784 0 1.75 0ZM1.5 1.75v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25ZM11.75 3a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5a.75.75 0 0 1 .75-.75Zm-8.25.75a.75.75 0 0 1 1.5 0v5.5a.75.75 0 0 1-1.5 0ZM8 3a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 8 3Z"></path>
+</svg>
+</template>
+
+<template id="pencil-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-pencil">
+    <path d="M11.013 1.427a1.75 1.75 0 0 1 2.474 0l1.086 1.086a1.75 1.75 0 0 1 0 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 0 1-.927-.928l.929-3.25c.081-.286.235-.547.445-.758l8.61-8.61Zm.176 4.823L9.75 4.81l-6.286 6.287a.253.253 0 0 0-.064.108l-.558 1.953 1.953-.558a.253.253 0 0 0 .108-.064Zm1.238-3.763a.25.25 0 0 0-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 0 0 0-.354Z"></path>
+</svg>
+</template>
+
+<template id="copilot-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copilot">
+    <path d="M7.998 15.035c-4.562 0-7.873-2.914-7.998-3.749V9.338c.085-.628.677-1.686 1.588-2.065.013-.07.024-.143.036-.218.029-.183.06-.384.126-.612-.201-.508-.254-1.084-.254-1.656 0-.87.128-1.769.693-2.484.579-.733 1.494-1.124 2.724-1.261 1.206-.134 2.262.034 2.944.765.05.053.096.108.139.165.044-.057.094-.112.143-.165.682-.731 1.738-.899 2.944-.765 1.23.137 2.145.528 2.724 1.261.566.715.693 1.614.693 2.484 0 .572-.053 1.148-.254 1.656.066.228.098.429.126.612.012.076.024.148.037.218.924.385 1.522 1.471 1.591 2.095v1.872c0 .766-3.351 3.795-8.002 3.795Zm0-1.485c2.28 0 4.584-1.11 5.002-1.433V7.862l-.023-.116c-.49.21-1.075.291-1.727.291-1.146 0-2.059-.327-2.71-.991A3.222 3.222 0 0 1 8 6.303a3.24 3.24 0 0 1-.544.743c-.65.664-1.563.991-2.71.991-.652 0-1.236-.081-1.727-.291l-.023.116v4.255c.419.323 2.722 1.433 5.002 1.433ZM6.762 2.83c-.193-.206-.637-.413-1.682-.297-1.019.113-1.479.404-1.713.7-.247.312-.369.789-.369 1.554 0 .793.129 1.171.308 1.371.162.181.519.379 1.442.379.853 0 1.339-.235 1.638-.54.315-.322.527-.827.617-1.553.117-.935-.037-1.395-.241-1.614Zm4.155-.297c-1.044-.116-1.488.091-1.681.297-.204.219-.359.679-.242 1.614.091.726.303 1.231.618 1.553.299.305.784.54 1.638.54.922 0 1.28-.198 1.442-.379.179-.2.308-.578.308-1.371 0-.765-.123-1.242-.37-1.554-.233-.296-.693-.587-1.713-.7Z"></path><path d="M6.25 9.037a.75.75 0 0 1 .75.75v1.501a.75.75 0 0 1-1.5 0V9.787a.75.75 0 0 1 .75-.75Zm4.25.75v1.501a.75.75 0 0 1-1.5 0V9.787a.75.75 0 0 1 1.5 0Z"></path>
+</svg>
+</template>
+
+<template id="copilot-error-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copilot-error">
+    <path d="M16 11.24c0 .112-.072.274-.21.467L13 9.688V7.862l-.023-.116c-.49.21-1.075.291-1.727.291-.198 0-.388-.009-.571-.029L6.833 5.226a4.01 4.01 0 0 0 .17-.782c.117-.935-.037-1.395-.241-1.614-.193-.206-.637-.413-1.682-.297-.683.076-1.115.231-1.395.415l-1.257-.91c.579-.564 1.413-.877 2.485-.996 1.206-.134 2.262.034 2.944.765.05.053.096.108.139.165.044-.057.094-.112.143-.165.682-.731 1.738-.899 2.944-.765 1.23.137 2.145.528 2.724 1.261.566.715.693 1.614.693 2.484 0 .572-.053 1.148-.254 1.656.066.228.098.429.126.612.012.076.024.148.037.218.924.385 1.522 1.471 1.591 2.095Zm-5.083-8.707c-1.044-.116-1.488.091-1.681.297-.204.219-.359.679-.242 1.614.091.726.303 1.231.618 1.553.299.305.784.54 1.638.54.922 0 1.28-.198 1.442-.379.179-.2.308-.578.308-1.371 0-.765-.123-1.242-.37-1.554-.233-.296-.693-.587-1.713-.7Zm2.511 11.074c-1.393.776-3.272 1.428-5.43 1.428-4.562 0-7.873-2.914-7.998-3.749V9.338c.085-.628.677-1.686 1.588-2.065.013-.07.024-.143.036-.218.029-.183.06-.384.126-.612-.18-.455-.241-.963-.252-1.475L.31 4.107A.747.747 0 0 1 0 3.509V3.49a.748.748 0 0 1 .625-.73c.156-.026.306.047.435.139l14.667 10.578a.592.592 0 0 1 .227.264.752.752 0 0 1 .046.249v.022a.75.75 0 0 1-1.19.596Zm-1.367-.991L5.635 7.964a5.128 5.128 0 0 1-.889.073c-.652 0-1.236-.081-1.727-.291l-.023.116v4.255c.419.323 2.722 1.433 5.002 1.433 1.539 0 3.089-.505 4.063-.934Z"></path>
+</svg>
+</template>
+
+<template id="workflow-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-workflow">
+    <path d="M0 1.75C0 .784.784 0 1.75 0h3.5C6.216 0 7 .784 7 1.75v3.5A1.75 1.75 0 0 1 5.25 7H4v4a1 1 0 0 0 1 1h4v-1.25C9 9.784 9.784 9 10.75 9h3.5c.966 0 1.75.784 1.75 1.75v3.5A1.75 1.75 0 0 1 14.25 16h-3.5A1.75 1.75 0 0 1 9 14.25v-.75H5A2.5 2.5 0 0 1 2.5 11V7h-.75A1.75 1.75 0 0 1 0 5.25Zm1.75-.25a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Zm9 9a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+</template>
+
+<template id="book-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-book">
+    <path d="M0 1.75A.75.75 0 0 1 .75 1h4.253c1.227 0 2.317.59 3 1.501A3.743 3.743 0 0 1 11.006 1h4.245a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-4.507a2.25 2.25 0 0 0-1.591.659l-.622.621a.75.75 0 0 1-1.06 0l-.622-.621A2.25 2.25 0 0 0 5.258 13H.75a.75.75 0 0 1-.75-.75Zm7.251 10.324.004-5.073-.002-2.253A2.25 2.25 0 0 0 5.003 2.5H1.5v9h3.757a3.75 3.75 0 0 1 1.994.574ZM8.755 4.75l-.004 7.322a3.752 3.752 0 0 1 1.992-.572H14.5v-9h-3.495a2.25 2.25 0 0 0-2.25 2.25Z"></path>
+</svg>
+</template>
+
+<template id="code-review-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-code-review">
+    <path d="M1.75 1h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 13H8.061l-2.574 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25v-8.5C0 1.784.784 1 1.75 1ZM1.5 2.75v8.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-8.5a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25Zm5.28 1.72a.75.75 0 0 1 0 1.06L5.31 7l1.47 1.47a.751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018l-2-2a.75.75 0 0 1 0-1.06l2-2a.75.75 0 0 1 1.06 0Zm2.44 0a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L10.69 7 9.22 5.53a.75.75 0 0 1 0-1.06Z"></path>
+</svg>
+</template>
+
+<template id="codespaces-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-codespaces">
+    <path d="M0 11.25c0-.966.784-1.75 1.75-1.75h12.5c.966 0 1.75.784 1.75 1.75v3A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm2-9.5C2 .784 2.784 0 3.75 0h8.5C13.216 0 14 .784 14 1.75v5a1.75 1.75 0 0 1-1.75 1.75h-8.5A1.75 1.75 0 0 1 2 6.75Zm1.75-.25a.25.25 0 0 0-.25.25v5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-5a.25.25 0 0 0-.25-.25Zm-2 9.5a.25.25 0 0 0-.25.25v3c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-3a.25.25 0 0 0-.25-.25Z"></path><path d="M7 12.75a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1-.75-.75Zm-4 0a.75.75 0 0 1 .75-.75h.5a.75.75 0 0 1 0 1.5h-.5a.75.75 0 0 1-.75-.75Z"></path>
+</svg>
+</template>
+
+<template id="comment-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-comment">
+    <path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h4.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+</template>
+
+<template id="comment-discussion-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-comment-discussion">
+    <path d="M1.75 1h8.5c.966 0 1.75.784 1.75 1.75v5.5A1.75 1.75 0 0 1 10.25 10H7.061l-2.574 2.573A1.458 1.458 0 0 1 2 11.543V10h-.25A1.75 1.75 0 0 1 0 8.25v-5.5C0 1.784.784 1 1.75 1ZM1.5 2.75v5.5c0 .138.112.25.25.25h1a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h3.5a.25.25 0 0 0 .25-.25v-5.5a.25.25 0 0 0-.25-.25h-8.5a.25.25 0 0 0-.25.25Zm13 2a.25.25 0 0 0-.25-.25h-.5a.75.75 0 0 1 0-1.5h.5c.966 0 1.75.784 1.75 1.75v5.5A1.75 1.75 0 0 1 14.25 12H14v1.543a1.458 1.458 0 0 1-2.487 1.03L9.22 12.28a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215l2.22 2.22v-2.19a.75.75 0 0 1 .75-.75h1a.25.25 0 0 0 .25-.25Z"></path>
+</svg>
+</template>
+
+<template id="organization-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-organization">
+    <path d="M1.75 16A1.75 1.75 0 0 1 0 14.25V1.75C0 .784.784 0 1.75 0h8.5C11.216 0 12 .784 12 1.75v12.5c0 .085-.006.168-.018.25h2.268a.25.25 0 0 0 .25-.25V8.285a.25.25 0 0 0-.111-.208l-1.055-.703a.749.749 0 1 1 .832-1.248l1.055.703c.487.325.779.871.779 1.456v5.965A1.75 1.75 0 0 1 14.25 16h-3.5a.766.766 0 0 1-.197-.026c-.099.017-.2.026-.303.026h-3a.75.75 0 0 1-.75-.75V14h-1v1.25a.75.75 0 0 1-.75.75Zm-.25-1.75c0 .138.112.25.25.25H4v-1.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 .75.75v1.25h2.25a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25h-8.5a.25.25 0 0 0-.25.25ZM3.75 6h.5a.75.75 0 0 1 0 1.5h-.5a.75.75 0 0 1 0-1.5ZM3 3.75A.75.75 0 0 1 3.75 3h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 3 3.75Zm4 3A.75.75 0 0 1 7.75 6h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 7 6.75ZM7.75 3h.5a.75.75 0 0 1 0 1.5h-.5a.75.75 0 0 1 0-1.5ZM3 9.75A.75.75 0 0 1 3.75 9h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 3 9.75ZM7.75 9h.5a.75.75 0 0 1 0 1.5h-.5a.75.75 0 0 1 0-1.5Z"></path>
+</svg>
+</template>
+
+<template id="rocket-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-rocket">
+    <path d="M14.064 0h.186C15.216 0 16 .784 16 1.75v.186a8.752 8.752 0 0 1-2.564 6.186l-.458.459c-.314.314-.641.616-.979.904v3.207c0 .608-.315 1.172-.833 1.49l-2.774 1.707a.749.749 0 0 1-1.11-.418l-.954-3.102a1.214 1.214 0 0 1-.145-.125L3.754 9.816a1.218 1.218 0 0 1-.124-.145L.528 8.717a.749.749 0 0 1-.418-1.11l1.71-2.774A1.748 1.748 0 0 1 3.31 4h3.204c.288-.338.59-.665.904-.979l.459-.458A8.749 8.749 0 0 1 14.064 0ZM8.938 3.623h-.002l-.458.458c-.76.76-1.437 1.598-2.02 2.5l-1.5 2.317 2.143 2.143 2.317-1.5c.902-.583 1.74-1.26 2.499-2.02l.459-.458a7.25 7.25 0 0 0 2.123-5.127V1.75a.25.25 0 0 0-.25-.25h-.186a7.249 7.249 0 0 0-5.125 2.123ZM3.56 14.56c-.732.732-2.334 1.045-3.005 1.148a.234.234 0 0 1-.201-.064.234.234 0 0 1-.064-.201c.103-.671.416-2.273 1.15-3.003a1.502 1.502 0 1 1 2.12 2.12Zm6.94-3.935c-.088.06-.177.118-.266.175l-2.35 1.521.548 1.783 1.949-1.2a.25.25 0 0 0 .119-.213ZM3.678 8.116 5.2 5.766c.058-.09.117-.178.176-.266H3.309a.25.25 0 0 0-.213.119l-1.2 1.95ZM12 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path>
+</svg>
+</template>
+
+<template id="shield-check-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-shield-check">
+    <path d="m8.533.133 5.25 1.68A1.75 1.75 0 0 1 15 3.48V7c0 1.566-.32 3.182-1.303 4.682-.983 1.498-2.585 2.813-5.032 3.855a1.697 1.697 0 0 1-1.33 0c-2.447-1.042-4.049-2.357-5.032-3.855C1.32 10.182 1 8.566 1 7V3.48a1.75 1.75 0 0 1 1.217-1.667l5.25-1.68a1.748 1.748 0 0 1 1.066 0Zm-.61 1.429.001.001-5.25 1.68a.251.251 0 0 0-.174.237V7c0 1.36.275 2.666 1.057 3.859.784 1.194 2.121 2.342 4.366 3.298a.196.196 0 0 0 .154 0c2.245-.957 3.582-2.103 4.366-3.297C13.225 9.666 13.5 8.358 13.5 7V3.48a.25.25 0 0 0-.174-.238l-5.25-1.68a.25.25 0 0 0-.153 0ZM11.28 6.28l-3.5 3.5a.75.75 0 0 1-1.06 0l-1.5-1.5a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215l.97.97 2.97-2.97a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path>
+</svg>
+</template>
+
+<template id="heart-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-heart">
+    <path d="m8 14.25.345.666a.75.75 0 0 1-.69 0l-.008-.004-.018-.01a7.152 7.152 0 0 1-.31-.17 22.055 22.055 0 0 1-3.434-2.414C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.045 5.231-3.885 6.818a22.066 22.066 0 0 1-3.744 2.584l-.018.01-.006.003h-.002ZM4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.58 20.58 0 0 0 8 13.393a20.58 20.58 0 0 0 3.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.749.749 0 0 1-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5Z"></path>
+</svg>
+</template>
+
+<template id="server-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-server">
+    <path d="M1.75 1h12.5c.966 0 1.75.784 1.75 1.75v4c0 .372-.116.717-.314 1 .198.283.314.628.314 1v4a1.75 1.75 0 0 1-1.75 1.75H1.75A1.75 1.75 0 0 1 0 12.75v-4c0-.358.109-.707.314-1a1.739 1.739 0 0 1-.314-1v-4C0 1.784.784 1 1.75 1ZM1.5 2.75v4c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-4a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25Zm.25 5.75a.25.25 0 0 0-.25.25v4c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-4a.25.25 0 0 0-.25-.25ZM7 4.75A.75.75 0 0 1 7.75 4h4.5a.75.75 0 0 1 0 1.5h-4.5A.75.75 0 0 1 7 4.75ZM7.75 10h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM3 4.75A.75.75 0 0 1 3.75 4h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 3 4.75ZM3.75 10h.5a.75.75 0 0 1 0 1.5h-.5a.75.75 0 0 1 0-1.5Z"></path>
+</svg>
+</template>
+
+<template id="globe-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-globe">
+    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM5.78 8.75a9.64 9.64 0 0 0 1.363 4.177c.255.426.542.832.857 1.215.245-.296.551-.705.857-1.215A9.64 9.64 0 0 0 10.22 8.75Zm4.44-1.5a9.64 9.64 0 0 0-1.363-4.177c-.307-.51-.612-.919-.857-1.215a9.927 9.927 0 0 0-.857 1.215A9.64 9.64 0 0 0 5.78 7.25Zm-5.944 1.5H1.543a6.507 6.507 0 0 0 4.666 5.5c-.123-.181-.24-.365-.352-.552-.715-1.192-1.437-2.874-1.581-4.948Zm-2.733-1.5h2.733c.144-2.074.866-3.756 1.58-4.948.12-.197.237-.381.353-.552a6.507 6.507 0 0 0-4.666 5.5Zm10.181 1.5c-.144 2.074-.866 3.756-1.58 4.948-.12.197-.237.381-.353.552a6.507 6.507 0 0 0 4.666-5.5Zm2.733-1.5a6.507 6.507 0 0 0-4.666-5.5c.123.181.24.365.353.552.714 1.192 1.436 2.874 1.58 4.948Z"></path>
+</svg>
+</template>
+
+<template id="issue-opened-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-issue-opened">
+    <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"></path>
+</svg>
+</template>
+
+<template id="device-mobile-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-device-mobile">
+    <path d="M3.75 0h8.5C13.216 0 14 .784 14 1.75v12.5A1.75 1.75 0 0 1 12.25 16h-8.5A1.75 1.75 0 0 1 2 14.25V1.75C2 .784 2.784 0 3.75 0ZM3.5 1.75v12.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25h-8.5a.25.25 0 0 0-.25.25ZM8 13a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path>
+</svg>
+</template>
+
+<template id="package-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-package">
+    <path d="m8.878.392 5.25 3.045c.54.314.872.89.872 1.514v6.098a1.75 1.75 0 0 1-.872 1.514l-5.25 3.045a1.75 1.75 0 0 1-1.756 0l-5.25-3.045A1.75 1.75 0 0 1 1 11.049V4.951c0-.624.332-1.201.872-1.514L7.122.392a1.75 1.75 0 0 1 1.756 0ZM7.875 1.69l-4.63 2.685L8 7.133l4.755-2.758-4.63-2.685a.248.248 0 0 0-.25 0ZM2.5 5.677v5.372c0 .09.047.171.125.216l4.625 2.683V8.432Zm6.25 8.271 4.625-2.683a.25.25 0 0 0 .125-.216V5.677L8.75 8.432Z"></path>
+</svg>
+</template>
+
+<template id="credit-card-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-credit-card">
+    <path d="M10.75 9a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5h-1.5Z"></path><path d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25ZM14.5 6.5h-13v5.75c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25Zm0-2.75a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25V5h13Z"></path>
+</svg>
+</template>
+
+<template id="play-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-play">
+    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm4.879-2.773 4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559V5.442a.25.25 0 0 1 .379-.215Z"></path>
+</svg>
+</template>
+
+<template id="gift-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-gift">
+    <path d="M2 2.75A2.75 2.75 0 0 1 4.75 0c.983 0 1.873.42 2.57 1.232.268.318.497.668.68 1.042.183-.375.411-.725.68-1.044C9.376.42 10.266 0 11.25 0a2.75 2.75 0 0 1 2.45 4h.55c.966 0 1.75.784 1.75 1.75v2c0 .698-.409 1.301-1 1.582v4.918A1.75 1.75 0 0 1 13.25 16H2.75A1.75 1.75 0 0 1 1 14.25V9.332C.409 9.05 0 8.448 0 7.75v-2C0 4.784.784 4 1.75 4h.55c-.192-.375-.3-.8-.3-1.25ZM7.25 9.5H2.5v4.75c0 .138.112.25.25.25h4.5Zm1.5 0v5h4.5a.25.25 0 0 0 .25-.25V9.5Zm0-4V8h5.5a.25.25 0 0 0 .25-.25v-2a.25.25 0 0 0-.25-.25Zm-7 0a.25.25 0 0 0-.25.25v2c0 .138.112.25.25.25h5.5V5.5h-5.5Zm3-4a1.25 1.25 0 0 0 0 2.5h2.309c-.233-.818-.542-1.401-.878-1.793-.43-.502-.915-.707-1.431-.707ZM8.941 4h2.309a1.25 1.25 0 0 0 0-2.5c-.516 0-1 .205-1.43.707-.337.392-.646.975-.879 1.793Z"></path>
+</svg>
+</template>
+
+<template id="code-square-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-code-square">
+    <path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path>
+</svg>
+</template>
+
+<template id="device-desktop-icon">
+  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-device-desktop">
+    <path d="M14.25 1c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 14.25 12h-3.727c.099 1.041.52 1.872 1.292 2.757A.752.752 0 0 1 11.25 16h-6.5a.75.75 0 0 1-.565-1.243c.772-.885 1.192-1.716 1.292-2.757H1.75A1.75 1.75 0 0 1 0 10.25v-7.5C0 1.784.784 1 1.75 1ZM1.75 2.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25ZM9.018 12H6.982a5.72 5.72 0 0 1-.765 2.5h3.566a5.72 5.72 0 0 1-.765-2.5Z"></path>
+</svg>
+</template>
+
+        <div class="position-relative">
+                        <ul
+              role="listbox"
+              class="ActionListWrap QueryBuilder-ListWrap"
+              aria-label="Suggestions"
+              data-action="
+                combobox-commit:query-builder#comboboxCommit
+                mousedown:query-builder#resultsMousedown
+              "
+              data-target="query-builder.resultsList"
+              data-persist-list=false
+              id="query-builder-test-results"
+              tabindex="-1"
+            ></ul>
+
+        </div>
+      <div class="FormControl-inlineValidation" id="validation-311a72d4-0c8c-491b-8d8f-ed5b70382efc" hidden="hidden">
+        <span class="FormControl-inlineValidation--visual">
+          <svg aria-hidden="true" height="12" viewBox="0 0 12 12" version="1.1" width="12" data-view-component="true" class="octicon octicon-alert-fill">
+    <path d="M4.855.708c.5-.896 1.79-.896 2.29 0l4.675 8.351a1.312 1.312 0 0 1-1.146 1.954H1.33A1.313 1.313 0 0 1 .183 9.058ZM7 7V3H5v4Zm-1 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"></path>
+</svg>
+        </span>
+        <span></span>
+</div>    </div>
+    <div data-target="query-builder.screenReaderFeedback" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+</query-builder></form>
+          <div class="d-flex flex-row color-fg-muted tmp-px-3 text-small color-bg-default search-feedback-prompt">
+            <a target="_blank" href="https://docs.github.com/search-github/github-code-search/understanding-github-code-search-syntax" data-view-component="true" class="Link color-fg-accent text-normal ml-2 tmp-ml-2">Search syntax tips</a>            <div class="d-flex flex-1"></div>
+          </div>
+        </div>
+</div>
+
+    </div>
+</modal-dialog></div>
+  </div>
+  <div data-action="click:qbsearch-input#retract" class="dark-backdrop position-fixed" hidden data-target="qbsearch-input.darkBackdrop"></div>
+  <div class="color-fg-default">
+    
+<dialog-helper>
+  <dialog data-target="qbsearch-input.feedbackDialog" data-action="close:qbsearch-input#handleDialogClose cancel:qbsearch-input#handleDialogClose" id="feedback-dialog" aria-modal="true" aria-labelledby="feedback-dialog-title" aria-describedby="feedback-dialog-description" data-view-component="true" class="Overlay Overlay-whenNarrow Overlay--size-medium Overlay--motion-scaleFade Overlay--disableScroll">
+    <div data-view-component="true" class="Overlay-header">
+  <div class="Overlay-headerContentWrap">
+    <div class="Overlay-titleWrap">
+      <h1 class="Overlay-title " id="feedback-dialog-title">
+        Provide feedback
+      </h1>
+        
+    </div>
+    <div class="Overlay-actionWrap">
+      <button data-close-dialog-id="feedback-dialog" aria-label="Close" aria-label="Close" type="button" data-view-component="true" class="close-button Overlay-closeButton"><svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
+    <path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path>
+</svg></button>
+    </div>
+  </div>
+  
+</div>
+      <scrollable-region data-labelled-by="feedback-dialog-title">
+        <div data-view-component="true" class="Overlay-body">        <!-- '"` --><!-- </textarea></xmp> --></option></form><form id="code-search-feedback-form" data-turbo="false" action="/search/feedback" accept-charset="UTF-8" method="post"><input type="hidden" data-csrf="true" name="authenticity_token" value="pGwKUNVZWvBGYvLSsj9xUpyhy/Ccng2OqqqgPejeMCrSkpwuiagW9XxDjjdJ6K6NpcNdV7fpNniKpIXeyYSymw==" />
+          <p>We read every piece of feedback, and take your input very seriously.</p>
+          <textarea name="feedback" class="form-control width-full mb-2" style="height: 120px" id="feedback"></textarea>
+          <input name="include_email" id="include_email" aria-label="Include my email address so I can be contacted" class="form-control mr-2" type="checkbox">
+          <label for="include_email" style="font-weight: normal">Include my email address so I can be contacted</label>
+</form></div>
+      </scrollable-region>
+      <div data-view-component="true" class="Overlay-footer Overlay-footer--alignEnd">          <button data-close-dialog-id="feedback-dialog" type="button" data-view-component="true" class="btn">    Cancel
+</button>
+          <button form="code-search-feedback-form" data-action="click:qbsearch-input#submitFeedback" type="submit" data-view-component="true" class="btn-primary btn">    Submit feedback
+</button>
+</div>
+</dialog></dialog-helper>
+
+    <custom-scopes data-target="qbsearch-input.customScopesManager">
+    
+<dialog-helper>
+  <dialog data-target="custom-scopes.customScopesModalDialog" data-action="close:qbsearch-input#handleDialogClose cancel:qbsearch-input#handleDialogClose" id="custom-scopes-dialog" aria-modal="true" aria-labelledby="custom-scopes-dialog-title" aria-describedby="custom-scopes-dialog-description" data-view-component="true" class="Overlay Overlay-whenNarrow Overlay--size-medium Overlay--motion-scaleFade Overlay--disableScroll">
+    <div data-view-component="true" class="Overlay-header Overlay-header--divided">
+  <div class="Overlay-headerContentWrap">
+    <div class="Overlay-titleWrap">
+      <h1 class="Overlay-title " id="custom-scopes-dialog-title">
+        Saved searches
+      </h1>
+        <h2 id="custom-scopes-dialog-description" class="Overlay-description">Use saved searches to filter your results more quickly</h2>
+    </div>
+    <div class="Overlay-actionWrap">
+      <button data-close-dialog-id="custom-scopes-dialog" aria-label="Close" aria-label="Close" type="button" data-view-component="true" class="close-button Overlay-closeButton"><svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
+    <path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path>
+</svg></button>
+    </div>
+  </div>
+  
+</div>
+      <scrollable-region data-labelled-by="custom-scopes-dialog-title">
+        <div data-view-component="true" class="Overlay-body">        <div data-target="custom-scopes.customScopesModalDialogFlash"></div>
+
+        <div hidden class="create-custom-scope-form" data-target="custom-scopes.createCustomScopeForm">
+        <!-- '"` --><!-- </textarea></xmp> --></option></form><form id="custom-scopes-dialog-form" data-turbo="false" action="/search/custom_scopes" accept-charset="UTF-8" method="post"><input type="hidden" data-csrf="true" name="authenticity_token" value="NZDkAxJCXzUCiv+Q3VAtmOKue0LK8FZLmyG7FN+o3GqDtXateBe0khBvfPeJX4OFSYTW25Fi8sv43zJhZpDv6Q==" />
+          <div data-target="custom-scopes.customScopesModalDialogFlash"></div>
+
+          <input type="hidden" id="custom_scope_id" name="custom_scope_id" data-target="custom-scopes.customScopesIdField">
+
+          <div class="form-group">
+            <label for="custom_scope_name">Name</label>
+            <auto-check src="/search/custom_scopes/check_name" required>
+              <input
+                type="text"
+                name="custom_scope_name"
+                id="custom_scope_name"
+                data-target="custom-scopes.customScopesNameField"
+                class="form-control"
+                autocomplete="off"
+                placeholder="github-ruby"
+                required
+                maxlength="50">
+              <input type="hidden" data-csrf="true" value="ADD/lFoYB55gPwwWx8A1CoffIoocoIGook2rWK/LSU6cQ733bWvBP0+y963vB/cDVas4ZjkJk7BaPpzVpDW5tg==" />
+            </auto-check>
+          </div>
+
+          <div class="form-group">
+            <label for="custom_scope_query">Query</label>
+            <input
+              type="text"
+              name="custom_scope_query"
+              id="custom_scope_query"
+              data-target="custom-scopes.customScopesQueryField"
+              class="form-control"
+              autocomplete="off"
+              placeholder="(repo:mona/a OR repo:mona/b) AND lang:python"
+              required
+              maxlength="500">
+          </div>
+
+          <p class="text-small color-fg-muted">
+            To see all available qualifiers, see our <a class="Link--inTextBlock" href="https://docs.github.com/search-github/github-code-search/understanding-github-code-search-syntax">documentation</a>.
+          </p>
+</form>        </div>
+
+        <div data-target="custom-scopes.manageCustomScopesForm">
+          <div data-target="custom-scopes.list"></div>
+        </div>
+
+</div>
+      </scrollable-region>
+      <div data-view-component="true" class="Overlay-footer Overlay-footer--alignEnd Overlay-footer--divided">          <button data-action="click:custom-scopes#customScopesCancel" type="button" data-view-component="true" class="btn">    Cancel
+</button>
+          <button form="custom-scopes-dialog-form" data-action="click:custom-scopes#customScopesSubmit" data-target="custom-scopes.customScopesSubmitButton" type="submit" data-view-component="true" class="btn-primary btn">    Create saved search
+</button>
+</div>
+</dialog></dialog-helper>
+    </custom-scopes>
+  </div>
+</qbsearch-input>
+
+
+            <div class="position-relative HeaderMenu-link-wrap d-lg-inline-block">
+              <a
+                href="/login?return_to=https%3A%2F%2Fgithub.com%2Fpython%2Fcpython%2Fissues%2F142665"
+                class="HeaderMenu-link HeaderMenu-link--sign-in HeaderMenu-button flex-shrink-0 no-underline d-none d-lg-inline-flex border border-lg-0 rounded px-2 py-1"
+                style="margin-left: 12px;"
+                data-hydro-click="{&quot;event_type&quot;:&quot;authentication.click&quot;,&quot;payload&quot;:{&quot;location_in_page&quot;:&quot;site header menu&quot;,&quot;repository_id&quot;:null,&quot;auth_type&quot;:&quot;SIGN_UP&quot;,&quot;originating_url&quot;:&quot;https://github.com/python/cpython/issues/142665&quot;,&quot;user_id&quot;:null}}" data-hydro-click-hmac="53f807f4fdbfd3dfb8cc069a820f873e5c73f98333f5e46a48eed5aba5f2baed"
+                data-analytics-event="{&quot;category&quot;:&quot;Marketing nav&quot;,&quot;action&quot;:&quot;click to go to homepage&quot;,&quot;label&quot;:&quot;ref_page:Marketing;ref_cta:Sign in;ref_loc:Header&quot;}"
+              >
+                Sign in
+              </a>
+            </div>
+
+              <a href="/signup?ref_cta=Sign+up&amp;ref_loc=header+logged+out&amp;ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E%2Fvoltron%2Fissues_fragments%2Fissue_layout&amp;source=header-repo&amp;source_repo=python%2Fcpython"
+                class="HeaderMenu-link HeaderMenu-link--sign-up HeaderMenu-button flex-shrink-0 d-flex d-lg-inline-flex no-underline border color-border-default rounded px-2 py-1"
+                data-hydro-click="{&quot;event_type&quot;:&quot;authentication.click&quot;,&quot;payload&quot;:{&quot;location_in_page&quot;:&quot;site header menu&quot;,&quot;repository_id&quot;:null,&quot;auth_type&quot;:&quot;SIGN_UP&quot;,&quot;originating_url&quot;:&quot;https://github.com/python/cpython/issues/142665&quot;,&quot;user_id&quot;:null}}" data-hydro-click-hmac="53f807f4fdbfd3dfb8cc069a820f873e5c73f98333f5e46a48eed5aba5f2baed"
+                data-analytics-event="{&quot;category&quot;:&quot;Sign up&quot;,&quot;action&quot;:&quot;click to sign up for account&quot;,&quot;label&quot;:&quot;ref_page:/&lt;user-name&gt;/&lt;repo-name&gt;/voltron/issues_fragments/issue_layout;ref_cta:Sign up;ref_loc:header logged out&quot;}"
+              >
+                Sign up
+              </a>
+
+                <div class="AppHeader-appearanceSettings">
+    <react-partial-anchor>
+      <button data-target="react-partial-anchor.anchor" id="icon-button-7d82ebf6-d6fc-4697-92cf-4b798d095fc1" aria-labelledby="tooltip-359ea761-a136-415b-8b7b-37d7aa0ea8a2" type="button" disabled="disabled" data-view-component="true" class="Button Button--iconOnly Button--invisible Button--medium AppHeader-button HeaderMenu-link border cursor-wait">  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-sliders Button-visual">
+    <path d="M15 2.75a.75.75 0 0 1-.75.75h-4a.75.75 0 0 1 0-1.5h4a.75.75 0 0 1 .75.75Zm-8.5.75v1.25a.75.75 0 0 0 1.5 0v-4a.75.75 0 0 0-1.5 0V2H1.75a.75.75 0 0 0 0 1.5H6.5Zm1.25 5.25a.75.75 0 0 0 0-1.5h-6a.75.75 0 0 0 0 1.5h6ZM15 8a.75.75 0 0 1-.75.75H11.5V10a.75.75 0 1 1-1.5 0V6a.75.75 0 0 1 1.5 0v1.25h2.75A.75.75 0 0 1 15 8Zm-9 5.25v-2a.75.75 0 0 0-1.5 0v1.25H1.75a.75.75 0 0 0 0 1.5H4.5v1.25a.75.75 0 0 0 1.5 0v-2Zm9 0a.75.75 0 0 1-.75.75h-6a.75.75 0 0 1 0-1.5h6a.75.75 0 0 1 .75.75Z"></path>
+</svg>
+</button><tool-tip id="tooltip-359ea761-a136-415b-8b7b-37d7aa0ea8a2" for="icon-button-7d82ebf6-d6fc-4697-92cf-4b798d095fc1" popover="manual" data-direction="s" data-type="label" data-view-component="true" class="sr-only position-absolute">Appearance settings</tool-tip>
+
+      <template data-target="react-partial-anchor.template">
+        <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/appearance-settings.babbb060397858d0.module.css" />
+
+<react-partial
+  partial-name="appearance-settings"
+  data-ssr="false"
+  data-attempted-ssr="false"
+  data-react-profiling="false"
+>
+  
+  <script type="application/json" data-target="react-partial.embeddedData">{"props":{}}</script>
+  <div data-target="react-partial.reactRoot"></div>
+</react-partial>
+
+
+      </template>
+    </react-partial-anchor>
+  </div>
+
+          <button type="button" class="sr-only js-header-menu-focus-trap d-block d-lg-none">Resetting focus</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div hidden="hidden" data-view-component="true" class="js-stale-session-flash stale-session-flash flash flash-warn flash-full">
+  
+        <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-alert">
+    <path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path>
+</svg>
+        <span class="js-stale-session-flash-signed-in" hidden>You signed in with another tab or window. <a class="Link--inTextBlock" href="">Reload</a> to refresh your session.</span>
+        <span class="js-stale-session-flash-signed-out" hidden>You signed out in another tab or window. <a class="Link--inTextBlock" href="">Reload</a> to refresh your session.</span>
+        <span class="js-stale-session-flash-switched" hidden>You switched accounts on another tab or window. <a class="Link--inTextBlock" href="">Reload</a> to refresh your session.</span>
+
+    <button id="icon-button-195b2a65-cfca-403e-b0bb-07beb794a7ac" aria-labelledby="tooltip-35ed3b63-073b-44f8-8f40-723584bf137b" type="button" data-view-component="true" class="Button Button--iconOnly Button--invisible Button--medium flash-close js-flash-close">  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x Button-visual">
+    <path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path>
+</svg>
+</button><tool-tip id="tooltip-35ed3b63-073b-44f8-8f40-723584bf137b" for="icon-button-195b2a65-cfca-403e-b0bb-07beb794a7ac" popover="manual" data-direction="s" data-type="label" data-view-component="true" class="sr-only position-absolute">Dismiss alert</tool-tip>
+
+
+  
+</div>
+    </div>
+
+  <div id="start-of-content" class="show-on-focus"></div>
+
+
+
+
+
+
+
+
+    <div id="js-flash-container" class="flash-container" data-turbo-replace>
+
+
+
+
+  <template class="js-flash-template">
+    
+<div class="flash flash-full   {{ className }}">
+  <div >
+    <button autofocus class="flash-close js-flash-close" type="button" aria-label="Dismiss this message">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
+    <path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path>
+</svg>
+    </button>
+    <div aria-atomic="true" role="alert" class="js-flash-alert">
+      
+      <div>{{ message }}</div>
+
+    </div>
+  </div>
+</div>
+  </template>
+</div>
+
+
+    
+
+
+
+
+
+
+  <div
+    class="application-main "
+    data-commit-hovercards-enabled
+    data-discussion-hovercards-enabled
+    data-issue-and-pr-hovercards-enabled
+    data-project-hovercards-enabled
+  >
+        <div itemscope itemtype="http://schema.org/SoftwareSourceCode" class="">
+    <main id="js-repo-pjax-container" >
+      
+      
+    
+
+    
+
+
+
+
+
+
+  
+
+  <div id="repository-container-header"  class="tmp-pt-3 hide-full-screen" style="background-color: var(--page-header-bgColor, var(--color-page-header-bg));" data-turbo-replace>
+
+      <div class="d-flex flex-nowrap flex-justify-end tmp-mb-3  tmp-px-3 tmp-px-lg-5" style="gap: 1rem;">
+
+        <div class="flex-auto min-width-0 width-fit">
+            
+  <div class=" d-flex flex-wrap flex-items-center wb-break-word f3 text-normal">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-repo color-fg-muted mr-2 tmp-mr-2">
+    <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"></path>
+</svg>
+    
+    <span class="author flex-self-stretch" itemprop="author">
+      <a class="url fn" rel="author" data-hovercard-type="organization" data-hovercard-url="/orgs/python/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="/python">
+        python
+</a>    </span>
+    <span class="mx-1 flex-self-stretch color-fg-muted">/</span>
+    <strong itemprop="name" class="mr-2 flex-self-stretch">
+      <a data-pjax="#repo-content-pjax-container" data-turbo-frame="repo-content-turbo-frame" href="/python/cpython">cpython</a>
+    </strong>
+
+    <span></span><span class="Label Label--secondary v-align-middle mr-1">Public</span>
+  </div>
+
+
+        </div>
+
+        <div id="repository-details-container" class="flex-shrink-0" data-turbo-replace style="max-width: 70%;">
+            <ul class="pagehead-actions flex-shrink-0 d-none d-md-inline" style="padding: 2px 0;">
+    
+        <li>
+          <include-fragment src="/python/cpython/sponsor_button" data-nonce="v2:6ce7c804-68aa-e50f-6bfa-8617199b75cd" data-view-component="true">
+  
+  <div data-show-on-forbidden-error hidden>
+    <div class="Box">
+  <div class="blankslate-container">
+    <div data-view-component="true" class="blankslate blankslate-spacious color-bg-default rounded-2">
+      
+
+      <h3 data-view-component="true" class="blankslate-heading">        Uh oh!
+</h3>
+      <p data-view-component="true" class="blankslate-description">        <p class="color-fg-muted my-2 mb-2 ws-normal">There was an error while loading. <a class="Link--inTextBlock" data-turbo="false" href="" aria-label="Please reload this page">Please reload this page</a>.</p>
+</p>
+
+</div>  </div>
+</div>  </div>
+</include-fragment>
+        </li>
+
+      
+
+  <li>
+            <a href="/login?return_to=%2Fpython%2Fcpython" rel="nofollow" id="repository-details-watch-button" data-hydro-click="{&quot;event_type&quot;:&quot;authentication.click&quot;,&quot;payload&quot;:{&quot;location_in_page&quot;:&quot;notification subscription menu watch&quot;,&quot;repository_id&quot;:null,&quot;auth_type&quot;:&quot;LOG_IN&quot;,&quot;originating_url&quot;:&quot;https://github.com/python/cpython/issues/142665&quot;,&quot;user_id&quot;:null}}" data-hydro-click-hmac="327eaccca1ae05cb33488739414be0670ce8c6333ce1466313d8f5c231f9357f" aria-label="You must be signed in to change notification settings" data-view-component="true" class="btn-sm btn">    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-bell mr-2 tmp-mr-2">
+    <path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16ZM3 5a5 5 0 0 1 10 0v2.947c0 .05.015.098.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.255.255 0 0 0 3 7.947Zm5-3.5A3.5 3.5 0 0 0 4.5 5v2.947c0 .346-.102.683-.294.97l-1.703 2.556a.017.017 0 0 0-.003.01l.001.006c0 .002.002.004.004.006l.006.004.007.001h10.964l.007-.001.006-.004.004-.006.001-.007a.017.017 0 0 0-.003-.01l-1.703-2.554a1.745 1.745 0 0 1-.294-.97V5A3.5 3.5 0 0 0 8 1.5Z"></path>
+</svg>Notifications
+</a>    <tool-tip id="tooltip-87ec91b6-81ca-43e5-913a-17ae2a4cf5fd" for="repository-details-watch-button" popover="manual" data-direction="s" data-type="description" data-view-component="true" class="sr-only position-absolute">You must be signed in to change notification settings</tool-tip>
+
+  </li>
+
+  <li>
+          <a icon="repo-forked" id="fork-button" href="/login?return_to=%2Fpython%2Fcpython" rel="nofollow" data-hydro-click="{&quot;event_type&quot;:&quot;authentication.click&quot;,&quot;payload&quot;:{&quot;location_in_page&quot;:&quot;repo details fork button&quot;,&quot;repository_id&quot;:81598961,&quot;auth_type&quot;:&quot;LOG_IN&quot;,&quot;originating_url&quot;:&quot;https://github.com/python/cpython/issues/142665&quot;,&quot;user_id&quot;:null}}" data-hydro-click-hmac="cd36bf8d004f7e324647d820f15a082e5227ecd1d0fa3e314e6d2e7dfb095bb4" data-view-component="true" class="btn-sm btn">    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-repo-forked mr-2 tmp-mr-2">
+    <path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z"></path>
+</svg>Fork
+    <span id="repo-network-counter" data-pjax-replace="true" data-turbo-replace="true" title="34,508" data-view-component="true" class="Counter">34.5k</span>
+</a>
+  </li>
+
+  <li>
+        <div data-view-component="true" class="BtnGroup d-flex">
+        <a href="/login?return_to=%2Fpython%2Fcpython" rel="nofollow" data-hydro-click="{&quot;event_type&quot;:&quot;authentication.click&quot;,&quot;payload&quot;:{&quot;location_in_page&quot;:&quot;star button&quot;,&quot;repository_id&quot;:81598961,&quot;auth_type&quot;:&quot;LOG_IN&quot;,&quot;originating_url&quot;:&quot;https://github.com/python/cpython/issues/142665&quot;,&quot;user_id&quot;:null}}" data-hydro-click-hmac="ee654f6640421ca3ede970a49dc36ad735ad69d9ff67c620b8c3ea0679aeaf1b" aria-label="You must be signed in to star a repository" data-view-component="true" class="tooltipped tooltipped-sw btn-sm btn">    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-star v-align-text-bottom d-inline-block mr-2 tmp-mr-2">
+    <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Zm0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41L8 2.694Z"></path>
+</svg><span data-view-component="true" class="d-inline">
+          Star
+</span>          <span id="repo-stars-counter-star" aria-label="72510 users starred this repository" data-singular-suffix="user starred this repository" data-plural-suffix="users starred this repository" data-turbo-replace="true" title="72,510" data-view-component="true" class="Counter js-social-count">72.5k</span>
+</a></div>
+  </li>
+
+</ul>
+
+        </div>
+      </div>
+
+        <div id="responsive-meta-container" data-turbo-replace>
+</div>
+
+
+          <nav data-pjax="#js-repo-pjax-container" aria-label="Repository" data-view-component="true" class="js-repo-nav js-sidenav-container-pjax js-responsive-underlinenav overflow-hidden UnderlineNav px-3 tmp-px-3 px-md-4 tmp-px-md-4 px-lg-5 tmp-px-lg-5">
+
+  <ul data-view-component="true" class="UnderlineNav-body list-style-none">
+      <li data-view-component="true" class="d-inline-flex">
+  <a id="code-tab" href="/python/cpython" data-tab-item="i0code-tab" data-selected-links="repo_source repo_downloads repo_commits repo_releases repo_tags repo_branches repo_packages repo_deployments repo_attestations /python/cpython" data-pjax="#repo-content-pjax-container" data-turbo-frame="repo-content-turbo-frame" data-hotkey="g c" data-command-id="repositories:go-to-code" data-react-nav="code-view" data-react-nav-anchor="code-view-repo-link" data-analytics-event="{&quot;category&quot;:&quot;Underline navbar&quot;,&quot;action&quot;:&quot;Click tab&quot;,&quot;label&quot;:&quot;Code&quot;,&quot;target&quot;:&quot;UNDERLINE_NAV.TAB&quot;}" data-view-component="true" class="UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item">
+    
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-code UnderlineNav-octicon d-none d-sm-inline">
+    <path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path>
+</svg>
+        <span data-content="Code">Code</span>
+          <span id="code-repo-tab-count" data-pjax-replace="" data-turbo-replace="" title="Not available" data-view-component="true" class="Counter"></span>
+
+
+    
+</a></li>
+      <li data-view-component="true" class="d-inline-flex">
+  <a id="issues-tab" href="/python/cpython/issues" data-tab-item="i1issues-tab" data-selected-links="repo_issues repo_labels repo_milestones /python/cpython/issues" data-pjax="#repo-content-pjax-container" data-turbo-frame="repo-content-turbo-frame" data-hotkey="g i" data-command-id="repositories:go-to-issues" data-react-nav="issues-react" data-analytics-event="{&quot;category&quot;:&quot;Underline navbar&quot;,&quot;action&quot;:&quot;Click tab&quot;,&quot;label&quot;:&quot;Issues&quot;,&quot;target&quot;:&quot;UNDERLINE_NAV.TAB&quot;}" aria-current="page" data-view-component="true" class="UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item selected">
+    
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-issue-opened UnderlineNav-octicon d-none d-sm-inline">
+    <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"></path>
+</svg>
+        <span data-content="Issues">Issues</span>
+          <span id="issues-repo-tab-count" data-pjax-replace="" data-turbo-replace="" title="5,000+" data-view-component="true" class="Counter">5k+</span>
+
+
+    
+</a></li>
+      <li data-view-component="true" class="d-inline-flex">
+  <a id="pull-requests-tab" href="/python/cpython/pulls" data-tab-item="i2pull-requests-tab" data-selected-links="repo_pulls checks /python/cpython/pulls" data-pjax="#repo-content-pjax-container" data-turbo-frame="repo-content-turbo-frame" data-hotkey="g p" data-command-id="repositories:go-to-pull-requests" data-analytics-event="{&quot;category&quot;:&quot;Underline navbar&quot;,&quot;action&quot;:&quot;Click tab&quot;,&quot;label&quot;:&quot;Pull requests&quot;,&quot;target&quot;:&quot;UNDERLINE_NAV.TAB&quot;}" data-view-component="true" class="UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item">
+    
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-git-pull-request UnderlineNav-octicon d-none d-sm-inline">
+    <path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354ZM3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z"></path>
+</svg>
+        <span data-content="Pull requests">Pull requests</span>
+          <span id="pull-requests-repo-tab-count" data-pjax-replace="" data-turbo-replace="" title="2,189" data-view-component="true" class="Counter">2.2k</span>
+
+
+    
+</a></li>
+      <li data-view-component="true" class="d-inline-flex">
+  <a id="actions-tab" href="/python/cpython/actions" data-tab-item="i3actions-tab" data-selected-links="repo_actions /python/cpython/actions" data-pjax="#repo-content-pjax-container" data-turbo-frame="repo-content-turbo-frame" data-hotkey="g a" data-command-id="repositories:go-to-actions" data-analytics-event="{&quot;category&quot;:&quot;Underline navbar&quot;,&quot;action&quot;:&quot;Click tab&quot;,&quot;label&quot;:&quot;Actions&quot;,&quot;target&quot;:&quot;UNDERLINE_NAV.TAB&quot;}" data-view-component="true" class="UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item">
+    
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-play UnderlineNav-octicon d-none d-sm-inline">
+    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm4.879-2.773 4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559V5.442a.25.25 0 0 1 .379-.215Z"></path>
+</svg>
+        <span data-content="Actions">Actions</span>
+          <span id="actions-repo-tab-count" data-pjax-replace="" data-turbo-replace="" title="Not available" data-view-component="true" class="Counter"></span>
+
+
+    
+</a></li>
+      <li data-view-component="true" class="d-inline-flex">
+  <a id="projects-tab" href="/python/cpython/projects" data-tab-item="i4projects-tab" data-selected-links="repo_projects new_repo_project repo_project /python/cpython/projects" data-pjax="#repo-content-pjax-container" data-turbo-frame="repo-content-turbo-frame" data-hotkey="g b" data-command-id="repositories:go-to-projects" data-analytics-event="{&quot;category&quot;:&quot;Underline navbar&quot;,&quot;action&quot;:&quot;Click tab&quot;,&quot;label&quot;:&quot;Projects&quot;,&quot;target&quot;:&quot;UNDERLINE_NAV.TAB&quot;}" data-view-component="true" class="UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item">
+    
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-table UnderlineNav-octicon d-none d-sm-inline">
+    <path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25ZM6.5 6.5v8h7.75a.25.25 0 0 0 .25-.25V6.5Zm8-1.5V1.75a.25.25 0 0 0-.25-.25H6.5V5Zm-13 1.5v7.75c0 .138.112.25.25.25H5v-8ZM5 5V1.5H1.75a.25.25 0 0 0-.25.25V5Z"></path>
+</svg>
+        <span data-content="Projects">Projects</span>
+          <span id="projects-repo-tab-count" data-pjax-replace="" data-turbo-replace="" title="Not available" data-view-component="true" class="Counter"></span>
+
+
+    
+</a></li>
+      <li data-view-component="true" class="d-inline-flex">
+  <a id="security-and-quality-tab" href="/python/cpython/security" data-tab-item="i5security-and-quality-tab" data-selected-links="security overview alerts policy token_scanning code_scanning /python/cpython/security" data-pjax="#repo-content-pjax-container" data-turbo-frame="repo-content-turbo-frame" data-hotkey="g s" data-command-id="repositories:go-to-security" data-analytics-event="{&quot;category&quot;:&quot;Underline navbar&quot;,&quot;action&quot;:&quot;Click tab&quot;,&quot;label&quot;:&quot;Security and quality&quot;,&quot;target&quot;:&quot;UNDERLINE_NAV.TAB&quot;}" data-view-component="true" class="UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item">
+    
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-shield UnderlineNav-octicon d-none d-sm-inline">
+    <path d="M7.467.133a1.748 1.748 0 0 1 1.066 0l5.25 1.68A1.75 1.75 0 0 1 15 3.48V7c0 1.566-.32 3.182-1.303 4.682-.983 1.498-2.585 2.813-5.032 3.855a1.697 1.697 0 0 1-1.33 0c-2.447-1.042-4.049-2.357-5.032-3.855C1.32 10.182 1 8.566 1 7V3.48a1.75 1.75 0 0 1 1.217-1.667Zm.61 1.429a.25.25 0 0 0-.153 0l-5.25 1.68a.25.25 0 0 0-.174.238V7c0 1.358.275 2.666 1.057 3.86.784 1.194 2.121 2.34 4.366 3.297a.196.196 0 0 0 .154 0c2.245-.956 3.582-2.104 4.366-3.298C13.225 9.666 13.5 8.36 13.5 7V3.48a.251.251 0 0 0-.174-.237l-5.25-1.68ZM8.75 4.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 1.5 0ZM9 10.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path>
+</svg>
+        <span data-content="Security and quality">Security and quality</span>
+          <span id="security-and-quality-repo-tab-count" data-pjax-replace="" data-turbo-replace="" title="0" hidden="hidden" data-view-component="true" class="Counter">0</span>
+
+
+    
+</a></li>
+      <li data-view-component="true" class="d-inline-flex">
+  <a id="insights-tab" href="/python/cpython/pulse" data-tab-item="i6insights-tab" data-selected-links="repo_graphs repo_contributors dependency_graph dependabot_updates pulse people community /python/cpython/pulse" data-pjax="#repo-content-pjax-container" data-turbo-frame="repo-content-turbo-frame" data-command-id="repositories:go-to-insights" data-analytics-event="{&quot;category&quot;:&quot;Underline navbar&quot;,&quot;action&quot;:&quot;Click tab&quot;,&quot;label&quot;:&quot;Insights&quot;,&quot;target&quot;:&quot;UNDERLINE_NAV.TAB&quot;}" data-view-component="true" class="UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item">
+    
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-graph UnderlineNav-octicon d-none d-sm-inline">
+    <path d="M1.5 1.75V13.5h13.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 1.5 0Zm14.28 2.53-5.25 5.25a.75.75 0 0 1-1.06 0L7 7.06 4.28 9.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.25-3.25a.75.75 0 0 1 1.06 0L10 7.94l4.72-4.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path>
+</svg>
+        <span data-content="Insights">Insights</span>
+          <span id="insights-repo-tab-count" data-pjax-replace="" data-turbo-replace="" title="Not available" data-view-component="true" class="Counter"></span>
+
+
+    
+</a></li>
+</ul>
+    <div style="visibility:hidden;" data-view-component="true" class="UnderlineNav-actions js-responsive-underlinenav-overflow position-absolute pr-3 tmp-pr-3 pr-md-4 tmp-pr-md-4 pr-lg-5 tmp-pr-lg-5 right-0">      <action-menu data-select-variant="none" data-view-component="true">
+  <focus-group direction="vertical" mnemonics retain>
+    <button id="action-menu-b20bda0e-e2bb-4aac-98a4-afcf7d4d8b26-button" popovertarget="action-menu-b20bda0e-e2bb-4aac-98a4-afcf7d4d8b26-overlay" aria-controls="action-menu-b20bda0e-e2bb-4aac-98a4-afcf7d4d8b26-list" aria-haspopup="true" aria-labelledby="tooltip-e424d150-2ee2-4c45-8cbc-408626122dec" type="button" data-view-component="true" class="Button Button--iconOnly Button--secondary Button--medium UnderlineNav-item">  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-kebab-horizontal Button-visual">
+    <path d="M8 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM1.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path>
+</svg>
+</button><tool-tip id="tooltip-e424d150-2ee2-4c45-8cbc-408626122dec" for="action-menu-b20bda0e-e2bb-4aac-98a4-afcf7d4d8b26-button" popover="manual" data-direction="s" data-type="label" data-view-component="true" class="sr-only position-absolute">Additional navigation options</tool-tip>
+
+
+<anchored-position data-target="action-menu.overlay" id="action-menu-b20bda0e-e2bb-4aac-98a4-afcf7d4d8b26-overlay" anchor="action-menu-b20bda0e-e2bb-4aac-98a4-afcf7d4d8b26-button" align="start" side="outside-bottom" anchor-offset="normal" popover="auto" data-view-component="true">
+  <div data-view-component="true" class="Overlay Overlay--size-auto">
+    
+      <div data-view-component="true" class="Overlay-body Overlay-body--paddingNone">          <action-list>
+  <div data-view-component="true">
+    <ul aria-labelledby="action-menu-b20bda0e-e2bb-4aac-98a4-afcf7d4d8b26-button" id="action-menu-b20bda0e-e2bb-4aac-98a4-afcf7d4d8b26-list" role="menu" data-view-component="true" class="ActionListWrap--inset ActionListWrap">
+        <li hidden="hidden" data-menu-item="i0code-tab" data-targets="action-list.items" role="none" data-view-component="true" class="ActionListItem">
+    
+    
+    <a tabindex="-1" id="item-696e69fb-6c23-4b2f-a0f0-29601220a9da" href="/python/cpython" role="menuitem" data-view-component="true" class="ActionListContent ActionListContent--visual16">
+        <span class="ActionListItem-visual ActionListItem-visual--leading">
+          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-code">
+    <path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path>
+</svg>
+        </span>
+      
+        <span data-view-component="true" class="ActionListItem-label">
+          Code
+</span>      
+</a>
+  
+</li>
+        <li hidden="hidden" data-menu-item="i1issues-tab" data-targets="action-list.items" role="none" data-view-component="true" class="ActionListItem">
+    
+    
+    <a tabindex="-1" id="item-93c2baa1-72a5-4e93-83c5-95d73c8d5aa1" href="/python/cpython/issues" role="menuitem" data-view-component="true" class="ActionListContent ActionListContent--visual16">
+        <span class="ActionListItem-visual ActionListItem-visual--leading">
+          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-issue-opened">
+    <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"></path>
+</svg>
+        </span>
+      
+        <span data-view-component="true" class="ActionListItem-label">
+          Issues
+</span>      
+</a>
+  
+</li>
+        <li hidden="hidden" data-menu-item="i2pull-requests-tab" data-targets="action-list.items" role="none" data-view-component="true" class="ActionListItem">
+    
+    
+    <a tabindex="-1" id="item-ccd90d45-3934-4542-a6f5-4a36729a2d0c" href="/python/cpython/pulls" role="menuitem" data-view-component="true" class="ActionListContent ActionListContent--visual16">
+        <span class="ActionListItem-visual ActionListItem-visual--leading">
+          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-git-pull-request">
+    <path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354ZM3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z"></path>
+</svg>
+        </span>
+      
+        <span data-view-component="true" class="ActionListItem-label">
+          Pull requests
+</span>      
+</a>
+  
+</li>
+        <li hidden="hidden" data-menu-item="i3actions-tab" data-targets="action-list.items" role="none" data-view-component="true" class="ActionListItem">
+    
+    
+    <a tabindex="-1" id="item-71ca5586-da3c-4495-af0b-8f3c233fa6c8" href="/python/cpython/actions" role="menuitem" data-view-component="true" class="ActionListContent ActionListContent--visual16">
+        <span class="ActionListItem-visual ActionListItem-visual--leading">
+          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-play">
+    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm4.879-2.773 4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559V5.442a.25.25 0 0 1 .379-.215Z"></path>
+</svg>
+        </span>
+      
+        <span data-view-component="true" class="ActionListItem-label">
+          Actions
+</span>      
+</a>
+  
+</li>
+        <li hidden="hidden" data-menu-item="i4projects-tab" data-targets="action-list.items" role="none" data-view-component="true" class="ActionListItem">
+    
+    
+    <a tabindex="-1" id="item-fba52b3d-fd09-4a38-9e43-54daea8d0afb" href="/python/cpython/projects" role="menuitem" data-view-component="true" class="ActionListContent ActionListContent--visual16">
+        <span class="ActionListItem-visual ActionListItem-visual--leading">
+          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-table">
+    <path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25ZM6.5 6.5v8h7.75a.25.25 0 0 0 .25-.25V6.5Zm8-1.5V1.75a.25.25 0 0 0-.25-.25H6.5V5Zm-13 1.5v7.75c0 .138.112.25.25.25H5v-8ZM5 5V1.5H1.75a.25.25 0 0 0-.25.25V5Z"></path>
+</svg>
+        </span>
+      
+        <span data-view-component="true" class="ActionListItem-label">
+          Projects
+</span>      
+</a>
+  
+</li>
+        <li hidden="hidden" data-menu-item="i5security-and-quality-tab" data-targets="action-list.items" role="none" data-view-component="true" class="ActionListItem">
+    
+    
+    <a tabindex="-1" id="item-f73f2cad-dc42-44b5-9a25-7cf5c2a8f223" href="/python/cpython/security" role="menuitem" data-view-component="true" class="ActionListContent ActionListContent--visual16">
+        <span class="ActionListItem-visual ActionListItem-visual--leading">
+          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-shield">
+    <path d="M7.467.133a1.748 1.748 0 0 1 1.066 0l5.25 1.68A1.75 1.75 0 0 1 15 3.48V7c0 1.566-.32 3.182-1.303 4.682-.983 1.498-2.585 2.813-5.032 3.855a1.697 1.697 0 0 1-1.33 0c-2.447-1.042-4.049-2.357-5.032-3.855C1.32 10.182 1 8.566 1 7V3.48a1.75 1.75 0 0 1 1.217-1.667Zm.61 1.429a.25.25 0 0 0-.153 0l-5.25 1.68a.25.25 0 0 0-.174.238V7c0 1.358.275 2.666 1.057 3.86.784 1.194 2.121 2.34 4.366 3.297a.196.196 0 0 0 .154 0c2.245-.956 3.582-2.104 4.366-3.298C13.225 9.666 13.5 8.36 13.5 7V3.48a.251.251 0 0 0-.174-.237l-5.25-1.68ZM8.75 4.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 1.5 0ZM9 10.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path>
+</svg>
+        </span>
+      
+        <span data-view-component="true" class="ActionListItem-label">
+          Security and quality
+</span>      
+</a>
+  
+</li>
+        <li hidden="hidden" data-menu-item="i6insights-tab" data-targets="action-list.items" role="none" data-view-component="true" class="ActionListItem">
+    
+    
+    <a tabindex="-1" id="item-a85a86ba-5170-4669-b90f-c9005b65db70" href="/python/cpython/pulse" role="menuitem" data-view-component="true" class="ActionListContent ActionListContent--visual16">
+        <span class="ActionListItem-visual ActionListItem-visual--leading">
+          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-graph">
+    <path d="M1.5 1.75V13.5h13.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 1.5 0Zm14.28 2.53-5.25 5.25a.75.75 0 0 1-1.06 0L7 7.06 4.28 9.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.25-3.25a.75.75 0 0 1 1.06 0L10 7.94l4.72-4.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path>
+</svg>
+        </span>
+      
+        <span data-view-component="true" class="ActionListItem-label">
+          Insights
+</span>      
+</a>
+  
+</li>
+</ul>    
+</div></action-list>
+
+
+</div>
+      
+</div></anchored-position>  </focus-group>
+</action-menu></div>
+</nav>
+
+  </div>
+  
+
+
+
+<turbo-frame id="repo-content-turbo-frame" target="_top" data-turbo-action="advance" class="">
+    <div id="repo-content-pjax-container" class="repository-content " >
+    
+
+
+
+    
+      
+    
+
+
+
+
+
+
+
+
+
+  
+
+
+<turbo-frame id="repo-content-turbo-frame" target="_top" data-turbo-action="advance" class=""><react-app
+  app-name="issues-react"
+  initial-path="/python/cpython/issues/142665"
+  style="display: block; min-height: calc(100vh - 64px);"
+  data-attempted-ssr="true"
+  data-ssr="true"
+  data-lazy="false"
+  data-alternate="false"
+  data-data-router-enabled="false"
+  data-react-profiling="false"
+>
+  
+  <script type="application/json" data-target="react-app.embeddedData">{"payload":{"preloaded_records":{},"structured_data":{"@context":"https://schema.org","@type":"DiscussionForumPosting","headline":"Use-after-free in `memoryview` slicing via re-entrant `__index__`","articleBody":"### What happened?\n\n`memory_subscript()` creates a new view (`mbuf_add_view`) **before** parsing slice indices. If a slice bound’s `__index__` releases/truncates the underlying buffer (e.g., `mv.release(); ftruncate()`), the newly created subview keeps a dangling pointer. Subsequent access (e.g., `sub[0]`) dereferences freed/invalid memory, crashing in `unpack_single`.\n\n**Proof of Concept:**\n```python\nimport mmap, os, tempfile\n\nfd, path = tempfile.mkstemp()\nos.write(fd, b\"A\" * 4096)\nmm = mmap.mmap(fd, 4096, access=mmap.ACCESS_WRITE)\nmv = memoryview(mm)\n\nclass Trigger:\n    def __index__(self):\n        mv.release()\n        os.ftruncate(fd, 0)\n        return 0\n\ntry:\n    sub = mv[slice(Trigger(), None, None)]\n    sub[0] # Trigger the slicing to call __index__\nfinally:\n    mm.close()\n    os.close(fd)\n    os.unlink(path)\n```\n\n**Related Code Snippet**\n\n\u003cdetails\u003e\n\n```c\nstatic PyObject *\nmemory_subscript(PyObject *_self, PyObject *key)\n{\n    PyMemoryViewObject *self = (PyMemoryViewObject *)_self;\n    Py_buffer *view;\n    view = \u0026(self-\u003eview);\n\n    CHECK_RELEASED(self);\n\n    if (view-\u003endim == 0) {\n        if (PyTuple_Check(key) \u0026\u0026 PyTuple_GET_SIZE(key) == 0) {\n            const char *fmt = adjust_fmt(view);\n            if (fmt == NULL)\n                return NULL;\n            return unpack_single(self, view-\u003ebuf, fmt);\n        }\n        else if (key == Py_Ellipsis) {\n            return Py_NewRef(self);\n        }\n        else {\n            PyErr_SetString(PyExc_TypeError,\n                \"invalid indexing of 0-dim memory\");\n            return NULL;\n        }\n    }\n\n    if (_PyIndex_Check(key)) {\n        Py_ssize_t index;\n        index = PyNumber_AsSsize_t(key, PyExc_IndexError);\n        if (index == -1 \u0026\u0026 PyErr_Occurred())\n            return NULL;\n        return memory_item((PyObject *)self, index);\n    }\n    else if (PySlice_Check(key)) {\n        CHECK_RESTRICTED(self);\n        PyMemoryViewObject *sliced;\n\n        sliced = (PyMemoryViewObject *)mbuf_add_view(self-\u003embuf, view);\n        if (sliced == NULL)\n            return NULL;\n\t\t\t\t\n\t\t// Call __index__ method which close the mmap memory while sliced still holds its pointer\n        if (init_slice(\u0026sliced-\u003eview, key, 0) \u003c 0) {\n            Py_DECREF(sliced);\n            return NULL;\n        }\n        init_len(\u0026sliced-\u003eview);\n        init_flags(sliced);\n\n        return (PyObject *)sliced;\n    }\n    else if (is_multiindex(key)) {\n        return memory_item_multi(self, key);\n    }\n    else if (is_multislice(key)) {\n        PyErr_SetString(PyExc_NotImplementedError,\n            \"multi-dimensional slicing is not implemented\");\n        return NULL;\n    }\n\n    PyErr_SetString(PyExc_TypeError, \"memoryview: invalid slice key\");\n    return NULL;\n}\n```\n\n\u003c/details\u003e\n\n**Affected Versions:**\n\u003cdetails\u003e\n\n| Python Version | Status | Exit Code |\n|---|---|---|\n| `Python 3.9.24+ (heads/3.9:9c4638d, Oct 17 2025, 11:19:30) ` | ASAN | 1 |\n| `Python 3.10.19+ (heads/3.10:0142619, Oct 17 2025, 11:20:05) [GCC 13.3.0]` | ASAN | 1 |\n| `Python 3.11.14+ (heads/3.11:88f3f5b, Oct 17 2025, 11:20:44) [GCC 13.3.0]` | ASAN | 1 |\n| `Python 3.12.12+ (heads/3.12:8cb2092, Oct 17 2025, 11:21:35) [GCC 13.3.0]` | ASAN | 1 |\n| `Python 3.13.9+ (heads/3.13:0760a57, Oct 17 2025, 11:22:25) [GCC 13.3.0]` | ASAN | 1 |\n| `Python 3.14.0+ (heads/3.14:889e918, Oct 17 2025, 11:23:02) [GCC 13.3.0]` | ASAN | 1 |\n| `Python 3.15.0a1+ (heads/main:fbf0843, Oct 17 2025, 11:23:37) [GCC 13.3.0]` | ASAN | 1 |\n\n\u003c/details\u003e\n\n**Sanitizer Output**\n\u003cdetails\u003e\n\n```python\n=================================================================\n==1532703==ERROR: AddressSanitizer: BUS on unknown address (pc 0x5ae17c7bd8ce bp 0x7fffb3a81570 sp 0x7fffb3a814b0 T0)\n==1532703==The signal is caused by a READ memory access.\n==1532703==Hint: this fault was caused by a dereference of a high value address (see register values below).  Disassemble the provided pc to learn which register was used.\n    #0 0x5ae17c7bd8ce in unpack_single Objects/memoryobject.c:1842\n    #1 0x5ae17c7be2c2 in memory_item Objects/memoryobject.c:2474\n    #2 0x5ae17c7c31d6 in memory_subscript Objects/memoryobject.c:2610\n    #3 0x5ae17c6e5393 in PyObject_GetItem Objects/abstract.c:163\n    #4 0x5ae17c98a8f8 in _PyEval_EvalFrameDefault Python/generated_cases.c.h:62\n    #5 0x5ae17c9d7e54 in _PyEval_EvalFrame Include/internal/pycore_ceval.h:121\n    #6 0x5ae17c9d8148 in _PyEval_Vector Python/ceval.c:2001\n    #7 0x5ae17c9d83f8 in PyEval_EvalCode Python/ceval.c:884\n    #8 0x5ae17cacf507 in run_eval_code_obj Python/pythonrun.c:1365\n    #9 0x5ae17cacf723 in run_mod Python/pythonrun.c:1459\n    #10 0x5ae17cad057a in pyrun_file Python/pythonrun.c:1293\n    #11 0x5ae17cad3220 in _PyRun_SimpleFileObject Python/pythonrun.c:521\n    #12 0x5ae17cad34f6 in _PyRun_AnyFileObject Python/pythonrun.c:81\n    #13 0x5ae17cb2474d in pymain_run_file_obj Modules/main.c:410\n    #14 0x5ae17cb249b4 in pymain_run_file Modules/main.c:429\n    #15 0x5ae17cb261b2 in pymain_run_python Modules/main.c:691\n    #16 0x5ae17cb26842 in Py_RunMain Modules/main.c:772\n    #17 0x5ae17cb26a2e in pymain_main Modules/main.c:802\n    #18 0x5ae17cb26db3 in Py_BytesMain Modules/main.c:826\n    #19 0x5ae17c5aa645 in main Programs/python.c:15\n    #20 0x715a34c2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #21 0x715a34c2a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #22 0x5ae17c5aa574 in _start (/home/jackfromeast/Desktop/entropy/tasks/grammar-afl++-latest/targets/cpython/python+0x2dd574) (BuildId: ff3dc40ea460bd4beb2c3a72283cca525b319bf0)\n\nAddressSanitizer can not provide additional info.\nSUMMARY: AddressSanitizer: BUS Objects/memoryobject.c:1842 in unpack_single\n==1532703==ABORTING\n```\n\u003c/details\u003e\n\n\n\n\u003c!-- gh-linked-prs --\u003e\n### Linked PRs\n* gh-143324\n\u003c!-- /gh-linked-prs --\u003e\n","author":{"url":"https://github.com/jackfromeast","@type":"Person","name":"jackfromeast"},"datePublished":"2025-12-13T14:35:27.000Z","interactionStatistic":{"@type":"InteractionCounter","interactionType":"https://schema.org/CommentAction","userInteractionCount":0},"url":"https://github.com/142665/cpython/issues/142665"},"best_match_sort_enabled":false,"tabbed_timeline":false,"preloadedQueries":[{"queryId":"930f2e0464d1b74cdd206ed7f12d0b19","queryName":"IssueViewerViewQuery","variables":{"count":15,"number":142665,"owner":"python","repo":"cpython"},"result":{"data":{"repository":{"id":"MDEwOlJlcG9zaXRvcnk4MTU5ODk2MQ==","isOwnerEnterpriseManaged":false,"owner":{"__typename":"Organization","userNameDisplayConfiguration":"HANDLE","id":"MDEyOk9yZ2FuaXphdGlvbjE1MjU5ODE="},"issue":{"id":"I_kwDOBN0Z8c7eFszW","number":142665,"repository":{"name":"cpython","owner":{"__typename":"Organization","login":"python","id":"MDEyOk9yZ2FuaXphdGlvbjE1MjU5ODE=","url":"https://github.com/python","databaseId":1525981,"issueFieldsEnabled":false,"pinnedIssueFields":{"nodes":[]}},"id":"MDEwOlJlcG9zaXRvcnk4MTU5ODk2MQ==","nameWithOwner":"python/cpython","isArchived":false,"isWritable":true,"isPrivate":false,"databaseId":81598961,"slashCommandsEnabled":false,"visibility":"PUBLIC","viewerCanPush":false,"viewerCanInteract":false,"viewerInteractionLimitReasonHTML":"","isCopilotAgentEnabled":null,"pinnedIssues":{"totalCount":0},"viewerCanPinIssues":false,"viewerIssueCreationPermissions":{"triageable":false},"issueTypes":{"edges":[]}},"updatedAt":"2026-01-01T11:43:05Z","title":"Use-after-free in `memoryview` slicing via re-entrant `__index__`","titleHTML":"Use-after-free in \u003ccode\u003ememoryview\u003c/code\u003e slicing via re-entrant \u003ccode\u003e__index__\u003c/code\u003e","url":"https://github.com/python/cpython/issues/142665","viewerCanUpdateNext":false,"issueType":null,"state":"OPEN","stateReason":null,"duplicateOf":null,"linkedPullRequests":{"nodes":[]},"agentAssignments":[],"linkedPullRequestsIncludingClosed":{"nodes":[]},"subIssuesSummary":{"total":0,"completed":0},"__isLabelable":"Issue","labels":{"edges":[{"node":{"id":"LA_kwDOBN0Z8c7viASu","color":"09fc59","name":"interpreter-core","nameHTML":"interpreter-core","description":"(Objects, Python, Grammar, and Parser dirs)","url":"https://github.com/python/cpython/labels/interpreter-core","__typename":"Label"},"cursor":"MQ"},{"node":{"id":"LA_kwDOBN0Z8c7visSS","color":"b60205","name":"type-crash","nameHTML":"type-crash","description":"A hard crash of the interpreter, possibly with a core dump","url":"https://github.com/python/cpython/labels/type-crash","__typename":"Label"},"cursor":"Mg"}],"pageInfo":{"endCursor":"Mg","hasNextPage":false}},"__isNode":"Issue","assignedActors":{"nodes":[{"__typename":"User","__isActor":"User","id":"MDQ6VXNlcjEwNzk2NjAw","login":"picnixz","name":"Bénédikt Tran","profileResourcePath":"/picnixz","avatarUrl":"https://avatars.githubusercontent.com/u/10796600?s=64\u0026v=4","__isNode":"User"}]},"milestone":null,"databaseId":3726036182,"viewerDidAuthor":false,"locked":false,"author":{"__isActor":"User","login":"jackfromeast","id":"MDQ6VXNlcjUxMjQyMDAz","profileUrl":"https://github.com/jackfromeast","name":"jackfromeast","avatarUrl":"https://avatars.githubusercontent.com/u/51242003?u=08a4e48995963085a26735cf0b8e3eeb44398825\u0026v=4","__typename":"User"},"__isComment":"Issue","body":"### What happened?\n\n`memory_subscript()` creates a new view (`mbuf_add_view`) **before** parsing slice indices. If a slice bound’s `__index__` releases/truncates the underlying buffer (e.g., `mv.release(); ftruncate()`), the newly created subview keeps a dangling pointer. Subsequent access (e.g., `sub[0]`) dereferences freed/invalid memory, crashing in `unpack_single`.\n\n**Proof of Concept:**\n```python\nimport mmap, os, tempfile\n\nfd, path = tempfile.mkstemp()\nos.write(fd, b\"A\" * 4096)\nmm = mmap.mmap(fd, 4096, access=mmap.ACCESS_WRITE)\nmv = memoryview(mm)\n\nclass Trigger:\n    def __index__(self):\n        mv.release()\n        os.ftruncate(fd, 0)\n        return 0\n\ntry:\n    sub = mv[slice(Trigger(), None, None)]\n    sub[0] # Trigger the slicing to call __index__\nfinally:\n    mm.close()\n    os.close(fd)\n    os.unlink(path)\n```\n\n**Related Code Snippet**\n\n\u003cdetails\u003e\n\n```c\nstatic PyObject *\nmemory_subscript(PyObject *_self, PyObject *key)\n{\n    PyMemoryViewObject *self = (PyMemoryViewObject *)_self;\n    Py_buffer *view;\n    view = \u0026(self-\u003eview);\n\n    CHECK_RELEASED(self);\n\n    if (view-\u003endim == 0) {\n        if (PyTuple_Check(key) \u0026\u0026 PyTuple_GET_SIZE(key) == 0) {\n            const char *fmt = adjust_fmt(view);\n            if (fmt == NULL)\n                return NULL;\n            return unpack_single(self, view-\u003ebuf, fmt);\n        }\n        else if (key == Py_Ellipsis) {\n            return Py_NewRef(self);\n        }\n        else {\n            PyErr_SetString(PyExc_TypeError,\n                \"invalid indexing of 0-dim memory\");\n            return NULL;\n        }\n    }\n\n    if (_PyIndex_Check(key)) {\n        Py_ssize_t index;\n        index = PyNumber_AsSsize_t(key, PyExc_IndexError);\n        if (index == -1 \u0026\u0026 PyErr_Occurred())\n            return NULL;\n        return memory_item((PyObject *)self, index);\n    }\n    else if (PySlice_Check(key)) {\n        CHECK_RESTRICTED(self);\n        PyMemoryViewObject *sliced;\n\n        sliced = (PyMemoryViewObject *)mbuf_add_view(self-\u003embuf, view);\n        if (sliced == NULL)\n            return NULL;\n\t\t\t\t\n\t\t// Call __index__ method which close the mmap memory while sliced still holds its pointer\n        if (init_slice(\u0026sliced-\u003eview, key, 0) \u003c 0) {\n            Py_DECREF(sliced);\n            return NULL;\n        }\n        init_len(\u0026sliced-\u003eview);\n        init_flags(sliced);\n\n        return (PyObject *)sliced;\n    }\n    else if (is_multiindex(key)) {\n        return memory_item_multi(self, key);\n    }\n    else if (is_multislice(key)) {\n        PyErr_SetString(PyExc_NotImplementedError,\n            \"multi-dimensional slicing is not implemented\");\n        return NULL;\n    }\n\n    PyErr_SetString(PyExc_TypeError, \"memoryview: invalid slice key\");\n    return NULL;\n}\n```\n\n\u003c/details\u003e\n\n**Affected Versions:**\n\u003cdetails\u003e\n\n| Python Version | Status | Exit Code |\n|---|---|---|\n| `Python 3.9.24+ (heads/3.9:9c4638d, Oct 17 2025, 11:19:30) ` | ASAN | 1 |\n| `Python 3.10.19+ (heads/3.10:0142619, Oct 17 2025, 11:20:05) [GCC 13.3.0]` | ASAN | 1 |\n| `Python 3.11.14+ (heads/3.11:88f3f5b, Oct 17 2025, 11:20:44) [GCC 13.3.0]` | ASAN | 1 |\n| `Python 3.12.12+ (heads/3.12:8cb2092, Oct 17 2025, 11:21:35) [GCC 13.3.0]` | ASAN | 1 |\n| `Python 3.13.9+ (heads/3.13:0760a57, Oct 17 2025, 11:22:25) [GCC 13.3.0]` | ASAN | 1 |\n| `Python 3.14.0+ (heads/3.14:889e918, Oct 17 2025, 11:23:02) [GCC 13.3.0]` | ASAN | 1 |\n| `Python 3.15.0a1+ (heads/main:fbf0843, Oct 17 2025, 11:23:37) [GCC 13.3.0]` | ASAN | 1 |\n\n\u003c/details\u003e\n\n**Sanitizer Output**\n\u003cdetails\u003e\n\n```python\n=================================================================\n==1532703==ERROR: AddressSanitizer: BUS on unknown address (pc 0x5ae17c7bd8ce bp 0x7fffb3a81570 sp 0x7fffb3a814b0 T0)\n==1532703==The signal is caused by a READ memory access.\n==1532703==Hint: this fault was caused by a dereference of a high value address (see register values below).  Disassemble the provided pc to learn which register was used.\n    #0 0x5ae17c7bd8ce in unpack_single Objects/memoryobject.c:1842\n    #1 0x5ae17c7be2c2 in memory_item Objects/memoryobject.c:2474\n    #2 0x5ae17c7c31d6 in memory_subscript Objects/memoryobject.c:2610\n    #3 0x5ae17c6e5393 in PyObject_GetItem Objects/abstract.c:163\n    #4 0x5ae17c98a8f8 in _PyEval_EvalFrameDefault Python/generated_cases.c.h:62\n    #5 0x5ae17c9d7e54 in _PyEval_EvalFrame Include/internal/pycore_ceval.h:121\n    #6 0x5ae17c9d8148 in _PyEval_Vector Python/ceval.c:2001\n    #7 0x5ae17c9d83f8 in PyEval_EvalCode Python/ceval.c:884\n    #8 0x5ae17cacf507 in run_eval_code_obj Python/pythonrun.c:1365\n    #9 0x5ae17cacf723 in run_mod Python/pythonrun.c:1459\n    #10 0x5ae17cad057a in pyrun_file Python/pythonrun.c:1293\n    #11 0x5ae17cad3220 in _PyRun_SimpleFileObject Python/pythonrun.c:521\n    #12 0x5ae17cad34f6 in _PyRun_AnyFileObject Python/pythonrun.c:81\n    #13 0x5ae17cb2474d in pymain_run_file_obj Modules/main.c:410\n    #14 0x5ae17cb249b4 in pymain_run_file Modules/main.c:429\n    #15 0x5ae17cb261b2 in pymain_run_python Modules/main.c:691\n    #16 0x5ae17cb26842 in Py_RunMain Modules/main.c:772\n    #17 0x5ae17cb26a2e in pymain_main Modules/main.c:802\n    #18 0x5ae17cb26db3 in Py_BytesMain Modules/main.c:826\n    #19 0x5ae17c5aa645 in main Programs/python.c:15\n    #20 0x715a34c2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #21 0x715a34c2a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #22 0x5ae17c5aa574 in _start (/home/jackfromeast/Desktop/entropy/tasks/grammar-afl++-latest/targets/cpython/python+0x2dd574) (BuildId: ff3dc40ea460bd4beb2c3a72283cca525b319bf0)\n\nAddressSanitizer can not provide additional info.\nSUMMARY: AddressSanitizer: BUS Objects/memoryobject.c:1842 in unpack_single\n==1532703==ABORTING\n```\n\u003c/details\u003e\n\n\n\n\u003c!-- gh-linked-prs --\u003e\n### Linked PRs\n* gh-143324\n\u003c!-- /gh-linked-prs --\u003e\n","bodyHTML":"\u003ch3 dir=\"auto\"\u003eWhat happened?\u003c/h3\u003e\n\u003cp dir=\"auto\"\u003e\u003ccode class=\"notranslate\"\u003ememory_subscript()\u003c/code\u003e creates a new view (\u003ccode class=\"notranslate\"\u003embuf_add_view\u003c/code\u003e) \u003cstrong\u003ebefore\u003c/strong\u003e parsing slice indices. If a slice bound’s \u003ccode class=\"notranslate\"\u003e__index__\u003c/code\u003e releases/truncates the underlying buffer (e.g., \u003ccode class=\"notranslate\"\u003emv.release(); ftruncate()\u003c/code\u003e), the newly created subview keeps a dangling pointer. Subsequent access (e.g., \u003ccode class=\"notranslate\"\u003esub[0]\u003c/code\u003e) dereferences freed/invalid memory, crashing in \u003ccode class=\"notranslate\"\u003eunpack_single\u003c/code\u003e.\u003c/p\u003e\n\u003cp dir=\"auto\"\u003e\u003cstrong\u003eProof of Concept:\u003c/strong\u003e\u003c/p\u003e\n\u003cdiv class=\"highlight highlight-source-python notranslate position-relative overflow-auto\" dir=\"auto\" data-snippet-clipboard-copy-content=\"import mmap, os, tempfile\n\nfd, path = tempfile.mkstemp()\nos.write(fd, b\u0026quot;A\u0026quot; * 4096)\nmm = mmap.mmap(fd, 4096, access=mmap.ACCESS_WRITE)\nmv = memoryview(mm)\n\nclass Trigger:\n    def __index__(self):\n        mv.release()\n        os.ftruncate(fd, 0)\n        return 0\n\ntry:\n    sub = mv[slice(Trigger(), None, None)]\n    sub[0] # Trigger the slicing to call __index__\nfinally:\n    mm.close()\n    os.close(fd)\n    os.unlink(path)\"\u003e\u003cpre class=\"notranslate\"\u003e\u003cspan class=\"pl-k\"\u003eimport\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003emmap\u003c/span\u003e, \u003cspan class=\"pl-s1\"\u003eos\u003c/span\u003e, \u003cspan class=\"pl-s1\"\u003etempfile\u003c/span\u003e\n\n\u003cspan class=\"pl-s1\"\u003efd\u003c/span\u003e, \u003cspan class=\"pl-s1\"\u003epath\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e=\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003etempfile\u003c/span\u003e.\u003cspan class=\"pl-c1\"\u003emkstemp\u003c/span\u003e()\n\u003cspan class=\"pl-s1\"\u003eos\u003c/span\u003e.\u003cspan class=\"pl-c1\"\u003ewrite\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003efd\u003c/span\u003e, \u003cspan class=\"pl-s\"\u003eb\"A\"\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e*\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e4096\u003c/span\u003e)\n\u003cspan class=\"pl-s1\"\u003emm\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e=\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003emmap\u003c/span\u003e.\u003cspan class=\"pl-c1\"\u003emmap\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003efd\u003c/span\u003e, \u003cspan class=\"pl-c1\"\u003e4096\u003c/span\u003e, \u003cspan class=\"pl-s1\"\u003eaccess\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e=\u003c/span\u003e\u003cspan class=\"pl-s1\"\u003emmap\u003c/span\u003e.\u003cspan class=\"pl-c1\"\u003eACCESS_WRITE\u003c/span\u003e)\n\u003cspan class=\"pl-s1\"\u003emv\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e=\u003c/span\u003e \u003cspan class=\"pl-en\"\u003ememoryview\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003emm\u003c/span\u003e)\n\n\u003cspan class=\"pl-k\"\u003eclass\u003c/span\u003e \u003cspan class=\"pl-v\"\u003eTrigger\u003c/span\u003e:\n    \u003cspan class=\"pl-k\"\u003edef\u003c/span\u003e \u003cspan class=\"pl-en\"\u003e__index__\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003eself\u003c/span\u003e):\n        \u003cspan class=\"pl-s1\"\u003emv\u003c/span\u003e.\u003cspan class=\"pl-c1\"\u003erelease\u003c/span\u003e()\n        \u003cspan class=\"pl-s1\"\u003eos\u003c/span\u003e.\u003cspan class=\"pl-c1\"\u003eftruncate\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003efd\u003c/span\u003e, \u003cspan class=\"pl-c1\"\u003e0\u003c/span\u003e)\n        \u003cspan class=\"pl-k\"\u003ereturn\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e0\u003c/span\u003e\n\n\u003cspan class=\"pl-k\"\u003etry\u003c/span\u003e:\n    \u003cspan class=\"pl-s1\"\u003esub\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e=\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003emv\u003c/span\u003e[\u003cspan class=\"pl-en\"\u003eslice\u003c/span\u003e(\u003cspan class=\"pl-en\"\u003eTrigger\u003c/span\u003e(), \u003cspan class=\"pl-c1\"\u003eNone\u003c/span\u003e, \u003cspan class=\"pl-c1\"\u003eNone\u003c/span\u003e)]\n    \u003cspan class=\"pl-s1\"\u003esub\u003c/span\u003e[\u003cspan class=\"pl-c1\"\u003e0\u003c/span\u003e] \u003cspan class=\"pl-c\"\u003e# Trigger the slicing to call __index__\u003c/span\u003e\n\u003cspan class=\"pl-k\"\u003efinally\u003c/span\u003e:\n    \u003cspan class=\"pl-s1\"\u003emm\u003c/span\u003e.\u003cspan class=\"pl-c1\"\u003eclose\u003c/span\u003e()\n    \u003cspan class=\"pl-s1\"\u003eos\u003c/span\u003e.\u003cspan class=\"pl-c1\"\u003eclose\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003efd\u003c/span\u003e)\n    \u003cspan class=\"pl-s1\"\u003eos\u003c/span\u003e.\u003cspan class=\"pl-c1\"\u003eunlink\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003epath\u003c/span\u003e)\u003c/pre\u003e\u003c/div\u003e\n\u003cp dir=\"auto\"\u003e\u003cstrong\u003eRelated Code Snippet\u003c/strong\u003e\u003c/p\u003e\n\u003cdetails\u003e\u003csummary\u003eDetails\u003c/summary\u003e\n\u003cdiv class=\"highlight highlight-source-c notranslate position-relative overflow-auto\" dir=\"auto\" data-snippet-clipboard-copy-content=\"static PyObject *\nmemory_subscript(PyObject *_self, PyObject *key)\n{\n    PyMemoryViewObject *self = (PyMemoryViewObject *)_self;\n    Py_buffer *view;\n    view = \u0026amp;(self-\u0026gt;view);\n\n    CHECK_RELEASED(self);\n\n    if (view-\u0026gt;ndim == 0) {\n        if (PyTuple_Check(key) \u0026amp;\u0026amp; PyTuple_GET_SIZE(key) == 0) {\n            const char *fmt = adjust_fmt(view);\n            if (fmt == NULL)\n                return NULL;\n            return unpack_single(self, view-\u0026gt;buf, fmt);\n        }\n        else if (key == Py_Ellipsis) {\n            return Py_NewRef(self);\n        }\n        else {\n            PyErr_SetString(PyExc_TypeError,\n                \u0026quot;invalid indexing of 0-dim memory\u0026quot;);\n            return NULL;\n        }\n    }\n\n    if (_PyIndex_Check(key)) {\n        Py_ssize_t index;\n        index = PyNumber_AsSsize_t(key, PyExc_IndexError);\n        if (index == -1 \u0026amp;\u0026amp; PyErr_Occurred())\n            return NULL;\n        return memory_item((PyObject *)self, index);\n    }\n    else if (PySlice_Check(key)) {\n        CHECK_RESTRICTED(self);\n        PyMemoryViewObject *sliced;\n\n        sliced = (PyMemoryViewObject *)mbuf_add_view(self-\u0026gt;mbuf, view);\n        if (sliced == NULL)\n            return NULL;\n\t\t\t\t\n\t\t// Call __index__ method which close the mmap memory while sliced still holds its pointer\n        if (init_slice(\u0026amp;sliced-\u0026gt;view, key, 0) \u0026lt; 0) {\n            Py_DECREF(sliced);\n            return NULL;\n        }\n        init_len(\u0026amp;sliced-\u0026gt;view);\n        init_flags(sliced);\n\n        return (PyObject *)sliced;\n    }\n    else if (is_multiindex(key)) {\n        return memory_item_multi(self, key);\n    }\n    else if (is_multislice(key)) {\n        PyErr_SetString(PyExc_NotImplementedError,\n            \u0026quot;multi-dimensional slicing is not implemented\u0026quot;);\n        return NULL;\n    }\n\n    PyErr_SetString(PyExc_TypeError, \u0026quot;memoryview: invalid slice key\u0026quot;);\n    return NULL;\n}\"\u003e\u003cpre class=\"notranslate\"\u003e\u003cspan class=\"pl-k\"\u003estatic\u003c/span\u003e \u003cspan class=\"pl-smi\"\u003ePyObject\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e*\u003c/span\u003e\n\u003cspan class=\"pl-en\"\u003ememory_subscript\u003c/span\u003e(\u003cspan class=\"pl-smi\"\u003ePyObject\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e*\u003c/span\u003e\u003cspan class=\"pl-s1\"\u003e_self\u003c/span\u003e, \u003cspan class=\"pl-smi\"\u003ePyObject\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e*\u003c/span\u003e\u003cspan class=\"pl-s1\"\u003ekey\u003c/span\u003e)\n{\n    \u003cspan class=\"pl-smi\"\u003ePyMemoryViewObject\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e*\u003c/span\u003e\u003cspan class=\"pl-s1\"\u003eself\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e=\u003c/span\u003e (\u003cspan class=\"pl-smi\"\u003ePyMemoryViewObject\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e*\u003c/span\u003e)\u003cspan class=\"pl-s1\"\u003e_self\u003c/span\u003e;\n    \u003cspan class=\"pl-smi\"\u003ePy_buffer\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e*\u003c/span\u003e\u003cspan class=\"pl-s1\"\u003eview\u003c/span\u003e;\n    \u003cspan class=\"pl-s1\"\u003eview\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e=\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e\u0026amp;\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003eself\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e-\u0026gt;\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003eview\u003c/span\u003e);\n\n    \u003cspan class=\"pl-en\"\u003eCHECK_RELEASED\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003eself\u003c/span\u003e);\n\n    \u003cspan class=\"pl-k\"\u003eif\u003c/span\u003e (\u003cspan class=\"pl-s1\"\u003eview\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e-\u0026gt;\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003endim\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e0\u003c/span\u003e) {\n        \u003cspan class=\"pl-k\"\u003eif\u003c/span\u003e (\u003cspan class=\"pl-en\"\u003ePyTuple_Check\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003ekey\u003c/span\u003e) \u003cspan class=\"pl-c1\"\u003e\u0026amp;\u0026amp;\u003c/span\u003e \u003cspan class=\"pl-en\"\u003ePyTuple_GET_SIZE\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003ekey\u003c/span\u003e) \u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e0\u003c/span\u003e) {\n            \u003cspan class=\"pl-k\"\u003econst\u003c/span\u003e \u003cspan class=\"pl-smi\"\u003echar\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e*\u003c/span\u003e\u003cspan class=\"pl-s1\"\u003efmt\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e=\u003c/span\u003e \u003cspan class=\"pl-en\"\u003eadjust_fmt\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003eview\u003c/span\u003e);\n            \u003cspan class=\"pl-k\"\u003eif\u003c/span\u003e (\u003cspan class=\"pl-s1\"\u003efmt\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003eNULL\u003c/span\u003e)\n                \u003cspan class=\"pl-k\"\u003ereturn\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003eNULL\u003c/span\u003e;\n            \u003cspan class=\"pl-k\"\u003ereturn\u003c/span\u003e \u003cspan class=\"pl-en\"\u003eunpack_single\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003eself\u003c/span\u003e, \u003cspan class=\"pl-s1\"\u003eview\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e-\u0026gt;\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003ebuf\u003c/span\u003e, \u003cspan class=\"pl-s1\"\u003efmt\u003c/span\u003e);\n        }\n        \u003cspan class=\"pl-k\"\u003eelse\u003c/span\u003e \u003cspan class=\"pl-k\"\u003eif\u003c/span\u003e (\u003cspan class=\"pl-s1\"\u003ekey\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003ePy_Ellipsis\u003c/span\u003e) {\n            \u003cspan class=\"pl-k\"\u003ereturn\u003c/span\u003e \u003cspan class=\"pl-en\"\u003ePy_NewRef\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003eself\u003c/span\u003e);\n        }\n        \u003cspan class=\"pl-k\"\u003eelse\u003c/span\u003e {\n            \u003cspan class=\"pl-en\"\u003ePyErr_SetString\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003ePyExc_TypeError\u003c/span\u003e,\n                \u003cspan class=\"pl-s\"\u003e\"invalid indexing of 0-dim memory\"\u003c/span\u003e);\n            \u003cspan class=\"pl-k\"\u003ereturn\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003eNULL\u003c/span\u003e;\n        }\n    }\n\n    \u003cspan class=\"pl-k\"\u003eif\u003c/span\u003e (\u003cspan class=\"pl-en\"\u003e_PyIndex_Check\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003ekey\u003c/span\u003e)) {\n        \u003cspan class=\"pl-smi\"\u003ePy_ssize_t\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003eindex\u003c/span\u003e;\n        \u003cspan class=\"pl-s1\"\u003eindex\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e=\u003c/span\u003e \u003cspan class=\"pl-en\"\u003ePyNumber_AsSsize_t\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003ekey\u003c/span\u003e, \u003cspan class=\"pl-s1\"\u003ePyExc_IndexError\u003c/span\u003e);\n        \u003cspan class=\"pl-k\"\u003eif\u003c/span\u003e (\u003cspan class=\"pl-s1\"\u003eindex\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e-1\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e\u0026amp;\u0026amp;\u003c/span\u003e \u003cspan class=\"pl-en\"\u003ePyErr_Occurred\u003c/span\u003e())\n            \u003cspan class=\"pl-k\"\u003ereturn\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003eNULL\u003c/span\u003e;\n        \u003cspan class=\"pl-k\"\u003ereturn\u003c/span\u003e \u003cspan class=\"pl-en\"\u003ememory_item\u003c/span\u003e((\u003cspan class=\"pl-smi\"\u003ePyObject\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e*\u003c/span\u003e)\u003cspan class=\"pl-s1\"\u003eself\u003c/span\u003e, \u003cspan class=\"pl-s1\"\u003eindex\u003c/span\u003e);\n    }\n    \u003cspan class=\"pl-k\"\u003eelse\u003c/span\u003e \u003cspan class=\"pl-k\"\u003eif\u003c/span\u003e (\u003cspan class=\"pl-en\"\u003ePySlice_Check\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003ekey\u003c/span\u003e)) {\n        \u003cspan class=\"pl-en\"\u003eCHECK_RESTRICTED\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003eself\u003c/span\u003e);\n        \u003cspan class=\"pl-smi\"\u003ePyMemoryViewObject\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e*\u003c/span\u003e\u003cspan class=\"pl-s1\"\u003esliced\u003c/span\u003e;\n\n        \u003cspan class=\"pl-s1\"\u003esliced\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e=\u003c/span\u003e (\u003cspan class=\"pl-smi\"\u003ePyMemoryViewObject\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e*\u003c/span\u003e)\u003cspan class=\"pl-en\"\u003embuf_add_view\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003eself\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e-\u0026gt;\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003embuf\u003c/span\u003e, \u003cspan class=\"pl-s1\"\u003eview\u003c/span\u003e);\n        \u003cspan class=\"pl-k\"\u003eif\u003c/span\u003e (\u003cspan class=\"pl-s1\"\u003esliced\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003eNULL\u003c/span\u003e)\n            \u003cspan class=\"pl-k\"\u003ereturn\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003eNULL\u003c/span\u003e;\n\t\t\t\t\n\t\t\u003cspan class=\"pl-c\"\u003e// Call __index__ method which close the mmap memory while sliced still holds its pointer\u003c/span\u003e\n        \u003cspan class=\"pl-k\"\u003eif\u003c/span\u003e (\u003cspan class=\"pl-en\"\u003einit_slice\u003c/span\u003e(\u003cspan class=\"pl-c1\"\u003e\u0026amp;\u003c/span\u003e\u003cspan class=\"pl-s1\"\u003esliced\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e-\u0026gt;\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003eview\u003c/span\u003e, \u003cspan class=\"pl-s1\"\u003ekey\u003c/span\u003e, \u003cspan class=\"pl-c1\"\u003e0\u003c/span\u003e) \u003cspan class=\"pl-c1\"\u003e\u0026lt;\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e0\u003c/span\u003e) {\n            \u003cspan class=\"pl-en\"\u003ePy_DECREF\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003esliced\u003c/span\u003e);\n            \u003cspan class=\"pl-k\"\u003ereturn\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003eNULL\u003c/span\u003e;\n        }\n        \u003cspan class=\"pl-en\"\u003einit_len\u003c/span\u003e(\u003cspan class=\"pl-c1\"\u003e\u0026amp;\u003c/span\u003e\u003cspan class=\"pl-s1\"\u003esliced\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e-\u0026gt;\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003eview\u003c/span\u003e);\n        \u003cspan class=\"pl-en\"\u003einit_flags\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003esliced\u003c/span\u003e);\n\n        \u003cspan class=\"pl-k\"\u003ereturn\u003c/span\u003e (\u003cspan class=\"pl-smi\"\u003ePyObject\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e*\u003c/span\u003e)\u003cspan class=\"pl-s1\"\u003esliced\u003c/span\u003e;\n    }\n    \u003cspan class=\"pl-k\"\u003eelse\u003c/span\u003e \u003cspan class=\"pl-k\"\u003eif\u003c/span\u003e (\u003cspan class=\"pl-en\"\u003eis_multiindex\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003ekey\u003c/span\u003e)) {\n        \u003cspan class=\"pl-k\"\u003ereturn\u003c/span\u003e \u003cspan class=\"pl-en\"\u003ememory_item_multi\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003eself\u003c/span\u003e, \u003cspan class=\"pl-s1\"\u003ekey\u003c/span\u003e);\n    }\n    \u003cspan class=\"pl-k\"\u003eelse\u003c/span\u003e \u003cspan class=\"pl-k\"\u003eif\u003c/span\u003e (\u003cspan class=\"pl-en\"\u003eis_multislice\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003ekey\u003c/span\u003e)) {\n        \u003cspan class=\"pl-en\"\u003ePyErr_SetString\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003ePyExc_NotImplementedError\u003c/span\u003e,\n            \u003cspan class=\"pl-s\"\u003e\"multi-dimensional slicing is not implemented\"\u003c/span\u003e);\n        \u003cspan class=\"pl-k\"\u003ereturn\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003eNULL\u003c/span\u003e;\n    }\n\n    \u003cspan class=\"pl-en\"\u003ePyErr_SetString\u003c/span\u003e(\u003cspan class=\"pl-s1\"\u003ePyExc_TypeError\u003c/span\u003e, \u003cspan class=\"pl-s\"\u003e\"memoryview: invalid slice key\"\u003c/span\u003e);\n    \u003cspan class=\"pl-k\"\u003ereturn\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003eNULL\u003c/span\u003e;\n}\u003c/pre\u003e\u003c/div\u003e\n\u003c/details\u003e\n\u003cp dir=\"auto\"\u003e\u003cstrong\u003eAffected Versions:\u003c/strong\u003e\u003c/p\u003e\n\u003cdetails\u003e\u003csummary\u003eDetails\u003c/summary\u003e\n\u003ctable role=\"table\"\u003e\n\u003cthead\u003e\n\u003ctr\u003e\n\u003cth\u003ePython Version\u003c/th\u003e\n\u003cth\u003eStatus\u003c/th\u003e\n\u003cth\u003eExit Code\u003c/th\u003e\n\u003c/tr\u003e\n\u003c/thead\u003e\n\u003ctbody\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u003ccode class=\"notranslate\"\u003ePython 3.9.24+ (heads/3.9:9c4638d, Oct 17 2025, 11:19:30) \u003c/code\u003e\u003c/td\u003e\n\u003ctd\u003eASAN\u003c/td\u003e\n\u003ctd\u003e1\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u003ccode class=\"notranslate\"\u003ePython 3.10.19+ (heads/3.10:0142619, Oct 17 2025, 11:20:05) [GCC 13.3.0]\u003c/code\u003e\u003c/td\u003e\n\u003ctd\u003eASAN\u003c/td\u003e\n\u003ctd\u003e1\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u003ccode class=\"notranslate\"\u003ePython 3.11.14+ (heads/3.11:88f3f5b, Oct 17 2025, 11:20:44) [GCC 13.3.0]\u003c/code\u003e\u003c/td\u003e\n\u003ctd\u003eASAN\u003c/td\u003e\n\u003ctd\u003e1\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u003ccode class=\"notranslate\"\u003ePython 3.12.12+ (heads/3.12:8cb2092, Oct 17 2025, 11:21:35) [GCC 13.3.0]\u003c/code\u003e\u003c/td\u003e\n\u003ctd\u003eASAN\u003c/td\u003e\n\u003ctd\u003e1\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u003ccode class=\"notranslate\"\u003ePython 3.13.9+ (heads/3.13:0760a57, Oct 17 2025, 11:22:25) [GCC 13.3.0]\u003c/code\u003e\u003c/td\u003e\n\u003ctd\u003eASAN\u003c/td\u003e\n\u003ctd\u003e1\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u003ccode class=\"notranslate\"\u003ePython 3.14.0+ (heads/3.14:889e918, Oct 17 2025, 11:23:02) [GCC 13.3.0]\u003c/code\u003e\u003c/td\u003e\n\u003ctd\u003eASAN\u003c/td\u003e\n\u003ctd\u003e1\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u003ccode class=\"notranslate\"\u003ePython 3.15.0a1+ (heads/main:fbf0843, Oct 17 2025, 11:23:37) [GCC 13.3.0]\u003c/code\u003e\u003c/td\u003e\n\u003ctd\u003eASAN\u003c/td\u003e\n\u003ctd\u003e1\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\n\u003c/table\u003e\n\u003c/details\u003e\n\u003cp dir=\"auto\"\u003e\u003cstrong\u003eSanitizer Output\u003c/strong\u003e\u003c/p\u003e\n\u003cdetails\u003e\u003csummary\u003eDetails\u003c/summary\u003e\n\u003cdiv class=\"highlight highlight-source-python notranslate position-relative overflow-auto\" dir=\"auto\" data-snippet-clipboard-copy-content=\"=================================================================\n==1532703==ERROR: AddressSanitizer: BUS on unknown address (pc 0x5ae17c7bd8ce bp 0x7fffb3a81570 sp 0x7fffb3a814b0 T0)\n==1532703==The signal is caused by a READ memory access.\n==1532703==Hint: this fault was caused by a dereference of a high value address (see register values below).  Disassemble the provided pc to learn which register was used.\n    #0 0x5ae17c7bd8ce in unpack_single Objects/memoryobject.c:1842\n    #1 0x5ae17c7be2c2 in memory_item Objects/memoryobject.c:2474\n    #2 0x5ae17c7c31d6 in memory_subscript Objects/memoryobject.c:2610\n    #3 0x5ae17c6e5393 in PyObject_GetItem Objects/abstract.c:163\n    #4 0x5ae17c98a8f8 in _PyEval_EvalFrameDefault Python/generated_cases.c.h:62\n    #5 0x5ae17c9d7e54 in _PyEval_EvalFrame Include/internal/pycore_ceval.h:121\n    #6 0x5ae17c9d8148 in _PyEval_Vector Python/ceval.c:2001\n    #7 0x5ae17c9d83f8 in PyEval_EvalCode Python/ceval.c:884\n    #8 0x5ae17cacf507 in run_eval_code_obj Python/pythonrun.c:1365\n    #9 0x5ae17cacf723 in run_mod Python/pythonrun.c:1459\n    #10 0x5ae17cad057a in pyrun_file Python/pythonrun.c:1293\n    #11 0x5ae17cad3220 in _PyRun_SimpleFileObject Python/pythonrun.c:521\n    #12 0x5ae17cad34f6 in _PyRun_AnyFileObject Python/pythonrun.c:81\n    #13 0x5ae17cb2474d in pymain_run_file_obj Modules/main.c:410\n    #14 0x5ae17cb249b4 in pymain_run_file Modules/main.c:429\n    #15 0x5ae17cb261b2 in pymain_run_python Modules/main.c:691\n    #16 0x5ae17cb26842 in Py_RunMain Modules/main.c:772\n    #17 0x5ae17cb26a2e in pymain_main Modules/main.c:802\n    #18 0x5ae17cb26db3 in Py_BytesMain Modules/main.c:826\n    #19 0x5ae17c5aa645 in main Programs/python.c:15\n    #20 0x715a34c2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #21 0x715a34c2a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #22 0x5ae17c5aa574 in _start (/home/jackfromeast/Desktop/entropy/tasks/grammar-afl++-latest/targets/cpython/python+0x2dd574) (BuildId: ff3dc40ea460bd4beb2c3a72283cca525b319bf0)\n\nAddressSanitizer can not provide additional info.\nSUMMARY: AddressSanitizer: BUS Objects/memoryobject.c:1842 in unpack_single\n==1532703==ABORTING\"\u003e\u003cpre class=\"notranslate\"\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e=\u003c/span\u003e\n\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e1532703\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003eERROR\u003c/span\u003e: \u003cspan class=\"pl-v\"\u003eAddressSanitizer\u003c/span\u003e: \u003cspan class=\"pl-c1\"\u003eBUS\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003eon\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003eunknown\u003c/span\u003e \u003cspan class=\"pl-en\"\u003eaddress\u003c/span\u003e (\u003cspan class=\"pl-s1\"\u003epc\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e0x5ae17c7bd8ce\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003ebp\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e0x7fffb3a81570\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003esp\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003e0x7fffb3a814b0\u003c/span\u003e \u003cspan class=\"pl-v\"\u003eT0\u003c/span\u003e)\n\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e1532703\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-v\"\u003eThe\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003esignal\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003eis\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003ecaused\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003eby\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003ea\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003eREAD\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003ememory\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003eaccess\u003c/span\u003e.\n\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e1532703\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-v\"\u003eHint\u003c/span\u003e: \u003cspan class=\"pl-s1\"\u003ethis\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003efault\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003ewas\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003ecaused\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003eby\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003ea\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003edereference\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003eof\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003ea\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003ehigh\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003evalue\u003c/span\u003e \u003cspan class=\"pl-en\"\u003eaddress\u003c/span\u003e (\u003cspan class=\"pl-s1\"\u003esee\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003eregister\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003evalues\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003ebelow\u003c/span\u003e).  \u003cspan class=\"pl-c1\"\u003eDisassemble\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003ethe\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003eprovided\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003epc\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003eto\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003elearn\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003ewhich\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003eregister\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003ewas\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003eused\u003c/span\u003e.\n    \u003cspan class=\"pl-c\"\u003e#0 0x5ae17c7bd8ce in unpack_single Objects/memoryobject.c:1842\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#1 0x5ae17c7be2c2 in memory_item Objects/memoryobject.c:2474\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#2 0x5ae17c7c31d6 in memory_subscript Objects/memoryobject.c:2610\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#3 0x5ae17c6e5393 in PyObject_GetItem Objects/abstract.c:163\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#4 0x5ae17c98a8f8 in _PyEval_EvalFrameDefault Python/generated_cases.c.h:62\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#5 0x5ae17c9d7e54 in _PyEval_EvalFrame Include/internal/pycore_ceval.h:121\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#6 0x5ae17c9d8148 in _PyEval_Vector Python/ceval.c:2001\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#7 0x5ae17c9d83f8 in PyEval_EvalCode Python/ceval.c:884\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#8 0x5ae17cacf507 in run_eval_code_obj Python/pythonrun.c:1365\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#9 0x5ae17cacf723 in run_mod Python/pythonrun.c:1459\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#10 0x5ae17cad057a in pyrun_file Python/pythonrun.c:1293\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#11 0x5ae17cad3220 in _PyRun_SimpleFileObject Python/pythonrun.c:521\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#12 0x5ae17cad34f6 in _PyRun_AnyFileObject Python/pythonrun.c:81\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#13 0x5ae17cb2474d in pymain_run_file_obj Modules/main.c:410\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#14 0x5ae17cb249b4 in pymain_run_file Modules/main.c:429\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#15 0x5ae17cb261b2 in pymain_run_python Modules/main.c:691\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#16 0x5ae17cb26842 in Py_RunMain Modules/main.c:772\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#17 0x5ae17cb26a2e in pymain_main Modules/main.c:802\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#18 0x5ae17cb26db3 in Py_BytesMain Modules/main.c:826\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#19 0x5ae17c5aa645 in main Programs/python.c:15\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#20 0x715a34c2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#21 0x715a34c2a28a in __libc_start_main_impl ../csu/libc-start.c:360\u003c/span\u003e\n    \u003cspan class=\"pl-c\"\u003e#22 0x5ae17c5aa574 in _start (/home/jackfromeast/Desktop/entropy/tasks/grammar-afl++-latest/targets/cpython/python+0x2dd574) (BuildId: ff3dc40ea460bd4beb2c3a72283cca525b319bf0)\u003c/span\u003e\n\n\u003cspan class=\"pl-c1\"\u003eAddressSanitizer\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003ecan\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003enot\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003eprovide\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003eadditional\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003einfo\u003c/span\u003e.\n\u003cspan class=\"pl-c1\"\u003eSUMMARY\u003c/span\u003e: \u003cspan class=\"pl-smi\"\u003eAddressSanitizer\u003c/span\u003e: \u003cspan class=\"pl-c1\"\u003eBUS\u003c/span\u003e \u003cspan class=\"pl-v\"\u003eObjects\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e/\u003c/span\u003e\u003cspan class=\"pl-s1\"\u003ememoryobject\u003c/span\u003e.\u003cspan class=\"pl-c1\"\u003ec\u003c/span\u003e:\u003cspan class=\"pl-c1\"\u003e1842\u003c/span\u003e \u003cspan class=\"pl-c1\"\u003ein\u003c/span\u003e \u003cspan class=\"pl-s1\"\u003eunpack_single\u003c/span\u003e\n\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e1532703\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003e==\u003c/span\u003e\u003cspan class=\"pl-c1\"\u003eABORTING\u003c/span\u003e\u003c/pre\u003e\u003c/div\u003e\n\u003c/details\u003e\n\n\u003ch3 dir=\"auto\"\u003eLinked PRs\u003c/h3\u003e\n\u003cul dir=\"auto\"\u003e\n\u003cli\u003e\u003cspan class=\"reference\"\u003e\u003csvg class=\"octicon octicon-git-pull-request open color-fg-open mr-1\" title=\"Open\" viewBox=\"0 0 16 16\" version=\"1.1\" width=\"16\" height=\"16\" aria-hidden=\"true\"\u003e\u003cpath d=\"M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354ZM3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z\"\u003e\u003c/path\u003e\u003c/svg\u003e\u003ca class=\"issue-link js-issue-link\" data-error-text=\"Failed to load title\" data-id=\"3774536160\" data-permission-text=\"Title is private\" data-url=\"https://github.com/python/cpython/issues/143324\" data-hovercard-type=\"pull_request\" data-hovercard-url=\"/python/cpython/pull/143324/hovercard\" href=\"https://github.com/python/cpython/pull/143324\"\u003egh-142665: fix UAF when accessing a \u003ccode\u003ememoryview\u003c/code\u003e concurrently mutates the underlying buffer\u003cspan class=\"issue-shorthand\"\u003e #143324\u003c/span\u003e\u003c/a\u003e\u003c/span\u003e\u003c/li\u003e\n\u003c/ul\u003e\n","bodyVersion":"179a8a966814a6dbc72e2223eeede7820c099bbf8e2846f113cc96d2a3d8a05f","createdAt":"2025-12-13T14:35:27Z","__isReactable":"Issue","reactionGroups":[{"content":"THUMBS_UP","viewerHasReacted":false,"reactors":{"totalCount":0,"nodes":[]}},{"content":"THUMBS_DOWN","viewerHasReacted":false,"reactors":{"totalCount":0,"nodes":[]}},{"content":"LAUGH","viewerHasReacted":false,"reactors":{"totalCount":0,"nodes":[]}},{"content":"HOORAY","viewerHasReacted":false,"reactors":{"totalCount":0,"nodes":[]}},{"content":"CONFUSED","viewerHasReacted":false,"reactors":{"totalCount":0,"nodes":[]}},{"content":"HEART","viewerHasReacted":false,"reactors":{"totalCount":0,"nodes":[]}},{"content":"ROCKET","viewerHasReacted":false,"reactors":{"totalCount":0,"nodes":[]}},{"content":"EYES","viewerHasReacted":false,"reactors":{"totalCount":0,"nodes":[]}}],"viewerCanUpdateMetadata":false,"pinnedIssueComment":null,"viewerCanComment":false,"viewerCanAssign":false,"viewerCanLabel":false,"__isIssueOrPullRequest":"Issue","projectItems":{"edges":[],"pageInfo":{"endCursor":null,"hasNextPage":false}},"viewerCanSetMilestone":false,"isPinned":false,"viewerCanDelete":false,"viewerCanTransfer":false,"viewerCanConvertToDiscussion":false,"viewerCanLock":false,"viewerCanType":false,"viewerCanSetFields":false,"issueFieldValues":{"nodes":[]},"frontTimelineItems":{"pageInfo":{"hasNextPage":false,"endCursor":"Y3Vyc29yOnYyOpPPAAABm3leVUACqjQyNjQyMjEyMjU="},"totalCount":8,"edges":[{"node":{"__typename":"CrossReferencedEvent","__isIssueTimelineItems":"CrossReferencedEvent","__isTimelineEvent":"CrossReferencedEvent","databaseId":4119865253,"createdAt":"2025-12-13T14:36:55Z","actor":{"__typename":"User","login":"jackfromeast","id":"MDQ6VXNlcjUxMjQyMDAz","__isActor":"User","avatarUrl":"https://avatars.githubusercontent.com/u/51242003?s=64\u0026u=08a4e48995963085a26735cf0b8e3eeb44398825\u0026v=4","profileResourcePath":"/jackfromeast","name":"jackfromeast"},"source":{"__typename":"Issue","__isNode":"Issue","id":"I_kwDOBN0Z8c7eFsvJ"},"willCloseTarget":false,"referencedAt":"2025-12-13T14:36:55Z","innerSource":{"__typename":"Issue","__isReferencedSubject":"Issue","id":"I_kwDOBN0Z8c7eFsvJ","issueTitleHTML":"Use-after-free in \u003ccode\u003ememoryview.__hash__\u003c/code\u003e via re-entrant \u003ccode\u003e__hash__\u003c/code\u003e","url":"https://github.com/python/cpython/issues/142664","number":142664,"stateReason":"COMPLETED","repository":{"id":"MDEwOlJlcG9zaXRvcnk4MTU5ODk2MQ==","name":"cpython","isPrivate":false,"owner":{"__typename":"Organization","login":"python","id":"MDEyOk9yZ2FuaXphdGlvbjE1MjU5ODE="}},"__isNode":"Issue"},"__isNode":"CrossReferencedEvent","id":"CRE_kwDOBN0Z8c71kCel"},"cursor":"Y3Vyc29yOnYyOpPPAAABmxgkq1gCqjQxMTk4NjUyNTM="},{"node":{"__typename":"LabeledEvent","__isIssueTimelineItems":"LabeledEvent","__isTimelineEvent":"LabeledEvent","databaseId":21542832945,"createdAt":"2025-12-13T15:03:34Z","actor":{"__typename":"User","login":"aisk","id":"MDQ6VXNlcjY5OTYzNg==","__isActor":"User","avatarUrl":"https://avatars.githubusercontent.com/u/699636?s=64\u0026u=f9700eabd3c57bf584479950c20d8fa8cccbecf9\u0026v=4","profileResourcePath":"/aisk","name":"AN Long"},"label":{"id":"LA_kwDOBN0Z8c7viASu","nameHTML":"interpreter-core","name":"interpreter-core","color":"09fc59","description":"(Objects, Python, Grammar, and Parser dirs)"},"__isNode":"LabeledEvent","id":"LE_lADOBN0Z8c7eFszWzwAAAAUEDYsx"},"cursor":"Y3Vyc29yOnYyOpPPAAABmxg9EXABqzIxNTQyODMyOTQ1"},{"node":{"__typename":"LabeledEvent","__isIssueTimelineItems":"LabeledEvent","__isTimelineEvent":"LabeledEvent","databaseId":21542832949,"createdAt":"2025-12-13T15:03:34Z","actor":{"__typename":"User","login":"aisk","id":"MDQ6VXNlcjY5OTYzNg==","__isActor":"User","avatarUrl":"https://avatars.githubusercontent.com/u/699636?s=64\u0026u=f9700eabd3c57bf584479950c20d8fa8cccbecf9\u0026v=4","profileResourcePath":"/aisk","name":"AN Long"},"label":{"id":"LA_kwDOBN0Z8c7visSS","nameHTML":"type-crash","name":"type-crash","color":"b60205","description":"A hard crash of the interpreter, possibly with a core dump"},"__isNode":"LabeledEvent","id":"LE_lADOBN0Z8c7eFszWzwAAAAUEDYs1"},"cursor":"Y3Vyc29yOnYyOpPPAAABmxg9EXABqzIxNTQyODMyOTQ5"},{"node":{"__typename":"AssignedEvent","__isIssueTimelineItems":"AssignedEvent","__isTimelineEvent":"AssignedEvent","databaseId":21817705038,"createdAt":"2026-01-01T11:13:10Z","actor":{"__typename":"User","login":"picnixz","id":"MDQ6VXNlcjEwNzk2NjAw","__isActor":"User","avatarUrl":"https://avatars.githubusercontent.com/u/10796600?s=64\u0026v=4","profileResourcePath":"/picnixz","name":"Bénédikt Tran"},"assignee":{"__typename":"User","id":"MDQ6VXNlcjEwNzk2NjAw","__isNode":"User","__isActor":"User","login":"picnixz","resourcePath":"/picnixz","name":"Bénédikt Tran"},"__isNode":"AssignedEvent","id":"AE_lADOBN0Z8c7eFszWzwAAAAUUb8JO"},"cursor":"Y3Vyc29yOnYyOpPPAAABm3lC9XABqzIxODE3NzA1MDM4"},{"node":{"__typename":"ReferencedEvent","__isIssueTimelineItems":"ReferencedEvent","__isTimelineEvent":"ReferencedEvent","databaseId":21817914442,"createdAt":"2026-01-01T11:39:56Z","actor":{"__typename":"User","login":"picnixz","id":"MDQ6VXNlcjEwNzk2NjAw","__isActor":"User","avatarUrl":"https://avatars.githubusercontent.com/u/10796600?s=64\u0026v=4","profileResourcePath":"/picnixz","name":"Bénédikt Tran"},"id":"REFE_lADOBN0Z8c7eFszWzwAAAAUUcvRK","willCloseSubject":false,"subject":{"__typename":"Issue","__isNode":"Issue","id":"I_kwDOBN0Z8c7eFszW"},"commit":{"message":"gh-142665: fix UAF when accessing a `memoryview` concurrently mutates the underlying buffer","messageHeadlineHTML":"\u003ca class=\"issue-link js-issue-link\" data-error-text=\"Failed to load title\" data-id=\"3726036182\" data-permission-text=\"Title is private\" data-url=\"https://github.com/python/cpython/issues/142665\" data-hovercard-type=\"issue\" data-hovercard-url=\"/python/cpython/issues/142665/hovercard\" href=\"https://github.com/python/cpython/issues/142665\"\u003epythongh-142665\u003c/a\u003e: fix UAF when accessing a `memoryview` concurrently m…","messageBodyHTML":"…utates the underlying buffer","url":"https://github.com/picnixz/cpython/commit/366f20e4bf38a505a58ddee109ed05a81d0f12fb","abbreviatedOid":"366f20e","repository":{"name":"cpython","owner":{"__typename":"User","login":"picnixz","id":"MDQ6VXNlcjEwNzk2NjAw"},"defaultBranch":"main","id":"R_kgDOKBHApQ"},"id":"C_kwDOKBHApdoAKDM2NmYyMGU0YmYzOGE1MDVhNThkZGVlMTA5ZWQwNWE4MWQwZjEyZmI"},"__isNode":"ReferencedEvent"},"cursor":"Y3Vyc29yOnYyOpPPAAABm3lbduABqzIxODE3OTE0NDQy"},{"node":{"__typename":"ReferencedEvent","__isIssueTimelineItems":"ReferencedEvent","__isTimelineEvent":"ReferencedEvent","databaseId":21817918319,"createdAt":"2026-01-01T11:41:01Z","actor":{"__typename":"User","login":"picnixz","id":"MDQ6VXNlcjEwNzk2NjAw","__isActor":"User","avatarUrl":"https://avatars.githubusercontent.com/u/10796600?s=64\u0026v=4","profileResourcePath":"/picnixz","name":"Bénédikt Tran"},"id":"REFE_lADOBN0Z8c7eFszWzwAAAAUUcwNv","willCloseSubject":false,"subject":{"__typename":"Issue","__isNode":"Issue","id":"I_kwDOBN0Z8c7eFszW"},"commit":{"message":"gh-142665: fix UAF when accessing a `memoryview` concurrently mutates the underlying buffer","messageHeadlineHTML":"\u003ca class=\"issue-link js-issue-link\" data-error-text=\"Failed to load title\" data-id=\"3726036182\" data-permission-text=\"Title is private\" data-url=\"https://github.com/python/cpython/issues/142665\" data-hovercard-type=\"issue\" data-hovercard-url=\"/python/cpython/issues/142665/hovercard\" href=\"https://github.com/python/cpython/issues/142665\"\u003epythongh-142665\u003c/a\u003e: fix UAF when accessing a `memoryview` concurrently m…","messageBodyHTML":"…utates the underlying buffer","url":"https://github.com/picnixz/cpython/commit/c214e562e98df0c4d919fb61cbb8bf2908016b03","abbreviatedOid":"c214e56","repository":{"name":"cpython","owner":{"__typename":"User","login":"picnixz","id":"MDQ6VXNlcjEwNzk2NjAw"},"defaultBranch":"main","id":"R_kgDOKBHApQ"},"id":"C_kwDOKBHApdoAKGMyMTRlNTYyZTk4ZGYwYzRkOTE5ZmI2MWNiYjhiZjI5MDgwMTZiMDM"},"__isNode":"ReferencedEvent"},"cursor":"Y3Vyc29yOnYyOpPPAAABm3lcdMgBqzIxODE3OTE4MzE5"},{"node":{"__typename":"ReferencedEvent","__isIssueTimelineItems":"ReferencedEvent","__isTimelineEvent":"ReferencedEvent","databaseId":21817919787,"createdAt":"2026-01-01T11:41:21Z","actor":{"__typename":"User","login":"picnixz","id":"MDQ6VXNlcjEwNzk2NjAw","__isActor":"User","avatarUrl":"https://avatars.githubusercontent.com/u/10796600?s=64\u0026v=4","profileResourcePath":"/picnixz","name":"Bénédikt Tran"},"id":"REFE_lADOBN0Z8c7eFszWzwAAAAUUcwkr","willCloseSubject":false,"subject":{"__typename":"Issue","__isNode":"Issue","id":"I_kwDOBN0Z8c7eFszW"},"commit":{"message":"gh-142665: fix UAF when accessing a `memoryview` concurrently mutates the underlying buffer","messageHeadlineHTML":"\u003ca class=\"issue-link js-issue-link\" data-error-text=\"Failed to load title\" data-id=\"3726036182\" data-permission-text=\"Title is private\" data-url=\"https://github.com/python/cpython/issues/142665\" data-hovercard-type=\"issue\" data-hovercard-url=\"/python/cpython/issues/142665/hovercard\" href=\"https://github.com/python/cpython/issues/142665\"\u003epythongh-142665\u003c/a\u003e: fix UAF when accessing a `memoryview` concurrently m…","messageBodyHTML":"…utates the underlying buffer","url":"https://github.com/picnixz/cpython/commit/243db4d01a84f68cde00a7f7041062182edc2ccc","abbreviatedOid":"243db4d","repository":{"name":"cpython","owner":{"__typename":"User","login":"picnixz","id":"MDQ6VXNlcjEwNzk2NjAw"},"defaultBranch":"main","id":"R_kgDOKBHApQ"},"id":"C_kwDOKBHApdoAKDI0M2RiNGQwMWE4NGY2OGNkZTAwYTdmNzA0MTA2MjE4MmVkYzJjY2M"},"__isNode":"ReferencedEvent"},"cursor":"Y3Vyc29yOnYyOpPPAAABm3lcwugBqzIxODE3OTE5Nzg3"},{"node":{"__typename":"CrossReferencedEvent","__isIssueTimelineItems":"CrossReferencedEvent","__isTimelineEvent":"CrossReferencedEvent","databaseId":4264221225,"createdAt":"2026-01-01T11:43:04Z","actor":{"__typename":"Bot","login":"bedevere-app","id":"BOT_kgDOCJ_FTA","__isActor":"Bot","avatarUrl":"https://avatars.githubusercontent.com/in/388350?s=64\u0026v=4","profileResourcePath":"/apps/bedevere-app","isCopilot":false,"isAgent":false,"displayName":"bedevere-app[bot]"},"source":{"__typename":"PullRequest","__isNode":"PullRequest","id":"PR_kwDOBN0Z8c67MfJe"},"willCloseTarget":false,"referencedAt":"2026-01-01T11:43:03Z","innerSource":{"__typename":"PullRequest","__isReferencedSubject":"PullRequest","id":"PR_kwDOBN0Z8c67MfJe","pullTitleHTML":"gh-142665: fix UAF when accessing a \u003ccode\u003ememoryview\u003c/code\u003e concurrently mutates the underlying buffer","url":"https://github.com/python/cpython/pull/143324","number":143324,"state":"OPEN","isDraft":false,"isInMergeQueue":false,"repository":{"id":"MDEwOlJlcG9zaXRvcnk4MTU5ODk2MQ==","name":"cpython","isPrivate":false,"owner":{"__typename":"Organization","login":"python","id":"MDEyOk9yZ2FuaXphdGlvbjE1MjU5ODE="}},"__isNode":"PullRequest"},"__isNode":"CrossReferencedEvent","id":"CRE_kwDOBN0Z8c7-Ktop"},"cursor":"Y3Vyc29yOnYyOpPPAAABm3leVUACqjQyNjQyMjEyMjU="}]},"backTimelineItems":{"pageInfo":{"hasPreviousPage":true,"startCursor":null},"totalCount":8,"edges":[]}}},"safeViewer":null}},"timestamp":1777439004}]},"title":"Issue","appPayload":{"initial_view_content":{"can_edit_view":true},"current_user":null,"current_user_settings":{"preferred_emoji_skin_tone":null,"copilot_show_functionality":false,"use_single_key_shortcut":false},"paste_url_link_as_plain_text":false,"base_avatar_url":"https://avatars.githubusercontent.com","help_url":"https://docs.github.com","sso_organizations":null,"current_sso_orgs_match_dismissed_cookie":null,"multi_tenant":false,"tracing":false,"tracing_flamegraph":false,"catalog_service":"github/issues","scoped_repository":{"id":"MDEwOlJlcG9zaXRvcnk4MTU5ODk2MQ==","owner":"python","name":"cpython","is_archived":false},"best_match_sort_enabled":false,"tabbed_timeline":false,"transactionalMessageBanner":null,"enabled_features":{"use_pull_request_subscriptions_enabled":false,"pull_request_single_subscription":true,"disable_issues_react_ssr":false,"copilot_natural_language_github_search":false,"private_avatars":false,"reserved_domain":true,"projects_classic_sunset_override":false,"notifyd_issue_watch_activity_notify":false,"notifyd_enable_issue_thread_subscriptions":false,"timeline_best_effort_count_optimization":false,"copilot_auto_assign_metadata":false,"issues_react_bots_timeline_pagination":true,"copilot_workspace_cross_repo_selection":false,"copilot_agent_mode":false,"issues_react_force_turbo_nav":false,"issues_react_client_side_caching":false,"copilot_swe_agent":false,"react_version_mismatch_detection":false,"issues_react_graceful_not_found_handling":false,"issue_create_relationships":false,"milestone_closed_issues_prioritization":true,"issues_react_timeline_tabs":false,"issues_search_type_gql":true,"issue_releases_sidebar":true,"tasklist_block":false,"issues_react_perf_test":false,"issue_pinned_views":false,"issues_triage_agent_enrolled":false,"issues_triage_agent_config_editor":true,"issues_automation":false,"issues_create_semantic_similarity_analytics":false,"semantic_similarity_duplicate_issue_detection":false,"issue_cca_visualization":false}}}</script>
+  <div data-target="react-app.reactRoot"><link rel="preload" as="image" href="https://avatars.githubusercontent.com/u/10796600?s=64&amp;v=4"/><link rel="preload" as="image" href="https://avatars.githubusercontent.com/u/51242003?u=08a4e48995963085a26735cf0b8e3eeb44398825&amp;v=4&amp;size=80"/><link rel="preload" as="image" href="https://avatars.githubusercontent.com/u/51242003?u=08a4e48995963085a26735cf0b8e3eeb44398825&amp;v=4&amp;size=48"/><!--$--><!--$--><div class="IssueShowPage-module__issueDetailContainer__DbXfA"><div class="primary-viewer IssueDetail-module__IssueDetailContainer__JnqVq" data-testid="issue-viewer-container"><!--$--><div class="IssueViewer-module__issueViewerContainer__Hualk IssueViewer-module__mainContainer__lmFuF"><!--$--><div class="ContentWrapper-module__contentContainer__H47cS"><div aria-label="Header" role="region" data-testid="issue-header" class="HeaderViewer-module__headerRegion__hrG_B"><div class="prc-PageHeader-PageHeader-YLwBQ HeaderViewer-module__headerContainer__lIELq "><div class="prc-PageHeader-TitleArea-2n2J0 HeaderViewer-module__PageHeader_TitleArea__gvcTw" data-component="TitleArea" data-size-variant="medium"><h1 class="prc-PageHeader-Title-p0Mgh HeaderViewer-module__PageHeader_Title__jVJ0i HeaderViewer-module__PageHeader_Title_viewport__r6rl8 HeaderViewer-module__PageHeader_Title_marginRight__S6GLh prc-Heading-Heading-MtWFE" data-component="PH_Title" data-hidden="false"><bdi class="markdown-title HeaderViewer-module__issueTitle__DW72_" data-testid="issue-title">Use-after-free in <code>memoryview</code> slicing via re-entrant <code>__index__</code></bdi> <span class="HeaderViewer-module__issueNumberText__MEUhM">#142665</span></h1></div><div class="prc-PageHeader-ContextArea-ueeWv" data-hidden-regular="true"><div class="prc-PageHeader-ContextAreaActions-DLQP5 HeaderViewer-module__PageHeader_ContextAreaActions__xYSsx" data-hidden-regular="true"><div class="HeaderMenu-module__menuActionsContainer__K0Mga"><div class="HeaderMenu-module__buttonContainer__S3hWB HeaderMenu-module__buttonContainer_viewport__Q3rwe"><!--$!--><template></template><button data-component="Button" type="button" class="prc-Button-ButtonBase-9n-Xk" data-loading="false" data-no-visuals="true" data-size="medium" data-variant="primary"><span data-component="buttonContent" data-align="center" class="prc-Button-ButtonContent-Iohp5"><span data-component="text" class="prc-Button-Label-FWkx3">New issue</span></span></button><!--/$--></div><button data-component="IconButton" type="button" class="prc-Button-ButtonBase-9n-Xk prc-Button-IconButton-fyge7" data-loading="false" data-no-visuals="true" data-size="medium" data-variant="invisible" aria-labelledby="_R_h8ktb_"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-copy" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></button><span class="CopyToClipboardButton-module__tooltip__BhMvU prc-TooltipV2-Tooltip-tLeuB" data-direction="s" data-component="Tooltip" aria-label="Copy link" aria-hidden="true" id="_R_h8ktb_">Copy link</span></div></div></div><div class="prc-PageHeader-Actions-wawWm HeaderViewer-module__PageHeader_Actions___iosX HeaderViewer-module__PageHeader_Actions_viewport__o4PW1" data-component="PH_Actions"><div class="HeaderMenu-module__menuActionsContainer__K0Mga"><div class="HeaderMenu-module__buttonContainer__S3hWB HeaderMenu-module__buttonContainer_viewport__Q3rwe"><!--$!--><template></template><button data-component="Button" type="button" class="prc-Button-ButtonBase-9n-Xk" data-loading="false" data-no-visuals="true" data-size="medium" data-variant="primary"><span data-component="buttonContent" data-align="center" class="prc-Button-ButtonContent-Iohp5"><span data-component="text" class="prc-Button-Label-FWkx3">New issue</span></span></button><!--/$--></div><button data-component="IconButton" type="button" class="prc-Button-ButtonBase-9n-Xk prc-Button-IconButton-fyge7" data-loading="false" data-no-visuals="true" data-size="medium" data-variant="invisible" aria-labelledby="_R_i8ktb_"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-copy" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></button><span class="CopyToClipboardButton-module__tooltip__BhMvU prc-TooltipV2-Tooltip-tLeuB" data-direction="s" data-component="Tooltip" aria-label="Copy link" aria-hidden="true" id="_R_i8ktb_">Copy link</span></div></div></div></div></div><div class="ContentWrapper-module__contentContainer__H47cS"><div data-testid="issue-metadata-fixed" class="HeaderMetadata-module__metadataContainer__RYoai"><div class="HeaderMetadata-module__metadataBorder__vMRcF"><div class="HeaderMetadata-module__metadataContent__Dg2N7"><div><span data-testid="header-state" class="prc-StateLabel-StateLabel-Iawzp HeaderState-module__stateLabel__vlM4W" data-size="medium" data-status="issueOpened"><svg data-component="Octicon" focusable="false" aria-label="Issue" class="octicon octicon-issue-opened prc-StateLabel-Icon-YICrR" role="img" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"></path></svg>Open</span></div><!--$--><!--/$--></div></div></div></div><div data-testid="issue-metadata-sticky" id="issue-viewer-sticky-header" class="HeaderMetadata-module__stickyContainer__XEec_ HeaderMetadata-module__stickyContainerHidden__DJzgH"><div class="ContentWrapper-module__contentContainer__H47cS"><div class="HeaderMetadata-module__stickyContent__ljPb0"><div><span data-testid="header-state" class="prc-StateLabel-StateLabel-Iawzp HeaderState-module__stateLabel__vlM4W" data-size="medium" data-status="issueOpened"><svg data-component="Octicon" focusable="false" aria-label="Issue" class="octicon octicon-issue-opened prc-StateLabel-Icon-YICrR" role="img" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"></path></svg>Open</span></div><div class="HeaderMetadata-module__titleAndMetadata__yKAq3"><div class="StickyHeaderTitle-module__stickyTitleContainer__xkM7n"><a class="StickyHeaderTitle-module__stickyTitleLink__H7P2k prc-Link-Link-9ZwDx" data-component="Link" href="#top"><bdi class="markdown-title" data-testid="issue-title-sticky">Use-after-free in <code>memoryview</code> slicing via re-entrant <code>__index__</code></bdi></a><span class="StickyHeaderTitle-module__issueNumberText__k2kX0">#142665</span></div><div class="HeaderMetadata-module__smallMetadataRow__Bvi2e HeaderMetadata-module__smallMetadataRow_viewport__j8aKB"><!--$--><!--/$--></div></div><div><div class="HeaderMenu-module__menuActionsContainer__K0Mga"><button data-component="IconButton" type="button" class="prc-Button-ButtonBase-9n-Xk prc-Button-IconButton-fyge7" data-loading="false" data-no-visuals="true" data-size="medium" data-variant="invisible" aria-labelledby="_R_3p4tb_"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-copy" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></button><span class="CopyToClipboardButton-module__tooltip__BhMvU prc-TooltipV2-Tooltip-tLeuB" data-direction="s" data-component="Tooltip" aria-label="Copy link" aria-hidden="true" id="_R_3p4tb_">Copy link</span></div></div></div></div></div><div class="ContentWrapper-module__contentContainer__H47cS"><div class="IssueMetadata-module__issueMetadata__ph4wO"><div class="IssueMetadata-module__metadata__y840P"><div class="IssueMetadata-module__metadataTitle__mIZQ2">Assignees</div><div class="IssueMetadata-module__metadataValue__VpFzn"><span data-component="AvatarStack" data-variant="cascade" data-shape="circle" data-avatar-count="1" data-responsive="" class="pc-AvatarStack--variant pc-AvatarStack--shape AssigneesMetadata-module__avatarStack__recCY prc-AvatarStack-AvatarStack-vkIK2" style="--stackSize-narrow:20px;--stackSize-regular:20px;--stackSize-wide:20px"><div data-component="AvatarStack.Body" class="pc-AvatarStackBody prc-AvatarStack-AvatarStackBody-JFK4u" tabindex="0"> <a class="prc-Link-Link-9ZwDx" data-component="Link" aria-label="picnixz is assigned" href="/picnixz"><img data-component="Avatar" class="AssigneesMetadata-module__avatar__SdD12 prc-Avatar-Avatar-0xaUi" alt="picnixz" width="20" height="20" style="--avatarSize-regular:20px" src="https://avatars.githubusercontent.com/u/10796600?s=64&amp;v=4" data-testid="github-avatar"/></a></div></span></div></div><div class="IssueMetadata-module__metadata__y840P"><div class="IssueMetadata-module__metadataTitle__mIZQ2">Labels</div><div class="IssueMetadata-module__metadataValue__VpFzn"><div tabindex="-1" class="LabelsList-module__labelsListContainer__q43kf"><a class="LabelsList-module__labelLink__puy8d prc-Link-Link-9ZwDx" data-component="Link" data-muted="true" href="https://github.com/python/cpython/issues?q=state%3Aopen%20label%3A%22interpreter-core%22" aria-describedby="LA_kwDOBN0Z8c7viASu-tooltip _R_dd4tb_"><span class="prc-Token-TokenBase-te5-F prc-Token-IssueLabel-2IazM LabelToken-module__IssueLabelToken__vAY0G" data-cursor-is-interactive="false" data-size="medium" text="[object Object]" style="--label-r:9;--label-g:252;--label-b:89;--label-h:140;--label-s:98;--label-l:51;overflow:hidden;text-overflow:ellipsis;cursor:pointer;max-width:100%" data-has-remove-button="false"><span class="prc-Token-TokenTextContainer-cOUaD"><span class="prc-Text-Text-9mHv3">interpreter-core</span></span></span><span class="sr-only" id="LA_kwDOBN0Z8c7viASu-tooltip">(Objects, Python, Grammar, and Parser dirs)</span></a><span class="LabelsList-module__labelDescriptionTooltip__hM1DT LabelsList-module__tooltipVisible__AA4FN prc-TooltipV2-Tooltip-tLeuB" data-direction="s" data-component="Tooltip" aria-label="(Objects, Python, Grammar, and Parser dirs)" role="tooltip" aria-hidden="true" id="_R_dd4tb_">(Objects, Python, Grammar, and Parser dirs)</span><a class="LabelsList-module__labelLink__puy8d prc-Link-Link-9ZwDx" data-component="Link" data-muted="true" href="https://github.com/python/cpython/issues?q=state%3Aopen%20label%3A%22type-crash%22" aria-describedby="LA_kwDOBN0Z8c7visSS-tooltip _R_ld4tb_"><span class="prc-Token-TokenBase-te5-F prc-Token-IssueLabel-2IazM LabelToken-module__IssueLabelToken__vAY0G" data-cursor-is-interactive="false" data-size="medium" text="[object Object]" style="--label-r:182;--label-g:2;--label-b:5;--label-h:359;--label-s:98;--label-l:36;overflow:hidden;text-overflow:ellipsis;cursor:pointer;max-width:100%" data-has-remove-button="false"><span class="prc-Token-TokenTextContainer-cOUaD"><span class="prc-Text-Text-9mHv3">type-crash</span></span></span><span class="sr-only" id="LA_kwDOBN0Z8c7visSS-tooltip">A hard crash of the interpreter, possibly with a core dump</span></a><span class="LabelsList-module__labelDescriptionTooltip__hM1DT LabelsList-module__tooltipVisible__AA4FN prc-TooltipV2-Tooltip-tLeuB" data-direction="s" data-component="Tooltip" aria-label="A hard crash of the interpreter, possibly with a core dump" role="tooltip" aria-hidden="true" id="_R_ld4tb_">A hard crash of the interpreter, possibly with a core dump</span></div></div></div></div></div><div class="Header-module__stickyObservableBox__nsRWC"></div><div class="Header-module__HeaderContentWrapper__pFwre"><div class="ContentWrapper-module__contentContainer__H47cS"><div class="Header-module__headerSpacer__CmNnw"></div></div></div><div class="ContentWrapper-module__contentContainer__H47cS"><div class="IssueViewer-module__contentAndSidebarWrapper__jEPzb IssueViewer-module__contentAndSidebarWrapper_viewport__psC8n"><div class="IssueViewer-module__contentArea__ChMIU IssueViewer-module__contentArea_viewport__xcHZT"><div data-testid="issue-viewer-issue-container"><div class="IssueBody-module__outerContainer__ULNTb"><a class="Avatar-module__avatarLink__LpV3I Avatar-module__avatarOuter__oECIk prc-Link-Link-9ZwDx" data-component="Link" href="https://github.com/jackfromeast" aria-label="@jackfromeast&#x27;s profile"><img data-component="Avatar" class="Avatar-module__issueViewerAvatar__BECCA prc-Avatar-Avatar-0xaUi" alt="@jackfromeast" width="40" height="40" style="--avatarSize-regular:40px" src="https://avatars.githubusercontent.com/u/51242003?u=08a4e48995963085a26735cf0b8e3eeb44398825&amp;v=4&amp;size=80" data-testid="github-avatar"/></a><div data-testid="issue-body" class="react-issue-body IssueBody-module__innerContainer__yRKH5" data-hpc="true"><h2 class="sr-only">Description</h2><div class="IssueBody-module__headerRow__sH4dg"><div class="IssueBody-module__commentBorder__U9VPv"><div class="IssueBodyHeader-module__IssueBodyHeaderContainer__SrDB7 IssueBodyHeader-module__viewerDidNotAuthor__vD8tZ"><div class="ActivityHeader-module__activityHeader__ZGlyB IssueBodyHeader-module__activityHeaderWrapper__nrxjr"><div class="Avatar-module__avatarInner__uWzS0 IssueBodyHeader-module__avatarContainer__O8TC2"><a class="Avatar-module__avatarLink__LpV3I prc-Link-Link-9ZwDx" data-component="Link" href="https://github.com/jackfromeast" aria-label="@jackfromeast&#x27;s profile"><img data-component="Avatar" class="prc-Avatar-Avatar-0xaUi" alt="@jackfromeast" width="24" height="24" style="--avatarSize-regular:24px" src="https://avatars.githubusercontent.com/u/51242003?u=08a4e48995963085a26735cf0b8e3eeb44398825&amp;v=4&amp;size=48" data-testid="github-avatar"/></a></div><div class="ActivityHeader-module__narrowViewportWrapper__n_VAC IssueBodyHeader-module__narrowViewportWrapper__iLs_y"><div class="IssueBodyHeader-module__titleSection__dX9cz"><a class="IssueBodyHeaderAuthor-module__authorLoginLink__aTls_ prc-Link-Link-9ZwDx" data-component="Link" href="https://github.com/jackfromeast" data-testid="issue-body-header-author">jackfromeast</a></div><div class="ActivityHeader-module__footer__HD8mP IssueBodyHeader-module__footerSection__Df7HB"><span>opened </span><a class="IssueBodyHeader-module__dateLink__kYTxQ prc-Link-Link-9ZwDx" data-component="Link" href="https://github.com/python/cpython/issues/142665#issue-3726036182" data-testid="issue-body-header-link"><relative-time class="IssueBodyHeader-module__RelativeTime__xv0lw">on <!-- -->Dec 13, 2025</relative-time></a></div></div><div class="ActivityHeader-module__narrowViewportWrapper__n_VAC IssueBodyHeader-module__actionsWrapper__D4Syp"><div class="ActivityHeader-module__edits__pnYtu IssueBodyHeader-module__editsSection__nQnXE"></div><div class="IssueBodyHeader-module__badgesSection___PWtJ"><div class="IssueBodyHeader-module__badgeGroup__EPYnd"></div><div class="IssueBodyHeader-module__actionsSection__gnoaX"><button data-component="IconButton" type="button" aria-haspopup="true" aria-expanded="false" tabindex="0" class="prc-Button-ButtonBase-9n-Xk prc-Button-IconButton-fyge7" data-loading="false" data-no-visuals="true" data-size="small" data-variant="invisible" aria-labelledby="_R_v5bd2mtb_" id="_R_15bd2mtb_"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-kebab-horizontal" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M8 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM1.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path></svg></button><span class="prc-TooltipV2-Tooltip-tLeuB" data-direction="s" data-component="Tooltip" aria-hidden="true" id="_R_v5bd2mtb_">Issue body actions</span></div></div></div></div></div><div class="IssueBodyViewer-module__IssueBody__xbjV0" id="issue-body-viewer" data-testid="issue-body-viewer"><div data-testid="markdown-body" data-team-hovercards-enabled="true" class="markdown-body" data-turbolinks="false"><div class="markdown-body NewMarkdownViewer-module__safe-html-box__ZT1eD"><h3 dir="auto">What happened?</h3>
+<p dir="auto"><code class="notranslate">memory_subscript()</code> creates a new view (<code class="notranslate">mbuf_add_view</code>) <strong>before</strong> parsing slice indices. If a slice bound’s <code class="notranslate">__index__</code> releases/truncates the underlying buffer (e.g., <code class="notranslate">mv.release(); ftruncate()</code>), the newly created subview keeps a dangling pointer. Subsequent access (e.g., <code class="notranslate">sub[0]</code>) dereferences freed/invalid memory, crashing in <code class="notranslate">unpack_single</code>.</p>
+<p dir="auto"><strong>Proof of Concept:</strong></p>
+<div class="highlight highlight-source-python notranslate position-relative overflow-auto" dir="auto" data-snippet-clipboard-copy-content="import mmap, os, tempfile
+
+fd, path = tempfile.mkstemp()
+os.write(fd, b&quot;A&quot; * 4096)
+mm = mmap.mmap(fd, 4096, access=mmap.ACCESS_WRITE)
+mv = memoryview(mm)
+
+class Trigger:
+    def __index__(self):
+        mv.release()
+        os.ftruncate(fd, 0)
+        return 0
+
+try:
+    sub = mv[slice(Trigger(), None, None)]
+    sub[0] # Trigger the slicing to call __index__
+finally:
+    mm.close()
+    os.close(fd)
+    os.unlink(path)"><pre class="notranslate"><span class="pl-k">import</span> <span class="pl-s1">mmap</span>, <span class="pl-s1">os</span>, <span class="pl-s1">tempfile</span>
+
+<span class="pl-s1">fd</span>, <span class="pl-s1">path</span> <span class="pl-c1">=</span> <span class="pl-s1">tempfile</span>.<span class="pl-c1">mkstemp</span>()
+<span class="pl-s1">os</span>.<span class="pl-c1">write</span>(<span class="pl-s1">fd</span>, <span class="pl-s">b"A"</span> <span class="pl-c1">*</span> <span class="pl-c1">4096</span>)
+<span class="pl-s1">mm</span> <span class="pl-c1">=</span> <span class="pl-s1">mmap</span>.<span class="pl-c1">mmap</span>(<span class="pl-s1">fd</span>, <span class="pl-c1">4096</span>, <span class="pl-s1">access</span><span class="pl-c1">=</span><span class="pl-s1">mmap</span>.<span class="pl-c1">ACCESS_WRITE</span>)
+<span class="pl-s1">mv</span> <span class="pl-c1">=</span> <span class="pl-en">memoryview</span>(<span class="pl-s1">mm</span>)
+
+<span class="pl-k">class</span> <span class="pl-v">Trigger</span>:
+    <span class="pl-k">def</span> <span class="pl-en">__index__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s1">mv</span>.<span class="pl-c1">release</span>()
+        <span class="pl-s1">os</span>.<span class="pl-c1">ftruncate</span>(<span class="pl-s1">fd</span>, <span class="pl-c1">0</span>)
+        <span class="pl-k">return</span> <span class="pl-c1">0</span>
+
+<span class="pl-k">try</span>:
+    <span class="pl-s1">sub</span> <span class="pl-c1">=</span> <span class="pl-s1">mv</span>[<span class="pl-en">slice</span>(<span class="pl-en">Trigger</span>(), <span class="pl-c1">None</span>, <span class="pl-c1">None</span>)]
+    <span class="pl-s1">sub</span>[<span class="pl-c1">0</span>] <span class="pl-c"># Trigger the slicing to call __index__</span>
+<span class="pl-k">finally</span>:
+    <span class="pl-s1">mm</span>.<span class="pl-c1">close</span>()
+    <span class="pl-s1">os</span>.<span class="pl-c1">close</span>(<span class="pl-s1">fd</span>)
+    <span class="pl-s1">os</span>.<span class="pl-c1">unlink</span>(<span class="pl-s1">path</span>)</pre></div>
+<p dir="auto"><strong>Related Code Snippet</strong></p>
+<details><summary>Details</summary>
+<div class="highlight highlight-source-c notranslate position-relative overflow-auto" dir="auto" data-snippet-clipboard-copy-content="static PyObject *
+memory_subscript(PyObject *_self, PyObject *key)
+{
+    PyMemoryViewObject *self = (PyMemoryViewObject *)_self;
+    Py_buffer *view;
+    view = &amp;(self-&gt;view);
+
+    CHECK_RELEASED(self);
+
+    if (view-&gt;ndim == 0) {
+        if (PyTuple_Check(key) &amp;&amp; PyTuple_GET_SIZE(key) == 0) {
+            const char *fmt = adjust_fmt(view);
+            if (fmt == NULL)
+                return NULL;
+            return unpack_single(self, view-&gt;buf, fmt);
+        }
+        else if (key == Py_Ellipsis) {
+            return Py_NewRef(self);
+        }
+        else {
+            PyErr_SetString(PyExc_TypeError,
+                &quot;invalid indexing of 0-dim memory&quot;);
+            return NULL;
+        }
+    }
+
+    if (_PyIndex_Check(key)) {
+        Py_ssize_t index;
+        index = PyNumber_AsSsize_t(key, PyExc_IndexError);
+        if (index == -1 &amp;&amp; PyErr_Occurred())
+            return NULL;
+        return memory_item((PyObject *)self, index);
+    }
+    else if (PySlice_Check(key)) {
+        CHECK_RESTRICTED(self);
+        PyMemoryViewObject *sliced;
+
+        sliced = (PyMemoryViewObject *)mbuf_add_view(self-&gt;mbuf, view);
+        if (sliced == NULL)
+            return NULL;
+				
+		// Call __index__ method which close the mmap memory while sliced still holds its pointer
+        if (init_slice(&amp;sliced-&gt;view, key, 0) &lt; 0) {
+            Py_DECREF(sliced);
+            return NULL;
+        }
+        init_len(&amp;sliced-&gt;view);
+        init_flags(sliced);
+
+        return (PyObject *)sliced;
+    }
+    else if (is_multiindex(key)) {
+        return memory_item_multi(self, key);
+    }
+    else if (is_multislice(key)) {
+        PyErr_SetString(PyExc_NotImplementedError,
+            &quot;multi-dimensional slicing is not implemented&quot;);
+        return NULL;
+    }
+
+    PyErr_SetString(PyExc_TypeError, &quot;memoryview: invalid slice key&quot;);
+    return NULL;
+}"><pre class="notranslate"><span class="pl-k">static</span> <span class="pl-smi">PyObject</span> <span class="pl-c1">*</span>
+<span class="pl-en">memory_subscript</span>(<span class="pl-smi">PyObject</span> <span class="pl-c1">*</span><span class="pl-s1">_self</span>, <span class="pl-smi">PyObject</span> <span class="pl-c1">*</span><span class="pl-s1">key</span>)
+{
+    <span class="pl-smi">PyMemoryViewObject</span> <span class="pl-c1">*</span><span class="pl-s1">self</span> <span class="pl-c1">=</span> (<span class="pl-smi">PyMemoryViewObject</span> <span class="pl-c1">*</span>)<span class="pl-s1">_self</span>;
+    <span class="pl-smi">Py_buffer</span> <span class="pl-c1">*</span><span class="pl-s1">view</span>;
+    <span class="pl-s1">view</span> <span class="pl-c1">=</span> <span class="pl-c1">&amp;</span>(<span class="pl-s1">self</span><span class="pl-c1">-&gt;</span><span class="pl-c1">view</span>);
+
+    <span class="pl-en">CHECK_RELEASED</span>(<span class="pl-s1">self</span>);
+
+    <span class="pl-k">if</span> (<span class="pl-s1">view</span><span class="pl-c1">-&gt;</span><span class="pl-c1">ndim</span> <span class="pl-c1">==</span> <span class="pl-c1">0</span>) {
+        <span class="pl-k">if</span> (<span class="pl-en">PyTuple_Check</span>(<span class="pl-s1">key</span>) <span class="pl-c1">&amp;&amp;</span> <span class="pl-en">PyTuple_GET_SIZE</span>(<span class="pl-s1">key</span>) <span class="pl-c1">==</span> <span class="pl-c1">0</span>) {
+            <span class="pl-k">const</span> <span class="pl-smi">char</span> <span class="pl-c1">*</span><span class="pl-s1">fmt</span> <span class="pl-c1">=</span> <span class="pl-en">adjust_fmt</span>(<span class="pl-s1">view</span>);
+            <span class="pl-k">if</span> (<span class="pl-s1">fmt</span> <span class="pl-c1">==</span> <span class="pl-c1">NULL</span>)
+                <span class="pl-k">return</span> <span class="pl-c1">NULL</span>;
+            <span class="pl-k">return</span> <span class="pl-en">unpack_single</span>(<span class="pl-s1">self</span>, <span class="pl-s1">view</span><span class="pl-c1">-&gt;</span><span class="pl-c1">buf</span>, <span class="pl-s1">fmt</span>);
+        }
+        <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-s1">key</span> <span class="pl-c1">==</span> <span class="pl-s1">Py_Ellipsis</span>) {
+            <span class="pl-k">return</span> <span class="pl-en">Py_NewRef</span>(<span class="pl-s1">self</span>);
+        }
+        <span class="pl-k">else</span> {
+            <span class="pl-en">PyErr_SetString</span>(<span class="pl-s1">PyExc_TypeError</span>,
+                <span class="pl-s">"invalid indexing of 0-dim memory"</span>);
+            <span class="pl-k">return</span> <span class="pl-c1">NULL</span>;
+        }
+    }
+
+    <span class="pl-k">if</span> (<span class="pl-en">_PyIndex_Check</span>(<span class="pl-s1">key</span>)) {
+        <span class="pl-smi">Py_ssize_t</span> <span class="pl-s1">index</span>;
+        <span class="pl-s1">index</span> <span class="pl-c1">=</span> <span class="pl-en">PyNumber_AsSsize_t</span>(<span class="pl-s1">key</span>, <span class="pl-s1">PyExc_IndexError</span>);
+        <span class="pl-k">if</span> (<span class="pl-s1">index</span> <span class="pl-c1">==</span> <span class="pl-c1">-1</span> <span class="pl-c1">&amp;&amp;</span> <span class="pl-en">PyErr_Occurred</span>())
+            <span class="pl-k">return</span> <span class="pl-c1">NULL</span>;
+        <span class="pl-k">return</span> <span class="pl-en">memory_item</span>((<span class="pl-smi">PyObject</span> <span class="pl-c1">*</span>)<span class="pl-s1">self</span>, <span class="pl-s1">index</span>);
+    }
+    <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-en">PySlice_Check</span>(<span class="pl-s1">key</span>)) {
+        <span class="pl-en">CHECK_RESTRICTED</span>(<span class="pl-s1">self</span>);
+        <span class="pl-smi">PyMemoryViewObject</span> <span class="pl-c1">*</span><span class="pl-s1">sliced</span>;
+
+        <span class="pl-s1">sliced</span> <span class="pl-c1">=</span> (<span class="pl-smi">PyMemoryViewObject</span> <span class="pl-c1">*</span>)<span class="pl-en">mbuf_add_view</span>(<span class="pl-s1">self</span><span class="pl-c1">-&gt;</span><span class="pl-c1">mbuf</span>, <span class="pl-s1">view</span>);
+        <span class="pl-k">if</span> (<span class="pl-s1">sliced</span> <span class="pl-c1">==</span> <span class="pl-c1">NULL</span>)
+            <span class="pl-k">return</span> <span class="pl-c1">NULL</span>;
+				
+		<span class="pl-c">// Call __index__ method which close the mmap memory while sliced still holds its pointer</span>
+        <span class="pl-k">if</span> (<span class="pl-en">init_slice</span>(<span class="pl-c1">&amp;</span><span class="pl-s1">sliced</span><span class="pl-c1">-&gt;</span><span class="pl-c1">view</span>, <span class="pl-s1">key</span>, <span class="pl-c1">0</span>) <span class="pl-c1">&lt;</span> <span class="pl-c1">0</span>) {
+            <span class="pl-en">Py_DECREF</span>(<span class="pl-s1">sliced</span>);
+            <span class="pl-k">return</span> <span class="pl-c1">NULL</span>;
+        }
+        <span class="pl-en">init_len</span>(<span class="pl-c1">&amp;</span><span class="pl-s1">sliced</span><span class="pl-c1">-&gt;</span><span class="pl-c1">view</span>);
+        <span class="pl-en">init_flags</span>(<span class="pl-s1">sliced</span>);
+
+        <span class="pl-k">return</span> (<span class="pl-smi">PyObject</span> <span class="pl-c1">*</span>)<span class="pl-s1">sliced</span>;
+    }
+    <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-en">is_multiindex</span>(<span class="pl-s1">key</span>)) {
+        <span class="pl-k">return</span> <span class="pl-en">memory_item_multi</span>(<span class="pl-s1">self</span>, <span class="pl-s1">key</span>);
+    }
+    <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-en">is_multislice</span>(<span class="pl-s1">key</span>)) {
+        <span class="pl-en">PyErr_SetString</span>(<span class="pl-s1">PyExc_NotImplementedError</span>,
+            <span class="pl-s">"multi-dimensional slicing is not implemented"</span>);
+        <span class="pl-k">return</span> <span class="pl-c1">NULL</span>;
+    }
+
+    <span class="pl-en">PyErr_SetString</span>(<span class="pl-s1">PyExc_TypeError</span>, <span class="pl-s">"memoryview: invalid slice key"</span>);
+    <span class="pl-k">return</span> <span class="pl-c1">NULL</span>;
+}</pre></div>
+</details>
+<p dir="auto"><strong>Affected Versions:</strong></p>
+<details><summary>Details</summary>
+<table role="table">
+<thead>
+<tr>
+<th>Python Version</th>
+<th>Status</th>
+<th>Exit Code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="notranslate">Python 3.9.24+ (heads/3.9:9c4638d, Oct 17 2025, 11:19:30) </code></td>
+<td>ASAN</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code class="notranslate">Python 3.10.19+ (heads/3.10:0142619, Oct 17 2025, 11:20:05) [GCC 13.3.0]</code></td>
+<td>ASAN</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code class="notranslate">Python 3.11.14+ (heads/3.11:88f3f5b, Oct 17 2025, 11:20:44) [GCC 13.3.0]</code></td>
+<td>ASAN</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code class="notranslate">Python 3.12.12+ (heads/3.12:8cb2092, Oct 17 2025, 11:21:35) [GCC 13.3.0]</code></td>
+<td>ASAN</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code class="notranslate">Python 3.13.9+ (heads/3.13:0760a57, Oct 17 2025, 11:22:25) [GCC 13.3.0]</code></td>
+<td>ASAN</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code class="notranslate">Python 3.14.0+ (heads/3.14:889e918, Oct 17 2025, 11:23:02) [GCC 13.3.0]</code></td>
+<td>ASAN</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code class="notranslate">Python 3.15.0a1+ (heads/main:fbf0843, Oct 17 2025, 11:23:37) [GCC 13.3.0]</code></td>
+<td>ASAN</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</details>
+<p dir="auto"><strong>Sanitizer Output</strong></p>
+<details><summary>Details</summary>
+<div class="highlight highlight-source-python notranslate position-relative overflow-auto" dir="auto" data-snippet-clipboard-copy-content="=================================================================
+==1532703==ERROR: AddressSanitizer: BUS on unknown address (pc 0x5ae17c7bd8ce bp 0x7fffb3a81570 sp 0x7fffb3a814b0 T0)
+==1532703==The signal is caused by a READ memory access.
+==1532703==Hint: this fault was caused by a dereference of a high value address (see register values below).  Disassemble the provided pc to learn which register was used.
+    #0 0x5ae17c7bd8ce in unpack_single Objects/memoryobject.c:1842
+    #1 0x5ae17c7be2c2 in memory_item Objects/memoryobject.c:2474
+    #2 0x5ae17c7c31d6 in memory_subscript Objects/memoryobject.c:2610
+    #3 0x5ae17c6e5393 in PyObject_GetItem Objects/abstract.c:163
+    #4 0x5ae17c98a8f8 in _PyEval_EvalFrameDefault Python/generated_cases.c.h:62
+    #5 0x5ae17c9d7e54 in _PyEval_EvalFrame Include/internal/pycore_ceval.h:121
+    #6 0x5ae17c9d8148 in _PyEval_Vector Python/ceval.c:2001
+    #7 0x5ae17c9d83f8 in PyEval_EvalCode Python/ceval.c:884
+    #8 0x5ae17cacf507 in run_eval_code_obj Python/pythonrun.c:1365
+    #9 0x5ae17cacf723 in run_mod Python/pythonrun.c:1459
+    #10 0x5ae17cad057a in pyrun_file Python/pythonrun.c:1293
+    #11 0x5ae17cad3220 in _PyRun_SimpleFileObject Python/pythonrun.c:521
+    #12 0x5ae17cad34f6 in _PyRun_AnyFileObject Python/pythonrun.c:81
+    #13 0x5ae17cb2474d in pymain_run_file_obj Modules/main.c:410
+    #14 0x5ae17cb249b4 in pymain_run_file Modules/main.c:429
+    #15 0x5ae17cb261b2 in pymain_run_python Modules/main.c:691
+    #16 0x5ae17cb26842 in Py_RunMain Modules/main.c:772
+    #17 0x5ae17cb26a2e in pymain_main Modules/main.c:802
+    #18 0x5ae17cb26db3 in Py_BytesMain Modules/main.c:826
+    #19 0x5ae17c5aa645 in main Programs/python.c:15
+    #20 0x715a34c2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+    #21 0x715a34c2a28a in __libc_start_main_impl ../csu/libc-start.c:360
+    #22 0x5ae17c5aa574 in _start (/home/jackfromeast/Desktop/entropy/tasks/grammar-afl++-latest/targets/cpython/python+0x2dd574) (BuildId: ff3dc40ea460bd4beb2c3a72283cca525b319bf0)
+
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: BUS Objects/memoryobject.c:1842 in unpack_single
+==1532703==ABORTING"><pre class="notranslate"><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">==</span><span class="pl-c1">=</span>
+<span class="pl-c1">==</span><span class="pl-c1">1532703</span><span class="pl-c1">==</span><span class="pl-c1">ERROR</span>: <span class="pl-v">AddressSanitizer</span>: <span class="pl-c1">BUS</span> <span class="pl-s1">on</span> <span class="pl-s1">unknown</span> <span class="pl-en">address</span> (<span class="pl-s1">pc</span> <span class="pl-c1">0x5ae17c7bd8ce</span> <span class="pl-s1">bp</span> <span class="pl-c1">0x7fffb3a81570</span> <span class="pl-s1">sp</span> <span class="pl-c1">0x7fffb3a814b0</span> <span class="pl-v">T0</span>)
+<span class="pl-c1">==</span><span class="pl-c1">1532703</span><span class="pl-c1">==</span><span class="pl-v">The</span> <span class="pl-s1">signal</span> <span class="pl-c1">is</span> <span class="pl-s1">caused</span> <span class="pl-s1">by</span> <span class="pl-s1">a</span> <span class="pl-c1">READ</span> <span class="pl-s1">memory</span> <span class="pl-s1">access</span>.
+<span class="pl-c1">==</span><span class="pl-c1">1532703</span><span class="pl-c1">==</span><span class="pl-v">Hint</span>: <span class="pl-s1">this</span> <span class="pl-s1">fault</span> <span class="pl-s1">was</span> <span class="pl-s1">caused</span> <span class="pl-s1">by</span> <span class="pl-s1">a</span> <span class="pl-s1">dereference</span> <span class="pl-s1">of</span> <span class="pl-s1">a</span> <span class="pl-s1">high</span> <span class="pl-s1">value</span> <span class="pl-en">address</span> (<span class="pl-s1">see</span> <span class="pl-s1">register</span> <span class="pl-s1">values</span> <span class="pl-s1">below</span>).  <span class="pl-c1">Disassemble</span> <span class="pl-s1">the</span> <span class="pl-s1">provided</span> <span class="pl-s1">pc</span> <span class="pl-s1">to</span> <span class="pl-s1">learn</span> <span class="pl-s1">which</span> <span class="pl-s1">register</span> <span class="pl-s1">was</span> <span class="pl-s1">used</span>.
+    <span class="pl-c">#0 0x5ae17c7bd8ce in unpack_single Objects/memoryobject.c:1842</span>
+    <span class="pl-c">#1 0x5ae17c7be2c2 in memory_item Objects/memoryobject.c:2474</span>
+    <span class="pl-c">#2 0x5ae17c7c31d6 in memory_subscript Objects/memoryobject.c:2610</span>
+    <span class="pl-c">#3 0x5ae17c6e5393 in PyObject_GetItem Objects/abstract.c:163</span>
+    <span class="pl-c">#4 0x5ae17c98a8f8 in _PyEval_EvalFrameDefault Python/generated_cases.c.h:62</span>
+    <span class="pl-c">#5 0x5ae17c9d7e54 in _PyEval_EvalFrame Include/internal/pycore_ceval.h:121</span>
+    <span class="pl-c">#6 0x5ae17c9d8148 in _PyEval_Vector Python/ceval.c:2001</span>
+    <span class="pl-c">#7 0x5ae17c9d83f8 in PyEval_EvalCode Python/ceval.c:884</span>
+    <span class="pl-c">#8 0x5ae17cacf507 in run_eval_code_obj Python/pythonrun.c:1365</span>
+    <span class="pl-c">#9 0x5ae17cacf723 in run_mod Python/pythonrun.c:1459</span>
+    <span class="pl-c">#10 0x5ae17cad057a in pyrun_file Python/pythonrun.c:1293</span>
+    <span class="pl-c">#11 0x5ae17cad3220 in _PyRun_SimpleFileObject Python/pythonrun.c:521</span>
+    <span class="pl-c">#12 0x5ae17cad34f6 in _PyRun_AnyFileObject Python/pythonrun.c:81</span>
+    <span class="pl-c">#13 0x5ae17cb2474d in pymain_run_file_obj Modules/main.c:410</span>
+    <span class="pl-c">#14 0x5ae17cb249b4 in pymain_run_file Modules/main.c:429</span>
+    <span class="pl-c">#15 0x5ae17cb261b2 in pymain_run_python Modules/main.c:691</span>
+    <span class="pl-c">#16 0x5ae17cb26842 in Py_RunMain Modules/main.c:772</span>
+    <span class="pl-c">#17 0x5ae17cb26a2e in pymain_main Modules/main.c:802</span>
+    <span class="pl-c">#18 0x5ae17cb26db3 in Py_BytesMain Modules/main.c:826</span>
+    <span class="pl-c">#19 0x5ae17c5aa645 in main Programs/python.c:15</span>
+    <span class="pl-c">#20 0x715a34c2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58</span>
+    <span class="pl-c">#21 0x715a34c2a28a in __libc_start_main_impl ../csu/libc-start.c:360</span>
+    <span class="pl-c">#22 0x5ae17c5aa574 in _start (/home/jackfromeast/Desktop/entropy/tasks/grammar-afl++-latest/targets/cpython/python+0x2dd574) (BuildId: ff3dc40ea460bd4beb2c3a72283cca525b319bf0)</span>
+
+<span class="pl-c1">AddressSanitizer</span> <span class="pl-s1">can</span> <span class="pl-c1">not</span> <span class="pl-s1">provide</span> <span class="pl-s1">additional</span> <span class="pl-s1">info</span>.
+<span class="pl-c1">SUMMARY</span>: <span class="pl-smi">AddressSanitizer</span>: <span class="pl-c1">BUS</span> <span class="pl-v">Objects</span><span class="pl-c1">/</span><span class="pl-s1">memoryobject</span>.<span class="pl-c1">c</span>:<span class="pl-c1">1842</span> <span class="pl-c1">in</span> <span class="pl-s1">unpack_single</span>
+<span class="pl-c1">==</span><span class="pl-c1">1532703</span><span class="pl-c1">==</span><span class="pl-c1">ABORTING</span></pre></div>
+</details>
+
+<h3 dir="auto">Linked PRs</h3>
+<ul dir="auto">
+<li><span class="reference"><svg class="octicon octicon-git-pull-request open color-fg-open mr-1" title="Open" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354ZM3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z"></path></svg><a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="3774536160" data-permission-text="Title is private" data-url="https://github.com/python/cpython/issues/143324" data-hovercard-type="pull_request" data-hovercard-url="/python/cpython/pull/143324/hovercard" href="https://github.com/python/cpython/pull/143324">gh-142665: fix UAF when accessing a <code>memoryview</code> concurrently mutates the underlying buffer<span class="issue-shorthand"> #143324</span></a></span></li>
+</ul>
+</div></div><div class="IssueBodyViewer-module__IssueBodyTaskList__a_Inr"><!--$!--><template></template><button data-component="IconButton" type="button" class="prc-Button-ButtonBase-9n-Xk ReactionViewerAnchor-module__ReactionViewerAnchorButton__TujhO prc-Button-IconButton-fyge7" data-inactive="true" data-loading="false" data-no-visuals="true" data-size="small" data-variant="default" aria-labelledby="_R_al2mtb_"><svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-smiley" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm3.82 1.636a.75.75 0 0 1 1.038.175l.007.009c.103.118.22.222.35.31.264.178.683.37 1.285.37.602 0 1.02-.192 1.285-.371.13-.088.247-.192.35-.31l.007-.008a.75.75 0 0 1 1.222.87l-.022-.015c.02.013.021.015.021.015v.001l-.001.002-.002.003-.005.007-.014.019a2.066 2.066 0 0 1-.184.213c-.16.166-.338.316-.53.445-.63.418-1.37.638-2.127.629-.946 0-1.652-.308-2.126-.63a3.331 3.331 0 0 1-.715-.657l-.014-.02-.005-.006-.002-.003v-.002h-.001l.613-.432-.614.43a.75.75 0 0 1 .183-1.044ZM12 7a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM5 8a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm5.25 2.25.592.416a97.71 97.71 0 0 0-.592-.416Z"></path></svg></button><span class="prc-TooltipV2-Tooltip-tLeuB" data-direction="s" data-component="Tooltip" aria-hidden="true" id="_R_al2mtb_">Reactions are currently unavailable</span><!--/$--></div></div></div></div></div></div></div><div data-testid="issue-viewer-comments-container" class="react-comments-container"><div class="IssueViewer-module__commentsContainer__qDkcR"><!--$!--><template></template><div class="issue-timeline-loading-module__delaySkeletonLoad__jSGd5" data-testid="issue-timeline-loading"><div><div class="CommentLoading-module__CommentLoadingContainer__sM4lf"><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__elliptical__Dkk2i CommentLoading-module__avatarSkeleton__SULiu" style="width:40px;height:40px"></div><div class="CommentLoading-module__CommentLoadingContentWrapper__N0UXI"><div class="CommentDivider-module__CommentDividerContainer__yjzmV"><div class="CommentDivider-module__CommentDividerLeftLine__eqHQu CommentDivider-module__paddingBottomDefault__pzmHv"></div><div class="CommentDivider-module__CommentDividerRightLine__VJuKh CommentDivider-module__paddingBottomDefault__pzmHv"></div></div><div data-testid="comment-skeleton" class="CommentLoading-module__CommentLoadingCard__HkqV6"><div class="CommentLoading-module__CommentLoadingHeader__kHKXi"><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:150px"></div></div><div class="CommentLoading-module__CommentLoadingContent__u2TbG"><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:57%"></div><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:75%"></div><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:76%"></div><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:60%"></div><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:40%"></div></div></div></div></div></div><div><div class="CommentLoading-module__CommentLoadingContainer__sM4lf"><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__elliptical__Dkk2i CommentLoading-module__avatarSkeleton__SULiu" style="width:40px;height:40px"></div><div class="CommentLoading-module__CommentLoadingContentWrapper__N0UXI"><div class="CommentDivider-module__CommentDividerContainer__yjzmV"><div class="CommentDivider-module__CommentDividerLeftLine__eqHQu CommentDivider-module__paddingBottomDefault__pzmHv"></div><div class="CommentDivider-module__CommentDividerRightLine__VJuKh CommentDivider-module__paddingBottomDefault__pzmHv"></div></div><div data-testid="comment-skeleton" class="CommentLoading-module__CommentLoadingCard__HkqV6"><div class="CommentLoading-module__CommentLoadingHeader__kHKXi"><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:150px"></div></div><div class="CommentLoading-module__CommentLoadingContent__u2TbG"><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:75%"></div></div></div></div></div></div><div><div class="CommentLoading-module__CommentLoadingContainer__sM4lf"><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__elliptical__Dkk2i CommentLoading-module__avatarSkeleton__SULiu" style="width:40px;height:40px"></div><div class="CommentLoading-module__CommentLoadingContentWrapper__N0UXI"><div class="CommentDivider-module__CommentDividerContainer__yjzmV"><div class="CommentDivider-module__CommentDividerLeftLine__eqHQu CommentDivider-module__paddingBottomDefault__pzmHv"></div><div class="CommentDivider-module__CommentDividerRightLine__VJuKh CommentDivider-module__paddingBottomDefault__pzmHv"></div></div><div data-testid="comment-skeleton" class="CommentLoading-module__CommentLoadingCard__HkqV6"><div class="CommentLoading-module__CommentLoadingHeader__kHKXi"><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:150px"></div></div><div class="CommentLoading-module__CommentLoadingContent__u2TbG"><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:76%"></div><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:60%"></div><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:54%"></div></div></div></div></div></div><div><div class="CommentLoading-module__CommentLoadingContainer__sM4lf"><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__elliptical__Dkk2i CommentLoading-module__avatarSkeleton__SULiu" style="width:40px;height:40px"></div><div class="CommentLoading-module__CommentLoadingContentWrapper__N0UXI"><div class="CommentDivider-module__CommentDividerContainer__yjzmV"><div class="CommentDivider-module__CommentDividerLeftLine__eqHQu CommentDivider-module__paddingBottomDefault__pzmHv"></div><div class="CommentDivider-module__CommentDividerRightLine__VJuKh CommentDivider-module__paddingBottomDefault__pzmHv"></div></div><div data-testid="comment-skeleton" class="CommentLoading-module__CommentLoadingCard__HkqV6"><div class="CommentLoading-module__CommentLoadingHeader__kHKXi"><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:150px"></div></div><div class="CommentLoading-module__CommentLoadingContent__u2TbG"><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:60%"></div><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:54%"></div><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:57%"></div><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:75%"></div><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:45%"></div></div></div></div></div></div><div><div class="CommentLoading-module__CommentLoadingContainer__sM4lf"><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__elliptical__Dkk2i CommentLoading-module__avatarSkeleton__SULiu" style="width:40px;height:40px"></div><div class="CommentLoading-module__CommentLoadingContentWrapper__N0UXI"><div class="CommentDivider-module__CommentDividerContainer__yjzmV"><div class="CommentDivider-module__CommentDividerLeftLine__eqHQu CommentDivider-module__paddingBottomDefault__pzmHv"></div><div class="CommentDivider-module__CommentDividerRightLine__VJuKh CommentDivider-module__paddingBottomDefault__pzmHv"></div></div><div data-testid="comment-skeleton" class="CommentLoading-module__CommentLoadingCard__HkqV6"><div class="CommentLoading-module__CommentLoadingHeader__kHKXi"><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:150px"></div></div><div class="CommentLoading-module__CommentLoadingContent__u2TbG"><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:54%"></div><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:57%"></div><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:75%"></div><div class="LoadingSkeleton-module__skeleton__euqGn LoadingSkeleton-module__rounded__J10DA LoadingSkeleton-module__heightSm__YvOXy" style="width:76%"></div></div></div></div></div></div></div><!--/$--></div></div></div><div data-testid="issue-viewer-metadata-container" class="IssueViewer-module__metadataSidebar__GxfUH IssueViewer-module__metadataSidebar_viewport__AKkg5"><div class="IssueViewer-module__issueViewerMetadataPane__bXvwI" data-testid="issue-viewer-metadata-pane"><h2 class="IssueViewer-module__metadataHeader__UQJId prc-Heading-Heading-MtWFE">Metadata</h2><h2 class="IssueViewer-module__largeScreenMetadataHeader__iySgH sr-only prc-Heading-Heading-MtWFE">Metadata</h2><div data-testid="sticky-sidebar"><div class="IssueSidebar-module__sidebarContent__HKaGK"><div data-testid="sidebar-assignees-section" class="Section-module__SectionContainer__DFzgf"><div class="Section-module__headerContentWrapper__gjSPk"><div class="SectionHeader-module__containerReadonly__QwNSM"><h3 class="SectionHeader-module__SectionHeaderTitle__qcG5P SectionHeader-module__headingReadonly__Xl5Sa prc-Heading-Heading-MtWFE">Assignees</h3></div></div><div class="Section-module__childrenContainer__tpT2L"><ul class="prc-ActionList-ActionList-rPFF2 Assignees-module__assigneesList__ZKD6F" data-component="ActionList" data-dividers="false" data-variant="full" data-icv-visible="true"><li data-component="ActionList.Item" data-has-description="false" class="prc-ActionList-ActionListItem-So4vC"><a class="prc-ActionList-ActionListContent-KBb8- prc-Link-Link-9ZwDx" data-component="Link" tabindex="0" aria-labelledby="_R_7b4f6tb_--label" id="_R_7b4f6tb_" data-size="medium" href="/picnixz" target="_blank" data-hovercard-url="/users/picnixz/hovercard" data-hovercard-type="user" aria-keyshortcuts="Alt+ArrowUp" octo-click="hovercard-link-click" octo-dimensions="link_type:self"><span class="prc-ActionList-Spacer-4tR2m"></span><span class="prc-ActionList-LeadingVisual-NBr28 prc-ActionList-VisualWrap-bdCsS" data-component="ActionList.LeadingVisual"><img data-component="Avatar" class="prc-Avatar-Avatar-0xaUi" alt="@picnixz" width="20" height="20" style="--avatarSize-regular:20px" src="https://avatars.githubusercontent.com/u/10796600?s=64&amp;v=4" data-testid="github-avatar"/></span><span class="prc-ActionList-ActionListSubContent-gKsFp" data-component="ActionList.Item--DividerContainer"><span id="_R_7b4f6tb_--label" class="prc-ActionList-ItemLabel-81ohH" data-component="ActionList.Item.Label"><div data-testid="issue-assignees" class="Assignees-module__assigneeNameLabel__RULR6">picnixz</div></span></span></a></li></ul></div></div><div data-testid="sidebar-labels-section" class="Section-module__SectionContainer__DFzgf"><div class="Section-module__headerContentWrapper__gjSPk"><div class="SectionHeader-module__containerReadonly__QwNSM"><h3 class="SectionHeader-module__SectionHeaderTitle__qcG5P SectionHeader-module__headingReadonly__Xl5Sa prc-Heading-Heading-MtWFE">Labels</h3></div></div><div class="Section-module__childrenContainer__tpT2L"><div tabindex="-1" data-testid="issue-labels" class="LabelsList-module__labelsListContainer__q43kf"><a class="LabelsList-module__labelLink__puy8d prc-Link-Link-9ZwDx" data-component="Link" data-muted="true" href="https://github.com/python/cpython/issues?q=state%3Aopen%20label%3A%22interpreter-core%22" aria-describedby="LA_kwDOBN0Z8c7viASu-tooltip _R_on6tb_"><span class="prc-Token-TokenBase-te5-F prc-Token-IssueLabel-2IazM LabelToken-module__IssueLabelToken__vAY0G" data-cursor-is-interactive="false" data-size="medium" text="[object Object]" style="--label-r:9;--label-g:252;--label-b:89;--label-h:140;--label-s:98;--label-l:51;overflow:hidden;text-overflow:ellipsis;cursor:pointer;max-width:100%" data-has-remove-button="false"><span class="prc-Token-TokenTextContainer-cOUaD"><span class="prc-Text-Text-9mHv3">interpreter-core</span></span></span><span class="sr-only" id="LA_kwDOBN0Z8c7viASu-tooltip">(Objects, Python, Grammar, and Parser dirs)</span></a><span class="LabelsList-module__labelDescriptionTooltip__hM1DT LabelsList-module__tooltipVisible__AA4FN prc-TooltipV2-Tooltip-tLeuB" data-direction="s" data-component="Tooltip" aria-label="(Objects, Python, Grammar, and Parser dirs)" role="tooltip" aria-hidden="true" id="_R_on6tb_">(Objects, Python, Grammar, and Parser dirs)</span><a class="LabelsList-module__labelLink__puy8d prc-Link-Link-9ZwDx" data-component="Link" data-muted="true" href="https://github.com/python/cpython/issues?q=state%3Aopen%20label%3A%22type-crash%22" aria-describedby="LA_kwDOBN0Z8c7visSS-tooltip _R_18n6tb_"><span class="prc-Token-TokenBase-te5-F prc-Token-IssueLabel-2IazM LabelToken-module__IssueLabelToken__vAY0G" data-cursor-is-interactive="false" data-size="medium" text="[object Object]" style="--label-r:182;--label-g:2;--label-b:5;--label-h:359;--label-s:98;--label-l:36;overflow:hidden;text-overflow:ellipsis;cursor:pointer;max-width:100%" data-has-remove-button="false"><span class="prc-Token-TokenTextContainer-cOUaD"><span class="prc-Text-Text-9mHv3">type-crash</span></span></span><span class="sr-only" id="LA_kwDOBN0Z8c7visSS-tooltip">A hard crash of the interpreter, possibly with a core dump</span></a><span class="LabelsList-module__labelDescriptionTooltip__hM1DT LabelsList-module__tooltipVisible__AA4FN prc-TooltipV2-Tooltip-tLeuB" data-direction="s" data-component="Tooltip" aria-label="A hard crash of the interpreter, possibly with a core dump" role="tooltip" aria-hidden="true" id="_R_18n6tb_">A hard crash of the interpreter, possibly with a core dump</span></div></div></div><!--$--><div data-testid="sidebar-projects-section" class="Section-module__SectionContainer__DFzgf"><div class="Section-module__headerContentWrapper__gjSPk"><div class="SectionHeader-module__containerReadonly__QwNSM"><h3 class="SectionHeader-module__SectionHeaderTitle__qcG5P SectionHeader-module__headingReadonly__Xl5Sa prc-Heading-Heading-MtWFE">Projects</h3></div><span class="Section-module__emptyText__P72MM">No projects</span><div class="Section-module__hiddenChildrenContainer__MgzXj"><div class="ProjectsSection-module__projectItemsContainer__D1nPN"></div></div></div></div><!--/$--><div data-testid="sidebar-milestones-section" class="Section-module__SectionContainer__DFzgf"><div class="Section-module__headerContentWrapper__gjSPk"><div class="SectionHeader-module__containerReadonly__QwNSM"><h3 class="SectionHeader-module__SectionHeaderTitle__qcG5P SectionHeader-module__headingReadonly__Xl5Sa prc-Heading-Heading-MtWFE">Milestone</h3></div><span class="Section-module__emptyText__P72MM">No milestone</span><div class="Section-module__hiddenChildrenContainer__MgzXj"><ul class="prc-ActionList-ActionList-rPFF2" data-component="ActionList" data-dividers="false" data-variant="full"><div class="Milestone-module__hiddenPlaceholder__jxVaN"></div></ul></div></div></div><!--$--><div data-testid="sidebar-section" class="Section-module__SectionContainer__DFzgf"><div class="Section-module__headerContentWrapper__gjSPk"><div class="SectionHeader-module__containerReadonly__QwNSM"><h3 class="SectionHeader-module__SectionHeaderTitle__qcG5P SectionHeader-module__headingReadonly__Xl5Sa prc-Heading-Heading-MtWFE">Relationships</h3></div><span class="Section-module__emptyText__P72MM">None yet</span><div class="Section-module__hiddenChildrenContainer__MgzXj"></div></div></div><div data-testid="sidebar-section" class="Section-module__SectionContainer__DFzgf"><div class="Section-module__headerContentWrapper__gjSPk"><div class="SectionHeader-module__containerReadonly__QwNSM"><h3 class="SectionHeader-module__SectionHeaderTitle__qcG5P SectionHeader-module__headingReadonly__Xl5Sa prc-Heading-Heading-MtWFE">Development</h3></div><span class="Section-module__emptyText__P72MM">No branches or pull requests</span><div class="Section-module__hiddenChildrenContainer__MgzXj"></div></div></div><!--/$--><h2 class="sr-only prc-Heading-Heading-MtWFE">Issue actions</h2><ul class="prc-ActionList-ActionList-rPFF2 OptionsSection-module__ActionListOverrides__e4GEe" data-component="ActionList" data-dividers="false" data-variant="full"></ul></div></div></div></div></div></div><!--/$--></div><!--/$--></div></div><!--/$--><!--/$--><script type="application/json" id="__PRIMER_DATA__R_0___">{"resolvedServerColorMode":"day"}</script></div>
+</react-app>
+</turbo-frame>
+
+
+
+
+  </div>
+
+</turbo-frame>
+
+    </main>
+  </div>
+
+  </div>
+
+          <footer class="footer tmp-pt-7 tmp-pb-6 f6 color-fg-muted color-border-subtle p-responsive" role="contentinfo" >
+  <h2 class='sr-only'>Footer</h2>
+
+  
+
+
+  <div class="d-flex flex-justify-center flex-items-center flex-column-reverse flex-lg-row flex-wrap flex-lg-nowrap">
+    <div class="d-flex flex-items-center flex-shrink-0 mx-2">
+      <a aria-label="GitHub Homepage" class="footer-octicon mr-2" href="https://github.com">
+        <svg aria-hidden="true" height="24" viewBox="0 0 24 24" version="1.1" width="24" data-view-component="true" class="octicon octicon-mark-github">
+    <path d="M10.226 17.284c-2.965-.36-5.054-2.493-5.054-5.256 0-1.123.404-2.336 1.078-3.144-.292-.741-.247-2.314.09-2.965.898-.112 2.111.36 2.83 1.01.853-.269 1.752-.404 2.853-.404 1.1 0 1.999.135 2.807.382.696-.629 1.932-1.1 2.83-.988.315.606.36 2.179.067 2.942.72.854 1.101 2 1.101 3.167 0 2.763-2.089 4.852-5.098 5.234.763.494 1.28 1.572 1.28 2.807v2.336c0 .674.561 1.056 1.235.786 4.066-1.55 7.255-5.615 7.255-10.646C23.5 6.188 18.334 1 11.978 1 5.62 1 .5 6.188.5 12.545c0 4.986 3.167 9.12 7.435 10.669.606.225 1.19-.18 1.19-.786V20.63a2.9 2.9 0 0 1-1.078.224c-1.483 0-2.359-.808-2.987-2.313-.247-.607-.517-.966-1.034-1.033-.27-.023-.359-.135-.359-.27 0-.27.45-.471.898-.471.652 0 1.213.404 1.797 1.235.45.651.921.943 1.483.943.561 0 .92-.202 1.437-.719.382-.381.674-.718.944-.943"></path>
+</svg>
+</a>
+      <span>
+        &copy; 2026 GitHub,&nbsp;Inc.
+      </span>
+    </div>
+
+    <nav aria-label="Footer">
+      <h3 class="sr-only" id="sr-footer-heading">Footer navigation</h3>
+
+      <ul class="list-style-none d-flex flex-justify-center flex-wrap mb-2 mb-lg-0" aria-labelledby="sr-footer-heading">
+
+
+          <li class="mx-2">
+            <a data-analytics-event="{&quot;category&quot;:&quot;Footer&quot;,&quot;action&quot;:&quot;go to Terms&quot;,&quot;label&quot;:&quot;text:terms&quot;}" href="https://docs.github.com/site-policy/github-terms/github-terms-of-service" data-view-component="true" class="Link--secondary Link">Terms</a>
+          </li>
+
+          <li class="mx-2">
+            <a data-analytics-event="{&quot;category&quot;:&quot;Footer&quot;,&quot;action&quot;:&quot;go to privacy&quot;,&quot;label&quot;:&quot;text:privacy&quot;}" href="https://docs.github.com/site-policy/privacy-policies/github-privacy-statement" data-view-component="true" class="Link--secondary Link">Privacy</a>
+          </li>
+
+          <li class="mx-2">
+            <a data-analytics-event="{&quot;category&quot;:&quot;Footer&quot;,&quot;action&quot;:&quot;go to security&quot;,&quot;label&quot;:&quot;text:security&quot;}" href="https://github.com/security" data-view-component="true" class="Link--secondary Link">Security</a>
+          </li>
+
+          <li class="mx-2">
+            <a data-analytics-event="{&quot;category&quot;:&quot;Footer&quot;,&quot;action&quot;:&quot;go to status&quot;,&quot;label&quot;:&quot;text:status&quot;}" href="https://www.githubstatus.com/" data-view-component="true" class="Link--secondary Link">Status</a>
+          </li>
+
+          <li class="mx-2">
+            <a data-analytics-event="{&quot;category&quot;:&quot;Footer&quot;,&quot;action&quot;:&quot;go to community&quot;,&quot;label&quot;:&quot;text:community&quot;}" href="https://github.community/" data-view-component="true" class="Link--secondary Link">Community</a>
+          </li>
+
+          <li class="mx-2">
+            <a data-analytics-event="{&quot;category&quot;:&quot;Footer&quot;,&quot;action&quot;:&quot;go to docs&quot;,&quot;label&quot;:&quot;text:docs&quot;}" href="https://docs.github.com/" data-view-component="true" class="Link--secondary Link">Docs</a>
+          </li>
+
+          <li class="mx-2">
+            <a data-analytics-event="{&quot;category&quot;:&quot;Footer&quot;,&quot;action&quot;:&quot;go to contact&quot;,&quot;label&quot;:&quot;text:contact&quot;}" href="https://support.github.com?tags=dotcom-footer" data-view-component="true" class="Link--secondary Link">Contact</a>
+          </li>
+
+          <li class="mx-2" >
+  <cookie-consent-link>
+    <button
+      type="button"
+      class="Link--secondary underline-on-hover border-0 p-0 color-bg-transparent"
+      data-action="click:cookie-consent-link#showConsentManagement"
+      data-analytics-event="{&quot;location&quot;:&quot;footer&quot;,&quot;action&quot;:&quot;cookies&quot;,&quot;context&quot;:&quot;subfooter&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;label&quot;:&quot;cookies_link_subfooter_footer&quot;}"
+    >
+       Manage cookies
+    </button>
+  </cookie-consent-link>
+</li>
+
+<li class="mx-2">
+  <cookie-consent-link>
+    <button
+      type="button"
+      class="Link--secondary underline-on-hover border-0 p-0 color-bg-transparent text-left"
+      data-action="click:cookie-consent-link#showConsentManagement"
+      data-analytics-event="{&quot;location&quot;:&quot;footer&quot;,&quot;action&quot;:&quot;dont_share_info&quot;,&quot;context&quot;:&quot;subfooter&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;label&quot;:&quot;dont_share_info_link_subfooter_footer&quot;}"
+    >
+      Do not share my personal information
+    </button>
+  </cookie-consent-link>
+</li>
+
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+
+    <ghcc-consent id="ghcc" class="position-fixed bottom-0 left-0" style="z-index: 999999"
+      data-locale="en"
+      data-initial-cookie-consent-allowed=""
+      data-cookie-consent-required="true"
+    ></ghcc-consent>
+
+
+
+
+  <div id="ajax-error-message" class="ajax-error-message flash flash-error" hidden>
+    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-alert">
+    <path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path>
+</svg>
+    <button type="button" class="flash-close js-ajax-error-dismiss" aria-label="Dismiss error">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
+    <path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path>
+</svg>
+    </button>
+    You can’t perform that action at this time.
+  </div>
+
+    <template id="site-details-dialog">
+  <details class="details-reset details-overlay details-overlay-dark lh-default color-fg-default hx_rsm" open>
+    <summary role="button" aria-label="Close dialog"></summary>
+    <details-dialog class="Box Box--overlay d-flex flex-column anim-fade-in fast hx_rsm-dialog hx_rsm-modal">
+      <button class="Box-btn-octicon m-0 btn-octicon position-absolute right-0 top-0" type="button" aria-label="Close dialog" data-close-dialog>
+        <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
+    <path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path>
+</svg>
+      </button>
+      <div class="octocat-spinner tmp-my-6 js-details-dialog-spinner"></div>
+    </details-dialog>
+  </details>
+</template>
+
+    <div class="Popover js-hovercard-content position-absolute" style="display: none; outline: none;">
+  <div class="Popover-message Popover-message--bottom-left Popover-message--large Box color-shadow-large" style="width:360px;">
+  </div>
+</div>
+
+    <template id="snippet-clipboard-copy-button">
+  <div class="zeroclipboard-container position-absolute right-0 top-0">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn js-clipboard-copy m-2 p-0" data-copy-feedback="Copied!" data-tooltip-direction="w">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon m-2 tmp-m-2">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none m-2 tmp-m-2">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div>
+</template>
+<template id="snippet-clipboard-copy-button-unpositioned">
+  <div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div>
+</template>
+
+
+
+
+    </div>
+    <div id="js-global-screen-reader-notice" class="sr-only mt-n1" aria-live="polite" aria-atomic="true" ></div>
+    <div id="js-global-screen-reader-notice-assertive" class="sr-only mt-n1" aria-live="assertive" aria-atomic="true"></div>
+  </body>
+</html>
+

@@ -1,0 +1,840 @@
+[
+  {
+    "url": "https://blog.abdulrah33m.com/prototype-pollution-in-python/",
+    "filename": "blog.abdulrah33m.com_prototype-pollution-in-python.md",
+    "primary_sink": "CLASS-001",
+    "all_sinks": [
+      "CLASS-001",
+      "CLASS-006"
+    ],
+    "domain": "blog.abdulrah33m.com"
+  },
+  {
+    "url": "https://maplebacon.org/2024/02/dicectf2024-irs/",
+    "filename": "maplebacon.org_2024_02_dicectf2024-irs.md",
+    "primary_sink": "CTF-002",
+    "all_sinks": [
+      "CTF-002"
+    ],
+    "domain": "maplebacon.org"
+  },
+  {
+    "url": "https://blog.antoine.rocks/%F0%9F%91%A9%E2%80%8D%F0%9F%8F%ABwriteups/ictf%202024%20-%20all%20pyjails/",
+    "filename": "blog.antoine.rocks_%F0%9F%91%A9%E2%80%8D%F0%9F%8F%ABwriteups_ictf%202.md",
+    "primary_sink": "CTF-003",
+    "all_sinks": [
+      "CTF-003"
+    ],
+    "domain": "blog.antoine.rocks"
+  },
+  {
+    "url": "https://wachter-space.de/2023/11/12/csaw23-python-jail-escape/",
+    "filename": "wachter-space.de_2023_11_12_csaw23-python-jail-escape.md",
+    "primary_sink": "CTF-003",
+    "all_sinks": [
+      "CTF-003"
+    ],
+    "domain": "wachter-space.de"
+  },
+  {
+    "url": "https://ctf.ulis.se/writeups/b01lers2023/rev/blacklist/",
+    "filename": "ctf.ulis.se_writeups_b01lers2023_rev_blacklist.md",
+    "primary_sink": "CTF-004",
+    "all_sinks": [
+      "CTF-004"
+    ],
+    "domain": "ctf.ulis.se"
+  },
+  {
+    "url": "https://crazymanarmy.github.io/2023/01/18/idek-2022-CTF-Pyjail-Pyjail-Revenge-Writeup/",
+    "filename": "crazymanarmy.github.io_2023_01_18_idek-2022-CTF-Pyjail-Pyjail-Revenge-Wri.md",
+    "primary_sink": "CTF-008",
+    "all_sinks": [
+      "CTF-008",
+      "FILE-008",
+      "STDLIB-014"
+    ],
+    "domain": "crazymanarmy.github.io"
+  },
+  {
+    "url": "https://hexplo.it/post/escaping-the-csawctf-python-sandbox/",
+    "filename": "hexplo.it_post_escaping-the-csawctf-python-sandbox.md",
+    "primary_sink": "STDLIB-006",
+    "all_sinks": [
+      "STDLIB-006"
+    ],
+    "domain": "hexplo.it"
+  },
+  {
+    "url": "https://bittripping.com/2012/09/14/python-sandbox-exploitation/",
+    "filename": "bittripping.com_2012_09_14_python-sandbox-exploitation.md",
+    "primary_sink": "CPYTHON-007",
+    "all_sinks": [
+      "CPYTHON-007"
+    ],
+    "domain": "bittripping.com"
+  },
+  {
+    "url": "https://pwn.win/2022/05/11/python-buffered-reader.html",
+    "filename": "pwn.win_2022_05_11_python-buffered-reader.html.md",
+    "primary_sink": "CPYTHON-013",
+    "all_sinks": [
+      "CPYTHON-013"
+    ],
+    "domain": "pwn.win"
+  },
+  {
+    "url": "https://lbarman.ch/blog/pyjail/",
+    "filename": "lbarman.ch_blog_pyjail.md",
+    "primary_sink": "CTF-012",
+    "all_sinks": [
+      "CTF-012"
+    ],
+    "domain": "lbarman.ch"
+  },
+  {
+    "url": "https://netsec.expert/posts/breaking-python3-eval-protections/",
+    "filename": "netsec.expert_posts_breaking-python3-eval-protections.md",
+    "primary_sink": "RCE-001",
+    "all_sinks": [
+      "RCE-001"
+    ],
+    "domain": "netsec.expert"
+  },
+  {
+    "url": "https://jia.je/ctf-writeups/misc/pyjail/seccon-2024-quals-1linepyjail.html",
+    "filename": "jia.je_ctf-writeups_misc_pyjail_seccon-2024-quals-1linepy.md",
+    "primary_sink": "RCE-002",
+    "all_sinks": [
+      "RCE-002"
+    ],
+    "domain": "jia.je"
+  },
+  {
+    "url": "https://jinja.palletsprojects.com/en/stable/templates/#jinja-filters.safe",
+    "filename": "jinja.palletsprojects.com_en_stable_templates.md",
+    "primary_sink": "SSTI-001",
+    "all_sinks": [
+      "SSTI-001"
+    ],
+    "domain": "jinja.palletsprojects.com"
+  },
+  {
+    "url": "https://markupsafe.palletsprojects.com/en/stable/escaping/#markupsafe.Markup",
+    "filename": "markupsafe.palletsprojects.com_en_stable_escaping.md",
+    "primary_sink": "SSTI-001",
+    "all_sinks": [
+      "SSTI-001"
+    ],
+    "domain": "markupsafe.palletsprojects.com"
+  },
+  {
+    "url": "https://bugs.python.org/issue43604",
+    "filename": "bugs.python.org_issue43604.md",
+    "primary_sink": "FILE-002",
+    "all_sinks": [
+      "FILE-002"
+    ],
+    "domain": "bugs.python.org"
+  },
+  {
+    "url": "https://sethmlarson.dev/security/deprecating-os-path-commonprefix-python-3-13",
+    "filename": "sethmlarson.dev_security_deprecating-os-path-commonprefix-python-3.md",
+    "primary_sink": "FILE-006",
+    "all_sinks": [
+      "FILE-006"
+    ],
+    "domain": "sethmlarson.dev"
+  },
+  {
+    "url": "https://www.kb.cert.org/vuls/id/127587",
+    "filename": "www.kb.cert.org_vuls_id_127587.md",
+    "primary_sink": "SSRF-001",
+    "all_sinks": [
+      "SSRF-001"
+    ],
+    "domain": "www.kb.cert.org"
+  },
+  {
+    "url": "https://ctftime.org/event/669",
+    "filename": "ctftime.org_event_669.md",
+    "primary_sink": "CTF-007",
+    "all_sinks": [
+      "CTF-007"
+    ],
+    "domain": "ctftime.org"
+  },
+  {
+    "url": "https://ctftime.org/",
+    "filename": "ctftime.org_.md",
+    "primary_sink": "ASYNC-005",
+    "all_sinks": [
+      "ASYNC-005",
+      "CPYTHON-009",
+      "CTF-010",
+      "FILE-007",
+      "STDLIB-007",
+      "STDLIB-008"
+    ],
+    "domain": "ctftime.org"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/maple3142/imaginaryCTF-solution/master/MapleCTF-2023/Python%20Type%20Hints%20Are%20Turing%20Complete.pdf",
+    "filename": "raw.githubusercontent.com_maple3142_imaginaryCTF-solution_master_MapleCTF-20.md",
+    "primary_sink": "CLASS-012",
+    "all_sinks": [
+      "CLASS-012"
+    ],
+    "domain": "raw.githubusercontent.com"
+  },
+  {
+    "url": "https://ctftime.org/task/15647",
+    "filename": "ctftime.org_task_15647.md",
+    "primary_sink": "STDLIB-012",
+    "all_sinks": [
+      "STDLIB-012"
+    ],
+    "domain": "ctftime.org"
+  },
+  {
+    "url": "https://ctftime.org/task/25562",
+    "filename": "ctftime.org_task_25562.md",
+    "primary_sink": "STDLIB-013",
+    "all_sinks": [
+      "STDLIB-013"
+    ],
+    "domain": "ctftime.org"
+  },
+  {
+    "url": "https://ctftime.org/task/16059",
+    "filename": "ctftime.org_task_16059.md",
+    "primary_sink": "SSTI-002",
+    "all_sinks": [
+      "SSTI-002"
+    ],
+    "domain": "ctftime.org"
+  },
+  {
+    "url": "https://fail0verflow.com/blog/2014/plaidctf-2014-nightmares/",
+    "filename": "fail0verflow.com_blog_2014_plaidctf-2014-nightmares.md",
+    "primary_sink": "CTF-011",
+    "all_sinks": [
+      "CTF-011"
+    ],
+    "domain": "fail0verflow.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/85380",
+    "filename": "github.com_python_cpython_issues_85380.md",
+    "primary_sink": "DESER-001",
+    "all_sinks": [
+      "DESER-001"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/113626",
+    "filename": "github.com_python_cpython_issues_113626.md",
+    "primary_sink": "DESER-001",
+    "all_sinks": [
+      "DESER-001"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/148801",
+    "filename": "github.com_python_cpython_issues_148801.md",
+    "primary_sink": "DESER-002",
+    "all_sinks": [
+      "DESER-002"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/133009",
+    "filename": "github.com_python_cpython_issues_133009.md",
+    "primary_sink": "DESER-002",
+    "all_sinks": [
+      "DESER-002"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/143638",
+    "filename": "github.com_python_cpython_issues_143638.md",
+    "primary_sink": "DESER-003",
+    "all_sinks": [
+      "DESER-003"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/109503",
+    "filename": "github.com_python_cpython_issues_109503.md",
+    "primary_sink": "FILE-001",
+    "all_sinks": [
+      "FILE-001"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/127987",
+    "filename": "github.com_python_cpython_issues_127987.md",
+    "primary_sink": "FILE-003",
+    "all_sinks": [
+      "FILE-003"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/146121",
+    "filename": "github.com_python_cpython_issues_146121.md",
+    "primary_sink": "FILE-004",
+    "all_sinks": [
+      "FILE-004"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-6597",
+    "filename": "nvd.nist.gov_vuln_detail_CVE-2023-6597.md",
+    "primary_sink": "FILE-005",
+    "all_sinks": [
+      "FILE-005"
+    ],
+    "domain": "nvd.nist.gov"
+  },
+  {
+    "url": "https://docs.python.org/3/library/sqlite3.html",
+    "filename": "docs.python.org_3_library_sqlite3.html.md",
+    "primary_sink": "SQLI-001",
+    "all_sinks": [
+      "SQLI-001"
+    ],
+    "domain": "docs.python.org"
+  },
+  {
+    "url": "https://docs.python.org/3/reference/datamodel.html#object.__init_subclass__",
+    "filename": "docs.python.org_3_reference_datamodel.html.md",
+    "primary_sink": "CLASS-002",
+    "all_sinks": [
+      "CLASS-002"
+    ],
+    "domain": "docs.python.org"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/122634",
+    "filename": "github.com_python_cpython_issues_122634.md",
+    "primary_sink": "CLASS-003",
+    "all_sinks": [
+      "CLASS-003"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://docs.python.org/3/reference/datamodel.html#object.__getitem__",
+    "filename": "docs.python.org_3_reference_datamodel.html.md",
+    "primary_sink": "CLASS-004",
+    "all_sinks": [
+      "CLASS-004"
+    ],
+    "domain": "docs.python.org"
+  },
+  {
+    "url": "https://docs.python.org/3/reference/datamodel.html#object.__getattribute__",
+    "filename": "docs.python.org_3_reference_datamodel.html.md",
+    "primary_sink": "CLASS-005",
+    "all_sinks": [
+      "CLASS-005"
+    ],
+    "domain": "docs.python.org"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/46578",
+    "filename": "github.com_python_cpython_issues_46578.md",
+    "primary_sink": "CLASS-007",
+    "all_sinks": [
+      "CLASS-007"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/117255",
+    "filename": "github.com_python_cpython_issues_117255.md",
+    "primary_sink": "CLASS-008",
+    "all_sinks": [
+      "CLASS-008"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/66677",
+    "filename": "github.com_python_cpython_issues_66677.md",
+    "primary_sink": "CLASS-009",
+    "all_sinks": [
+      "CLASS-009"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-22153",
+    "filename": "nvd.nist.gov_vuln_detail_CVE-2025-22153.md",
+    "primary_sink": "CLASS-010",
+    "all_sinks": [
+      "CLASS-010"
+    ],
+    "domain": "nvd.nist.gov"
+  },
+  {
+    "url": "https://docs.python.org/3/reference/datamodel.html#object.__setattr__",
+    "filename": "docs.python.org_3_reference_datamodel.html.md",
+    "primary_sink": "PROTO-001",
+    "all_sinks": [
+      "PROTO-001"
+    ],
+    "domain": "docs.python.org"
+  },
+  {
+    "url": "https://github.com/advisories/GHSA-69v7-xpr6-6gjm",
+    "filename": "github.com_advisories_GHSA-69v7-xpr6-6gjm.md",
+    "primary_sink": "PROTO-002",
+    "all_sinks": [
+      "PROTO-002"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://docs.python.org/3/library/functions.html#dir",
+    "filename": "docs.python.org_3_library_functions.html.md",
+    "primary_sink": "PROTO-003",
+    "all_sinks": [
+      "PROTO-003"
+    ],
+    "domain": "docs.python.org"
+  },
+  {
+    "url": "https://docs.python.org/3/library/functions.html#vars",
+    "filename": "docs.python.org_3_library_functions.html.md",
+    "primary_sink": "PROTO-004",
+    "all_sinks": [
+      "PROTO-004"
+    ],
+    "domain": "docs.python.org"
+  },
+  {
+    "url": "https://github.com/advisories/GHSA-w853-jp5j-5j7f",
+    "filename": "github.com_advisories_GHSA-w853-jp5j-5j7f.md",
+    "primary_sink": "RACE-001",
+    "all_sinks": [
+      "RACE-001"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/143650",
+    "filename": "github.com_python_cpython_issues_143650.md",
+    "primary_sink": "RACE-002",
+    "all_sinks": [
+      "RACE-002"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/126548",
+    "filename": "github.com_python_cpython_issues_126548.md",
+    "primary_sink": "RACE-003",
+    "all_sinks": [
+      "RACE-003"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/112202",
+    "filename": "github.com_python_cpython_issues_112202.md",
+    "primary_sink": "ASYNC-001",
+    "all_sinks": [
+      "ASYNC-001"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/126080",
+    "filename": "github.com_python_cpython_issues_126080.md",
+    "primary_sink": "ASYNC-002",
+    "all_sinks": [
+      "ASYNC-002"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/126138",
+    "filename": "github.com_python_cpython_issues_126138.md",
+    "primary_sink": "ASYNC-002",
+    "all_sinks": [
+      "ASYNC-002",
+      "ASYNC-006"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/117881",
+    "filename": "github.com_python_cpython_issues_117881.md",
+    "primary_sink": "ASYNC-003",
+    "all_sinks": [
+      "ASYNC-003"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/134471",
+    "filename": "github.com_python_cpython_issues_134471.md",
+    "primary_sink": "ASYNC-004",
+    "all_sinks": [
+      "ASYNC-004"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/danthedeckie/simpleeval/issues/138",
+    "filename": "github.com_danthedeckie_simpleeval_issues_138.md",
+    "primary_sink": "CTF-001",
+    "all_sinks": [
+      "CTF-001"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/jiegec/ctf-writeups/blob/master/docs/misc/pyjail.md",
+    "filename": "github.com_jiegec_ctf-writeups_blob_master_docs_misc_pyjail.m.md",
+    "primary_sink": "CTF-004",
+    "all_sinks": [
+      "CTF-004"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/95588",
+    "filename": "github.com_python_cpython_issues_95588.md",
+    "primary_sink": "STDLIB-001",
+    "all_sinks": [
+      "STDLIB-001"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-3177",
+    "filename": "nvd.nist.gov_vuln_detail_CVE-2021-3177.md",
+    "primary_sink": "STDLIB-002",
+    "all_sinks": [
+      "STDLIB-002"
+    ],
+    "domain": "nvd.nist.gov"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/42938",
+    "filename": "github.com_python_cpython_issues_42938.md",
+    "primary_sink": "STDLIB-002",
+    "all_sinks": [
+      "STDLIB-002"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-28861",
+    "filename": "nvd.nist.gov_vuln_detail_CVE-2021-28861.md",
+    "primary_sink": "STDLIB-003",
+    "all_sinks": [
+      "STDLIB-003"
+    ],
+    "domain": "nvd.nist.gov"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/33515",
+    "filename": "github.com_python_cpython_issues_33515.md",
+    "primary_sink": "STDLIB-004",
+    "all_sinks": [
+      "STDLIB-004"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-6232",
+    "filename": "nvd.nist.gov_vuln_detail_CVE-2024-6232.md",
+    "primary_sink": "STDLIB-005",
+    "all_sinks": [
+      "STDLIB-005"
+    ],
+    "domain": "nvd.nist.gov"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/112127",
+    "filename": "github.com_python_cpython_issues_112127.md",
+    "primary_sink": "CPYTHON-001",
+    "all_sinks": [
+      "CPYTHON-001"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/jailctf/pyjail-collection",
+    "filename": "github.com_jailctf_pyjail-collection.md",
+    "primary_sink": "CPYTHON-002",
+    "all_sinks": [
+      "CPYTHON-002",
+      "CTF-005"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/143236",
+    "filename": "github.com_python_cpython_issues_143236.md",
+    "primary_sink": "CPYTHON-003",
+    "all_sinks": [
+      "CPYTHON-003"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/143003",
+    "filename": "github.com_python_cpython_issues_143003.md",
+    "primary_sink": "CPYTHON-004",
+    "all_sinks": [
+      "CPYTHON-004"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/125859",
+    "filename": "github.com_python_cpython_issues_125859.md",
+    "primary_sink": "CPYTHON-005",
+    "all_sinks": [
+      "CPYTHON-005"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/123083",
+    "filename": "github.com_python_cpython_issues_123083.md",
+    "primary_sink": "CPYTHON-006",
+    "all_sinks": [
+      "CPYTHON-006"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/ljagiello/ctf-skills/blob/main/ctf-misc/pyjails.md",
+    "filename": "github.com_ljagiello_ctf-skills_blob_main_ctf-misc_pyjails.md.md",
+    "primary_sink": "CTF-006",
+    "all_sinks": [
+      "CTF-006"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/salvatore-abello/python-ctf-cheatsheet",
+    "filename": "github.com_salvatore-abello_python-ctf-cheatsheet.md",
+    "primary_sink": "CTF-009",
+    "all_sinks": [
+      "CTF-009"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-0863",
+    "filename": "nvd.nist.gov_vuln_detail_CVE-2026-0863.md",
+    "primary_sink": "CLASS-011",
+    "all_sinks": [
+      "CLASS-011"
+    ],
+    "domain": "nvd.nist.gov"
+  },
+  {
+    "url": "https://gist.github.com/",
+    "filename": "gist.github.com_.md",
+    "primary_sink": "CPYTHON-008",
+    "all_sinks": [
+      "CPYTHON-008"
+    ],
+    "domain": "gist.github.com"
+  },
+  {
+    "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-6101",
+    "filename": "nvd.nist.gov_vuln_detail_CVE-2025-6101.md",
+    "primary_sink": "RCE-003",
+    "all_sinks": [
+      "RCE-003"
+    ],
+    "domain": "nvd.nist.gov"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/143635",
+    "filename": "github.com_python_cpython_issues_143635.md",
+    "primary_sink": "CPYTHON-010",
+    "all_sinks": [
+      "CPYTHON-010"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/142829",
+    "filename": "github.com_python_cpython_issues_142829.md",
+    "primary_sink": "CPYTHON-011",
+    "all_sinks": [
+      "CPYTHON-011"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/142783",
+    "filename": "github.com_python_cpython_issues_142783.md",
+    "primary_sink": "STDLIB-009",
+    "all_sinks": [
+      "STDLIB-009"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/113631",
+    "filename": "github.com_python_cpython_issues_113631.md",
+    "primary_sink": "STDLIB-010",
+    "all_sinks": [
+      "STDLIB-010"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/100942",
+    "filename": "github.com_python_cpython_issues_100942.md",
+    "primary_sink": "CPYTHON-012",
+    "all_sinks": [
+      "CPYTHON-012"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/92112",
+    "filename": "github.com_python_cpython_issues_92112.md",
+    "primary_sink": "CLASS-013",
+    "all_sinks": [
+      "CLASS-013"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/105038",
+    "filename": "github.com_python_cpython_issues_105038.md",
+    "primary_sink": "CLASS-014",
+    "all_sinks": [
+      "CLASS-014"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-27043",
+    "filename": "nvd.nist.gov_vuln_detail_CVE-2023-27043.md",
+    "primary_sink": "PROTOCOL-001",
+    "all_sinks": [
+      "PROTOCOL-001"
+    ],
+    "domain": "nvd.nist.gov"
+  },
+  {
+    "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-48566",
+    "filename": "nvd.nist.gov_vuln_detail_CVE-2022-48566.md",
+    "primary_sink": "STDLIB-011",
+    "all_sinks": [
+      "STDLIB-011"
+    ],
+    "domain": "nvd.nist.gov"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/102555",
+    "filename": "github.com_python_cpython_issues_102555.md",
+    "primary_sink": "PROTOCOL-002",
+    "all_sinks": [
+      "PROTOCOL-002"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/69909",
+    "filename": "github.com_python_cpython_issues_69909.md",
+    "primary_sink": "PROTOCOL-003",
+    "all_sinks": [
+      "PROTOCOL-003"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/140938",
+    "filename": "github.com_python_cpython_issues_140938.md",
+    "primary_sink": "NUMERIC-001",
+    "all_sinks": [
+      "NUMERIC-001"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/142555",
+    "filename": "github.com_python_cpython_issues_142555.md",
+    "primary_sink": "CPYTHON-014",
+    "all_sinks": [
+      "CPYTHON-014"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-6446",
+    "filename": "nvd.nist.gov_vuln_detail_CVE-2019-6446.md",
+    "primary_sink": "DESER-004",
+    "all_sinks": [
+      "DESER-004"
+    ],
+    "domain": "nvd.nist.gov"
+  },
+  {
+    "url": "https://github.com/pandas-dev/pandas/issues/60602",
+    "filename": "github.com_pandas-dev_pandas_issues_60602.md",
+    "primary_sink": "RCE-004",
+    "all_sinks": [
+      "RCE-004"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/protocolbuffers/protobuf/issues/26432",
+    "filename": "github.com_protocolbuffers_protobuf_issues_26432.md",
+    "primary_sink": "PROTOCOL-004",
+    "all_sinks": [
+      "PROTOCOL-004"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/142665",
+    "filename": "github.com_python_cpython_issues_142665.md",
+    "primary_sink": "CPYTHON-015",
+    "all_sinks": [
+      "CPYTHON-015"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/python/cpython/issues/142560",
+    "filename": "github.com_python_cpython_issues_142560.md",
+    "primary_sink": "CPYTHON-016",
+    "all_sinks": [
+      "CPYTHON-016"
+    ],
+    "domain": "github.com"
+  },
+  {
+    "url": "https://github.com/advisories/GHSA-xjw2-6jm9-rf67",
+    "filename": "github.com_advisories_GHSA-xjw2-6jm9-rf67.md",
+    "primary_sink": "SSTI-003",
+    "all_sinks": [
+      "SSTI-003"
+    ],
+    "domain": "github.com"
+  }
+]

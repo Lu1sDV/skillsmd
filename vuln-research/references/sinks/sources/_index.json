@@ -1,0 +1,377 @@
+{
+  "meta": {
+    "created": "2026-04-29",
+    "total_urls": 92,
+    "archived": 91,
+    "failed": 1,
+    "failed_urls": [
+      "https://bittripping.com/2012/09/14/python-sandbox-exploitation/"
+    ]
+  },
+  "archives": [
+    {
+      "path": "sources/ASYNC-001/github.com_python_cpython_issues_112202.md",
+      "size_bytes": 262405
+    },
+    {
+      "path": "sources/ASYNC-002/github.com_python_cpython_issues_126080.md",
+      "size_bytes": 346466
+    },
+    {
+      "path": "sources/ASYNC-002/github.com_python_cpython_issues_126138.md",
+      "size_bytes": 324188
+    },
+    {
+      "path": "sources/ASYNC-003/github.com_python_cpython_issues_117881.md",
+      "size_bytes": 296715
+    },
+    {
+      "path": "sources/ASYNC-004/github.com_python_cpython_issues_134471.md",
+      "size_bytes": 283386
+    },
+    {
+      "path": "sources/ASYNC-005/ctftime.org_.md",
+      "size_bytes": 146
+    },
+    {
+      "path": "sources/CLASS-001/blog.abdulrah33m.com_prototype-pollution-in-python.md",
+      "size_bytes": 118049
+    },
+    {
+      "path": "sources/CLASS-002/docs.python.org_3_reference_datamodel.html.md",
+      "size_bytes": 464535
+    },
+    {
+      "path": "sources/CLASS-003/github.com_python_cpython_issues_122634.md",
+      "size_bytes": 316059
+    },
+    {
+      "path": "sources/CLASS-004/docs.python.org_3_reference_datamodel.html.md",
+      "size_bytes": 464535
+    },
+    {
+      "path": "sources/CLASS-005/docs.python.org_3_reference_datamodel.html.md",
+      "size_bytes": 464535
+    },
+    {
+      "path": "sources/CLASS-007/github.com_python_cpython_issues_46578.md",
+      "size_bytes": 297995
+    },
+    {
+      "path": "sources/CLASS-008/github.com_python_cpython_issues_117255.md",
+      "size_bytes": 270453
+    },
+    {
+      "path": "sources/CLASS-009/github.com_python_cpython_issues_66677.md",
+      "size_bytes": 266094
+    },
+    {
+      "path": "sources/CLASS-010/nvd.nist.gov_vuln_detail_CVE-2025-22153.md",
+      "size_bytes": 5459
+    },
+    {
+      "path": "sources/CLASS-011/nvd.nist.gov_vuln_detail_CVE-2026-0863.md",
+      "size_bytes": 5459
+    },
+    {
+      "path": "sources/CLASS-012/raw.githubusercontent.com_maple3142_imaginaryCTF-solution_master_MapleCTF-20.md",
+      "size_bytes": 14
+    },
+    {
+      "path": "sources/CLASS-013/github.com_python_cpython_issues_92112.md",
+      "size_bytes": 280880
+    },
+    {
+      "path": "sources/CLASS-014/github.com_python_cpython_issues_105038.md",
+      "size_bytes": 249919
+    },
+    {
+      "path": "sources/CPYTHON-001/github.com_python_cpython_issues_112127.md",
+      "size_bytes": 421477
+    },
+    {
+      "path": "sources/CPYTHON-002/github.com_jailctf_pyjail-collection.md",
+      "size_bytes": 272573
+    },
+    {
+      "path": "sources/CPYTHON-003/github.com_python_cpython_issues_143236.md",
+      "size_bytes": 355465
+    },
+    {
+      "path": "sources/CPYTHON-004/github.com_python_cpython_issues_143003.md",
+      "size_bytes": 350157
+    },
+    {
+      "path": "sources/CPYTHON-005/github.com_python_cpython_issues_125859.md",
+      "size_bytes": 288110
+    },
+    {
+      "path": "sources/CPYTHON-006/github.com_python_cpython_issues_123083.md",
+      "size_bytes": 289778
+    },
+    {
+      "path": "sources/CPYTHON-008/gist.github.com_.md",
+      "size_bytes": 108964
+    },
+    {
+      "path": "sources/CPYTHON-010/github.com_python_cpython_issues_143635.md",
+      "size_bytes": 382910
+    },
+    {
+      "path": "sources/CPYTHON-011/github.com_python_cpython_issues_142829.md",
+      "size_bytes": 422293
+    },
+    {
+      "path": "sources/CPYTHON-012/github.com_python_cpython_issues_100942.md",
+      "size_bytes": 290598
+    },
+    {
+      "path": "sources/CPYTHON-013/pwn.win_2022_05_11_python-buffered-reader.html.md",
+      "size_bytes": 42925
+    },
+    {
+      "path": "sources/CPYTHON-014/github.com_python_cpython_issues_142555.md",
+      "size_bytes": 340686
+    },
+    {
+      "path": "sources/CPYTHON-015/github.com_python_cpython_issues_142665.md",
+      "size_bytes": 321057
+    },
+    {
+      "path": "sources/CPYTHON-016/github.com_python_cpython_issues_142560.md",
+      "size_bytes": 421627
+    },
+    {
+      "path": "sources/CTF-001/github.com_danthedeckie_simpleeval_issues_138.md",
+      "size_bytes": 261001
+    },
+    {
+      "path": "sources/CTF-002/maplebacon.org_2024_02_dicectf2024-irs.md",
+      "size_bytes": 68230
+    },
+    {
+      "path": "sources/CTF-003/blog.antoine.rocks_%F0%9F%91%A9%E2%80%8D%F0%9F%8F%ABwriteups_ictf%202.md",
+      "size_bytes": 113296
+    },
+    {
+      "path": "sources/CTF-003/wachter-space.de_2023_11_12_csaw23-python-jail-escape.md",
+      "size_bytes": 59918
+    },
+    {
+      "path": "sources/CTF-004/ctf.ulis.se_writeups_b01lers2023_rev_blacklist.md",
+      "size_bytes": 24002
+    },
+    {
+      "path": "sources/CTF-004/github.com_jiegec_ctf-writeups_blob_master_docs_misc_pyjail.m.md",
+      "size_bytes": 404322
+    },
+    {
+      "path": "sources/CTF-006/github.com_ljagiello_ctf-skills_blob_main_ctf-misc_pyjails.md.md",
+      "size_bytes": 570102
+    },
+    {
+      "path": "sources/CTF-007/ctftime.org_event_669.md",
+      "size_bytes": 146
+    },
+    {
+      "path": "sources/CTF-008/crazymanarmy.github.io_2023_01_18_idek-2022-CTF-Pyjail-Pyjail-Revenge-Wri.md",
+      "size_bytes": 67333
+    },
+    {
+      "path": "sources/CTF-009/github.com_salvatore-abello_python-ctf-cheatsheet.md",
+      "size_bytes": 242913
+    },
+    {
+      "path": "sources/CTF-011/fail0verflow.com_blog_2014_plaidctf-2014-nightmares.md",
+      "size_bytes": 153
+    },
+    {
+      "path": "sources/CTF-012/lbarman.ch_blog_pyjail.md",
+      "size_bytes": 17448
+    },
+    {
+      "path": "sources/DESER-001/github.com_python_cpython_issues_113626.md",
+      "size_bytes": 394447
+    },
+    {
+      "path": "sources/DESER-001/github.com_python_cpython_issues_85380.md",
+      "size_bytes": 304846
+    },
+    {
+      "path": "sources/DESER-002/github.com_python_cpython_issues_133009.md",
+      "size_bytes": 279322
+    },
+    {
+      "path": "sources/DESER-002/github.com_python_cpython_issues_148801.md",
+      "size_bytes": 268563
+    },
+    {
+      "path": "sources/DESER-003/github.com_python_cpython_issues_143638.md",
+      "size_bytes": 386323
+    },
+    {
+      "path": "sources/DESER-004/nvd.nist.gov_vuln_detail_CVE-2019-6446.md",
+      "size_bytes": 5459
+    },
+    {
+      "path": "sources/FILE-001/github.com_python_cpython_issues_109503.md",
+      "size_bytes": 269371
+    },
+    {
+      "path": "sources/FILE-002/bugs.python.org_issue43604.md",
+      "size_bytes": 20032
+    },
+    {
+      "path": "sources/FILE-003/github.com_python_cpython_issues_127987.md",
+      "size_bytes": 307092
+    },
+    {
+      "path": "sources/FILE-004/github.com_python_cpython_issues_146121.md",
+      "size_bytes": 301313
+    },
+    {
+      "path": "sources/FILE-005/nvd.nist.gov_vuln_detail_CVE-2023-6597.md",
+      "size_bytes": 5459
+    },
+    {
+      "path": "sources/FILE-006/sethmlarson.dev_security_deprecating-os-path-commonprefix-python-3.md",
+      "size_bytes": 232
+    },
+    {
+      "path": "sources/NUMERIC-001/github.com_python_cpython_issues_140938.md",
+      "size_bytes": 297137
+    },
+    {
+      "path": "sources/PROTO-001/docs.python.org_3_reference_datamodel.html.md",
+      "size_bytes": 464535
+    },
+    {
+      "path": "sources/PROTO-002/github.com_advisories_GHSA-69v7-xpr6-6gjm.md",
+      "size_bytes": 192762
+    },
+    {
+      "path": "sources/PROTO-003/docs.python.org_3_library_functions.html.md",
+      "size_bytes": 315436
+    },
+    {
+      "path": "sources/PROTO-004/docs.python.org_3_library_functions.html.md",
+      "size_bytes": 315436
+    },
+    {
+      "path": "sources/PROTOCOL-001/nvd.nist.gov_vuln_detail_CVE-2023-27043.md",
+      "size_bytes": 5459
+    },
+    {
+      "path": "sources/PROTOCOL-002/github.com_python_cpython_issues_102555.md",
+      "size_bytes": 339059
+    },
+    {
+      "path": "sources/PROTOCOL-003/github.com_python_cpython_issues_69909.md",
+      "size_bytes": 314475
+    },
+    {
+      "path": "sources/PROTOCOL-004/github.com_protocolbuffers_protobuf_issues_26432.md",
+      "size_bytes": 312782
+    },
+    {
+      "path": "sources/RACE-001/github.com_advisories_GHSA-w853-jp5j-5j7f.md",
+      "size_bytes": 200448
+    },
+    {
+      "path": "sources/RACE-002/github.com_python_cpython_issues_143650.md",
+      "size_bytes": 297838
+    },
+    {
+      "path": "sources/RACE-003/github.com_python_cpython_issues_126548.md",
+      "size_bytes": 347141
+    },
+    {
+      "path": "sources/RCE-001/netsec.expert_posts_breaking-python3-eval-protections.md",
+      "size_bytes": 131218
+    },
+    {
+      "path": "sources/RCE-002/jia.je_ctf-writeups_misc_pyjail_seccon-2024-quals-1linepy.md",
+      "size_bytes": 19881
+    },
+    {
+      "path": "sources/RCE-003/nvd.nist.gov_vuln_detail_CVE-2025-6101.md",
+      "size_bytes": 5459
+    },
+    {
+      "path": "sources/RCE-004/github.com_pandas-dev_pandas_issues_60602.md",
+      "size_bytes": 291674
+    },
+    {
+      "path": "sources/SQLI-001/docs.python.org_3_library_sqlite3.html.md",
+      "size_bytes": 315290
+    },
+    {
+      "path": "sources/SSRF-001/www.kb.cert.org_vuls_id_127587.md",
+      "size_bytes": 9894
+    },
+    {
+      "path": "sources/SSTI-001/jinja.palletsprojects.com_en_stable_templates.md",
+      "size_bytes": 401818
+    },
+    {
+      "path": "sources/SSTI-001/markupsafe.palletsprojects.com_en_stable_escaping.md",
+      "size_bytes": 22382
+    },
+    {
+      "path": "sources/SSTI-002/ctftime.org_task_16059.md",
+      "size_bytes": 146
+    },
+    {
+      "path": "sources/SSTI-003/github.com_advisories_GHSA-xjw2-6jm9-rf67.md",
+      "size_bytes": 186745
+    },
+    {
+      "path": "sources/STDLIB-001/github.com_python_cpython_issues_95588.md",
+      "size_bytes": 291440
+    },
+    {
+      "path": "sources/STDLIB-002/github.com_python_cpython_issues_42938.md",
+      "size_bytes": 292779
+    },
+    {
+      "path": "sources/STDLIB-002/nvd.nist.gov_vuln_detail_CVE-2021-3177.md",
+      "size_bytes": 5459
+    },
+    {
+      "path": "sources/STDLIB-003/nvd.nist.gov_vuln_detail_CVE-2021-28861.md",
+      "size_bytes": 5459
+    },
+    {
+      "path": "sources/STDLIB-004/github.com_python_cpython_issues_33515.md",
+      "size_bytes": 265016
+    },
+    {
+      "path": "sources/STDLIB-005/nvd.nist.gov_vuln_detail_CVE-2024-6232.md",
+      "size_bytes": 5459
+    },
+    {
+      "path": "sources/STDLIB-006/hexplo.it_post_escaping-the-csawctf-python-sandbox.md",
+      "size_bytes": 58305
+    },
+    {
+      "path": "sources/STDLIB-009/github.com_python_cpython_issues_142783.md",
+      "size_bytes": 400773
+    },
+    {
+      "path": "sources/STDLIB-010/github.com_python_cpython_issues_113631.md",
+      "size_bytes": 295143
+    },
+    {
+      "path": "sources/STDLIB-011/nvd.nist.gov_vuln_detail_CVE-2022-48566.md",
+      "size_bytes": 5459
+    },
+    {
+      "path": "sources/STDLIB-012/ctftime.org_task_15647.md",
+      "size_bytes": 146
+    },
+    {
+      "path": "sources/STDLIB-013/ctftime.org_task_25562.md",
+      "size_bytes": 146
+    }
+  ]
+}

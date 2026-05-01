@@ -64,8 +64,15 @@ For each finding: identify the source (user input), trace through transforms, co
 
 ### PoC Methodology
 
+**Before any PoC work: confirm the environment passes the Realism Gate.**
+- The app runs **unmodified** — same Dockerfile, compose file, configs, entrypoint. No debug flags, no feature toggles, no `DEBUG=true`.
+- If no container setup exists: create **two separate networks** — victim (unmodified app) and attacker (exploit tooling). The victim side must be production-identical.
+- **Absolutely no mocked APIs, simulated responses, or synthetic shortcuts.** Every step must be a real HTTP request, real database query, real browser interaction.
+- Use existing `docker-compose.yml` if present. You may add a vanilla container to the same network for attacker/victim tooling, but never alter the target service definition.
+- **Responsible disclosure principle:** if the exploit requires altering the app's normal behavior, it is not a confirmed vulnerability.
+
 1. **Identify the vulnerability** — exact sink, controllable input, bypass path
-2. **Minimal reproduction** — simplest possible payload that demonstrates the issue
+2. **Minimal reproduction** — simplest possible payload that demonstrates the issue, running against the unmodified app
 3. **Impact demonstration** — escalate to show real-world consequences:
    - RCE → execute `id`/`whoami`, read `/etc/passwd`, establish reverse shell
    - SQLi → extract sensitive data (passwords, API keys, PII)
@@ -83,6 +90,20 @@ Every PoC must include:
 - **Expected vs actual response** showing the vulnerability
 - **Impact statement** — what an attacker gains
 - **Prerequisites** — auth level, network position, timing requirements
+- **Verification that the app ran unmodified** — state which compose file or container setup was used, confirm no debug flags or config changes were made
+
+### PoC Must Ship in Two Forms
+
+Every confirmed finding requires **two deliverables**. One without the other is incomplete and the finding stays at Candidate.
+
+| # | Form | Audience | Contents |
+|---|------|----------|----------|
+| **1** | **Step-by-step (explanatory)** | Reviewer / triager / vendor | Narrative walkthrough of the vulnerability cause → source→sink trace → why the sink is exploitable → conditions → each exploit step with **only the necessary scripts and commands**, no bundled tooling, no automation. Each command is shown, its output explained, and the impact justified. A reviewer following along should understand the bug without running anything. |
+| **2** | **Full bundled PoC** | Reproducer / CI / verification | Self-contained, `docker compose up && ./poc.sh` runnable directory. Contains: `docker-compose.poc.yml` (or equivalent), all scripts, payloads, and a `README.md` with the single command to reproduce. No manual steps beyond the documented prerequisites. A third party can clone, run, see the exploit work. |
+
+**Form 1 establishes the vulnerability is real** (reviewer comprehends the bug). **Form 2 establishes the vulnerability is exploitable** (reviewer reproduces the impact). Both are required for a `Confirmed` classification.
+
+**Anti-caveat rule:** the PoC must prove impact against the app as it ships. Any scenario that requires `--debug`, config edits, feature flags, or mocked third-party services to demonstrate the exploit is a **Candidate** finding, not Confirmed. The finding severity is downgraded accordingly.
 
 ### PoC Script Template
 

@@ -164,6 +164,26 @@ HTTP/2 `CONNECT` method creates a TCP tunnel through the proxy, bypassing HTTP-l
 - `ldap://` / `ldaps://` — JNDI-style lookup trigger in Java apps
 - `tftp://attacker/payload` — blind UDP exfil on restricted networks
 
+### When TLS Hacks You — SSRF via TLS Session Resumption
+
+Joshua Maddux's technique (SNI injection + DNS rebinding + TLS session resumption) enables exploitation of non-HTTP internal services through SSRF.
+
+**Mechanism:**
+1. Attacker controls DNS for `target.internal` → first resolves to attacker server for TLS handshake
+2. During TLS handshake, server records SNI and establishes session ticket
+3. DNS re-resolves `target.internal` to internal service IP (e.g., Redis, MySQL on localhost)
+4. TLS session resumption with the cached ticket reuses the original session's parameters
+5. Attacker sends crafted TCP payload inside the resumed TLS session → exploits internal non-HTTP service
+
+**Key innovation:** Standard SSRF exploits HTTP services; this extends to Redis, MySQL, Memcache, and other non-HTTP protocols that don't speak TLS. The TLS handshake is a stepping stone, not the target.
+
+**Requirements:**
+- SSRF with outbound TLS capability
+- DNS rebinding not blocked by the SSRF target
+- Internal service without TLS (plain TCP) — TLS session resumption to non-TLS service causes confusing behavior that can be exploited
+
+Source: Joshua Maddux, PortSwigger Top 10 Web Hacking Techniques of 2020 #4.
+
 ### Internal Service Targets
 - Redis (write webshell via `CONFIG SET`), Memcached (inject serialized data), Elasticsearch, Docker API (`/containers/json`, `/exec`), Kubernetes API (`/api/v1/`), Consul, etcd, Zookeeper
 
@@ -197,6 +217,25 @@ User input is HTML-encoded at submission (e.g., `<` → `&lt;`), stored safely. 
 - wkhtmltopdf and Puppeteer both execute JavaScript during rendering — SSRF and LFI via `file://` are the primary impacts
 - The encoding/decoding mismatch means XSS-safe storage is NOT PDF-safe storage
 - **Detection:** look for shared data paths between web display (HTML-encoded) and PDF generation (re-rendered as HTML)
+
+### Cloudbleed — Memory Disclosure via Parser Buffer Over-Read (2017)
+
+Tavis Ormandy's accidental discovery in Cloudflare's HTML parser — a buffer over-read leaked memory from adjacent requests, exposing cookies, passwords, API keys, and TLS private keys across customer boundaries.
+
+**Root cause:** Cloudflare's custom Ragel-based HTML parser (used for URL rewriting, email obfuscation, and Rocket Loader) read beyond allocated buffer boundaries when processing specific HTML patterns. The leaked data was written into cached responses served to other customers.
+
+**Key properties:**
+- **Parser-level vulnerability:** Not memory corruption in the traditional sense — the parser's state machine had an edge case where it continued reading past the input buffer end
+- **CDN amplification:** Cloudflare's cache multiplied the impact — a single corrupted response was cached and served to thousands of users
+- **Detection:** Leaked data appeared as random strings in HTTP response bodies; Google's cache was the first to systematically detect it
+- **Impact scope:** Major services using Cloudflare (Uber, OKCupid, Fitbit, and thousands more) potentially leaked customer data
+
+**Lessons:**
+- Custom parsers in performance-critical paths (CDN edge) deserve the same scrutiny as security-critical code
+- Memory-safe languages (Go, Rust) reduce but don't eliminate logic-level buffer over-reads
+- CDN cache amplification means a single transient bug can have persistent, widespread impact
+
+Source: Tavis Ormandy, Cloudflare post-mortem, PortSwigger Top 10 Web Hacking Techniques of 2017 #5.
 
 ---
 
@@ -397,6 +436,25 @@ Mitigation: always use `--` separator before user input to terminate flag parsin
 
 ### .NET
 - `BinaryFormatter`, `ObjectStateFormatter`, `NetDataContractSerializer`, `SoapFormatter`, `LosFormatter`, `XmlSerializer` with known types, `Json.NET` with `TypeNameHandling != None`, `JavaScriptSerializer` with `SimpleTypeResolver` — gadget chains via ysoserial.net
+
+### Friday the 13th — JSON Deserialization Attacks (2017)
+
+Alvaro Muñoz & Oleksandr Mirosh's systematic analysis of JSON (de)serialization libraries across Java and .NET — extending the 2015 deserialization apocalypse to JSON formats.
+
+**JSON deserialization sinks by library:**
+
+| Language | Library | Dangerous API | Poison Gadget |
+|----------|---------|---------------|---------------|
+| Java | Jackson | `ObjectMapper.enableDefaultTyping()` | Spring beans, commons-collections |
+| Java | Gson | `GsonBuilder().enableComplexMapKeySerialization()` | Custom `InstanceCreator` |
+| Java | JSON-IO | `JsonReader.jsonToJava()` | `Object[]` with gadget classes |
+| .NET | Json.NET | `TypeNameHandling.Auto/All/Objects/Arrays` | `SelectedEventsCollection`, `ObjectDataProvider` |
+| .NET | FastJson | `JSON.ToObject()` with type parameter | `System.Data.DataSet` |
+| .NET | JavaScriptSerializer | `SimpleTypeResolver` enabled | PSObject, SessionStateItemCollection |
+
+**Key insight:** JSON deserialization is widely considered safer than binary/proprietary formats — this research proves it's equally dangerous when type information is resolvable from input.
+
+Source: Alvaro Muñoz & Oleksandr Mirosh, Black Hat USA 2017 / PortSwigger Top 10 Web Hacking Techniques of 2017 #4.
 
 ### Node.js
 - `node-serialize` (`_$$ND_FUNC$$_`), `funcster`, `cryo`, `serialize-javascript` — IIFE in serialized function

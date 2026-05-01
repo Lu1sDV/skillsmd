@@ -23,10 +23,11 @@ vuln-research/
 │   └── vuln-swarm.md                           # Swarm Pipeline slash command (orchestration)
 └── references/
     ├── injection-attacks.md                    # SQLi, NoSQL, SSTI, XSLT injection, CRLF, LDAP, XPath
-    ├── client-side-attacks.md                  # XSS, Prototype Pollution, DOM Clobbering, CSS Exfiltration, CORS
+    ├── client-side-attacks.md                  # XSS, Prototype Pollution, DOM Clobbering, CSS Exfiltration, CORS, CSTI, postMessage
+    ├── browser-attacks.md                      # XS-Leaks, Clickjacking, CSP Bypass, Browser Desync, HTML Smuggling
     ├── server-side-attacks.md                  # RCE, SSRF, XXE, File Ops, Deserialization (expanded)
     ├── auth-access-logic.md                    # Auth, Access Control, OAuth/SSO, JWT, Logic, Race, Crypto
-    ├── protocol-infra-attacks.md               # Smuggling, Browser Desync, Cache Poisoning, GraphQL, WebSocket, DNS, Cloud
+    ├── protocol-infra-attacks.md               # Smuggling, Cache Poisoning, GraphQL, WebSocket, DNS, Cloud, Encoding, ReDoS
     ├── sinks-catalog.md                        # Language router + SAST/DAST integration layer
     ├── chaining-advanced-techniques.md         # Chain patterns, scanning augmentation, blind spots checklist
     ├── agent-sweep.md                          # Agent Sweep methodology: Carlini discovery/verification loops
@@ -207,3 +208,21 @@ The `sinks-catalog.md` router includes cross-language tooling references:
 ### Blind Spots Checklist
 
 25+ commonly missed testing areas including XSLT injection, browser desync, CSS injection, DOM clobbering, client-side prototype pollution, cache delimiter confusion, JWT audience validation, mutable OAuth claims, Service Worker pollution, and more.
+
+## References
+
+### PortSwigger Top 10 Web Hacking Techniques (2017–2025)
+
+The following annual research roundups were analyzed in full. Each technique cataloged above is sourced from these articles and the original research papers they cite.
+
+- **2017:** James Kettle et al., "[Top 10 Web Hacking Techniques of 2017](https://portswigger.net/research/top-10-web-hacking-techniques-of-2017)". Panel: Kettle, Heyes, Grégoire, Rosén, Dalili. Notable: A New Era of SSRF (Orange Tsai #1), Web Cache Deception (Omer Gil #2), Ticket Trick (Inti De Ceukelaire #3).
+- **2018:** James Kettle et al., "[Top 10 Web Hacking Techniques of 2018](https://portswigger.net/research/top-10-web-hacking-techniques-of-2018)". Panel: Kettle, Grégoire, Dalili, Filedescriptor. Notable: Breaking Parser Logic (Orange Tsai #1), Practical Web Cache Poisoning (Kettle #2), ESI Injection (#3), Prototype Pollution in Node.js (#4).
+- **2019:** James Kettle et al., "[Top 10 Web Hacking Techniques of 2019](https://portswigger.net/research/top-10-web-hacking-techniques-of-2019)". Panel: Kettle, Grégoire, Dalili, Filedescriptor. Notable: Cached and Confused: Web Cache Deception (#1), Cross-Site Leaks (#2), SSRF on PDF generators (#3), Meta-Programming RCE in Jenkins (Orange Tsai #4).
+- **2020:** James Kettle et al., "[Top 10 Web Hacking Techniques of 2020](https://portswigger.net/research/top-10-web-hacking-techniques-of-2020)". Panel: Kettle, Grégoire, Dalili, Filedescriptor. Notable: H2C Smuggling (Jake Miller #1), XSS for PDFs (Gareth Heyes #2), Attacking Secondary Contexts (Sam Curry #3), When TLS Hacks You (#4), NAT Slipstreaming (Samy Kamkar #5).
+- **2021:** James Kettle et al., "[Top 10 Web Hacking Techniques of 2021](https://portswigger.net/research/top-10-web-hacking-techniques-of-2021)". Panel: Kettle, Grégoire, Dalili, Filedescriptor. Notable: Dependency Confusion (Alex Birsan #1), HTTP/2: The Sequel is Always Worse (Kettle #2), ProxyLogon Exchange Attack Surface (Orange Tsai #3), Client-Side Prototype Pollution (#4).
+- **2022:** James Kettle et al., "[Top 10 Web Hacking Techniques of 2022](https://portswigger.net/research/top-10-web-hacking-techniques-of-2022)". Panel: Kettle, Grégoire, Dalili, Filedescriptor. Notable: Dirty Dancing OAuth Account Hijacking (Frans Rosén #1), Browser-Powered Desync Attacks (Kettle #2), Zimbra Memcache Injection (#3), Hacking the Cloud with SAML (Felix Wilhelm #4).
+- **2023:** James Kettle et al., "[Top 10 Web Hacking Techniques of 2023](https://portswigger.net/research/top-10-web-hacking-techniques-of-2023)". Panel: Kettle, Grégoire, Dalili, Filedescriptor. Notable: Smashing the State Machine: Race Conditions (Kettle #1), Exploiting Hardened .NET Deserialization (#2), SMTP Smuggling (Timo Longin #3), PHP Filter Chains File Read (#4).
+- **2024:** James Kettle et al., "[Top 10 Web Hacking Techniques of 2024](https://portswigger.net/research/top-10-web-hacking-techniques-of-2024)". Panel: Kettle, Grégoire, Dalili, STÖK, LiveOverflow. Notable: Confusion Attacks: Apache HTTP Server (Orange Tsai #1), SQL Injection Isn't Dead: Protocol Level (#2), TE.0 HTTP Request Smuggling (#3), WorstFit Unicode (Orange Tsai #4), DOMPurify mXSS (#5).
+- **2025:** James Kettle et al., "[Top 10 Web Hacking Techniques of 2025](https://portswigger.net/research/top-10-web-hacking-techniques-of-2025)". Panel: Kettle, Grégoire, Dalili, STÖK, LiveOverflow. Notable: Successful Errors: SSTI Error-Based Techniques (#1), ORM Leaking (#2), Novel SSRF via HTTP Redirect Loops (#3), Unicode Normalization WAF Bypass (#4), SOAPwn .NET RCE (#5).
+
+These articles are the authoritative community-curated source for novel web security research methodology. Each year's full nomination list contains 40–120+ additional entries beyond the top 10 — see individual articles for complete nomination lists.

@@ -141,7 +141,8 @@ Load references on-demand based on the active testing domain. **Do not load all 
 | Domain | Reference File | Load When |
 |--------|---------------|-----------|
 | SQLi, NoSQL, SSTI, CRLF, LDAP, XPath, LaTeX Injection, CSV Injection, XSLT Injection | `references/injection-attacks.md` | Testing injection vectors |
-| XSS, Prototype Pollution, CORS, XS-Leaks, CSTI, postMessage | `references/client-side-attacks.md` | Testing client-side attacks |
+| XSS, Prototype Pollution, CORS, CSTI, postMessage, DOM Clobbering, CSS Injection, Cookie Tossing | `references/client-side-attacks.md` | Testing client-side attacks |
+| XS-Leaks, Clickjacking, CSP Bypass, Browser Desync, HTML Smuggling, Reverse Tabnabbing | `references/browser-attacks.md` | Testing browser security model attacks |
 | RCE, SSRF, XXE, File Ops, Deserialization | `references/server-side-attacks.md` | Testing server-side attacks |
 | Auth, Access Control, OAuth, Logic, Race, Crypto | `references/auth-access-logic.md` | Testing auth & business logic |
 | Smuggling, Cache, WebSocket, GraphQL, DNS, Cloud, Encoding, ReDoS, HTML Smuggling, Prompt Injection | `references/protocol-infra-attacks.md` | Testing protocols & infrastructure |
@@ -300,7 +301,8 @@ Run parallel agents, each focused on one attack domain. Every agent traces **sou
 | Attack Category | Key Targets | Reference |
 |----------------|-------------|-----------|
 | **Injection** (SQLi, NoSQL, SSTI, CRLF, LDAP, XPath) | Query builders, template renders, header construction | `injection-attacks.md` |
-| **Client-Side** (XSS, Proto Pollution, CORS) | Output contexts, deep merge, origin validation | `client-side-attacks.md` |
+| **Client-Side** (XSS, Proto Pollution, CORS, CSTI, DOM Clobbering, CSS Injection) | Output contexts, deep merge, origin validation | `client-side-attacks.md` |
+| **Browser** (XS-Leaks, Clickjacking, CSP Bypass, Browser Desync, HTML Smuggling) | Cross-origin side channels, UI redressing, CSP evasion | `browser-attacks.md` |
 | **Server-Side** (RCE, SSRF, XXE, File Ops, Deser) | Command exec, URL fetching, XML parsing, file I/O, object deser | `server-side-attacks.md` |
 | **Auth & Logic** (Auth, ACL, OAuth, Race, Crypto) | Session mgmt, role checks, token flows, concurrent ops, key mgmt | `auth-access-logic.md` |
 | **Protocol & Infra** (Smuggling, Cache, WS, GraphQL, DNS, Cloud) | HTTP parsing, cache keys, WS handlers, query depth, metadata | `protocol-infra-attacks.md` |
@@ -433,6 +435,22 @@ SAST tools generate noise. Calibrate expectations before triaging:
 
 For each finding: identify source → trace transforms → confirm sink reach → craft payload → prove impact.
 
+### PoC Constraints (Mandatory)
+
+The PoC must be a **realistic, end-to-end victim↔attacker interaction**. Absolutely no mocked APIs, simulated responses, or synthetic conditions that would not exist in production.
+
+- If the target app ships with a `docker-compose.yml`: use it as-is. You may add a separate attacker/victim container on the **same network** (e.g. `docker run --network=<project>_default ...`), but never modify the target's own container definition, environment, config, or behavior.
+- If the target app has **no** container setup: create two networks — one for the **victim** (running the unmodified app), one for the **attacker** (exploit tooling). The app runs identically to how it would in production.
+- **No altered configs, no debug flags, no feature toggles.** The app must run as close to production as possible. If exploitation requires a non-default setting, that must be documented as a prerequisite, not baked into the environment.
+- **Responsible disclosure principle:** nothing in the PoC environment changes the normal behavior of the application. If your exploit only works against a modified version of the app, it is not a confirmed vulnerability — it is a misconfiguration finding.
+
+**Every confirmed finding ships two PoC forms.** Missing either → Candidate.
+
+| Form | Audience | Description |
+|------|----------|-------------|
+| **Step-by-step (explanatory)** | Reviewer / triager / vendor | Narrative walkthrough: bug cause → source→sink trace → each exploit step with only necessary commands shown and explained. Reviewer understands the bug without running anything. |
+| **Full bundled PoC** | Reproducer / CI / verification | Self-contained `docker compose up && ./poc.sh` directory: compose file, scripts, payloads, README with one command to reproduce. Third party clones, runs, sees exploit work. |
+
 ---
 
 ## Phase 6: Vulnerability Chaining
@@ -479,6 +497,12 @@ Layered defenses (hardened allocators, sandboxes, user/kernel barriers, virtuali
 ## Proof Collection (Summary)
 
 Every reported vulnerability MUST include:
+
+**⚠️ Before collecting proof: the PoC environment must pass the Realism Gate.**
+- The target application runs **unmodified** — same Dockerfile, same compose file, same configs, same entrypoint. No `--debug`, no `DEBUG=true`, no `safe_mode=0`, no feature flags flipped.
+- If you added containers (attacker box, callback listener, victim browser), they must be **vanilla images** pinned to stable tags — no pre-installed exploit tooling, no modified entrypoints. Tooling is installed at runtime by the PoC script.
+- The victim and attacker must interact from **separate network positions** (separate containers, separate compose services, or separate machines). No shortcutting by running both roles in the same process.
+- **Result:** a third party can clone the repo, run `docker compose up`, execute the PoC script, and observe the exploit working against the unmodified app. If this is not possible, the finding is **Candidate**, not Confirmed.
 
 1. **Confidence Score (1-10)** — exploitability certainty
 2. **Exploitability Likelihood (High/Medium/Low)** — how likely is real-world exploitation given attack complexity, auth requirements, and conditions

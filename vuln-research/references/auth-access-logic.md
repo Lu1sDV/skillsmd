@@ -113,6 +113,87 @@ Client certificate validation that checks certificate validity but not authoriza
 - **SAML assertion replay:** if assertion lacks audience restriction or timestamp check, replay captured assertion to authenticate as victim
 - **SAML signature exclusion:** strip the `<Signature>` element entirely — SP authenticates without verifying signature if it doesn't enforce signature presence
 
+### Dirty Dancing — OAuth Account Hijacking via URL-Leak Gadgets (2022)
+
+Frans Rosén's research shows that referrer-stripping mitigations in modern browsers can be bypassed through chaining multiple low-severity URL-leak gadgets for OAuth account takeover.
+
+**Attack chain:**
+1. Victim initiates OAuth login to target app
+2. Referrer header leaks OAuth `state` or `code` parameter via cross-site navigation
+3. Third-party XSS on any URL-leak gadget (postMessage, `window.referrer`, URL storage) intercepts the OAuth tokens
+4. Attacker uses leaked token to complete OAuth flow → account takeover
+
+**URL-leak gadgets observed:**
+- `postMessage` receivers that echo `event.origin` or `event.source.location.href`
+- URL storage in analytics scripts (GA, Facebook Pixel storing current URL)
+- Image loading with URL-parameter reflection in error URLs
+- `window.open()` return values navigated cross-origin
+- Browser extensions that expose current tab URL via API
+
+**Key insight:** These gadgets individually are Low/Informational severity. Chained with OAuth, they become Critical. Modern referrer-stripping (Cross-Origin-Request-Policy, Referrer-Policy) helps but doesn't eliminate all leak paths.
+
+Source: Frans Rosén / Detectify, PortSwigger Top 10 Web Hacking Techniques of 2022 #1.
+
+### OAuth Non-Happy Path — Referer-Based ATO (2024)
+
+Oxrz's research chains a Referer header manipulation with OAuth flow behavior for account takeover.
+
+**Mechanism:**
+1. OAuth authorization redirect respects `Redirect URI` registered with IdP
+2. Application trusts `Referer` header for post-login redirect destination
+3. Attacker crafts login URL where `Referer` points to attacker-controlled page
+4. After authorization, IdP redirects to app's callback which uses `Referer` to determine next page
+5. OAuth `code` or `state` leaks via Referer to attacker domain
+6. Attacker completes OAuth flow → ATO
+
+**Key insight:** Application validates the OAuth redirect URI against the IdP registration, but the *post-login redirect* uses the Referer header (or a Referer-derivative) which is attacker-influenced.
+
+Source: Oxrz / voorivex.team, PortSwigger Top 10 Web Hacking Techniques of 2024 #8.
+
+### Hidden OAuth Attack Vectors — Spec-Diving for Undocumented Endpoints (2021)
+
+Michael Stepankin's deep dive into OAuth and OpenID specifications reveals hidden endpoints and design flaws that enable enumeration, session poisoning, and SSRF.
+
+**Undocumented endpoints discovered:**
+- `/.well-known/oauth-authorization-server` — schema differences between implementations leak server info
+- `/oauth2/device_authorization` — device code flow endpoints often unthrottled
+- `/oauth2/sessions` — session management endpoints exposed without auth
+- `/oauth2/keys` — JWKS endpoints leaking key rotation patterns
+
+**Design flaw exploitation:**
+1. OAuth `claims` parameter: `claims={"id_token":{"email":{"essential":true}}}` — returns user email in ID token even when scope doesn't include it
+2. `request` parameter passing JWT with embedded request object → signature verification bypasses
+3. `request_uri` parameter → SSRF via OAuth authorization request (server fetches the request object from attacker URL)
+
+**Detection:**
+- Use ActiveScan++ (updated wordlists) to fuzz OAuth `.well-known` endpoints
+- Test all OAuth grant types against the authorization server, not just the intended flow
+- Examine `claims`, `request`, and `request_uri` parameter behavior
+
+Source: Michael Stepankin / PortSwigger Research, PortSwigger Top 10 Web Hacking Techniques of 2021 #5.
+
+### Ticket Trick — Cross-System Helpdesk Trust Abuse (2017)
+
+Inti De Ceukelaire's technique exploits implicit trust between issue trackers and the systems they integrate with — each system is secure in isolation but compromised when combined.
+
+**Mechanism:**
+1. Target company uses a helpdesk/ticketing system that trusts email domain for authentication
+2. Attacker registers email address at a subdomain the company owns: `anything@company-org.atlassian.net`
+3. Helpdesk sees `@company-org.atlassian.net` and grants employee-level access
+4. Attacker accesses internal tickets, customer data, and integrated systems
+
+**Why it works:**
+- Issue trackers (Zendesk, Freshdesk, Jira Service Desk) authenticate users by email domain
+- Many accept subdomains of the primary domain as valid proof of affiliation
+- The trust boundary is the email domain, but the company doesn't control subdomains on SaaS platforms
+- Independent systems (email, helpdesk, SSO) are each secure — the vulnerability emerges from their combination
+
+**Affected systems:** Zendesk, Freshdesk, Atlassian, Salesforce Desk, and any helpdesk using email-domain-based authentication.
+
+**Defense:** Helpdesks should verify domain ownership (DNS TXT records) and not accept subdomain-of-trusted-domain as proof.
+
+Source: Inti De Ceukelaire / Intigriti, PortSwigger Top 10 Web Hacking Techniques of 2017 #3.
+
 ### SAML Implementation Weaknesses — Expanded
 
 **Self-signed certificate acceptance (Zscaler-style, CVE-2025-54982):**

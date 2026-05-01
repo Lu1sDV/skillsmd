@@ -51,6 +51,31 @@ WAF processes body as non-chunked (reads full Content-Length), backend processes
 
 ---
 
+### H2C Smuggling — HTTP/2 Cleartext to Request Tunneling (2020)
+
+Jake Miller's research abuses HTTP/2 cleartext (H2C) — an obsolete protocol that no browser supports — to smuggle requests through H2C-unaware front-ends.
+
+**Mechanism:**
+1. Front-end proxy doesn't understand `Upgrade: h2c` header
+2. Back-end server supports H2C and upgrades the connection
+3. After upgrade, HTTP/2 frames flow through the original TCP connection
+4. Front-end sees standard HTTP/1.1 request/response but back-end processes H2C frames
+5. Attacker can bypass front-end rewrite rules, inject internal headers, and access hidden endpoints
+
+**Exploitation:**
+- Smuggle requests past WAF rules (WAF inspects HTTP/1.1, backend processes H2C frames)
+- Inject `X-Forwarded-For`, `X-Real-IP`, or internal auth headers
+- Access endpoints the front-end blocks (admin panels, debug interfaces, internal microservices)
+
+**Detection:**
+- Send `Upgrade: h2c` header and check if backend upgrades → 101 Switching Protocols
+- Test with HTTP/2 frames (use curl with `--http2`, custom tools)
+- Common on infrastructure with H2C-enabled backends (Go servers, Envoy, custom proxies)
+
+Source: Jake Miller / Bishop Fox, PortSwigger Top 10 Web Hacking Techniques of 2020 #1.
+
+---
+
 ## Web Cache Poisoning & Deception
 
 - **Cache poisoning:** inject unkeyed headers (`X-Forwarded-Host`, `X-Original-URL`, `X-Forwarded-Scheme`) that alter response content but aren't in cache key → serve malicious content to other users
@@ -61,6 +86,22 @@ WAF processes body as non-chunked (reads full Content-Length), backend processes
 - **Unkeyed headers for poisoning:** `X-Forwarded-Host`, `X-Host`, `X-Forwarded-Server`, `X-Original-URL`, `X-Rewrite-URL`, `X-Forwarded-Prefix`
 - **Cache key normalization differences:** cache normalizes case/encoding differently than origin → bypass cache key matching
 - **Vary header abuse:** force different `Vary` combinations to poison specific cache entries
+
+### Practical Web Cache Poisoning — Unkeyed Header Methodology (2018)
+
+James Kettle's foundational research demonstrating how obscure HTTP headers can poison web caches with malicious content — systematically testing unkeyed inputs that alter server responses.
+
+**Unkeyed header testing methodology:**
+1. **Param Miner approach:** send request twice — once with test header, once without. If response differs, the header is processed but likely unkeyed
+2. **Systematic header fuzz:** `X-Forwarded-Host`, `X-Forwarded-Scheme`, `X-Original-URL`, `X-Rewrite-URL`, `X-Forwarded-Prefix`, `X-HTTP-Method-Override`, `X-HTTP-Method`, `X-Method-Override`
+3. **Cache key detection:** inject header value that changes URL generation (e.g., `X-Forwarded-Host: evil.com` generates links to `evil.com`) — if cache key doesn't include the header, poisoned response serves to all users
+4. **Impact chaining:** unkeyed header → reflected content (XSS) → cached → served to all visitors without individual exploitation
+
+**Key insight:** Many applications process headers like `X-Forwarded-Host` for link generation but don't include them in the cache key. The cache stores the response under the original URL, but the response body contains attacker-controlled URLs.
+
+**Raising the bar:** Standard cache poisoning requires the cacheable response to contain attacker-injected content. Response-queue poisoning extends this by poisoning the connection state — the injected content never appears in the response body but still reaches the victim through request misrouting.
+
+Source: James Kettle / PortSwigger Research, PortSwigger Top 10 Web Hacking Techniques of 2018 #2.
 
 ### Delimiter-Based Path Confusion
 
