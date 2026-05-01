@@ -23,6 +23,7 @@ A collection of Claude Code skills — self-contained markdown files that give C
 | [telethon-development](telethon-development/) | Telethon MTProto client — FloodWait handling, mocking, session management, DB integration |
 | [test-engineering](test-engineering/) | Framework-agnostic test strategy, automation planning, coverage analysis |
 | [tri-model-consensus](tri-model-consensus/) | Tri-model adversarial consensus — route tasks to Claude+Codex+Gemini, cross-grade discrepancies, merge the strongest output |
+| [universal-research-orchestrator](universal-research-orchestrator/) | Domain-agnostic 5-phase research pipeline — parallel 8–12 lane search, synthesis, citation, validation, source archival for exhaustive research tasks |
 | [vuln-research](vuln-research/) | Vulnerability research, security auditing, code analysis — 30+ attack domains, 12-language sink catalog, SAST/DAST, chaining, PoC/report |
 | [web-performance-optimization](web-performance-optimization/) | Lighthouse scores, Core Web Vitals, page load and rendering optimization |
 | [zero-dof](zero-dof/) | Zero-DOF programming — executable oracles, opposing constraints, mandatory playbooks, gaming prevention for LLM coding agents |
