@@ -500,58 +500,17 @@ Layered defenses (hardened allocators, sandboxes, user/kernel barriers, virtuali
 
 ## Proof Collection (Summary)
 
-Every reported vulnerability MUST include:
+**Realism Gate:** a third party must be able to clone the repo, run `docker compose up`, and observe the exploit firing against the **unmodified app**. If this is not possible, the finding is **Candidate**, not Confirmed.
 
-**⚠️ Before collecting proof: the PoC environment must pass the Realism Gate.**
-- The target application runs **unmodified** — same Dockerfile, same compose file, same configs, same entrypoint. No `--debug`, no `DEBUG=true`, no `safe_mode=0`, no feature flags flipped.
-- If you added containers (attacker box, callback listener, victim browser), they must be **vanilla images** pinned to stable tags — no pre-installed exploit tooling, no modified entrypoints. Tooling is installed at runtime by the PoC script.
-- The victim and attacker must interact from **separate network positions** (separate containers, separate compose services, or separate machines). No shortcutting by running both roles in the same process.
-- **Result:** a third party can clone the repo, run `docker compose up`, execute the PoC script, and observe the exploit working against the unmodified app. If this is not possible, the finding is **Candidate**, not Confirmed.
+Every confirmed finding requires:
+- Working payload (copy-pasteable, not screenshots) + server response proving impact
+- Step-by-step numbered reproduction a reviewer can follow without running code first
+- Both PoC forms: step-by-step explanatory + full bundled runnable script
+- Video is **supplementary only** — a submission based solely on a video attachment is auto-rejected
 
-1. **Confidence Score (1-10)** — exploitability certainty
-2. **Exploitability Likelihood (High/Medium/Low)** — how likely is real-world exploitation given attack complexity, auth requirements, and conditions
-3. **Auth Level** — Unauthenticated / Authenticated (specify minimum role) / Multi-level (specify each)
-4. **Intent Verification Gate** — double-check this is NOT an intended feature (admin RCE via plugin upload = intended; editor accessing admin plugin upload = real bug). See full gate in `audit-poc-report.md`
-5. **Intent Classification** — Actual bug / Intended feature / Design weakness
-6. **Justification** — who has access? Is this expected for that role? Would fixing it break legitimate workflows?
-7. **Exact payload** — copy-pasteable, not screenshots
-8. **Server response** — proving impact
-9. **Step-by-step reproduction** — numbered, command-exact walkthrough; a reader must be able to reproduce the impact without running any code first
-10. **Video recording** — full exploit chain end-to-end (**supplementary only** — a video without accompanying step-by-step text and a runnable PoC script is not sufficient; submissions based solely on a video attachment are auto-rejected)
+Low-confidence findings (score <= 3) → **Observations** section. Intended features → also Observations.
 
-### Submission N/A Criteria (Guaranteed Rejection)
-
-A finding with **any** of the following properties will be closed as Not Applicable by bug bounty programs and must not be submitted. If a finding triggers any row below, move it to Observations and fix the gap before promoting it.
-
-| Condition | Why It Fails | How to Fix |
-|-----------|-------------|------------|
-| **Speculative or misleading impact** | "An attacker *could* theoretically…" without a working payload is noise, not a finding | Build a working PoC that demonstrates the stated impact end-to-end |
-| **Missing proof of concept** | No PoC = no reproducible evidence = no confidence in exploitability | Produce both PoC forms (step-by-step + bundled script) before reporting |
-| **Not reproducible** | Reviewer clones the repo, runs the steps, exploit does not fire | Test on a clean environment; pin all dependency versions; remove any assumption about local state |
-| **Based solely on a video attachment** | Video cannot be independently verified; no command-level audit trail | Replace with step-by-step text + runnable script; video may accompany but never substitute |
-| **Lacking demonstrated impact** | Security consequences are asserted but not shown (no data exfil, no shell, no ATO, no CSRF state change) | Re-run Phase 7 Q3 — if you cannot prove impact with a payload and server response, the finding is Candidate, not Confirmed |
-
-Low-confidence findings (score <= 3) → **Observations** section. Intended features flagged as design weaknesses → also Observations.
-
-### Always-Rejected Findings (Do Not Report)
-
-These are commonly submitted findings that bug bounty programs universally reject. Do not waste time reporting them unless they are part of a demonstrated exploit chain with proven impact:
-
-| Finding | Why It's Rejected | When It Becomes Valid |
-|---------|-------------------|---------------------|
-| Missing security headers alone (`X-Frame-Options`, `X-Content-Type-Options`, `Strict-Transport-Security`) | No demonstrated impact — headers are defense-in-depth | Only if missing header is a **required prerequisite** in a working exploit chain (e.g., missing `X-Frame-Options` + clickjacking PoC with state change) |
-| CORS wildcard (`Access-Control-Allow-Origin: *`) without credential exfiltration | Browsers block `*` + `withCredentials` — no cookie/token leakage | Only if combined with `Access-Control-Allow-Credentials: true` AND sensitive data exfiltrated in PoC |
-| GraphQL introspection enabled alone | Introspection is a development feature, not a vulnerability | Only if introspection reveals mutations/fields that lead to demonstrated auth bypass or data leak |
-| Open redirects without OAuth/auth chaining | Low impact — redirect to phishing page is social engineering, not a technical vuln | Only when chained: open redirect → OAuth token theft → ATO, or open redirect → SSRF filter bypass |
-| SSRF with DNS-only callbacks (no response, no internal access) | Proves DNS resolution but not exploitability — most programs require demonstrated internal access or data exfil | Only if callback proves access to internal network (response data, cloud metadata, or internal service interaction) |
-| Self-XSS (requires victim to paste payload in their own browser) | Attacker cannot trigger it remotely — requires social engineering the victim | Only when chained with cookie tossing, login CSRF, or clickjacking to deliver the payload without victim cooperation |
-| Server/technology banner disclosure (`Server: Apache/2.4.51`, `X-Powered-By: PHP/8.1`) | Version information alone is not exploitable | Only if the disclosed version has a known, exploitable CVE AND you demonstrate the exploit working |
-| Shell/exec sink where the "user-controlled" arg is a hardcoded string constant | Grep for the interpolated symbol; if it is assigned once to a string literal and never reassigned, the finding is a false positive. Dead-code guards (`if (false) { ... }`) that share a filename with a live sink are a common conflation trap | Only when dynamic user input is confirmed to flow into the sink at runtime |
-| Regex-chain across modules where each link uses a different regex | Do not assume two regex constants "feed" each other just because they target the same domain. Confirm the data-flow path: source → regex A → transform → regex B. If A's output is not literally B's input, there is no chain | Only when the actual data-flow path source → regex A → regex B is traced end-to-end |
-
-**Rule of thumb:** if the finding requires the phrase "an attacker could theoretically..." without a working PoC, it belongs in Observations, not Vulnerabilities.
-
-Full proof methodology and report template in `references/audit-poc-report.md` (load when writing reports).
+> **Load `references/audit-poc-report.md`** for: full proof checklist (confidence score, exploitability likelihood, auth level, intent gate), Submission N/A Criteria, Always-Rejected Findings, Docker lab setup, Playwright templates, and report template.
 
 ---
 

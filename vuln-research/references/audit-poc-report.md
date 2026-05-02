@@ -433,18 +433,46 @@ Every reported vulnerability MUST include:
    - **Intended feature**: functionality working as designed — do NOT report as vulnerability
    - **Design weakness**: intended but represents poor security design — report as Observation with recommendation
 6. **Justification** — brief reasoning for the classification
+7. **Exact payload** — copy-pasteable, not screenshots
+8. **Server response** — proving impact (status code, body excerpt, or out-of-band callback log)
+9. **Step-by-step reproduction** — numbered, command-exact walkthrough; a reviewer must be able to follow along and understand the bug without running anything
+10. **Video recording** — full exploit chain end-to-end (**supplementary only** — video cannot be independently verified and provides no command-level audit trail; a submission based solely on a video attachment is auto-rejected; always accompany with step-by-step text and a runnable PoC script)
 
 Low-confidence findings (score <= 3) go under a separate **Observations** section, not mixed in with confirmed vulnerabilities. Intended features flagged as design weaknesses also go under Observations.
 
-Additionally, every exploited vulnerability needs:
-- Video recording showing the full exploit chain end-to-end
-- The exact payload used (copy-pasteable, not screenshots of payloads)
-- The server response proving impact
-- For multi-role vulns: demonstrate from admin, user, and unauthenticated perspectives
-- For race conditions: show concurrent request tool (Turbo Intruder, threading script)
-- Clean up: remove uploaded shells and test data after recording
+For multi-role vulns: demonstrate from admin, user, and unauthenticated perspectives. For race conditions: show concurrent request tool (Turbo Intruder, threading script). Clean up uploaded shells and test data after recording.
 
 Organize evidence by severity. Master report links to individual agent reports, video files, and raw scanner output.
+
+### Submission N/A Criteria (Guaranteed Rejection)
+
+A finding with **any** of the following properties will be closed as Not Applicable by bug bounty programs. If a finding triggers any row, move it to Observations and resolve the gap before submitting.
+
+| Condition | Why It Fails | How to Fix |
+|-----------|-------------|------------|
+| **Speculative or misleading impact** | "An attacker *could* theoretically…" without a working payload is noise, not a finding | Build a working PoC demonstrating the stated impact end-to-end |
+| **Missing proof of concept** | No PoC = no reproducible evidence = no confidence in exploitability | Produce both PoC forms (step-by-step + bundled script) before reporting |
+| **Not reproducible** | Reviewer clones the repo, runs the steps, exploit does not fire | Test on a clean environment; pin all dependency versions; remove local-state assumptions |
+| **Based solely on a video attachment** | Video cannot be independently verified; no command-level audit trail | Replace with step-by-step text + runnable script; video may accompany but never substitute |
+| **Lacking demonstrated impact** | Consequences asserted but not shown (no data exfil, no shell, no ATO, no CSRF state change) | Re-run Phase 7 Q3 — if you cannot prove impact with a payload and server response, the finding is Candidate |
+
+### Always-Rejected Findings (Do Not Report)
+
+These are commonly submitted findings that bug bounty programs universally reject. Do not report unless part of a demonstrated exploit chain with proven impact:
+
+| Finding | Why It's Rejected | When It Becomes Valid |
+|---------|-------------------|---------------------|
+| Missing security headers alone (`X-Frame-Options`, `X-Content-Type-Options`, `Strict-Transport-Security`) | No demonstrated impact — headers are defense-in-depth | Only if the missing header is a required prerequisite in a working exploit chain (e.g., missing `X-Frame-Options` + clickjacking PoC with state change) |
+| CORS wildcard (`Access-Control-Allow-Origin: *`) without credential exfiltration | Browsers block `*` + `withCredentials` — no cookie/token leakage | Only if combined with `Access-Control-Allow-Credentials: true` AND sensitive data exfiltrated in PoC |
+| GraphQL introspection enabled alone | Introspection is a development feature, not a vulnerability | Only if introspection reveals mutations/fields that lead to demonstrated auth bypass or data leak |
+| Open redirects without OAuth/auth chaining | Low impact — redirect to phishing page is social engineering, not a technical vuln | Only when chained: open redirect → OAuth token theft → ATO, or open redirect → SSRF filter bypass |
+| SSRF with DNS-only callbacks (no response, no internal access) | Proves DNS resolution but not exploitability | Only if callback proves access to internal network (response data, cloud metadata, or internal service interaction) |
+| Self-XSS (requires victim to paste payload in their own browser) | Attacker cannot trigger it remotely | Only when chained with cookie tossing, login CSRF, or clickjacking to deliver the payload without victim cooperation |
+| Server/technology banner disclosure (`Server: Apache/2.4.51`, `X-Powered-By: PHP/8.1`) | Version information alone is not exploitable | Only if the disclosed version has a known, exploitable CVE AND you demonstrate the exploit working |
+| Shell/exec sink where the "user-controlled" arg is a hardcoded string constant | Grep the symbol — if it is assigned once to a string literal and never reassigned, the finding is a false positive | Only when dynamic user input is confirmed to flow into the sink at runtime |
+| Regex-chain across modules where each link uses a different regex | Do not assume two regex constants "feed" each other without tracing the data-flow path | Only when the actual data-flow path source → regex A → regex B is traced end-to-end |
+
+**Rule of thumb:** if the finding requires the phrase "an attacker could theoretically…" without a working PoC, it belongs in Observations, not Vulnerabilities.
 
 ---
 
