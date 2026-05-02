@@ -437,7 +437,11 @@ For each finding: identify source → trace transforms → confirm sink reach �
 
 ### PoC Constraints (Mandatory)
 
-The PoC must be a **realistic, end-to-end victim↔attacker interaction**. Absolutely no mocked APIs, simulated responses, or synthetic conditions that would not exist in production.
+The PoC must be a **realistic, end-to-end victim↔attacker interaction** against the **unmodified target running in a production-equivalent environment**.
+
+> **⛔ ZERO MOCKING IN THE TESTING ENVIRONMENT — NO EXCEPTIONS**
+>
+> No mocked APIs. No simulated responses. No stub servers. No in-memory fakes. No patched binaries. No injected headers. No synthetic database states. No `DEBUG=true`. No test-only flags. No flipped feature toggles. No modified `docker-compose.yml` target services. **If the precondition does not exist in an unmodified production deployment, it is not a valid reproduction environment — and the finding cannot be confirmed.**
 
 - If the target app ships with a `docker-compose.yml`: use it as-is. You may add a separate attacker/victim container on the **same network** (e.g. `docker run --network=<project>_default ...`), but never modify the target's own container definition, environment, config, or behavior.
 - If the target app has **no** container setup: create two networks — one for the **victim** (running the unmodified app), one for the **attacker** (exploit tooling). The app runs identically to how it would in production.
@@ -512,7 +516,20 @@ Every reported vulnerability MUST include:
 6. **Justification** — who has access? Is this expected for that role? Would fixing it break legitimate workflows?
 7. **Exact payload** — copy-pasteable, not screenshots
 8. **Server response** — proving impact
-9. **Video recording** — full exploit chain end-to-end
+9. **Step-by-step reproduction** — numbered, command-exact walkthrough; a reader must be able to reproduce the impact without running any code first
+10. **Video recording** — full exploit chain end-to-end (**supplementary only** — a video without accompanying step-by-step text and a runnable PoC script is not sufficient; submissions based solely on a video attachment are auto-rejected)
+
+### Submission N/A Criteria (Guaranteed Rejection)
+
+A finding with **any** of the following properties will be closed as Not Applicable by bug bounty programs and must not be submitted. If a finding triggers any row below, move it to Observations and fix the gap before promoting it.
+
+| Condition | Why It Fails | How to Fix |
+|-----------|-------------|------------|
+| **Speculative or misleading impact** | "An attacker *could* theoretically…" without a working payload is noise, not a finding | Build a working PoC that demonstrates the stated impact end-to-end |
+| **Missing proof of concept** | No PoC = no reproducible evidence = no confidence in exploitability | Produce both PoC forms (step-by-step + bundled script) before reporting |
+| **Not reproducible** | Reviewer clones the repo, runs the steps, exploit does not fire | Test on a clean environment; pin all dependency versions; remove any assumption about local state |
+| **Based solely on a video attachment** | Video cannot be independently verified; no command-level audit trail | Replace with step-by-step text + runnable script; video may accompany but never substitute |
+| **Lacking demonstrated impact** | Security consequences are asserted but not shown (no data exfil, no shell, no ATO, no CSRF state change) | Re-run Phase 7 Q3 — if you cannot prove impact with a payload and server response, the finding is Candidate, not Confirmed |
 
 Low-confidence findings (score <= 3) → **Observations** section. Intended features flagged as design weaknesses → also Observations.
 
