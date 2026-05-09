@@ -1,0 +1,3 @@
+TreeSet.putAll → RdnEntry.compareTo → XString.equals
+→ MultiUIDefaults.toString → UIDefaults.get
+→ SwingLazyValue.createValue → InitialContext.doLookup(JNDI-URL)
