@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-ldap-injection-filter-construct-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Net::LDAP::Filter.construct parses a raw RFC 2254 filter string. Building
+      that string with interpolated request data lets an attacker inject filter
+      operators (such as *)(uid=*) to broaden or subvert the search. Build the
+      filter with the typed Net::LDAP::Filter.eq helper, or escape each value
+      with Net::LDAP::Filter.escape before assembling the string.
+    metadata:
+      vr-id: RB-SG-2301
+      category: ldap-injection
+      cwe: ["CWE-90"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/ldap-injection net-ldap Filter sink; CWE-90"
+      license: derived-original
+      references:
+        - "https://cheatsheetseries.owasp.org/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html"
+        - "https://www.rubydoc.info/gems/net-ldap/Net/LDAP/Filter"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Net::LDAP::Filter.construct("...#{...}...")
+          - pattern: Net::LDAP::Filter.from_rfc2254("...#{...}...")

@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-cache-poisoning-redis-call-tainted-command
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Redis#call dispatches a raw command whose name or arguments come from
+      request input. An attacker can choose the command (FLUSHALL, KEYS, CONFIG)
+      or its targets, poisoning or wiping the entire store and abusing the
+      key space. Issue fixed command names and treat user input only as data
+      arguments to a known command.
+    metadata:
+      vr-id: RB-SG-1814
+      category: cache-poisoning
+      cwe: ["CWE-349"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Redis#call with tainted commands command abuse; CWE-349"
+      license: derived-original
+      references:
+        - "https://redis.io/docs/latest/develop/connect/clients/ruby/"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $REDIS.call(params[...], ...)
+          - pattern: $REDIS.call([params[...], ...])
+          - pattern: $REDIS.call(*params[...])

@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-ssrf-httprb-post
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      HTTP.post (the http.rb gem) sends a request to a URL built from
+      interpolated external input, allowing an attacker to direct the POST at
+      internal services or metadata endpoints (CWE-918). Validate the destination
+      against an allowlist of hosts and schemes before posting rather than
+      trusting the user-controlled URL.
+    metadata:
+      vr-id: RB-SG-0514
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from http.rb HTTP.post sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://github.com/httprb/http"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: HTTP.post("...#{...}...", ...)

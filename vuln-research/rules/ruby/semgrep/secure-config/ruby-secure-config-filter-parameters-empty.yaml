@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-filter-parameters-empty
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      filter_parameters is assigned an empty list, so no request parameters are
+      redacted and secrets such as passwords, tokens and card numbers are written
+      verbatim into the Rails logs. Populate the filter with the sensitive
+      parameter names (for example :password, :token, :secret) the app handles.
+    metadata:
+      vr-id: RB-SG-2417
+      category: secure-config
+      cwe: ["CWE-16", "CWE-532"]
+      owasp: "A09:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog filter_parameters missing keys; CWE-532"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/532.html"
+        - "https://guides.rubyonrails.org/configuring.html"
+    patterns:
+      - pattern: $CFG.filter_parameters = []

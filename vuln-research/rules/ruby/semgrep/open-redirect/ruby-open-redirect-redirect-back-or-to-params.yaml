@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-open-redirect-redirect-back-or-to-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      redirect_back_or_to is called with a request parameter as the primary target.
+      The first argument is the explicit destination, so a tainted value navigates
+      the victim to an arbitrary host. Pass a fixed in-app path as the target and let
+      the helper fall back to the trusted referer only.
+    metadata:
+      vr-id: RB-SG-1010
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by ruby sink catalog 'redirect_back_or_to(params[:url], allow_other_host: true)'; CWE-601"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Redirecting.html#method-i-redirect_back_or_to"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: redirect_back_or_to(params[...])
+          - pattern: "redirect_back_or_to(params[...], ...)"
+          - pattern: redirect_back_or_to params[...]

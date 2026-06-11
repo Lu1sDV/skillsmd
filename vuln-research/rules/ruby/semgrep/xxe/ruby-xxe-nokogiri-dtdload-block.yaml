@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-xxe-nokogiri-dtdload-block
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Nokogiri parse configuration block calls config.dtdload, which forces
+      the parser to load the document's DTD — including any external subset
+      referenced by a SYSTEM identifier. With attacker-controlled XML this lets
+      a remote DTD be fetched (SSRF) and external/parameter entities to be
+      defined. Remove config.dtdload for untrusted input, or pair it with
+      config.nonet so no network DTD is ever retrieved.
+    metadata:
+      vr-id: RB-SG-1503
+      category: xxe
+      cwe: ["CWE-611"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by semgrep ruby nokogiri parse-options dtdload; CWE-611"
+      license: derived-original
+      references:
+        - "https://nokogiri.org/rdoc/Nokogiri/XML/ParseOptions.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $CFG.dtdload
+          - pattern: $CFG.dtdload(...)
+      - pattern-inside: |
+          Nokogiri::XML(...) { |$CFG| ... }

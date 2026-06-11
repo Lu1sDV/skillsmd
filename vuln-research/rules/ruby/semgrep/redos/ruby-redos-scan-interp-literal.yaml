@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-redos-scan-interp-literal
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      String#scan uses an interpolated regex literal, splicing a runtime value into the
+      pattern that is matched across the whole subject. When the value comes from request
+      data the attacker controls part of the expression and can trigger catastrophic
+      backtracking on every scan step (ReDoS). Scan with a fixed literal, or escape the
+      dynamic fragment with Regexp.escape.
+    metadata:
+      vr-id: RB-SG-1227
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sinks /#{pattern}/ and scan(regex) combined; CWE-1333"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/String.html#method-i-scan"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $S.scan(/...#{...}.../)

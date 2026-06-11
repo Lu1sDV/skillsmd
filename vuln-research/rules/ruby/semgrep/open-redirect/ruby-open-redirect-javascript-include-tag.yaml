@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-open-redirect-javascript-include-tag
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      javascript_include_tag emits a <script src> from request input. An attacker can
+      point the src at an external host and have arbitrary JavaScript loaded into the
+      page, escalating an open-redirect-style host injection into stored XSS. Reference
+      scripts only by fixed asset names, never by a user-supplied URL or host.
+    metadata:
+      vr-id: RB-SG-1018
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby sink catalog 'javascript_include_tag(url)'; CWE-601"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/AssetTagHelper.html#method-i-javascript_include_tag"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: javascript_include_tag(params[...])
+          - pattern: javascript_include_tag(params[...], ...)
+          - pattern: javascript_include_tag("...#{...}...")
+      - pattern-not: javascript_include_tag("/...#{...}...")

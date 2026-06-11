@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-xss-content-tag
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      `content_tag` HTML-escapes its body by default, but passing a body that has
+      already been marked `html_safe` or `raw` reintroduces an unescaped sink. When
+      that pre-marked value derives from request data, attacker markup is rendered
+      verbatim inside the generated tag, causing cross-site scripting. Pass the raw
+      string and let `content_tag` escape it, or sanitize before marking safe.
+    metadata:
+      vr-id: RB-SG-0807
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Rails content_tag with html_safe body; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/TagHelper.html#method-i-content_tag"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: content_tag($T, raw(...))
+          - pattern: content_tag($T, "...#{...}...".html_safe)
+          - pattern: content_tag($T, params[...].html_safe)

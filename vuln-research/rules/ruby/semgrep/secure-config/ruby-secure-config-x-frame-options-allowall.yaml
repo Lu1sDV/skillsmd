@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-x-frame-options-allowall
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The default X-Frame-Options header is set to ALLOWALL (or removed), letting
+      any site embed the application in an iframe and exposing users to
+      clickjacking. Set the header to SAMEORIGIN or DENY, or define an equivalent
+      frame-ancestors CSP directive.
+    metadata:
+      vr-id: RB-SG-2420
+      category: secure-config
+      cwe: ["CWE-16", "CWE-1021"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog default_headers X-Frame-Options ALLOWALL; CWE-1021"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/1021.html"
+        - "https://guides.rubyonrails.org/security.html"
+    patterns:
+      - pattern: '$H["X-Frame-Options"] = "ALLOWALL"'

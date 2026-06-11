@@ -1,0 +1,12 @@
+edges
+| marshal_load.rb:3:5:3:8 | blob | marshal_load.rb:5:24:5:27 | blob | provenance |  |
+| marshal_load.rb:3:12:3:17 | call to params | marshal_load.rb:3:12:3:25 | ...[...] | provenance |  |
+| marshal_load.rb:3:12:3:25 | ...[...] | marshal_load.rb:3:5:3:8 | blob | provenance |  |
+nodes
+| marshal_load.rb:3:5:3:8 | blob | semmle.label | blob |
+| marshal_load.rb:3:12:3:17 | call to params | semmle.label | call to params |
+| marshal_load.rb:3:12:3:25 | ...[...] | semmle.label | ...[...] |
+| marshal_load.rb:5:24:5:27 | blob | semmle.label | blob |
+subpaths
+#select
+| marshal_load.rb:5:24:5:27 | blob | marshal_load.rb:3:12:3:17 | call to params | marshal_load.rb:5:24:5:27 | blob | Marshal deserialization of a $@ may execute arbitrary code. | marshal_load.rb:3:12:3:17 | call to params | user-provided value |

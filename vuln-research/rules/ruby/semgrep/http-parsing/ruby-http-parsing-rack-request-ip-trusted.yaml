@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-http-parsing-rack-request-ip-trusted
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Rack::Request#ip is used in an access-control or rate-limit decision. When
+      trusted_proxies is broad, this value is taken from the client-controlled
+      X-Forwarded-For chain and can be spoofed to bypass IP allowlists or throttles.
+      Pin trusted_proxies to your real edge and treat the left-most forwarded hop
+      as untrusted.
+    metadata:
+      vr-id: RB-SG-2003
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Rack::Request#ip / X-Forwarded-For spoofing; CWE-444"
+      license: derived-original
+      references:
+        - "https://www.rfc-editor.org/rfc/rfc7239"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: allowed_ips.include?(request.ip)
+          - pattern: $LIST.include?(request.ip)
+          - pattern: if request.ip == $X then ... end

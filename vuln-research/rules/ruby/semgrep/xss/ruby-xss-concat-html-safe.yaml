@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-xss-concat-html-safe
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      `concat` is appending an already-`html_safe` interpolated string to the view
+      output buffer, so the fragment is emitted without escaping. If the interpolated
+      value comes from request data, attacker markup is rendered, causing cross-site
+      scripting. Append the plain string (let `concat` escape it) or sanitize the
+      fragment before marking it safe.
+    metadata:
+      vr-id: RB-SG-0819
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Rails concat of html_safe interpolated buffer; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/TextHelper.html#method-i-concat"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'concat("...#{...}...".html_safe)'
+          - pattern: 'concat(raw("...#{...}..."))'
+          - pattern: 'concat(raw(params[...]))'

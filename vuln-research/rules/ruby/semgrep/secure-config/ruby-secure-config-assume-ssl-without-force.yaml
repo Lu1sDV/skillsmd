@@ -1,0 +1,24 @@
+rules:
+  - id: ruby-secure-config-assume-ssl-without-force
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      assume_ssl is enabled, telling Rails to treat every incoming request as
+      HTTPS even when it arrives over plaintext. If a proxy ever forwards an HTTP
+      request this makes secure cookies and HSTS decisions on false assumptions;
+      only set assume_ssl when a trusted terminating proxy guarantees TLS, and
+      pair it with force_ssl.
+    metadata:
+      vr-id: RB-SG-2426
+      category: secure-config
+      cwe: ["CWE-16", "CWE-319"]
+      owasp: "A05:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by sink catalog config.assume_ssl=true; CWE-319"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/319.html"
+        - "https://guides.rubyonrails.org/configuring.html"
+    patterns:
+      - pattern: $CFG.assume_ssl = true

@@ -1,0 +1,32 @@
+# Canonical Ruby rule taxonomy.
+# Mirrors the 21 sink-type sections of references/sinks/ruby.md, plus standard
+# CWE families that warrant their own rule category. Every authored rule's
+# `category` MUST be one of these keys. `target` is a soft distribution goal
+# guiding the ~1000-rule backlog; not a hard cap.
+version: 1
+categories:
+  command-injection:      { cwe: [CWE-78],                  target: 70,  ruby_md: "OS command execution" }
+  code-injection:         { cwe: [CWE-94, CWE-95],          target: 60,  ruby_md: "Code evaluation & metaprogramming" }
+  sql-injection:          { cwe: [CWE-89],                  target: 80,  ruby_md: "SQL & data-layer sinks" }
+  deserialization:        { cwe: [CWE-502],                 target: 60,  ruby_md: "Unsafe deserialization and object materialization" }
+  ssrf:                   { cwe: [CWE-918],                 target: 60,  ruby_md: "HTTP clients, SSRF & URL-based sinks" }
+  path-traversal:         { cwe: [CWE-22, CWE-73, CWE-434], target: 60,  ruby_md: "File system, path traversal, file uploads" }
+  zip-slip:               { cwe: [CWE-22],                  target: 20,  ruby_md: "Archive extraction and decompression" }
+  xss:                    { cwe: [CWE-79],                  target: 80,  ruby_md: "Views, templating and XSS" }
+  ssti:                   { cwe: [CWE-1336, CWE-94],        target: 30,  ruby_md: "Views, templating and XSS" }
+  open-redirect:          { cwe: [CWE-601],                 target: 30,  ruby_md: "Redirects and URL construction" }
+  mass-assignment:        { cwe: [CWE-915],                 target: 40,  ruby_md: "Mass assignment & parameter handling" }
+  redos:                  { cwe: [CWE-1333, CWE-400],       target: 40,  ruby_md: "Regex, ReDoS and validation" }
+  auth-session:           { cwe: [CWE-352, CWE-384, CWE-639, CWE-862], target: 70, ruby_md: "Sessions, cookies, CSRF and authorization" }
+  crypto-tls:             { cwe: [CWE-295, CWE-327, CWE-326], target: 60, ruby_md: "SSL verification, crypto and HTTP client configuration" }
+  xxe:                    { cwe: [CWE-611],                 target: 30,  ruby_md: "XML, XXE and parser configuration" }
+  mail-header-injection:  { cwe: [CWE-93],                  target: 20,  ruby_md: "Mail, SMTP and header injection" }
+  job-injection:          { cwe: [CWE-502, CWE-94],         target: 25,  ruby_md: "Background jobs, queues and async dispatch" }
+  cache-poisoning:        { cwe: [CWE-349, CWE-444],        target: 20,  ruby_md: "Cache, key-value stores and poisoning" }
+  render-injection:       { cwe: [CWE-22, CWE-98],          target: 30,  ruby_md: "Dynamic render paths & routing" }
+  http-parsing:           { cwe: [CWE-444],                 target: 25,  ruby_md: "Rack, headers, proxies and WEBrick parsing" }
+  hardcoded-secrets:      { cwe: [CWE-798],                 target: 40,  ruby_md: "Miscellaneous security-sensitive configuration" }
+  insecure-randomness:    { cwe: [CWE-330, CWE-338],        target: 20,  ruby_md: "SSL verification, crypto and HTTP client configuration" }
+  ldap-injection:         { cwe: [CWE-90],                  target: 15,  ruby_md: "SQL & data-layer sinks" }
+  secure-config:          { cwe: [CWE-16, CWE-1004],        target: 40,  ruby_md: "Miscellaneous security-sensitive configuration" }
+  rails-misc:             { cwe: [CWE-200, CWE-209],        target: 30,  ruby_md: "Rails framework APIs and client-side channels" }

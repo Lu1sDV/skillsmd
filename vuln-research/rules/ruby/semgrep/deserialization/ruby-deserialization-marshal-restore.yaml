@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-deserialization-marshal-restore
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Marshal.restore is an alias of Marshal.load and carries the same risk: it
+      instantiates arbitrary Ruby objects from a serialized stream. If the input
+      is attacker-influenced, a gadget chain leads to remote code execution.
+      Avoid Marshal entirely for untrusted data and parse a validated text format
+      such as JSON without object additions.
+    metadata:
+      vr-id: RB-SG-0402
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Marshal.restore; CWE-502"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Marshal.html#method-c-restore"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Marshal.restore($X)
+          - pattern: Marshal.restore($X, ...)
+      - pattern-not: Marshal.restore("...")

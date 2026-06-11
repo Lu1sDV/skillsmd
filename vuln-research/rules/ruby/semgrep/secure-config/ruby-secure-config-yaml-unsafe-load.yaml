@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-yaml-unsafe-load
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      ActiveRecord is configured with use_yaml_unsafe_load = true, restoring the
+      legacy YAML.unsafe_load behavior for serialized columns and allowing
+      arbitrary Ruby object instantiation from database content. Leave this
+      disabled and enumerate allowed classes via yaml_column_permitted_classes.
+    metadata:
+      vr-id: RB-SG-2403
+      category: secure-config
+      cwe: ["CWE-16", "CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog use_yaml_unsafe_load=true; CWE-502"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/502.html"
+        - "https://guides.rubyonrails.org/configuring.html"
+    patterns:
+      - pattern: $CFG.active_record.use_yaml_unsafe_load = true

@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-sql-injection-delete-all-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Model.delete_all is called with a WHERE condition built by interpolation,
+      which is emitted as raw DELETE SQL. Tainted input in the condition can widen
+      the deletion or inject SQL, destroying data beyond the intended scope. Apply
+      conditions through a relation with bound parameters before calling delete_all.
+    metadata:
+      vr-id: RB-SG-0314
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by brakeman SQL injection delete_all check; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/Relation.html#method-i-delete_all"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $M.delete_all("...#{...}...")

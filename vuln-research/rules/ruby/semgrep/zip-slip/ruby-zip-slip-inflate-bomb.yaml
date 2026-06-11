@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-zip-slip-inflate-bomb
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Zlib::Inflate.inflate decompresses an untrusted blob in one shot with no
+      output bound. A crafted highly-compressible payload (zip bomb) expands to a
+      huge buffer and exhausts memory, causing denial of service. Use a streaming
+      Zlib::Inflate instance and stop feeding data once the running output size
+      passes a hard limit, rather than the convenience one-shot inflate.
+    metadata:
+      vr-id: RB-SG-0713
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by decompression-bomb DoS guidance; CWE-409/CWE-22; ruby.md Zlib::Inflate.inflate decompression-bomb sink"
+      license: derived-original
+      references:
+        - "https://ruby-doc.org/stdlib/libdoc/zlib/rdoc/Zlib/Inflate.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Zlib::Inflate.inflate($DATA)

@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-mail-header-injection-inline-attachment-name
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An inline attachment is keyed with a request-controlled name via
+      attachments.inline[...]. That name is emitted in the Content-Disposition and
+      Content-ID MIME headers, so CR/LF or quotes inject extra headers. Sanitize the
+      name to a safe basename and strip control characters before use.
+    metadata:
+      vr-id: RB-SG-1619
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog inline attachment name MIME header injection; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $X.inline[params[...]] = ...
+          - pattern: '$X.inline["...#{...}..."] = ...'

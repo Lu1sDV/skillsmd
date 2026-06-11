@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-redos-gsub-dynamic
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      String#gsub substitutes using a regex compiled from request input, so the attacker
+      controls the search expression. A crafted pattern with nested quantifiers forces
+      catastrophic backtracking on every substitution attempt, hanging the request
+      (ReDoS). Substitute with a fixed pattern, not one derived from params.
+    metadata:
+      vr-id: RB-SG-1208
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink gsub(regex, replacement) with attacker-supplied regex; CWE-1333"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/String.html#method-i-gsub"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $S.gsub(Regexp.new(params[...]), ...)

@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-permissions-policy-wildcard
+    languages: [ruby]
+    severity: INFO
+    message: >
+      The Permissions-Policy grants a powerful browser feature to all origins via
+      :all (for example camera or geolocation), removing the per-origin
+      restriction the header is meant to enforce. Limit each feature to :self or
+      the specific trusted origins that genuinely need it.
+    metadata:
+      vr-id: RB-SG-2427
+      category: secure-config
+      cwe: ["CWE-16", "CWE-1021"]
+      owasp: "A05:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by sink catalog permissions_policy feature :all; CWE-1021"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/1021.html"
+        - "https://guides.rubyonrails.org/security.html"
+    patterns:
+      - pattern: $P.camera :all

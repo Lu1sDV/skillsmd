@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-open-redirect-image-tag
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      image_tag builds an <img src> from request input. An attacker-chosen src leaks
+      the visitor's request (and any referer or auth context) to an external host and
+      can be combined with other tricks for SSRF or content spoofing. Render images
+      from validated, same-origin asset paths only.
+    metadata:
+      vr-id: RB-SG-1020
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by ruby sink catalog 'image_tag(url)'; CWE-601"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/AssetTagHelper.html#method-i-image_tag"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: image_tag(params[...])
+          - pattern: image_tag(params[...], ...)
+          - pattern: image_tag("...#{...}...")
+      - pattern-not: image_tag("/...#{...}...")

@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-http-parsing-original-url-redirect
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      redirect_to is fed request.original_url / request.url / request.base_url,
+      all of which are reconstructed from the client Host header. A forged Host
+      turns this into an open redirect or a poisoned absolute link. Redirect to a
+      relative path or a host taken from server configuration.
+    metadata:
+      vr-id: RB-SG-2010
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md request.original_url/url/base_url host-derived; CWE-444"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionDispatch/Http/URL.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: redirect_to request.original_url
+          - pattern: redirect_to request.url
+          - pattern: redirect_to request.base_url
+          - pattern: redirect_to "...#{request.base_url}..."

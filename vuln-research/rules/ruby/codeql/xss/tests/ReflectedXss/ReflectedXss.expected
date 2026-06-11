@@ -1,0 +1,12 @@
+edges
+| app.rb:5:5:5:8 | name | app.rb:6:17:6:20 | name | provenance |  |
+| app.rb:5:12:5:17 | call to params | app.rb:5:12:5:24 | ...[...] | provenance |  |
+| app.rb:5:12:5:24 | ...[...] | app.rb:5:5:5:8 | name | provenance |  |
+nodes
+| app.rb:5:5:5:8 | name | semmle.label | name |
+| app.rb:5:12:5:17 | call to params | semmle.label | call to params |
+| app.rb:5:12:5:24 | ...[...] | semmle.label | ...[...] |
+| app.rb:6:17:6:20 | name | semmle.label | name |
+subpaths
+#select
+| app.rb:6:17:6:20 | name | app.rb:5:12:5:17 | call to params | app.rb:6:17:6:20 | name | Reflected XSS: unescaped $@ is written into the HTTP response body. | app.rb:5:12:5:17 | call to params | request-derived value |

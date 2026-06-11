@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-render-injection-format-param
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      render is given a formats: value taken from request input, letting the
+      attacker steer template-handler and format resolution toward unintended
+      variants. This can surface templates meant for other formats or trigger
+      unexpected handlers. Constrain the format to a known set before rendering.
+    metadata:
+      vr-id: RB-SG-1922
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md dynamic render paths; formats/handlers resolution; CWE-22"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/LookupContext.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "render(..., formats: params[...])"
+          - pattern: "render(..., formats: [params[...]])"
+          - pattern: "render(formats: params[...], ...)"

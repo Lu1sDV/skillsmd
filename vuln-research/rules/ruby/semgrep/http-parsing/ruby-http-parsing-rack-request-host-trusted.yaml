@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-http-parsing-rack-request-host-trusted
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A security or routing decision is made from Rack::Request#host, which is
+      derived from the client-supplied Host header. An attacker can set an
+      arbitrary Host to poison generated links, password-reset URLs, or
+      multi-tenant routing. Resolve the host from a server-side allowlist
+      (config.hosts / a fixed canonical host), not from the request.
+    metadata:
+      vr-id: RB-SG-2002
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Rack::Request#host host-header poisoning; CWE-444"
+      license: derived-original
+      references:
+        - "https://www.rfc-editor.org/rfc/rfc7230"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: request.host

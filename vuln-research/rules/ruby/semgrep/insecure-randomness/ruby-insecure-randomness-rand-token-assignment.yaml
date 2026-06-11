@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-insecure-randomness-rand-token-assignment
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A security token, secret, or password is derived from Kernel#rand, a
+      non-cryptographic PRNG seeded from predictable state. An attacker who can
+      observe or guess the generator state can reproduce the value, leading to
+      account takeover or token forgery. Generate the value with
+      SecureRandom.hex / SecureRandom.urlsafe_base64 instead.
+    metadata:
+      vr-id: RB-SG-2201
+      category: insecure-randomness
+      cwe: ["CWE-338"]
+      owasp: "A02:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from CodeQL rb/insecure-randomness DefaultSource (Kernel#rand into sensitive write); CWE-338"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/338.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $TOKEN = rand(...)
+          - pattern: $TOKEN = rand
+      - metavariable-regex:
+          metavariable: $TOKEN
+          regex: (?i).*(token|secret|password|passwd|nonce|otp|api_?key|reset).*

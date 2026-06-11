@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-redos-validates-regexp-new
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A custom validator compiles its format from a request parameter via
+      Regexp.new(params[...]), so a user supplies the validating expression itself. A
+      crafted pattern with catastrophic backtracking will hang every save attempt that
+      runs the validation (ReDoS). Validate against a fixed, server-defined regex; never
+      let request data become the pattern.
+    metadata:
+      vr-id: RB-SG-1213
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink custom validators using Regexp.new(params[:pattern]); CWE-1333"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/active_record_validations.html#format"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: "validates ..., format: { with: Regexp.new(params[...]) }"

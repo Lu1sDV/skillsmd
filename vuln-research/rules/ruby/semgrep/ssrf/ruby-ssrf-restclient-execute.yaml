@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-ssrf-restclient-execute
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      RestClient::Request.execute is invoked with a :url option built from
+      interpolated external input. The low-level request goes to an
+      attacker-chosen destination, enabling requests to internal hosts or the
+      metadata service (CWE-918). Validate the url against an allowlist and
+      confirm the resolved address is public before executing the request.
+    metadata:
+      vr-id: RB-SG-0509
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from RestClient::Request.execute sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://github.com/rest-client/rest-client"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: 'RestClient::Request.execute(url: "...#{...}...", ...)'

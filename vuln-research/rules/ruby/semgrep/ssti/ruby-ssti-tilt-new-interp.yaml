@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-ssti-tilt-new-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Tilt compiles a template whose body is built from interpolation. Tilt
+      delegates to engines such as ERB, Erubi, or Haml that evaluate embedded code,
+      so external input concatenated into the template string runs as server-side
+      code. Pass a path to a trusted template file and supply data through the
+      `render` locals, rather than constructing the template body from input.
+    metadata:
+      vr-id: RB-SG-0907
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Tilt template-injection class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://github.com/jeremyevans/tilt"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Tilt::ERBTemplate.new { "...#{...}..." }
+          - pattern: Tilt.new("...#{...}...")
+          - pattern: Tilt[$ENGINE].new { "...#{...}..." }

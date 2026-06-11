@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-redos-regexp-new-request-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Regexp.new compiles a value taken from request.params, so the client supplies the
+      entire regular expression the server evaluates. A pattern crafted with nested
+      quantifiers triggers catastrophic backtracking and hangs the worker (ReDoS). Match
+      against a fixed, server-defined pattern; never compile request-derived data as a
+      regex.
+    metadata:
+      vr-id: RB-SG-1228
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink Regexp.new(pattern) with request.params input; CWE-1333"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionDispatch/Request.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Regexp.new(request.params[...])
+          - pattern: Regexp.new(request.query_parameters[...])

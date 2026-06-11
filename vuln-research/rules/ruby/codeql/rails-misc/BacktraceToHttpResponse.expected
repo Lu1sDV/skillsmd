@@ -1,0 +1,15 @@
+edges
+| tests/KernelCallerExposure/kernel_caller.rb:5:5:5:10 | frames | tests/KernelCallerExposure/kernel_caller.rb:6:18:6:23 | frames | provenance |  |
+| tests/KernelCallerExposure/kernel_caller.rb:5:14:5:21 | call to caller | tests/KernelCallerExposure/kernel_caller.rb:5:5:5:10 | frames | provenance |  |
+nodes
+| tests/BacktraceToHttpResponse/backtrace_response.rb:7:18:7:28 | call to backtrace | semmle.label | call to backtrace |
+| tests/KernelCallerExposure/kernel_caller.rb:5:5:5:10 | frames | semmle.label | frames |
+| tests/KernelCallerExposure/kernel_caller.rb:5:14:5:21 | call to caller | semmle.label | call to caller |
+| tests/KernelCallerExposure/kernel_caller.rb:6:18:6:23 | frames | semmle.label | frames |
+| tests/KernelCallerExposure/kernel_caller.rb:14:18:14:28 | call to backtrace | semmle.label | call to backtrace |
+| tests/StackTraceExposure/stack_trace.rb:7:18:7:28 | call to backtrace | semmle.label | call to backtrace |
+subpaths
+#select
+| tests/BacktraceToHttpResponse/backtrace_response.rb:7:18:7:28 | call to backtrace | tests/BacktraceToHttpResponse/backtrace_response.rb:7:18:7:28 | call to backtrace | tests/BacktraceToHttpResponse/backtrace_response.rb:7:18:7:28 | call to backtrace | $@ can be exposed to an external user. | tests/BacktraceToHttpResponse/backtrace_response.rb:7:18:7:28 | call to backtrace | Exception backtrace |
+| tests/KernelCallerExposure/kernel_caller.rb:14:18:14:28 | call to backtrace | tests/KernelCallerExposure/kernel_caller.rb:14:18:14:28 | call to backtrace | tests/KernelCallerExposure/kernel_caller.rb:14:18:14:28 | call to backtrace | $@ can be exposed to an external user. | tests/KernelCallerExposure/kernel_caller.rb:14:18:14:28 | call to backtrace | Exception backtrace |
+| tests/StackTraceExposure/stack_trace.rb:7:18:7:28 | call to backtrace | tests/StackTraceExposure/stack_trace.rb:7:18:7:28 | call to backtrace | tests/StackTraceExposure/stack_trace.rb:7:18:7:28 | call to backtrace | $@ can be exposed to an external user. | tests/StackTraceExposure/stack_trace.rb:7:18:7:28 | call to backtrace | Exception backtrace |

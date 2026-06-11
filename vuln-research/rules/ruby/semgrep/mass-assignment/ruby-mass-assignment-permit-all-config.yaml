@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-mass-assignment-permit-all-config
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The application sets permit_all_parameters = true, which makes every
+      ActionController::Parameters instance behave as already-permitted. Strong
+      parameters then enforce nothing and every controller becomes vulnerable to
+      mass assignment. Remove this global override and permit attributes explicitly
+      per action.
+    metadata:
+      vr-id: RB-SG-1128
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by ActionController permit_all_parameters global setting; CWE-915"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Parameters.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "$X.permit_all_parameters = true"
+          - pattern: "ActionController::Parameters.permit_all_parameters = true"

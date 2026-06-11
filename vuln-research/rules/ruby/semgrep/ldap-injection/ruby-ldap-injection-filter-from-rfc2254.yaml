@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-ldap-injection-filter-from-rfc2254
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A request parameter is passed straight into Net::LDAP::Filter.construct,
+      which parses an arbitrary RFC 2254 filter expression. Treating raw input
+      as a complete filter gives an attacker full control of the search logic.
+      Never accept a client-supplied filter string; build the filter from typed
+      assertions with escaped values.
+    metadata:
+      vr-id: RB-SG-2307
+      category: ldap-injection
+      cwe: ["CWE-90"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by net-ldap Filter.construct/from_rfc2254 raw-filter sink; CWE-90"
+      license: derived-original
+      references:
+        - "https://www.rubydoc.info/gems/net-ldap/Net/LDAP/Filter"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Net::LDAP::Filter.construct(params[...])
+          - pattern: Net::LDAP::Filter.from_rfc2254(params[...])

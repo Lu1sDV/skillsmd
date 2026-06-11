@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-code-injection-binding-eval
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An interpolated string is evaluated through a Binding#eval call, executing
+      Ruby inside the captured scope and exposing that scope's local variables.
+      If the evaluated text is built from external input, an attacker gains
+      arbitrary code execution with access to the surrounding context. Avoid
+      Binding#eval on dynamic input; resolve the desired value through a
+      whitelisted lookup instead.
+    metadata:
+      vr-id: RB-SG-0202
+      category: code-injection
+      cwe: ["CWE-94", "CWE-95"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md binding.eval; CWE-95"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Binding.html#method-i-eval"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $B.eval("...#{...}...")
+          - pattern: TOPLEVEL_BINDING.eval("...#{...}...")
+      - pattern-not: $B.eval("...")

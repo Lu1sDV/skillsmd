@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-open-redirect-redirect-to-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Rails controller passes a request parameter straight into redirect_to.
+      Because the target host is attacker-controlled, a crafted ?url=https://evil.example
+      value sends the victim to an external phishing page that mimics the real site.
+      Restrict the destination to an allow-list of known paths, or pass only a relative
+      path (redirect_to "/dashboard") so the browser cannot leave the application origin.
+    metadata:
+      vr-id: RB-SG-1001
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/url-redirection (cwe-601 UrlRedirect example); CWE-601"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/601.html"
+        - "https://api.rubyonrails.org/classes/ActionController/Redirecting.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: redirect_to(params[...])
+          - pattern: redirect_to params[...]
+      - pattern-not: "redirect_to(params[...], allow_other_host: false)"

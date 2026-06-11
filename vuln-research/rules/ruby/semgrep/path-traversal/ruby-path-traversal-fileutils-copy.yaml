@@ -1,0 +1,33 @@
+rules:
+  - id: ruby-path-traversal-fileutils-copy
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      FileUtils.cp, cp_r, or mv uses a source or destination path drawn from external
+      input. Traversal in the source can read files outside the intended directory, and
+      traversal in the destination can overwrite arbitrary files. Validate both paths
+      against an allow list and resolve them under a trusted base before copying or moving.
+    metadata:
+      vr-id: RB-SG-0618
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/FileUtils.html#method-c-cp"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: FileUtils.cp(params[...], ...)
+          - pattern: FileUtils.cp(..., params[...])
+          - pattern: FileUtils.cp_r(params[...], ...)
+          - pattern: FileUtils.cp_r(..., params[...])
+          - pattern: FileUtils.mv(params[...], ...)
+          - pattern: FileUtils.mv(..., params[...])
+          - pattern: FileUtils.cp(..., "...#{params[...]}...")
+          - pattern: FileUtils.mv(..., "...#{params[...]}...")

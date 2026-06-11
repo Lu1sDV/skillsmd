@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-auth-session-verify-authenticity-token-override
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The controller redefines verify_authenticity_token as an empty method,
+      silently neutralizing Rails' CSRF check while appearing to keep it. Every
+      state-changing action is then forgeable cross-site. Delete the override so
+      the framework's real token verification runs.
+    metadata:
+      vr-id: RB-SG-1328
+      category: auth-session
+      cwe: ["CWE-352"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by no-op override of verify_authenticity_token; CWE-352"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/security.html#cross-site-request-forgery-csrf"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: |
+          def verify_authenticity_token
+          end

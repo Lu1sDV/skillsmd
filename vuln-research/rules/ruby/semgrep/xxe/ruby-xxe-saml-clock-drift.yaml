@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-xxe-saml-clock-drift
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A ruby-saml settings/security hash disables a timing or recipient check —
+      check_idp_cert_expiration, want_messages_signed, or the conditions/
+      audience validation — leaving the SAML assertion XML accepted without full
+      validation. Combined with the XML parser surface this enables assertion
+      replay and forgery. Keep message signing, certificate-expiration, and
+      audience/condition checks enabled.
+    metadata:
+      vr-id: RB-SG-1524
+      category: xxe
+      cwe: ["CWE-347"]
+      owasp: "A07:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby.md 'SAML parsing with disabled audience/clock validation' sink; ruby-saml"
+      license: derived-original
+      references:
+        - "https://github.com/SAML-Toolkits/ruby-saml"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "$S.security[:want_messages_signed] = false"
+          - pattern: "$S.security[:check_idp_cert_expiration] = false"
+          - pattern: $S.idp_cert_fingerprint_validation = false

@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-ssti-liquid-render-bang-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Liquid template parsed from an interpolated string is evaluated with
+      render!, which raises on errors but still executes the user-influenced
+      template. Attacker input woven into the template source lets them drive
+      object drops, expensive loops (denial of service), and any registered custom
+      tags. Parse only trusted, static template text and expose data through the
+      assigns hash given to render!.
+    metadata:
+      vr-id: RB-SG-0917
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Liquid render! injection class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://github.com/Shopify/liquid"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Liquid::Template.parse("...#{...}...").render!(...)

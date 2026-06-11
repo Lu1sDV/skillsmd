@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-command-injection-io-popen
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      IO.popen receives an interpolated string command. The string form runs through a
+      shell, so interpolating external input lets an attacker inject shell operators and
+      run arbitrary commands while reading their output. Pass an array of program plus
+      arguments — `IO.popen(["cmd", arg])` — which executes without a shell.
+    metadata:
+      vr-id: RB-SG-0106
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql CommandInjectionQuery (IO.popen string sink); CWE-78"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/IO.html#method-c-popen"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: IO.popen("...#{...}...", ...)

@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-crypto-tls-nethttp-verify-none
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Net::HTTP client has its verify_mode set to OpenSSL::SSL::VERIFY_NONE,
+      which disables TLS certificate validation. Any party on the network path
+      can present a forged certificate and silently man-in-the-middle the
+      connection, exposing credentials and response bodies. Leave verify_mode at
+      its default or set it to OpenSSL::SSL::VERIFY_PEER and supply a trusted
+      ca_file/ca_path instead.
+    metadata:
+      vr-id: RB-SG-1401
+      category: crypto-tls
+      cwe: ["CWE-295"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/request-without-validation; CWE-295"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/295.html"
+        - "https://ruby-doc.org/stdlib/libdoc/net/http/rdoc/Net/HTTP.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $H.verify_mode = OpenSSL::SSL::VERIFY_NONE

@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-mass-assignment-assign-attributes
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      assign_attributes copies a raw params slice onto the in-memory record. Even
+      though it does not save immediately, the unfiltered hash stages every
+      request key — including authorization columns — so a later save persists
+      them. Whitelist with params.require(:record).permit(...) before assigning.
+    metadata:
+      vr-id: RB-SG-1108
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/insecure-mass-assignment; CWE-915"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveModel/AttributeAssignment.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $O.assign_attributes(params[$K])
+          - pattern: $O.assign_attributes(params[$K], ...)
+      - pattern-not: $O.assign_attributes(params.require(...).permit(...), ...)
+      - pattern-not: $O.assign_attributes(params.require(...).permit(...))

@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-command-injection-open3-popen3
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Open3.popen3 executes an interpolated command string and exposes stdin, stdout and
+      stderr pipes. The string form is shell-parsed, so attacker-controlled interpolated
+      input permits shell metacharacter injection and arbitrary command execution. Split
+      the command into separate arguments — `Open3.popen3("cmd", arg)` — to skip the shell.
+    metadata:
+      vr-id: RB-SG-0110
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql frameworks/stdlib/Open3.qll (popen3 sink); CWE-78"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Open3.html#method-c-popen3"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Open3.popen3("...#{...}...")
+      - pattern-not: Open3.popen3("...", ...)

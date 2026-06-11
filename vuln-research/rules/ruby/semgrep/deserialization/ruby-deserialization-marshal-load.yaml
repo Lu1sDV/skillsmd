@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-deserialization-marshal-load
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Marshal.load reconstructs arbitrary Ruby objects from a serialized byte
+      stream and invokes their materialization hooks. When the stream comes from
+      request parameters, cookies, cache entries, or any other external source,
+      an attacker can craft a payload that chains existing classes into a gadget
+      and achieves remote code execution. Never Marshal.load untrusted bytes;
+      exchange data with JSON.parse (no create_additions) or a schema-validated
+      format instead.
+    metadata:
+      vr-id: RB-SG-0401
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by semgrep ruby.lang.security.deserialization.marshal-load; CWE-502"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Marshal.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Marshal.load($X)
+          - pattern: Marshal.load($X, ...)
+      - pattern-not: Marshal.load("...")

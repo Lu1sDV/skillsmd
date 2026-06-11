@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-code-injection-slim-template
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Slim template is built from external input and rendered. Slim evaluates
+      embedded Ruby expressions, so user-controlled template source is
+      server-side template injection that runs arbitrary code. Keep Slim sources
+      static and pass dynamic data as locals through the render call.
+    metadata:
+      vr-id: RB-SG-0219
+      category: code-injection
+      cwe: ["CWE-94", "CWE-1336"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md Slim::Template.new { template }.render; CWE-94"
+      license: derived-original
+      references:
+        - "https://github.com/slim-template/slim"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Slim::Template.new { params[...] }.render(...)
+          - pattern: Slim::Template.new(params[...], ...).render(...)
+          - pattern: Slim::Template.new("...#{...}...", ...).render(...)
+      - pattern-not: Slim::Template.new("...").render(...)

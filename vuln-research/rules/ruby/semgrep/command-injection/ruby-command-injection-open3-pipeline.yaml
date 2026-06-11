@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-command-injection-open3-pipeline
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Open3.pipeline runs a shell-style pipeline where at least one stage is an
+      interpolated string command. String stages are parsed by the shell, so
+      attacker-controlled interpolation lets an attacker inject extra commands into the
+      pipeline. Express each stage as an argument array — `["grep", term]` — so the
+      arguments bypass the shell.
+    metadata:
+      vr-id: RB-SG-0114
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql frameworks/stdlib/Open3.qll (pipeline sink); CWE-78"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Open3.html#method-c-pipeline"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Open3.pipeline(..., "...#{...}...", ...)
+          - pattern: Open3.pipeline("...#{...}...", ...)

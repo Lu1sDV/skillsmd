@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-action-cable-allow-all-origins
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Action Cable is configured with disable_request_forgery_protection set to
+      true, accepting WebSocket connections from any origin and removing the
+      same-origin check that defends against cross-site WebSocket hijacking. Keep
+      forgery protection on and list allowed_request_origins explicitly.
+    metadata:
+      vr-id: RB-SG-2425
+      category: secure-config
+      cwe: ["CWE-16", "CWE-352"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog action_cable.disable_request_forgery_protection=true; CWE-352"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/352.html"
+        - "https://guides.rubyonrails.org/action_cable_overview.html"
+    patterns:
+      - pattern: $CFG.action_cable.disable_request_forgery_protection = true

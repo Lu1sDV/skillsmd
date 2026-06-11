@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-sql-injection-where-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A WHERE condition is passed to Model.where as an interpolated string
+      literal. ActiveRecord treats a bare string condition as raw SQL, so any
+      external value spliced into it can alter the query and exfiltrate data.
+      Use the placeholder form — where("col = ?", value) or where(col: value) —
+      which binds and escapes the value.
+    metadata:
+      vr-id: RB-SG-0307
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by semgrep ruby.rails.security.brakeman.sql-injection where; CWE-89"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/active_record_querying.html#conditions"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $M.where("...#{...}...")

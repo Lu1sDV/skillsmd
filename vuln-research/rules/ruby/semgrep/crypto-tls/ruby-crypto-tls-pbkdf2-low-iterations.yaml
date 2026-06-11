@@ -1,0 +1,33 @@
+rules:
+  - id: ruby-crypto-tls-pbkdf2-low-iterations
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      PBKDF2 is invoked with a very low iteration count, making the derived key
+      cheap to brute-force offline once the salt and hash are known. Password and
+      key-derivation should cost real work. Use at least 600,000 SHA-256
+      iterations (OWASP 2023 guidance) or move to a memory-hard KDF such as
+      Argon2id or scrypt.
+    metadata:
+      vr-id: RB-SG-1413
+      category: crypto-tls
+      cwe: ["CWE-916", "CWE-326"]
+      owasp: "A02:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog OpenSSL::PKCS5.pbkdf2_hmac low iterations; CWE-916"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/916.html"
+        - "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: OpenSSL::PKCS5.pbkdf2_hmac($PW, $SALT, $N, ...)
+          - pattern: OpenSSL::PKCS5.pbkdf2_hmac_sha1($PW, $SALT, $N, ...)
+          - pattern: "OpenSSL::KDF.pbkdf2_hmac($PW, salt: $SALT, iterations: $N, ...)"
+      - metavariable-comparison:
+          metavariable: $N
+          comparison: $N < 100000

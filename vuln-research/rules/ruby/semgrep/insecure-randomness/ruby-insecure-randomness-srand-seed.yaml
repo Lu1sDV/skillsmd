@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-insecure-randomness-srand-seed
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Kernel#srand re-seeds the global PRNG with an explicit or predictable seed.
+      Seeding from a constant, timestamp, or PID makes the entire subsequent rand
+      sequence reproducible by an attacker who can guess the seed. Never seed a
+      PRNG used for security; use SecureRandom which is self-seeded from the OS CSPRNG.
+    metadata:
+      vr-id: RB-SG-2203
+      category: insecure-randomness
+      cwe: ["CWE-336", "CWE-338"]
+      owasp: "A02:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog 'srand, timestamp/PID-derived values'; CWE-336"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/336.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: srand(...)
+          - pattern: Random.srand(...)
+      - pattern-not: srand()
+      - pattern-not: srand

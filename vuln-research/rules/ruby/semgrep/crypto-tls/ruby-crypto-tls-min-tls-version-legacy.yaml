@@ -1,0 +1,35 @@
+rules:
+  - id: ruby-crypto-tls-min-tls-version-legacy
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An SSLContext pins a legacy protocol (SSLv2, SSLv3, TLS 1.0, or TLS 1.1)
+      via ssl_version or min_version. These versions have known downgrade and
+      padding-oracle weaknesses (POODLE, BEAST) and are deprecated. Set
+      min_version to OpenSSL::SSL::TLS1_2_VERSION or higher and let the library
+      negotiate the maximum.
+    metadata:
+      vr-id: RB-SG-1417
+      category: crypto-tls
+      cwe: ["CWE-326", "CWE-327"]
+      owasp: "A02:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog ctx.ssl_version legacy protocols; CWE-326"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/326.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $CTX.ssl_version = :SSLv3
+          - pattern: $CTX.ssl_version = :SSLv2
+          - pattern: $CTX.ssl_version = :TLSv1
+          - pattern: $CTX.ssl_version = :TLSv1_1
+          - pattern: $CTX.ssl_version = "SSLv3"
+          - pattern: $CTX.ssl_version = "TLSv1"
+          - pattern: $CTX.min_version = OpenSSL::SSL::SSL3_VERSION
+          - pattern: $CTX.min_version = OpenSSL::SSL::TLS1_VERSION
+          - pattern: $CTX.min_version = OpenSSL::SSL::TLS1_1_VERSION

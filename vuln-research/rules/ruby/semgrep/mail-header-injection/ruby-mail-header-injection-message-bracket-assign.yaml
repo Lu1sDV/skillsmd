@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-mail-header-injection-message-bracket-assign
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Mail::Message header is assigned via message[header] = with a tainted value.
+      The mail gem stores the value as a raw header field, so CR/LF in the input
+      produces header injection or message body splitting. Sanitize the value and
+      restrict the header name to a known-safe set.
+    metadata:
+      vr-id: RB-SG-1609
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog 'Mail::Message#[]=' header assignment; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'message["...#{...}..."] = ...'
+          - pattern: 'message["..."] = params[...]'
+          - pattern: 'message["..."] = "...#{...}..."'

@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-mail-header-injection-mail-cc-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The Cc: header of a mail(...) call is populated straight from request params.
+      Attacker-supplied recipients turn the mailer into an open relay and a CR/LF in
+      the value can smuggle additional headers. Restrict recipients to a vetted
+      address book and reject any value containing control characters.
+    metadata:
+      vr-id: RB-SG-1604
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog 'mail(cc:...)' tainted recipient header; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: 'mail(..., cc: params[...], ...)'

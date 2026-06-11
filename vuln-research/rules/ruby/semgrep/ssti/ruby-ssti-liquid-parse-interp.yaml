@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-ssti-liquid-parse-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Liquid template is parsed from a string built with interpolation that mixes
+      attacker input into the template source. Although Liquid is sandboxed, letting
+      users control the template body still enables data exfiltration through object
+      drops, denial of service, and abuse of registered custom tags/filters. Parse
+      only trusted template strings and expose user data exclusively through the
+      assigns hash passed to `render`.
+    metadata:
+      vr-id: RB-SG-0910
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Liquid template-injection abuse class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://github.com/Shopify/liquid"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Liquid::Template.parse("...#{...}...")
+          - pattern: Liquid::Template.parse("...#{...}...", ...)
+      - pattern-not: Liquid::Template.parse("...")

@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-deserialization-ox-parse-obj
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Ox.parse_obj deserializes Ox's object-marshalling XML back into arbitrary
+      Ruby objects, reconstructing their classes and instance variables. Parsing
+      attacker-controlled XML with it is a deserialization gadget sink. Use a
+      data-only XML parser (Ox.load with mode: :hash or Nokogiri) for untrusted
+      documents.
+    metadata:
+      vr-id: RB-SG-0419
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Ox.parse_obj; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/ohler55/ox"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Ox.parse_obj($X)
+          - pattern: Ox.parse_obj($X, ...)
+      - pattern-not: Ox.parse_obj("...")

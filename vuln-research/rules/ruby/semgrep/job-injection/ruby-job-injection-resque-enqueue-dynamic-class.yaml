@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-resque-enqueue-dynamic-class
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Resque.enqueue is dispatched against a job class resolved from user input.
+      Resque persists the class name and a worker later constantizes and runs it,
+      so attacker-controlled class strings allow invocation of arbitrary jobs and
+      can chain into deserialization of the queued arguments. Select the job
+      class from a fixed mapping, never from params.
+    metadata:
+      vr-id: RB-SG-1704
+      category: job-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Resque.enqueue(klass, *args); CWE-94"
+      license: derived-original
+      references:
+        - "https://github.com/resque/resque"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Resque.enqueue(params[...].constantize, ...)
+          - pattern: Resque.enqueue(params[...].safe_constantize, ...)
+          - pattern: Resque.enqueue_to($Q, params[...].constantize, ...)

@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-render-injection-metal-action
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A controller action is dispatched dynamically via .action(params[...]),
+      letting the attacker invoke any public method exposed as an action. This can
+      reach handlers that were never meant to be web-callable, bypassing intended
+      routing constraints. Dispatch only to a fixed, validated action name.
+    metadata:
+      vr-id: RB-SG-1911
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md 'ActionController::Metal.action(params[:action])'; CWE-22"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Metal.html#method-c-action"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $C.action(params[...])
+          - pattern: $C.action(params[...]).call(...)

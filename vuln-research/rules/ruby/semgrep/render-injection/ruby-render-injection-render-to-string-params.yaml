@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-render-injection-render-to-string-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      render_to_string resolves a template from request input. The rendered output
+      may be returned in a response, email, or PDF, so attacker-chosen template
+      names lead to disclosure of unintended view content or files. Pass a fixed
+      template name and supply data through locals.
+    metadata:
+      vr-id: RB-SG-1912
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md dynamic render paths; render_to_string variant; CWE-98"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Rendering.html#method-i-render_to_string"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: render_to_string(params[...])
+          - pattern: render_to_string params[...]
+          - pattern: "render_to_string(template: params[...])"
+          - pattern: "render_to_string(partial: params[...])"
+          - pattern: 'render_to_string("...#{params[...]}...")'

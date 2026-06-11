@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-xxe-nokogiri-default-xml-option
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Nokogiri::XML::ParseOptions::DEFAULT_XML is passed when parsing
+      attacker-controlled XML. The DEFAULT_XML preset bundles the RECOVER and
+      NONET flags but does not by itself stop a declared DTD from defining
+      internal entities, and any added NOENT/DTDLOAD flag re-opens the
+      external-entity path. Build an explicit option set that omits NOENT and
+      DTDLOAD for untrusted documents rather than relying on a named preset.
+    metadata:
+      vr-id: RB-SG-1521
+      category: xxe
+      cwe: ["CWE-611", "CWE-776"]
+      owasp: "A05:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by Nokogiri ParseOptions presets; CWE-776"
+      license: derived-original
+      references:
+        - "https://nokogiri.org/rdoc/Nokogiri/XML/ParseOptions.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Nokogiri::XML($SRC, ..., Nokogiri::XML::ParseOptions::DEFAULT_XML | Nokogiri::XML::ParseOptions::NOENT)

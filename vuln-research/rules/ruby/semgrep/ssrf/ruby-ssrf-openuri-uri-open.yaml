@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-ssrf-openuri-uri-open
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      URI.open (OpenURI) is given a URL assembled from interpolated external
+      input. OpenURI follows http, https, ftp, and even file schemes, so an
+      attacker who controls the string can read local files or reach internal
+      hosts and metadata endpoints (CWE-918). Restrict the scheme to https,
+      validate the host against an allowlist, and pin the resolved address before
+      opening, instead of opening the raw user-controlled URL.
+    metadata:
+      vr-id: RB-SG-0505
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from OpenURI URI.open sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/OpenURI.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: URI.open("...#{...}...")
+          - pattern: URI.open("...#{...}...", ...)

@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-deserialization-globalid-locate
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      GlobalID::Locator.locate materializes an ActiveRecord object straight from a
+      GlobalID string. When that GID comes from request parameters, an attacker
+      can supply the class and id of any model and pull records they should not
+      reach, an insecure-direct-object-reference style object-access sink. Use
+      signed GlobalIDs scoped with :for, or look the record up through an
+      authorized, type-checked query.
+    metadata:
+      vr-id: RB-SG-0429
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md GlobalID::Locator.locate; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/rails/globalid"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: GlobalID::Locator.locate($GID)
+          - pattern: GlobalID::Locator.locate($GID, ...)
+      - pattern-not: GlobalID::Locator.locate("...")
+      - pattern-not: "GlobalID::Locator.locate($GID, only: ...)"

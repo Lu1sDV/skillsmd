@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-http-parsing-rack-input-rewind-reuse
+    languages: [ruby]
+    severity: INFO
+    message: >
+      The raw rack.input stream is read directly in middleware. Consuming the input
+      without rewinding, or re-buffering it inconsistently with the server's
+      framing, can desync body boundaries for downstream apps and corrupt request
+      parsing. Read through request.body and rewind so later middleware sees the
+      same bytes.
+    metadata:
+      vr-id: RB-SG-2019
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md WEBrick/Rack raw body handling; CWE-444"
+      license: derived-original
+      references:
+        - "https://github.com/rack/rack/blob/main/SPEC.rdoc"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: env["rack.input"].read
+          - pattern: $ENV["rack.input"].read
+          - pattern: env["rack.input"].gets

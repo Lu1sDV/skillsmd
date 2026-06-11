@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-xxe-nokogiri-schema
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      An XML Schema is compiled from attacker-controlled input with
+      Nokogiri::XML::Schema.from_document or Nokogiri::XML::Schema.new. A
+      crafted schema can use xsd:import / xsd:include with an external SYSTEM
+      location to make the parser fetch remote resources (SSRF) and process
+      external entities. Only compile schemas from trusted, local sources.
+    metadata:
+      vr-id: RB-SG-1526
+      category: xxe
+      cwe: ["CWE-611", "CWE-918"]
+      owasp: "A05:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by Nokogiri::XML::Schema remote import surface; CWE-611"
+      license: derived-original
+      references:
+        - "https://nokogiri.org/rdoc/Nokogiri/XML/Schema.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Nokogiri::XML::Schema($SRC)
+          - pattern: Nokogiri::XML::Schema.new($SRC)
+      - pattern-not: Nokogiri::XML::Schema("...")
+      - pattern-not: Nokogiri::XML::Schema.new("...")

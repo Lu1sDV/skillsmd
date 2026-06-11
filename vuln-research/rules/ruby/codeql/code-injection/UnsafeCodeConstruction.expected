@@ -1,0 +1,11 @@
+edges
+| tests/UnsafeCodeConstruction/lib/codegen.rb:4:26:4:29 | attr | tests/UnsafeCodeConstruction/lib/codegen.rb:5:17:5:23 | #{...} | provenance |  |
+| tests/UnsafeCodeConstruction/lib/codegen.rb:4:26:4:29 | attr | tests/UnsafeCodeConstruction/lib/codegen.rb:5:27:5:33 | #{...} | provenance |  |
+nodes
+| tests/UnsafeCodeConstruction/lib/codegen.rb:4:26:4:29 | attr | semmle.label | attr |
+| tests/UnsafeCodeConstruction/lib/codegen.rb:5:17:5:23 | #{...} | semmle.label | #{...} |
+| tests/UnsafeCodeConstruction/lib/codegen.rb:5:27:5:33 | #{...} | semmle.label | #{...} |
+subpaths
+#select
+| tests/UnsafeCodeConstruction/lib/codegen.rb:5:17:5:23 | #{...} | tests/UnsafeCodeConstruction/lib/codegen.rb:4:26:4:29 | attr | tests/UnsafeCodeConstruction/lib/codegen.rb:5:17:5:23 | #{...} | This string interpolation which depends on $@ is later $@. | tests/UnsafeCodeConstruction/lib/codegen.rb:4:26:4:29 | attr | library input | tests/UnsafeCodeConstruction/lib/codegen.rb:6:5:6:14 | call to eval | interpreted as code |
+| tests/UnsafeCodeConstruction/lib/codegen.rb:5:27:5:33 | #{...} | tests/UnsafeCodeConstruction/lib/codegen.rb:4:26:4:29 | attr | tests/UnsafeCodeConstruction/lib/codegen.rb:5:27:5:33 | #{...} | This string interpolation which depends on $@ is later $@. | tests/UnsafeCodeConstruction/lib/codegen.rb:4:26:4:29 | attr | library input | tests/UnsafeCodeConstruction/lib/codegen.rb:6:5:6:14 | call to eval | interpreted as code |

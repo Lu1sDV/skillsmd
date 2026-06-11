@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-mass-assignment-as-role
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A model write uses the as: role option (e.g. as: :admin) to select a
+      mass-assignment role while assigning attributes that ultimately derive from
+      request data. The admin role typically whitelists privileged columns, so
+      assigning user input under it lets the request set those columns. Assign user
+      data under the default role with an explicit permit list instead.
+    metadata:
+      vr-id: RB-SG-1111
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by protected_attributes role-based assignment (as: option); CWE-915"
+      license: derived-original
+      references:
+        - "https://github.com/rails/protected_attributes"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "$M.new(params[$K], as: $ROLE)"
+          - pattern: "$M.create(params[$K], as: $ROLE)"
+          - pattern: "$M.create!(params[$K], as: $ROLE)"
+          - pattern: "$O.update_attributes(params[$K], as: $ROLE)"
+          - pattern: "$O.assign_attributes(params[$K], as: $ROLE)"

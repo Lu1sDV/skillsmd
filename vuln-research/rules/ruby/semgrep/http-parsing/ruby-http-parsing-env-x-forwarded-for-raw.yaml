@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-http-parsing-env-x-forwarded-for-raw
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The raw HTTP_X_FORWARDED_FOR env entry is read directly. Any client can set
+      this header, so trusting the left-most hop as the "real" client IP lets an
+      attacker spoof their origin to defeat geolocation, IP allowlists, or
+      rate-limiting. Derive the client IP via ActionDispatch::RemoteIp with a
+      pinned trusted_proxies list.
+    metadata:
+      vr-id: RB-SG-2006
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Rack::Request#env['HTTP_X_FORWARDED_FOR']; CWE-444"
+      license: derived-original
+      references:
+        - "https://www.rfc-editor.org/rfc/rfc7239"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $REQ.env["HTTP_X_FORWARDED_FOR"]
+          - pattern: request.env["HTTP_X_FORWARDED_FOR"]
+          - pattern: env["HTTP_X_FORWARDED_FOR"]

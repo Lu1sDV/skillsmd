@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-deserialization-activesupport-messagepack-decode
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      ActiveSupport::MessagePack.decode reconstructs Ruby values from a binary
+      MessagePack payload and, when registered custom types are present, can
+      instantiate application objects. Decoding attacker-controlled bytes may
+      therefore materialize unexpected objects. Restrict custom type
+      registration and decode only payloads from a trusted, integrity-checked
+      channel.
+    metadata:
+      vr-id: RB-SG-0423
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md ActiveSupport::MessagePack.decode; CWE-502"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveSupport/MessagePack.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: ActiveSupport::MessagePack.decode($X)
+          - pattern: ActiveSupport::MessagePack.decode($X, ...)
+      - pattern-not: ActiveSupport::MessagePack.decode("...")

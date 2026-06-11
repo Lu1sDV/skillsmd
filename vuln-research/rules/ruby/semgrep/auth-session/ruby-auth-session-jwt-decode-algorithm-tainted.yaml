@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-auth-session-jwt-decode-algorithm-tainted
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The algorithm passed to JWT.decode is taken from request parameters. An
+      attacker can downgrade an RS256-signed token to HS256 and sign it with the
+      public key as the HMAC secret (algorithm confusion), or select "none",
+      bypassing signature verification entirely. Hard-code the expected
+      algorithm in the decode options and never derive it from client input.
+    metadata:
+      vr-id: RB-SG-1307
+      category: auth-session
+      cwe: ["CWE-347"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by JWT algorithm-confusion advisories; CWE-347"
+      license: derived-original
+      references:
+        - "https://github.com/jwt/ruby-jwt#algorithms-and-usage"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "JWT.decode($T, $K, $V, algorithm: params[...], ...)"
+          - pattern: "JWT.decode($T, $K, $V, algorithms: params[...], ...)"
+          - pattern: "JWT.decode($T, $K, $V, algorithm: request.params[...], ...)"

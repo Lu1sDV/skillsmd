@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-insecure-randomness-default-prng-bytes
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Raw bytes are pulled from the shared non-cryptographic generator
+      (Random.bytes, Random::DEFAULT.bytes, or Random.new.bytes) for use as a key,
+      token, or IV. These bytes are predictable from the Mersenne-Twister state.
+      Use SecureRandom.bytes, which reads the operating system CSPRNG.
+    metadata:
+      vr-id: RB-SG-2218
+      category: insecure-randomness
+      cwe: ["CWE-338"]
+      owasp: "A02:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from Random#bytes misuse; CWE-338"
+      license: derived-original
+      references:
+        - "https://ruby-doc.org/core/Random.html#method-i-bytes"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Random.bytes(...)
+          - pattern: Random::DEFAULT.bytes(...)
+          - pattern: Random.new.bytes(...)
+          - pattern: Random.new(...).bytes(...)

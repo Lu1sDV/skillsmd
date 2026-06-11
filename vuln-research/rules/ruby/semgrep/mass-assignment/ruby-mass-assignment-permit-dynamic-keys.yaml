@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-mass-assignment-permit-dynamic-keys
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A strong-parameters permit list is built dynamically from the request itself
+      (permit(*params.keys) or permit(params.keys)). Allowing whatever keys the
+      client sent defeats the whitelist exactly like permit!, so any column becomes
+      mass-assignable. Enumerate the permitted attribute names statically in source.
+    metadata:
+      vr-id: RB-SG-1127
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql MassAssignmentQuery dynamic-permit bypass; CWE-915"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Parameters.html#method-i-permit"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $P.permit(*params.keys)
+          - pattern: $P.permit(params.keys)
+          - pattern: $P.permit(*$P.keys)
+          - pattern: $P.permit($P.keys)

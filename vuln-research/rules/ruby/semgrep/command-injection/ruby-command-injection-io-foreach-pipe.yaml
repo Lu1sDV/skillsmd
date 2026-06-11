@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-command-injection-io-foreach-pipe
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      IO.foreach is called with an interpolated path string. A path that resolves to a
+      leading pipe character is executed as a shell command rather than iterated as a
+      file, so attacker-controlled input can run arbitrary commands. Iterate files with
+      File.foreach and reject any argument beginning with "|".
+    metadata:
+      vr-id: RB-SG-0120
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql frameworks/core/IO.qll (IO.foreach pipe path); CWE-78"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/IO.html#method-c-foreach"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: IO.foreach("...#{...}...")

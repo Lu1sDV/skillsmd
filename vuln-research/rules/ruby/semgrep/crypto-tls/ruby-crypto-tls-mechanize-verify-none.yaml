@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-crypto-tls-mechanize-verify-none
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Mechanize agent has its verify_mode set to OpenSSL::SSL::VERIFY_NONE,
+      disabling certificate validation for every page it fetches. An attacker on
+      the network path can impersonate the target site and capture submitted
+      credentials or cookies. Leave verify_mode at its default or set it to
+      OpenSSL::SSL::VERIFY_PEER with a trusted cert_store.
+    metadata:
+      vr-id: RB-SG-1428
+      category: crypto-tls
+      cwe: ["CWE-295"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog Mechanize agent.verify_mode VERIFY_NONE; CWE-295"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/295.html"
+        - "https://github.com/sparklemotion/mechanize"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $AGENT.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE

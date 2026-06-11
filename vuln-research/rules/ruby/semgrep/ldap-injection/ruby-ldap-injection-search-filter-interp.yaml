@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-ldap-injection-search-filter-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An LDAP search is executed with a :filter keyword built from an
+      interpolated string. net-ldap parses a String filter as a raw RFC 2254
+      expression, so interpolated request data can inject filter operators and
+      retrieve unauthorized directory entries. Construct the filter from typed
+      Net::LDAP::Filter helpers with escaped values instead.
+    metadata:
+      vr-id: RB-SG-2303
+      category: ldap-injection
+      cwe: ["CWE-90"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/ldap-injection NetLdapExecution sink; CWE-90"
+      license: derived-original
+      references:
+        - "https://cheatsheetseries.owasp.org/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html"
+        - "https://www.rubydoc.info/gems/net-ldap/Net/LDAP"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: '$LDAP.search(..., filter: "...#{...}...", ...)'

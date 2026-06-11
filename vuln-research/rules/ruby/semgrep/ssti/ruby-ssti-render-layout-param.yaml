@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-ssti-render-layout-param
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The layout to wrap a response is chosen from a request parameter via
+      `render layout:`. Rails compiles and evaluates the selected layout, so
+      attacker control over the layout name can force rendering of an unintended
+      template that interpolates other tainted state, and may permit path traversal
+      to layouts outside the layouts directory. Select layouts from a fixed
+      allowlist keyed by the user's choice instead of passing `params` to `layout:`.
+    metadata:
+      vr-id: RB-SG-0920
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Rails dynamic-layout selection class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/RenderingHelper.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'render(layout: params[...], ...)'
+          - pattern: 'render($X, layout: params[...])'

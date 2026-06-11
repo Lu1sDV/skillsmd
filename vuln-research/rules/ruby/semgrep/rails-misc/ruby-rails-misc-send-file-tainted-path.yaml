@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-rails-misc-send-file-tainted-path
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      send_file streams a file whose path is built from request params. Without
+      canonicalization an attacker uses ../ sequences to read arbitrary files outside
+      the intended directory (path traversal / information disclosure). Resolve the
+      path under a fixed base directory and verify it stays within that root before
+      streaming.
+    metadata:
+      vr-id: RB-SG-2503
+      category: rails-misc
+      cwe: ["CWE-200"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by ActionController::DataStreaming#send_file path-traversal sink; CWE-200"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/DataStreaming.html#method-i-send_file"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "send_file(params[...], ...)"
+          - pattern: "send_file(\"...#{params[...]}...\", ...)"
+          - pattern: "send_file(Rails.root.join(..., params[...]), ...)"

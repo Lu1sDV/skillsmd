@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-crypto-tls-restclient-verify-ssl-false
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A RestClient request is issued with verify_ssl set to false, turning off
+      TLS certificate validation for the call. An on-path attacker can present a
+      self-signed or forged certificate and intercept the request, leaking any
+      tokens or payload it carries. Remove the option (validation is on by
+      default) or pass verify_ssl: OpenSSL::SSL::VERIFY_PEER with a pinned
+      ssl_ca_file.
+    metadata:
+      vr-id: RB-SG-1403
+      category: crypto-tls
+      cwe: ["CWE-295"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog RestClient::Request.execute(verify_ssl:false); CWE-295"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/295.html"
+        - "https://github.com/rest-client/rest-client"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "RestClient::Request.execute(..., verify_ssl: false, ...)"
+          - pattern: "RestClient::Resource.new(..., verify_ssl: false, ...)"

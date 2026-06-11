@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-command-injection-logger-pipe
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Logger.new is initialised with an interpolated device string. Logger forwards the
+      device argument to Kernel#open, so a value that begins with a pipe character is run
+      as a shell command. Attacker-controlled input therefore enables command execution.
+      Pass an explicit IO object or a validated absolute file path, never a raw external string.
+    metadata:
+      vr-id: RB-SG-0121
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/kernel-open chain via Logger device; CWE-78"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Logger.html#method-c-new"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Logger.new("...#{...}...", ...)

@@ -1,0 +1,34 @@
+rules:
+  - id: ruby-xss-i18n-html-interp
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A translation key ending in `_html` (or `.html`) is rendered HTML-safe by
+      Rails, yet a request-derived value is passed as an interpolation argument.
+      Rails escapes interpolation values for plain keys but the surrounding template
+      stays safe, and any value pre-marked safe is emitted verbatim, enabling
+      cross-site scripting. Use a non-`_html` key, or ensure interpolated values are
+      plain strings so they are escaped.
+    metadata:
+      vr-id: RB-SG-0824
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by Rails I18n _html key auto-html_safe interpolation; CWE-79"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/i18n.html#using-safe-html-translations"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 't($KEY, ..., $K: raw(...), ...)'
+          - pattern: 't($KEY, ..., $K: params[...].html_safe, ...)'
+          - pattern: 'I18n.t($KEY, ..., $K: raw(...), ...)'
+          - pattern: 'I18n.t($KEY, ..., $K: params[...].html_safe, ...)'
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: '.*_html.*'

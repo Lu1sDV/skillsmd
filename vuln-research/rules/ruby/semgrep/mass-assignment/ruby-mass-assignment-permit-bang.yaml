@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-mass-assignment-permit-bang
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      params.permit! marks the entire request parameter set as permitted, turning
+      strong parameters into a no-op. Any model write that consumes the result can
+      then have every column set by the client, including role or owner_id. Replace
+      permit! with an explicit allow-list: params.require(:record).permit(:a, :b).
+    metadata:
+      vr-id: RB-SG-1112
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql MassAssignmentQuery permit! sanitizer-bypass; CWE-915"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Parameters.html#method-i-permit-21"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: params.permit!
+          - pattern: $P.permit!
+      - pattern-not: $P.permit(...)

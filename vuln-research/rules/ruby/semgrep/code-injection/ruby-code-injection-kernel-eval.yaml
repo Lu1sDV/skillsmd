@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-code-injection-kernel-eval
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A string assembled with interpolation is handed to Kernel#eval, which
+      compiles and executes it as Ruby in the current binding. When any
+      interpolated fragment originates from request parameters, headers, or
+      another external source, an attacker can run arbitrary Ruby and take over
+      the process. Replace eval with an explicit dispatch table or a parser that
+      only accepts a known, fixed set of operations.
+    metadata:
+      vr-id: RB-SG-0201
+      category: code-injection
+      cwe: ["CWE-94", "CWE-95"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/code-injection (CodeInjection.ql); CWE-95"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Kernel.html#method-i-eval"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: eval("...#{...}...")
+          - pattern: Kernel.eval("...#{...}...")
+      - pattern-not: eval("...")

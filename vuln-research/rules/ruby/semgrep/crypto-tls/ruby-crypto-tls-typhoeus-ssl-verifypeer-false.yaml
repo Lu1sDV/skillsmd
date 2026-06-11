@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-crypto-tls-typhoeus-ssl-verifypeer-false
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Typhoeus request sets ssl_verifypeer to false, disabling validation of
+      the server certificate chain. A man-in-the-middle can then impersonate the
+      endpoint and read or alter the traffic. Remove the option (verification is
+      on by default) or pin a CA bundle with sslcert/cainfo.
+    metadata:
+      vr-id: RB-SG-1418
+      category: crypto-tls
+      cwe: ["CWE-295"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog Typhoeus ssl_verifypeer:false; CWE-295"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/295.html"
+        - "https://github.com/typhoeus/typhoeus"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "Typhoeus.get(..., ssl_verifypeer: false, ...)"
+          - pattern: "Typhoeus.post(..., ssl_verifypeer: false, ...)"
+          - pattern: "Typhoeus::Request.new(..., ssl_verifypeer: false, ...)"

@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-xxe-rexml-document
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Untrusted input is parsed with REXML::Document.new. Older REXML versions
+      expanded DOCTYPE entities and were prone to entity-expansion denial of
+      service (billion laughs) and external-entity disclosure. When the source
+      comes from a request, parse with REXML::Document.new(io, entity_expansion_limit: ...)
+      on a current REXML, or strip the DOCTYPE before parsing untrusted XML.
+    metadata:
+      vr-id: RB-SG-1506
+      category: xxe
+      cwe: ["CWE-611", "CWE-776"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby.md 'REXML::Document.new' sink; CWE-776"
+      license: derived-original
+      references:
+        - "https://github.com/ruby/rexml/security/advisories"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: REXML::Document.new(params[...])
+          - pattern: REXML::Document.new(request.body)
+          - pattern: REXML::Document.new(request.body.read)
+          - pattern: REXML::Document.new("...#{...}...")
+          - pattern: REXML::Document.new($IO.read)

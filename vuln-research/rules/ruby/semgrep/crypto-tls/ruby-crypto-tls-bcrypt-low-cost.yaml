@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-crypto-tls-bcrypt-low-cost
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      BCrypt::Password.create is called with an explicit cost factor below the
+      recommended minimum, which lets attackers test guesses far faster after a
+      database breach. Use a cost of at least 12 (the modern default) or omit the
+      option to inherit BCrypt::Engine.cost.
+    metadata:
+      vr-id: RB-SG-1414
+      category: crypto-tls
+      cwe: ["CWE-916"]
+      owasp: "A02:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog BCrypt::Password.create(cost:low); CWE-916"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/916.html"
+        - "https://github.com/bcrypt-ruby/bcrypt-ruby"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: "BCrypt::Password.create($PW, cost: $C)"
+      - metavariable-comparison:
+          metavariable: $C
+          comparison: $C < 12

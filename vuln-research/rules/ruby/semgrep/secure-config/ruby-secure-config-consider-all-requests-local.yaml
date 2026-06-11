@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-consider-all-requests-local
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      consider_all_requests_local is enabled, causing Rails to render detailed
+      exception pages with backtraces, source snippets and environment data to
+      every client. Disable it outside development so production error pages do
+      not leak internal application details to attackers.
+    metadata:
+      vr-id: RB-SG-2404
+      category: secure-config
+      cwe: ["CWE-16"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog consider_all_requests_local=true; CWE-209"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/209.html"
+        - "https://guides.rubyonrails.org/configuring.html"
+    patterns:
+      - pattern: $CFG.consider_all_requests_local = true

@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-cache-poisoning-marshal-cache-coder
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A cache store is configured with the Marshal coder over a shared backend
+      (Redis/Memcached/file). If an attacker can write to that backend, the
+      Marshal payload is deserialized on read into arbitrary Ruby objects,
+      turning cache poisoning into remote code execution. Use a non-executing
+      coder such as the JSON/MessagePack serializer and treat the cache backend
+      as untrusted.
+    metadata:
+      vr-id: RB-SG-1809
+      category: cache-poisoning
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md cache backends using Marshal coder deserialization sink; CWE-502"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/caching_with_rails.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "$C.cache_store = :redis_cache_store, { coder: Marshal, ... }"
+          - pattern: "$C.cache_store = :mem_cache_store, { coder: Marshal, ... }"
+          - pattern: "$C.cache_store = $TYPE, { coder: Marshal, ... }"
+          - pattern: "ActiveSupport::Cache::RedisCacheStore.new(coder: Marshal, ...)"
+          - pattern: "ActiveSupport::Cache::MemCacheStore.new(coder: Marshal, ...)"

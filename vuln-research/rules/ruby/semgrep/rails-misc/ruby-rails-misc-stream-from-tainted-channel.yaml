@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-rails-misc-stream-from-tainted-channel
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      stream_from subscribes the connection to a channel named from client-supplied
+      params. A subscriber can name any other tenant's stream and silently receive
+      their broadcasts (broken object-level authorization). Subscribe only to streams
+      derived from the authenticated identity, or authorize the requested target first.
+    metadata:
+      vr-id: RB-SG-2505
+      category: rails-misc
+      cwe: ["CWE-200"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by ActionCable stream_from user-controlled subscription sink; CWE-200"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/action_cable_overview.html#streams"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: stream_from(params[...], ...)
+          - pattern: stream_from("...#{params[...]}...", ...)

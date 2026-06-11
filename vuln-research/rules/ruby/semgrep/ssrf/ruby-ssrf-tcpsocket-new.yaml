@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-ssrf-tcpsocket-new
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      TCPSocket.new / TCPSocket.open connects to a host built from interpolated
+      external input. As a raw egress primitive, an attacker-controlled host and
+      port can reach arbitrary internal services and the cloud metadata endpoint
+      (CWE-918). Resolve and validate the host against an allowlist, blocking
+      private and link-local ranges, before opening the socket.
+    metadata:
+      vr-id: RB-SG-0523
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "re-expressed from TCPSocket.new/open sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/TCPSocket.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: TCPSocket.new("...#{...}...", ...)
+          - pattern: TCPSocket.open("...#{...}...", ...)

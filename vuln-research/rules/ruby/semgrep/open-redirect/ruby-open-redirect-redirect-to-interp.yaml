@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-open-redirect-redirect-to-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      redirect_to receives a string built with interpolation. When the interpolated
+      value comes from request input, an attacker can supply an absolute URL or a
+      protocol-relative //evil.example value and the browser will navigate off-site.
+      Build the redirect target from a server-side allow-list or use only a fixed
+      relative path rather than interpolating untrusted data into the location.
+    metadata:
+      vr-id: RB-SG-1002
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by semgrep ruby.rails.security.open-redirect; CWE-601"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/601.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: redirect_to("...#{...}...")
+          - pattern: redirect_to "...#{...}..."
+      - pattern-not-regex: 'redirect_to\s*\(?\s*"/'

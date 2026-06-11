@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-auth-session-forgery-origin-check-false
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      config.action_controller.forgery_protection_origin_check = false turns off
+      the Origin-header comparison that Rails uses as a second CSRF defense. With
+      it disabled, requests whose Origin does not match the host are no longer
+      rejected, widening the cross-site request-forgery surface. Keep the origin
+      check enabled (the default) so forged cross-origin posts are blocked.
+    metadata:
+      vr-id: RB-SG-1305
+      category: auth-session
+      cwe: ["CWE-352"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Rails forgery_protection_origin_check setting; CWE-352"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/configuring.html#configuring-action-controller"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $CONFIG.action_controller.forgery_protection_origin_check = false

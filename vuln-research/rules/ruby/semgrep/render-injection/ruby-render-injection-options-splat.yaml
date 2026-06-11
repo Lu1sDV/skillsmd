@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-render-injection-options-splat
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      render is called with a request-derived options hash splatted into its
+      keyword arguments. The attacker can supply template:, file:, or inline: keys
+      and fully control what is rendered, including arbitrary files or evaluated
+      templates. Never splat untrusted parameters into render; pass an explicit,
+      fixed set of options.
+    metadata:
+      vr-id: RB-SG-1926
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md dynamic render paths; options-hash splat variant; CWE-98"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/layouts_and_rendering.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: render(**params)
+          - pattern: render(**params[...])
+          - pattern: render(params.to_unsafe_h)
+          - pattern: render(**params.to_unsafe_h)

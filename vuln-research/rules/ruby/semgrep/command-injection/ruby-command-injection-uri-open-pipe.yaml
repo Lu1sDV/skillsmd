@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-command-injection-uri-open-pipe
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      URI.open is called with an interpolated string. On vulnerable OpenURI call chains a
+      value that resolves to a leading pipe character is run as a shell command instead of
+      fetched, so attacker-controlled input can execute arbitrary commands. Validate that
+      the argument is a well-formed http(s) URL and reject any leading "|".
+    metadata:
+      vr-id: RB-SG-0127
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived: URI.open pipe path via OpenURI (ruby.md OS command execution); CWE-78"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/OpenURI.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: URI.open("...#{...}...")

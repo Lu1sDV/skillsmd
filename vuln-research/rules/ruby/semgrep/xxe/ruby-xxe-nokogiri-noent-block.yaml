@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-xxe-nokogiri-noent-block
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Nokogiri parse configuration block calls config.noent, re-enabling
+      external entity substitution for the parse. If the XML being parsed is
+      attacker-controlled, an external entity declaration can disclose local
+      files, reach internal services (SSRF), or exhaust memory. Drop the
+      config.noent call (or use config.nononet/config.nonoent) so entities from
+      untrusted documents are never resolved.
+    metadata:
+      vr-id: RB-SG-1502
+      category: xxe
+      cwe: ["CWE-611"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/xxe (Nokogiri config.noent example); CWE-611"
+      license: derived-original
+      references:
+        - "https://nokogiri.org/rdoc/Nokogiri/XML/ParseOptions.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $CFG.noent
+          - pattern: $CFG.noent(...)
+      - pattern-inside: |
+          Nokogiri::XML(...) { |$CFG| ... }

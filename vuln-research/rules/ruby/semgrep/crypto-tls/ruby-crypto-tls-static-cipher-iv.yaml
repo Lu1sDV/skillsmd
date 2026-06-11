@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-crypto-tls-static-cipher-iv
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An OpenSSL cipher is given a hardcoded string literal as its
+      initialization vector. Reusing a fixed IV across messages destroys the
+      semantic security of CBC/CTR/GCM modes — identical plaintexts produce
+      identical ciphertext and, for GCM/CTR, key-stream reuse can fully break
+      confidentiality and authentication. Generate a fresh random IV per message
+      with cipher.random_iv and transmit it alongside the ciphertext.
+    metadata:
+      vr-id: RB-SG-1415
+      category: crypto-tls
+      cwe: ["CWE-329", "CWE-330"]
+      owasp: "A02:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog OpenSSL::Cipher static IV reuse; CWE-329"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/329.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $C.iv = "..."

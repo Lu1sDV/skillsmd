@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-redos-validates-dollar-anchor
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A Rails format validation uses the $ anchor, which in Ruby matches end-of-line,
+      not end-of-string. Multiline attacker input can smuggle a malicious payload onto a
+      second line that the validator never inspects, and the per-line matching can also
+      amplify backtracking. Use the \z (or \Z) anchor with \A so the pattern validates
+      the entire string.
+    metadata:
+      vr-id: RB-SG-1211
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink validates format with ^/$ anchors; CWE-1333; Rails security guide line-anchor pitfall"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/active_record_validations.html#format"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-regex: 'validates\b.*format:\s*\{\s*with:\s*/[^/]*\$/'

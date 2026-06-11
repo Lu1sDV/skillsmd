@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-rails-misc-find-signed-tainted
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      ActiveStorage::Blob.find_signed is called on a signed id from params without a
+      purpose scope or authorization check. If a signed id leaks or is reused across
+      contexts, the blob is materialized and served to an unauthorized caller. Pass an
+      explicit purpose and authorize the current user against the owning record.
+    metadata:
+      vr-id: RB-SG-2509
+      category: rails-misc
+      cwe: ["CWE-200"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ActiveStorage::Blob.find_signed access-boundary sink; CWE-200"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveStorage/Blob.html#method-c-find_signed"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: ActiveStorage::Blob.find_signed(params[...])
+          - pattern: ActiveStorage::Blob.find_signed!(params[...])
+      - pattern-not: "ActiveStorage::Blob.find_signed(..., purpose: ...)"

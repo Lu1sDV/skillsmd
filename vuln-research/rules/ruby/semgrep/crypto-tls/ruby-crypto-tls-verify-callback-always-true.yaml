@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-crypto-tls-verify-callback-always-true
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A TLS verify_callback is installed that ignores its result and returns
+      true unconditionally. This overrides every certificate error the library
+      reports, so expired, untrusted, or mismatched certificates are all
+      accepted — equivalent to disabling verification entirely. Remove the
+      override or return preverify_ok so genuine validation failures propagate.
+    metadata:
+      vr-id: RB-SG-1424
+      category: crypto-tls
+      cwe: ["CWE-295"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog verify_callback returning true; CWE-295"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/295.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $CTX.verify_callback = lambda { |preverify_ok, store_context| true }
+          - pattern: |
+              $CTX.verify_callback = proc { |preverify_ok, store_context| true }
+          - pattern: |
+              $CTX.verify_callback = ->(preverify_ok, store_context) { true }

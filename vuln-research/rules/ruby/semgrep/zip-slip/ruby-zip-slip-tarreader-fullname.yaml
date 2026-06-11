@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-zip-slip-tarreader-fullname
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Gem::Package::TarReader entry's full_name is joined to the output
+      directory and used as a write target without canonicalization. TAR headers
+      can carry "../" components, so a hostile tarball escapes the destination and
+      writes over arbitrary files during unpacking (Zip Slip / Tar Slip). Validate
+      File.expand_path(entry.full_name, dest) stays under the destination root
+      before writing.
+    metadata:
+      vr-id: RB-SG-0704
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by RubyGems tar extraction hardening; CWE-22; ruby.md entry.full_name from Gem::Package::TarReader sink"
+      license: derived-original
+      references:
+        - "https://ruby-doc.org/stdlib/libdoc/rubygems/rdoc/Gem/Package/TarReader.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: File.open(File.join($DEST, $ENTRY.full_name), ...)
+          - pattern: File.write(File.join($DEST, $ENTRY.full_name), ...)
+          - pattern: File.write("...#{$ENTRY.full_name}...", ...)

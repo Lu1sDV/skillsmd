@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-secure-config-force-ssl-disabled
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Rails force_ssl is explicitly set to false, so requests are served over
+      plaintext HTTP and session cookies, CSRF tokens and credentials can be
+      sniffed or stripped by a network attacker. Set config.force_ssl = true in
+      production environments to enforce HTTPS and secure-flag cookies.
+    metadata:
+      vr-id: RB-SG-2401
+      category: secure-config
+      cwe: ["CWE-16"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog config.force_ssl=false; CWE-16"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/16.html"
+        - "https://guides.rubyonrails.org/configuring.html"
+    patterns:
+      - pattern-either:
+          - pattern: $CFG.force_ssl = false
+          - pattern: config.force_ssl = false

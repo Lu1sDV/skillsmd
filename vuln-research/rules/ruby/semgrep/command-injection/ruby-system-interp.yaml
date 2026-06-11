@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-system-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A shell command built with string interpolation is passed to Kernel#system,
+      which runs it through /bin/sh. If any interpolated value derives from request
+      parameters, headers, or other external input, an attacker can inject shell
+      metacharacters and execute arbitrary commands. Pass the command and its
+      arguments as separate strings — `system("ls", dir)` — so no shell is invoked,
+      or shell-escape with Shellwords.escape when a shell is unavoidable.
+    metadata:
+      vr-id: RB-SG-0001
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by semgrep ruby.lang.security.system-command-injection; CWE-78"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Kernel.html#method-i-system"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: system("...#{...}...")
+          - pattern: system("...#{...}...", ...)
+      - pattern-not: system("...", ...)

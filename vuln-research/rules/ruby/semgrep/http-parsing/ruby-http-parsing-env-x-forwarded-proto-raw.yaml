@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-http-parsing-env-x-forwarded-proto-raw
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The raw HTTP_X_FORWARDED_PROTO env entry drives a security decision. A client
+      that is not behind a proxy you control can forge this header to claim https,
+      bypassing TLS enforcement and secure-cookie gating (forwarded-scheme
+      confusion). Trust the forwarded scheme only from a verified edge proxy.
+    metadata:
+      vr-id: RB-SG-2007
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Rack::Request#env['HTTP_X_FORWARDED_PROTO']; CWE-444"
+      license: derived-original
+      references:
+        - "https://www.rfc-editor.org/rfc/rfc7239"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $REQ.env["HTTP_X_FORWARDED_PROTO"]
+          - pattern: request.env["HTTP_X_FORWARDED_PROTO"]
+          - pattern: env["HTTP_X_FORWARDED_PROTO"]
+          - pattern: $REQ.env["HTTP_X_FORWARDED_PROTOCOL"]

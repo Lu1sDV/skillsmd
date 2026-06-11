@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-job-injection-sidekiq-pro-batch-dynamic-class
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Inside a Sidekiq::Batch, a worker class resolved from request input is
+      enqueued with perform_async. The batch persists each job for later
+      execution, so an attacker-controlled class string can fan out invocations of
+      arbitrary workers across the batch. Choose the worker from a fixed mapping
+      rather than constantizing untrusted parameter values.
+    metadata:
+      vr-id: RB-SG-1726
+      category: job-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md dynamic Sidekiq class dispatch (batch); CWE-94"
+      license: derived-original
+      references:
+        - "https://github.com/sidekiq/sidekiq/wiki/Batches"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: params[...].constantize.perform_async(...)
+          - pattern: params[...].safe_constantize.perform_async(...)

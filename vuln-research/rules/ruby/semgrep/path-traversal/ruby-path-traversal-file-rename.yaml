@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-path-traversal-file-rename
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      File.rename moves a file using a source or destination path taken from external
+      input. Traversal in either argument lets an attacker move sensitive files out of
+      place or plant content at a chosen location. Validate both paths against an allow
+      list and resolve them under a trusted base directory with File.expand_path before
+      calling rename.
+    metadata:
+      vr-id: RB-SG-0606
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/File.html#method-c-rename"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: File.rename(params[...], ...)
+          - pattern: File.rename(..., params[...])
+          - pattern: File.rename("...#{params[...]}...", ...)
+          - pattern: File.rename(..., "...#{params[...]}...")

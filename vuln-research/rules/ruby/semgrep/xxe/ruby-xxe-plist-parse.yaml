@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-xxe-plist-parse
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Plist.parse_xml processes an Apple property-list document, which is XML
+      under the hood and parsed via REXML in the plist gem. Older releases
+      evaluated Marshal data and processed DOCTYPE entities, so untrusted .plist
+      input is an unsafe-deserialization and entity-expansion vector. Do not
+      parse attacker-supplied plists, or upgrade to a release with
+      marshal: false and entity handling disabled.
+    metadata:
+      vr-id: RB-SG-1525
+      category: xxe
+      cwe: ["CWE-611", "CWE-502"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by plist gem Plist.parse_xml marshal/entity behaviour; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/patsplat/plist"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Plist.parse_xml(params[...])
+          - pattern: Plist.parse_xml(request.body.read)
+          - pattern: Plist.parse_xml($IO.read)

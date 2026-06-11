@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-auth-session-allow-forgery-protection-false
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Setting config.action_controller.allow_forgery_protection = false disables
+      CSRF token verification application-wide. Every state-changing,
+      cookie-authenticated endpoint then becomes forgeable from an attacker page.
+      Leave forgery protection enabled (the default) in production and only
+      toggle it off in test environments.
+    metadata:
+      vr-id: RB-SG-1304
+      category: auth-session
+      cwe: ["CWE-352"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/csrf-protection-disabled; Rails security guide; CWE-352"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/configuring.html#configuring-action-controller"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $CONFIG.action_controller.allow_forgery_protection = false

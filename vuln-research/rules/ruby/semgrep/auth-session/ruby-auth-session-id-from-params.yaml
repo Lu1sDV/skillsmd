@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-auth-session-id-from-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A session identity value (user_id) is written into the session directly
+      from request parameters. Because the client controls params, an attacker
+      can assign themselves any account's identity and impersonate other users.
+      Derive the session identity only from a verified credential or the result
+      of an authentication step, never from raw request input.
+    metadata:
+      vr-id: RB-SG-1308
+      category: auth-session
+      cwe: ["CWE-384", "CWE-639"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Rails session-fixation guidance; CWE-384"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/security.html#session-hijacking"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "session[:user_id] = params[...]"
+          - pattern: "session[:user_id] = params[...][...]"
+          - pattern: "session[\"user_id\"] = params[...]"

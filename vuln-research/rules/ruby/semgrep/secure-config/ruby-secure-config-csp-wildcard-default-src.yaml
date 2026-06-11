@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-csp-wildcard-default-src
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The Content Security Policy default_src is set to the wildcard "*", which
+      permits scripts, frames and connections from any origin and effectively
+      disables CSP as a defense. Constrain default_src to :self plus the specific
+      trusted hosts the application actually uses.
+    metadata:
+      vr-id: RB-SG-2414
+      category: secure-config
+      cwe: ["CWE-16", "CWE-1021"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog content_security_policy default_src '*'; CWE-1021"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/1021.html"
+        - "https://guides.rubyonrails.org/security.html"
+    patterns:
+      - pattern: $P.default_src "*"

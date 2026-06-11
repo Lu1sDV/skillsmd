@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-code-injection-erb-result
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An ERB template is constructed from external input and then rendered with
+      result, which compiles the embedded Ruby and runs it. Attacker-controlled
+      template source means server-side template injection leading to arbitrary
+      code execution. Never build ERB sources from user data; render only fixed
+      templates and pass dynamic values as escaped locals.
+    metadata:
+      vr-id: RB-SG-0213
+      category: code-injection
+      cwe: ["CWE-94", "CWE-95"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md ERB.new(params[:template]).result; CWE-94"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/ERB.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: ERB.new(params[...], ...).result(...)
+          - pattern: ERB.new("...#{...}...", ...).result(...)
+          - pattern: ERB.new(params[...], ...).result_with_hash(...)
+      - pattern-not: ERB.new("...").result(...)

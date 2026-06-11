@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-open-redirect-rack-response-location
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A raw Rack response sets the Location header from request input. Returning a 3xx
+      with an attacker-controlled Location is an open redirect at the Rack layer, below
+      any framework host checks. Only emit a Location that is a validated relative path
+      on the current origin.
+    metadata:
+      vr-id: RB-SG-1022
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Rack response Location header open-redirect pattern; CWE-601"
+      license: derived-original
+      references:
+        - "https://github.com/rack/rack/blob/main/SPEC.rdoc"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'res.set_header("Location", params[...])'
+          - pattern: 'res.set_header("Location", "...#{...}...")'
+          - pattern: 'response.set_header("Location", params[...])'
+          - pattern: 'res["Location"] = params[...]'
+          - pattern: '$RES["Location"] = params[...]'
+      - pattern-not-regex: 'Location",?\s*=?\s*"/'

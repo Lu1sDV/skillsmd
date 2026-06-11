@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-delayed-job-dynamic-method
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Delayed Job's delay proxy is used to schedule a method whose name comes from
+      request input. delay(...).send(params[:method]) records the method and runs
+      it later in a worker, so an attacker-controlled name can invoke any public
+      method on the target object asynchronously. Dispatch only from a fixed
+      allow-list of permitted method names.
+    metadata:
+      vr-id: RB-SG-1721
+      category: job-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md Delayed::Job async method dispatch; CWE-94"
+      license: derived-original
+      references:
+        - "https://github.com/collectiveidea/delayed_job#queuing-jobs"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $OBJ.delay.public_send(params[...], ...)
+          - pattern: $OBJ.delay.send(params[...], ...)
+          - pattern: $OBJ.delay(...).public_send(params[...], ...)

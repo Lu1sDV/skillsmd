@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-sql-injection-select-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A SELECT expression list is built with interpolation and passed to
+      Model.select (or reselect). Selected expressions are emitted as raw SQL, so
+      a tainted column or function call enables SQL injection and data disclosure
+      via crafted expressions. Choose select columns from a fixed allow-list of
+      symbols rather than interpolating external input.
+    metadata:
+      vr-id: RB-SG-0315
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by brakeman SQL injection select check; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/QueryMethods.html#method-i-select"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $M.select("...#{...}...")
+          - pattern: $M.reselect("...#{...}...")

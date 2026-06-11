@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-auth-session-devise-sign-in-from-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Devise sign_in is invoked with an identity resolved directly from request
+      parameters, establishing an authenticated session for whatever user the
+      client names. This lets an attacker log in as any account without proving
+      ownership. Look up and authenticate the user from verified credentials,
+      then call sign_in with that authenticated record.
+    metadata:
+      vr-id: RB-SG-1310
+      category: auth-session
+      cwe: ["CWE-639", "CWE-287"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Devise unsafe sign_in pattern; CWE-639"
+      license: derived-original
+      references:
+        - "https://www.rubydoc.info/github/heartcombo/devise/Devise%2FControllers%2FSignInOut:sign_in"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "sign_in(params[...])"
+          - pattern: "sign_in(User.find(params[...]))"
+          - pattern: "sign_in(User.find_by(...))"
+          - pattern: "sign_in(:user, params[...])"

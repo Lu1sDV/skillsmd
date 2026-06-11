@@ -1,0 +1,6 @@
+edges
+nodes
+| tests/StoredXss/app.rb:11:12:11:22 | call to handle | semmle.label | call to handle |
+subpaths
+#select
+| tests/StoredXss/app.rb:11:12:11:22 | call to handle | tests/StoredXss/app.rb:11:12:11:22 | call to handle | tests/StoredXss/app.rb:11:12:11:22 | call to handle | Stored XSS: a persisted $@ is rendered into HTML without escaping. | tests/StoredXss/app.rb:11:12:11:22 | call to handle | stored value |

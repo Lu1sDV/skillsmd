@@ -1,0 +1,12 @@
+edges
+| oj_load.rb:5:5:5:8 | body | oj_load.rb:7:19:7:22 | body | provenance |  |
+| oj_load.rb:5:12:5:17 | call to params | oj_load.rb:5:12:5:27 | ...[...] | provenance |  |
+| oj_load.rb:5:12:5:27 | ...[...] | oj_load.rb:5:5:5:8 | body | provenance |  |
+nodes
+| oj_load.rb:5:5:5:8 | body | semmle.label | body |
+| oj_load.rb:5:12:5:17 | call to params | semmle.label | call to params |
+| oj_load.rb:5:12:5:27 | ...[...] | semmle.label | ...[...] |
+| oj_load.rb:7:19:7:22 | body | semmle.label | body |
+subpaths
+#select
+| oj_load.rb:7:19:7:22 | body | oj_load.rb:5:12:5:17 | call to params | oj_load.rb:7:19:7:22 | body | Unsafe Oj object-mode deserialization of a $@ may execute arbitrary code. | oj_load.rb:5:12:5:17 | call to params | user-provided value |

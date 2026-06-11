@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-xss-render-html
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      `render html:` writes its argument as the HTML response body. If the value is
+      an interpolated string or comes from request parameters, the attacker controls
+      the page markup and can inject script, producing cross-site scripting. Render
+      an escaped template, or wrap trusted-only content and sanitize untrusted parts
+      before responding.
+    metadata:
+      vr-id: RB-SG-0806
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Rails render html: response rendering; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Rendering.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'render(html: "...#{...}...")'
+          - pattern: 'render(html: params[...])'
+          - pattern: 'render html: "...#{...}..."'
+          - pattern: 'render html: params[...]'

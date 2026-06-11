@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-path-traversal-pathname-new
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Pathname is constructed directly from request input and immediately read or
+      written. Pathname does not strip "../" segments, so the resulting filesystem
+      operation can escape the intended directory. Build the Pathname from a fixed base
+      and call expand_path, then verify the result is still inside that base before
+      reading or writing.
+    metadata:
+      vr-id: RB-SG-0621
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Pathname.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Pathname.new(params[...]).read
+          - pattern: Pathname.new(params[...]).binread
+          - pattern: Pathname.new(params[...]).write(...)
+          - pattern: Pathname.new("...#{params[...]}...").read
+          - pattern: Pathname.new("...#{params[...]}...").write(...)

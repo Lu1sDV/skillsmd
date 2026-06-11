@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-mass-assignment-new-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An ActiveRecord model is instantiated with a raw params slice
+      (Model.new(params[:key])). Before strong parameters or when protection is
+      disabled, every key in the request hash becomes a settable attribute, so an
+      attacker can supply fields the form never exposed — admin, role, or
+      account_id — and escalate privileges. Restrict the input with
+      params.require(:user).permit(:name, :email) and pass only the permitted hash.
+    metadata:
+      vr-id: RB-SG-1101
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/insecure-mass-assignment; CWE-915; Rails strong parameters guide"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/action_controller_overview.html#strong-parameters"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $M.new(params[$K])
+          - pattern: $M.new(params[$K], ...)
+      - pattern-not: $M.new(params.require(...).permit(...), ...)
+      - pattern-not: $M.new(params.require(...).permit(...))

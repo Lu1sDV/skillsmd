@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-mass-assignment-nested-attributes
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      accepts_nested_attributes_for opens the model to nested mass assignment of
+      associated records via the <association>_attributes key. If the controller
+      then permits that nested key broadly (permit ...attributes: {}), an attacker
+      can create or modify associated records, including their privilege columns.
+      Pair this with a tightly scoped permit that names each nested attribute.
+    metadata:
+      vr-id: RB-SG-1121
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md accepts_nested_attributes_for; CWE-915"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/NestedAttributes/ClassMethods.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: "accepts_nested_attributes_for ..., allow_destroy: true"

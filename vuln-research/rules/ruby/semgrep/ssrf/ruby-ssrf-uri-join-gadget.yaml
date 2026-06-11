@@ -1,0 +1,34 @@
+rules:
+  - id: ruby-ssrf-uri-join-gadget
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      URI.join combines a base URL with an external path segment. Because
+      join treats an absolute URL or scheme-relative value in the segment as a
+      replacement, attacker input that looks like "//evil.example" or
+      "http://169.254.169.254/" overrides the intended host, producing an SSRF
+      gadget when the result is later fetched (CWE-918). Reject path segments
+      that contain a scheme or leading slashes, or build the path with explicit
+      percent-encoding instead of URI.join.
+    metadata:
+      vr-id: RB-SG-0526
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "re-expressed from URI.join host-override gadget noted in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/URI.html#method-c-join"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: URI.join($BASE, "...#{...}...")
+          - patterns:
+              - pattern: URI.join($BASE, $SEG)
+              - metavariable-regex:
+                  metavariable: $SEG
+                  regex: ^(params|request|path|segment|user_path|input)

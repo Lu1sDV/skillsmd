@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-job-injection-activejob-queue-as-block-params
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      An ActiveJob declares queue_as with a block that derives the queue name from
+      the job's arguments. Because those arguments originate from the enqueuing
+      request, a client can steer its own job into an arbitrary queue served by a
+      different worker pool. Compute the queue from trusted, server-side
+      attributes rather than from arguments under caller control.
+    metadata:
+      vr-id: RB-SG-1731
+      category: job-injection
+      cwe: ["CWE-94"]
+      owasp: "A04:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md ActiveJob queue routing controlled by input; CWE-94"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/active_job_basics.html#queues"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: |
+          queue_as do
+            ...
+            arguments.$M
+            ...
+          end

@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-zip-slip-rubyzip-extract-overwrite
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      rubyzip extraction is configured with on_exists_proc/continue_on_exists_proc
+      set to always overwrite (returning true) while the destination derives from
+      the entry name. Combined with an unvalidated entry path this turns a Zip Slip
+      into a guaranteed clobber of existing files outside the destination. Keep the
+      overwrite decision conditional AND validate the canonicalized target stays
+      under the extraction root.
+    metadata:
+      vr-id: RB-SG-0719
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by rubyzip on_exists_proc misuse; CWE-22; ruby.md Zip::File.open extraction sink"
+      license: derived-original
+      references:
+        - "https://github.com/rubyzip/rubyzip"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Zip.on_exists_proc = true
+          - pattern: Zip.continue_on_exists_proc = true
+          - pattern: $ENTRY.extract($DEST) { true }

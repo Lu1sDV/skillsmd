@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-mail-header-injection-smtp-settings-host
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      delivery_method :smtp is configured with an address (relay host) taken from
+      request params. An attacker can redirect all outbound mail through a server
+      they control, capturing message contents and credentials. Pin SMTP connection
+      settings to trusted configuration, never to per-request input.
+    metadata:
+      vr-id: RB-SG-1618
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog tainted SMTP relay configuration; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: '$X.delivery_method(:smtp, address: params[...], ...)'
+          - pattern: '$X.delivery_method :smtp, address: params[...]'
+          - pattern: 'delivery_method(:smtp, address: params[...], ...)'

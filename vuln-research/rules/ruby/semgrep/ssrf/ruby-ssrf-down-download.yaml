@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-ssrf-down-download
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Down.download fetches a remote file from a URL built from interpolated
+      external input. The download helper requests the attacker-controlled
+      destination and can be aimed at internal services or cloud metadata
+      (CWE-918). Validate the URL against an allowlist, restrict the scheme to
+      https, and pass Down's max_size and resolution guards rather than
+      downloading the raw user-supplied URL.
+    metadata:
+      vr-id: RB-SG-0521
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from Down.download sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://github.com/janko/down"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Down.download("...#{...}...")
+          - pattern: Down.download("...#{...}...", ...)
+          - pattern: Down.open("...#{...}...")
+          - pattern: Down.open("...#{...}...", ...)

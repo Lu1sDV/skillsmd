@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-http-parsing-rack-request-scheme-trusted
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A branch keys on Rack::Request#scheme (or #ssl?) to decide whether a request
+      is secure. The scheme is reconstructed from the X-Forwarded-Proto header, so
+      a client behind a permissive proxy can forge https and bypass force_ssl or
+      secure-cookie logic. Enforce TLS at the edge and rely on a trusted proxy
+      contract, not the reflected scheme.
+    metadata:
+      vr-id: RB-SG-2004
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Rack::Request#scheme / X-Forwarded-Proto confusion; CWE-444"
+      license: derived-original
+      references:
+        - "https://www.rfc-editor.org/rfc/rfc7239"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: if request.scheme == "https" then ... end
+          - pattern: unless request.scheme == "https" then ... end
+          - pattern: request.scheme == "https"

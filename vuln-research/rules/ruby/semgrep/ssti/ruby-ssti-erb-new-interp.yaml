@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-ssti-erb-new-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An ERB template is compiled from a string that is built with interpolation.
+      When request parameters or other external input are concatenated into the
+      template body, ERB.new treats the injected text as template source, so an
+      attacker can embed `<%= %>` tags and run arbitrary Ruby (server-side template
+      injection). Keep the template text static and pass user data through the
+      binding instead of building the template string from input.
+    metadata:
+      vr-id: RB-SG-0901
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by known ERB template-injection class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/ERB.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: ERB.new("...#{...}...")
+          - pattern: ERB.new("...#{...}...", ...)
+      - pattern-not: ERB.new("...")

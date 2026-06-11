@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-ssrf-curb-easy-new
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Curl::Easy.new is created with a URL built from interpolated external
+      input, so the libcurl-backed request goes to an attacker-chosen
+      destination (CWE-918). curl honours many schemes, so this can be aimed at
+      internal hosts or metadata endpoints. Validate the URL against an allowlist
+      and restrict the scheme before performing the request.
+    metadata:
+      vr-id: RB-SG-0518
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from Curb::Easy.new sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://github.com/taf2/curb"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Curl::Easy.new("...#{...}...")
+          - pattern: Curl::Easy.new("...#{...}...", ...)
+          - pattern: Curl::Easy.perform("...#{...}...")

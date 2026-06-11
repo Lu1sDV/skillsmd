@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-mail-header-injection-url-helper-host-param
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A mailer URL helper is given an explicit host: drawn from request params or the
+      request Host header. The reset/confirmation link embedded in the email then
+      points at an attacker-chosen domain (host-header poisoning), leaking the token
+      on click. Always pass a server-configured host to URL helpers in mailers.
+    metadata:
+      vr-id: RB-SG-1615
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog host-header poisoning of email URLs via url helper host:; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: '$URL(..., host: params[...], ...)'
+          - pattern: '$URL(..., host: request.host, ...)'
+          - pattern: '$URL(..., host: request.host_with_port, ...)'
+      - metavariable-regex:
+          metavariable: $URL
+          regex: .*_url$

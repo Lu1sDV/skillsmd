@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-redos-pg-regex-operator
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An ActiveRecord where clause uses the PostgreSQL regex match operator (~) with a
+      bound parameter, pushing an attacker-supplied pattern into the database engine. A
+      crafted expression causes catastrophic backtracking inside PostgreSQL, exhausting a
+      connection and degrading the whole database (ReDoS). Match against a fixed pattern,
+      or use a literal LIKE/ILIKE comparison when the input is user data.
+    metadata:
+      vr-id: RB-SG-1218
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink search filters building regex (PostgreSQL where(\"name ~ ?\", pattern)); CWE-1333"
+      license: derived-original
+      references:
+        - "https://www.postgresql.org/docs/current/functions-matching.html#FUNCTIONS-POSIX-REGEXP"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-regex: '\.where\(\s*"[^"]*\s~\*?\s*\?'

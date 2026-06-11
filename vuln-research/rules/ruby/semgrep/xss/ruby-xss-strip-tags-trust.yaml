@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-xss-strip-tags-trust
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The result of `strip_tags` is marked HTML-safe and emitted unescaped. While
+      `strip_tags` removes tags, it does not encode the remaining text, so escaped
+      angle brackets or attribute-context payloads can survive; combining it with
+      `raw`/`html_safe` on request data reintroduces a cross-site scripting sink.
+      Emit the stripped text through normal escaping rather than marking it safe.
+    metadata:
+      vr-id: RB-SG-0820
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by Rails strip_tags + html_safe misuse; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/SanitizeHelper.html#method-i-strip_tags"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: strip_tags(params[...]).html_safe
+          - pattern: raw(strip_tags(...))

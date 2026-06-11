@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-xss-render-plain-html-type
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      `render plain:` is paired with an explicit `text/html` content type, so the
+      "plain" body is actually parsed as markup by the browser. With request-derived
+      content this re-enables script execution — cross-site scripting. Drop the
+      `content_type: "text/html"` override (plain defaults to `text/plain`) or render
+      through an escaping view.
+    metadata:
+      vr-id: RB-SG-0823
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Rails render plain with text/html content type; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Rendering.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'render(plain: ..., content_type: "text/html")'
+          - pattern: 'render plain: ..., content_type: "text/html"'

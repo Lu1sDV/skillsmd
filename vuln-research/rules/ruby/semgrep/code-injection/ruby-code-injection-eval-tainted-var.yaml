@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-code-injection-eval-tainted-var
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Kernel#eval is called directly on a value taken from request parameters,
+      with no interpolation needed — the entire program is attacker-supplied.
+      This is the most direct form of Ruby code injection and grants full remote
+      code execution. Never eval request data; map the input to a fixed operation
+      through an allowlist instead.
+    metadata:
+      vr-id: RB-SG-0227
+      category: code-injection
+      cwe: ["CWE-94", "CWE-95"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/code-injection direct-param eval; CWE-95"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Kernel.html#method-i-eval"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: eval(params[...])
+          - pattern: Kernel.eval(params[...])
+          - pattern: eval(request.$M)

@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-cache-poisoning-redis-eval-tainted-script
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Redis EVAL runs a Lua script whose body is built from request input.
+      Attacker-controlled Lua executes server-side inside Redis and can read or
+      overwrite any key in the data store, fully poisoning the cache and
+      bypassing key namespacing. Use fixed, reviewed scripts and pass untrusted
+      values only as KEYS/ARGV, never interpolated into the script text.
+    metadata:
+      vr-id: RB-SG-1813
+      category: cache-poisoning
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Redis#eval(script) tainted Lua execution; CWE-94"
+      license: derived-original
+      references:
+        - "https://redis.io/docs/latest/commands/eval/"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $REDIS.eval(params[...], ...)
+          - pattern: $REDIS.eval("...#{params[...]}...", ...)
+          - pattern: $REDIS.eval("...#{...}...", ...)

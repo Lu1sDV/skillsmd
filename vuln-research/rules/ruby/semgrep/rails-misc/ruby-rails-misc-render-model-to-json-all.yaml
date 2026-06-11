@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-rails-misc-render-model-to-json-all
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A model is serialized to JSON with all attributes and rendered to the client.
+      Without an only/except filter or a serializer, sensitive columns such as
+      password_digest, tokens, or internal flags are exposed (over-permissive data
+      exposure). Render an explicit attribute allow-list or a dedicated serializer.
+    metadata:
+      vr-id: RB-SG-2517
+      category: rails-misc
+      cwe: ["CWE-200"]
+      owasp: "A01:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by ActiveModel to_json full-attribute exposure sink; CWE-200"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveModel/Serializers/JSON.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "render(json: $U.attributes, ...)"
+          - pattern: "render(json: $U.attributes)"

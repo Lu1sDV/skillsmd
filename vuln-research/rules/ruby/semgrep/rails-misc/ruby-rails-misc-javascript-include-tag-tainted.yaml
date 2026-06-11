@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-rails-misc-javascript-include-tag-tainted
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      javascript_include_tag is given a script source from request params. An
+      attacker supplies an external URL and the page loads attacker-controlled
+      JavaScript in the victim's origin, resulting in cross-site scripting. Reference
+      scripts from the asset pipeline by fixed name and never from request input.
+    metadata:
+      vr-id: RB-SG-2508
+      category: rails-misc
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by javascript_include_tag user-controlled src sink; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/AssetTagHelper.html#method-i-javascript_include_tag"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: javascript_include_tag(params[...], ...)
+          - pattern: stylesheet_link_tag(params[...], ...)

@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-sql-injection-update-all-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Model.update_all receives a SET assignment built by string interpolation,
+      which ActiveRecord runs as raw UPDATE SQL with no binding. Tainted values in
+      the assignment let an attacker rewrite arbitrary rows or inject SQL. Pass a
+      Hash of column/value pairs — update_all(col: value) — so values are escaped.
+    metadata:
+      vr-id: RB-SG-0313
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by brakeman SQL injection update_all check; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/Relation.html#method-i-update_all"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $M.update_all("...#{...}...")

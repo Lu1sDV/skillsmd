@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-xss-send-data-html
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      `send_data` is returning request-derived bytes with a `text/html` content type
+      and inline disposition, so the browser renders the payload as an active HTML
+      document in the application origin. Attacker-supplied content then executes as
+      script, causing cross-site scripting. Serve untrusted downloads with a benign
+      type such as `application/octet-stream` and `disposition: "attachment"`.
+    metadata:
+      vr-id: RB-SG-0812
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Rails send_data text/html inline rendering; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/DataStreaming.html#method-i-send_data"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: 'send_data($DATA, ..., type: "text/html", ...)'

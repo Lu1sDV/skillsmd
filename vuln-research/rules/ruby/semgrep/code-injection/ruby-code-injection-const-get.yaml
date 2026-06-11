@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-code-injection-const-get
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      const_get resolves a constant whose name is taken from external input,
+      letting an attacker reference any reachable class or module — a common
+      first step toward instantiating dangerous gadget objects or reaching
+      remote-code-execution sinks. Validate the requested name against an
+      allowlist of permitted constants before resolving it.
+    metadata:
+      vr-id: RB-SG-0209
+      category: code-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md Object.const_get/Kernel.const_get; CWE-94"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Module.html#method-i-const_get"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $M.const_get(params[...], ...)
+          - pattern: const_get(params[...], ...)

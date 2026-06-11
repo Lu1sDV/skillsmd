@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-redos-regexp-new-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A regular expression is compiled with Regexp.new from an interpolated string,
+      so the pattern itself is built from external data. An attacker who controls the
+      embedded value can inject catastrophic-backtracking constructs (nested quantifiers
+      such as (a+)+) and freeze the matching thread, causing denial of service. Build
+      the regex from a fixed literal, or validate and escape the dynamic part with
+      Regexp.escape before compiling.
+    metadata:
+      vr-id: RB-SG-1201
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by ruby.lang.security.regexp-from-user-input; CWE-1333; ruby.md Regex/ReDoS sink Regexp.new(pattern)"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Regexp.html#method-c-new"
+        - "https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Regexp.new("...#{...}...")

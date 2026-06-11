@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-redos-mongoid-regex-param
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Mongoid/MongoDB query passes a $regex value taken from request parameters, so the
+      client supplies the regular expression the database evaluates. A malicious pattern
+      with nested quantifiers forces catastrophic backtracking on the server and abuses
+      the query interface (ReDoS plus query injection). Build the $regex value from a
+      fixed pattern and escape any user fragment; do not pass params directly.
+    metadata:
+      vr-id: RB-SG-1219
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink Mongoid/NoSQL $regex queries from params; CWE-1333"
+      license: derived-original
+      references:
+        - "https://www.mongodb.com/docs/manual/reference/operator/query/regex/"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-regex: '"\$regex"\s*=>\s*params\b'

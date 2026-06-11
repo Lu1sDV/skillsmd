@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-rails-misc-signed-id-no-expiry
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A record signed id is generated without an expiry or purpose. The resulting
+      token is valid forever and across contexts, so a single leaked link grants
+      indefinite access to the record (over-broad signed token). Pass expires_in and a
+      purpose so the token is short-lived and context-bound.
+    metadata:
+      vr-id: RB-SG-2526
+      category: rails-misc
+      cwe: ["CWE-200"]
+      owasp: "A01:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by signed_id generated without expiry/purpose sink; CWE-200"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/SignedId.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: "$REC.signed_id"
+      - pattern-not-inside: "$REC.signed_id(...)"

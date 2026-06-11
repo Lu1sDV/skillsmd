@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-mass-assignment-to-unsafe-h
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      params.to_unsafe_h returns the full request hash with strong-parameters
+      filtering bypassed. Feeding that hash into a model write re-opens mass
+      assignment on every column. Use params.require(:record).permit(:a, :b) to get
+      a filtered hash instead of to_unsafe_h.
+    metadata:
+      vr-id: RB-SG-1114
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md to_unsafe_h strong-params bypass; CWE-915"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Parameters.html#method-i-to_unsafe_h"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $P.to_unsafe_h

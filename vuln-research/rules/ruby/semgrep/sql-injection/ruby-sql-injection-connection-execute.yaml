@@ -1,0 +1,33 @@
+rules:
+  - id: ruby-sql-injection-connection-execute
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An interpolated SQL string is passed to the low-level connection.execute,
+      which sends it to the database with no escaping or binding. External input
+      reaching this sink lets an attacker inject arbitrary SQL. Build the statement
+      with ActiveRecord::Base.sanitize_sql_array or use a higher-level query method
+      with bind parameters instead of string interpolation.
+    metadata:
+      vr-id: RB-SG-0302
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/sql-injection connection.execute sink; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/DatabaseStatements.html#method-i-execute"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $C.execute("...#{...}...")
+      - metavariable-pattern:
+          metavariable: $C
+          patterns:
+            - pattern-either:
+                - pattern: connection
+                - pattern: $X.connection
+                - pattern: ActiveRecord::Base.connection

@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-deserialization-yaml-load
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      YAML.load on the Psych versions shipped before Ruby 3.1 instantiates
+      arbitrary tagged objects (for example !ruby/object:). Feeding it
+      attacker-controlled YAML allows gadget-chain object materialization and
+      remote code execution. Use YAML.safe_load with an explicit, minimal
+      permitted_classes allowlist (or upgrade to a Ruby where YAML.load is the
+      safe variant) instead of loading untrusted documents directly.
+    metadata:
+      vr-id: RB-SG-0403
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by semgrep ruby.lang.security.deserialization.yaml-load; CWE-502"
+      license: derived-original
+      references:
+        - "https://ruby-doc.org/stdlib/libdoc/psych/rdoc/Psych.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: YAML.load($X)
+          - pattern: YAML.load($X, ...)
+      - pattern-not: "YAML.load($X, permitted_classes: [...])"
+      - pattern-not: YAML.load("...")

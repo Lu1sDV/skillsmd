@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-sql-injection-group-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A GROUP BY fragment is interpolated into the string passed to Model.group.
+      Grouping clauses are emitted as raw SQL with no binding, so a tainted column
+      name lets an attacker inject SQL. Restrict grouping columns to a fixed
+      allow-list and pass a symbol rather than an interpolated string.
+    metadata:
+      vr-id: RB-SG-0309
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by brakeman SQL injection GROUP BY check; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/QueryMethods.html#method-i-group"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $M.group("...#{...}...")

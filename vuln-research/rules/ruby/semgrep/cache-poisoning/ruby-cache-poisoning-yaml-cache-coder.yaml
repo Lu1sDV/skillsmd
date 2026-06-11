@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-cache-poisoning-yaml-cache-coder
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A cache store is configured to serialize entries with YAML.load (the
+      unsafe loader). An attacker who can poison the backing store places a YAML
+      payload that instantiates arbitrary objects on read, escalating cache
+      poisoning to remote code execution. Use YAML.safe_load with an explicit
+      permitted-class list, or a non-executing coder.
+    metadata:
+      vr-id: RB-SG-1810
+      category: cache-poisoning
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md cache backends using YAML coders deserialization sink; CWE-502"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveSupport/Cache/Store.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: YAML.load(Rails.cache.read(...))
+          - pattern: YAML.load(Rails.cache.fetch(...))
+          - pattern: YAML.load($REDIS.get(...))
+          - pattern: Psych.load(Rails.cache.read(...))

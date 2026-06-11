@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-secure-config-logger-level-debug-prod
+    languages: [ruby]
+    severity: INFO
+    message: >
+      The log level is set to :debug, which in Rails causes full request
+      parameters, SQL with bound values and other internals to be written to the
+      logs and can leak sensitive data in production. Use :info or higher for
+      production environments.
+    metadata:
+      vr-id: RB-SG-2423
+      category: secure-config
+      cwe: ["CWE-16", "CWE-532"]
+      owasp: "A09:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by sink catalog log_level :debug; CWE-532"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/532.html"
+        - "https://guides.rubyonrails.org/configuring.html"
+    patterns:
+      - pattern-either:
+          - pattern: "$CFG.log_level = :debug"
+          - pattern: "config.log_level = :debug"

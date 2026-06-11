@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-secure-config-yaml-permitted-classes-object
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      yaml_column_permitted_classes includes the bare Object (or Class) type,
+      allowing serialized columns to materialize arbitrary objects during YAML
+      load and reopening the deserialization attack surface. List only the
+      concrete value classes the column actually stores.
+    metadata:
+      vr-id: RB-SG-2416
+      category: secure-config
+      cwe: ["CWE-16", "CWE-502"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog yaml_column_permitted_classes too broad; CWE-502"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/502.html"
+        - "https://guides.rubyonrails.org/configuring.html"
+    patterns:
+      - pattern-either:
+          - pattern: $CFG.active_record.yaml_column_permitted_classes = [..., Object, ...]
+          - pattern: $CFG.active_record.yaml_column_permitted_classes = [..., Class, ...]

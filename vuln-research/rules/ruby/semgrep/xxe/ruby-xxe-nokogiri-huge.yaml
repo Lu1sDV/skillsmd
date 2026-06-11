@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-xxe-nokogiri-huge
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Nokogiri is parsing with the HUGE parse option, which lifts libxml2's
+      built-in limits on node count, entity expansion depth, and document size.
+      On attacker-controlled XML this removes the safety net against
+      entity-expansion (billion-laughs) and quadratic-blowup denial of service.
+      Do not set HUGE for untrusted documents; keep libxml2's default limits.
+    metadata:
+      vr-id: RB-SG-1505
+      category: xxe
+      cwe: ["CWE-611", "CWE-776"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby.md Nokogiri 'cfg.huge' sink; CWE-776"
+      license: derived-original
+      references:
+        - "https://nokogiri.org/rdoc/Nokogiri/XML/ParseOptions.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $CFG.huge
+          - pattern: $CFG.huge(...)
+          - pattern: Nokogiri::XML($SRC, ..., Nokogiri::XML::ParseOptions::HUGE)

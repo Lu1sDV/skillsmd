@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-mass-assignment-new-merge-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A model is built from a hash that merges in a raw params slice
+      (defaults.merge(params[:key])). Merging defaults does not whitelist anything —
+      the request keys override or extend the hash, so every column the params carry
+      is still mass-assignable. Merge a permitted hash (permit(...)) instead of the
+      raw params key.
+    metadata:
+      vr-id: RB-SG-1124
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md merge-into-model mass assignment; CWE-915"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/915.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $M.new($H.merge(params[$K]))
+          - pattern: $M.create($H.merge(params[$K]))
+          - pattern: $M.create!($H.merge(params[$K]))

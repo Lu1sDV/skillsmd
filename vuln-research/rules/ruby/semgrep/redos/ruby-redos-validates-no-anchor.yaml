@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-redos-validates-no-anchor
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A Rails format validation uses a pattern with no start- or end-of-string anchor, so
+      it accepts any input that merely contains a match. Beyond the obvious validation
+      bypass, an unanchored quantified pattern run over long attacker input can backtrack
+      expensively. Anchor the pattern with \A and \z so it validates the whole string.
+    metadata:
+      vr-id: RB-SG-1226
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink validates format partial matches rather than full string; CWE-1333"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/active_record_validations.html#format"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-regex: 'validates\b.*format:\s*\{\s*with:\s*/[^^\\][^/\n]*[^$]/'

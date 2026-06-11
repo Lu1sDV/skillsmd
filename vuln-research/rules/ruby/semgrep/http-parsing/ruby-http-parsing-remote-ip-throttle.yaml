@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-http-parsing-remote-ip-throttle
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A throttle / rate-limit key is built from request.remote_ip while
+      trusted_proxies remains permissive. Since remote_ip is computed from the
+      forwarded chain, an attacker can rotate forged X-Forwarded-For values to
+      evade the limiter. Pin trusted_proxies to your edge before keying throttles
+      on the derived IP.
+    metadata:
+      vr-id: RB-SG-2021
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md ActionDispatch::RemoteIp rate-limit bypass; CWE-444"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionDispatch/RemoteIp.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-inside: $X.throttle(...) do |$REQ| ... end
+      - pattern: $REQ.ip

@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-crypto-tls-sslcontext-verify-none
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A TLS client disables hostname checking by setting verify_hostname to
+      false. Even when certificate-chain validation is enabled, skipping the
+      hostname match lets any holder of any trusted-CA certificate impersonate
+      the target host, defeating the authentication guarantee of TLS. Leave
+      verify_hostname at its default true so the presented certificate must
+      match the requested host.
+    metadata:
+      vr-id: RB-SG-1402
+      category: crypto-tls
+      cwe: ["CWE-297", "CWE-295"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/request-without-validation; CWE-297"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/297.html"
+        - "https://ruby-doc.org/stdlib/ext/openssl/rdoc/OpenSSL/SSL/SSLContext.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $CTX.verify_hostname = false

@@ -1,0 +1,36 @@
+rules:
+  - id: ruby-cache-poisoning-public-cache-control-authenticated
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The response Cache-Control header is set to public for content that is
+      personalized or behind authentication. A shared/CDN cache will store the
+      authenticated body and serve it to other users, leaking private data and
+      enabling cross-user cache poisoning. Mark personalized responses private
+      (or no-store) and rely on a correct Vary header.
+    metadata:
+      vr-id: RB-SG-1819
+      category: cache-poisoning
+      cwe: ["CWE-525"]
+      owasp: "A05:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md HTTP cache helpers public response on private content; CWE-525"
+      license: derived-original
+      references:
+        - "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern-either:
+                  - pattern: response.headers["Cache-Control"] = $V
+                  - pattern: response.headers['Cache-Control'] = $V
+                  - pattern: headers["Cache-Control"] = $V
+                  - pattern: headers['Cache-Control'] = $V
+              - metavariable-regex:
+                  metavariable: $V
+                  regex: '.*public.*'
+          - pattern: response.cache_control[:public] = true

@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-code-injection-instance-exec
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      instance_exec runs a block in the receiver's context, exposing private
+      state and methods. When the block body or the arguments forwarded into it
+      come from external input, the executed logic becomes attacker-influenced
+      and can leak or mutate internal state. Keep instance_exec blocks static and
+      validate any forwarded argument against an allowlist.
+    metadata:
+      vr-id: RB-SG-0205
+      category: code-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md instance_exec; CWE-94"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/BasicObject.html#method-i-instance_exec"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $X.instance_exec(params[...], ...)
+          - pattern: $X.instance_exec(request.$M, ...)

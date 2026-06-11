@@ -1,0 +1,20 @@
+edges
+| EvalArbitraryCode.rb:3:5:3:11 | snippet | EvalArbitraryCode.rb:5:30:5:36 | snippet | provenance |  |
+| EvalArbitraryCode.rb:3:5:3:11 | snippet | EvalArbitraryCode.rb:5:30:5:36 | snippet | provenance |  |
+| EvalArbitraryCode.rb:3:15:3:20 | call to params | EvalArbitraryCode.rb:3:15:3:30 | ...[...] | provenance |  |
+| EvalArbitraryCode.rb:3:15:3:20 | call to params | EvalArbitraryCode.rb:3:15:3:30 | ...[...] | provenance |  |
+| EvalArbitraryCode.rb:3:15:3:30 | ...[...] | EvalArbitraryCode.rb:3:5:3:11 | snippet | provenance |  |
+| EvalArbitraryCode.rb:3:15:3:30 | ...[...] | EvalArbitraryCode.rb:3:5:3:11 | snippet | provenance |  |
+nodes
+| EvalArbitraryCode.rb:3:5:3:11 | snippet | semmle.label | snippet |
+| EvalArbitraryCode.rb:3:5:3:11 | snippet | semmle.label | snippet |
+| EvalArbitraryCode.rb:3:15:3:20 | call to params | semmle.label | call to params |
+| EvalArbitraryCode.rb:3:15:3:20 | call to params | semmle.label | call to params |
+| EvalArbitraryCode.rb:3:15:3:30 | ...[...] | semmle.label | ...[...] |
+| EvalArbitraryCode.rb:3:15:3:30 | ...[...] | semmle.label | ...[...] |
+| EvalArbitraryCode.rb:5:30:5:36 | snippet | semmle.label | snippet |
+| EvalArbitraryCode.rb:5:30:5:36 | snippet | semmle.label | snippet |
+subpaths
+#select
+| EvalArbitraryCode.rb:5:30:5:36 | snippet | EvalArbitraryCode.rb:3:15:3:20 | call to params | EvalArbitraryCode.rb:5:30:5:36 | snippet | Arbitrary Ruby code execution depends on a $@. | EvalArbitraryCode.rb:3:15:3:20 | call to params | user-provided value |
+| EvalArbitraryCode.rb:5:30:5:36 | snippet | EvalArbitraryCode.rb:3:15:3:20 | call to params | EvalArbitraryCode.rb:5:30:5:36 | snippet | Arbitrary Ruby code execution depends on a $@. | EvalArbitraryCode.rb:3:15:3:20 | call to params | user-provided value |

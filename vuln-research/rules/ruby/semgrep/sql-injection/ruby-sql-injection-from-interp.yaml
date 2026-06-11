@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-sql-injection-from-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A FROM clause is interpolated into the string passed to Model.from. The
+      table/subquery source is emitted as raw SQL, so a tainted table name or
+      subquery enables SQL injection and cross-table data access. Pass a fixed
+      table name or a sanitized relation, never interpolated external input.
+    metadata:
+      vr-id: RB-SG-0311
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by brakeman SQL injection FROM check; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/QueryMethods.html#method-i-from"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $M.from("...#{...}...")

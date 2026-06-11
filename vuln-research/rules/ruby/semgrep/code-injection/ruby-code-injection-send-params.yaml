@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-code-injection-send-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The method name passed to send is taken directly from request parameters,
+      allowing an attacker to invoke any method on the receiver — including
+      private ones such as instance_variable_set, system, or send itself. This is
+      a dynamic-dispatch code-injection sink. Map the external value through an
+      allowlist of permitted method names before dispatching.
+    metadata:
+      vr-id: RB-SG-0207
+      category: code-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md send/__send__; CWE-94"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Object.html#method-i-send"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $X.send(params[...], ...)
+          - pattern: $X.__send__(params[...], ...)

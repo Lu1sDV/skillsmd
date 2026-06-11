@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-redos-index-regex-dynamic
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The String#[] reference operator is given a regex compiled from request input,
+      extracting a substring by an attacker-controlled pattern. A crafted expression with
+      ambiguous quantifiers makes the match backtrack catastrophically, hanging the
+      thread (ReDoS). Index with a fixed pattern, never one assembled from params.
+    metadata:
+      vr-id: RB-SG-1215
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sinks (String#match family) extended to String#[] regex indexing; CWE-1333"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/String.html#method-i-5B-5D"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $S[Regexp.new(params[...])]

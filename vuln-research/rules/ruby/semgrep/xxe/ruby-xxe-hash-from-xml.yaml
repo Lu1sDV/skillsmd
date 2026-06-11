@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-xxe-hash-from-xml
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Tainted input is passed to Hash.from_xml, ActiveSupport's XML-to-hash
+      helper. Depending on the configured XmlMini backend (notably the
+      LibXMLSAX/Nokogiri backends), this parses a full XML document and has
+      historically been a vector for entity-expansion denial of service and
+      type-coercion attacks (CVE-2013-0156 family). Avoid converting
+      attacker-supplied XML to a hash; if unavoidable, run it through a parser
+      configured to reject DOCTYPE/entities.
+    metadata:
+      vr-id: RB-SG-1510
+      category: xxe
+      cwe: ["CWE-611", "CWE-776"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby.md 'Hash.from_xml' sink; CVE-2013-0156 family; CWE-776"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/Hash.html#method-c-from_xml"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Hash.from_xml(params[...])
+          - pattern: Hash.from_xml(request.body.read)
+          - pattern: Hash.from_xml(request.raw_post)
+          - pattern: Hash.from_xml($IO.read)

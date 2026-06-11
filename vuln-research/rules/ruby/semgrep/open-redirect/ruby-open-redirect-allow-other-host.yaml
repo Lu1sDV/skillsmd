@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-open-redirect-allow-other-host
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      redirect_to is called with allow_other_host: true on a request parameter.
+      Rails 7 blocks cross-host redirects by default, and this option re-opens that
+      protection, letting an attacker drive the victim to any external host. Remove
+      allow_other_host and redirect only to in-app paths, or validate the host
+      against a strict allow-list before opting back in.
+    metadata:
+      vr-id: RB-SG-1003
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Rails 7 redirect_to allow_other_host hardening; CWE-601"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Redirecting.html#method-i-redirect_to"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "redirect_to(params[...], allow_other_host: true)"
+          - pattern: "redirect_to(..., allow_other_host: true)"
+      - pattern-not-regex: 'redirect_to\s*\(\s*"/'

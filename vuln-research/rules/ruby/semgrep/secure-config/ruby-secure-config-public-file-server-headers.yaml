@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-public-file-server-headers
+    languages: [ruby]
+    severity: INFO
+    message: >
+      The public file server is enabled and serves static assets with a wide-open
+      Access-Control-Allow-Origin header, letting any site fetch those files cross
+      origin. Serve assets through a CDN or restrict the CORS header so private
+      static files are not exposed to arbitrary origins.
+    metadata:
+      vr-id: RB-SG-2422
+      category: secure-config
+      cwe: ["CWE-16", "CWE-942"]
+      owasp: "A05:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by sink catalog public_file_server.headers ACAO '*'; CWE-942"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/942.html"
+        - "https://guides.rubyonrails.org/configuring.html"
+    patterns:
+      - pattern: '$CFG.public_file_server.headers = { "Access-Control-Allow-Origin" => "*" }'

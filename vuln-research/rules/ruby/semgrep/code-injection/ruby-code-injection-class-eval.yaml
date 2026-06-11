@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-code-injection-class-eval
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An interpolated string is evaluated by class_eval (or its module_eval
+      alias), reopening a class and executing arbitrary Ruby in its definition
+      scope. If the string includes external input, an attacker can redefine
+      methods or run code at class level. Use a block-form class_eval with static
+      logic, or generate methods from a fixed, validated set of names.
+    metadata:
+      vr-id: RB-SG-0204
+      category: code-injection
+      cwe: ["CWE-94", "CWE-95"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md class_eval/module_eval; CWE-95"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Module.html#method-i-class_eval"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $K.class_eval("...#{...}...")
+          - pattern: $K.module_eval("...#{...}...")
+      - pattern-not: $K.class_eval("...")
+      - pattern-not: $K.module_eval("...")

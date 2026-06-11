@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-ssti-erb-result-with-hash
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      ERB#result_with_hash evaluates the template against caller-supplied locals.
+      When the template source itself is constructed from interpolated external
+      input, attacker-controlled `<%= %>` tags execute as Ruby. Compile ERB only
+      from trusted, static template files and supply variable data through the
+      locals hash, never by interpolating input into the template body.
+    metadata:
+      vr-id: RB-SG-0902
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by known ERB template-injection class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/ERB.html#method-i-result_with_hash"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: ERB.new("...#{...}...").result_with_hash(...)

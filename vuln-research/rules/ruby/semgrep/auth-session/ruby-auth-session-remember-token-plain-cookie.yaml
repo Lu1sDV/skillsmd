@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-auth-session-remember-token-plain-cookie
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A persistent authentication token is written into a plain (unsigned,
+      unencrypted) cookie via cookies[:remember_token]. Client-stored auth state
+      that is not signed can be tampered with, and an attacker who reads it can
+      replay it indefinitely. Use cookies.signed/encrypted, store only an opaque
+      server-validated handle, and set httponly and secure.
+    metadata:
+      vr-id: RB-SG-1317
+      category: auth-session
+      cwe: ["CWE-539", "CWE-384"]
+      owasp: "A05:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by ruby.md remember_token plain-cookie sink; CWE-539"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/security.html#session-storage"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "cookies[:remember_token] = $V"
+          - pattern: "cookies[:auth_token] = $V"
+      - pattern-not: "cookies[:remember_token] = { ... }"
+      - pattern-not: "cookies[:auth_token] = { ... }"

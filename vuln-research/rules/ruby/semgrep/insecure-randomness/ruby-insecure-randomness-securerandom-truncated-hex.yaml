@@ -1,0 +1,33 @@
+rules:
+  - id: ruby-insecure-randomness-securerandom-truncated-hex
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      SecureRandom.hex is called with a very small byte count, so the produced
+      token has only a handful of bytes of entropy and is brute-forceable despite
+      coming from a CSPRNG. Request at least 16 bytes (SecureRandom.hex(16)) for
+      session identifiers, reset tokens, or API keys.
+    metadata:
+      vr-id: RB-SG-2212
+      category: insecure-randomness
+      cwe: ["CWE-331"]
+      owasp: "A02:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog 'SecureRandom output truncated too aggressively'; CWE-331"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/331.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: SecureRandom.hex(1)
+          - pattern: SecureRandom.hex(2)
+          - pattern: SecureRandom.hex(3)
+          - pattern: SecureRandom.hex(4)
+          - pattern: SecureRandom.urlsafe_base64(1)
+          - pattern: SecureRandom.urlsafe_base64(2)
+          - pattern: SecureRandom.urlsafe_base64(3)
+          - pattern: SecureRandom.urlsafe_base64(4)

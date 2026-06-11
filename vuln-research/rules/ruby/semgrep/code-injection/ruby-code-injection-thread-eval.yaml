@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-code-injection-thread-eval
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Code built with interpolation is eval'd inside a Thread block. Moving the
+      eval into a different execution context does not change the risk: if the
+      evaluated string contains external input the spawned thread runs arbitrary
+      Ruby. Remove eval entirely and drive the threaded work with static logic.
+    metadata:
+      vr-id: RB-SG-0222
+      category: code-injection
+      cwe: ["CWE-94", "CWE-95"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md Thread.new { eval(...) }; CWE-95"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Thread.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Thread.new { eval("...#{...}...") }
+          - pattern: Thread.start { eval("...#{...}...") }

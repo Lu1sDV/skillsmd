@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-xss-render-js
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      `render js:` returns its argument as an executable JavaScript response. When
+      the body is interpolated from request parameters, the attacker injects script
+      that runs in the victim's browser, a cross-site scripting vector typically
+      reached through unsafe AJAX endpoints. Return data as escaped JSON and build
+      behavior on the client, or escape values with `j`/`escape_javascript`.
+    metadata:
+      vr-id: RB-SG-0814
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Rails render js: response rendering; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Rendering.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'render(js: "...#{...}...")'
+          - pattern: 'render(js: params[...])'
+          - pattern: 'render js: "...#{...}..."'
+          - pattern: 'render js: params[...]'

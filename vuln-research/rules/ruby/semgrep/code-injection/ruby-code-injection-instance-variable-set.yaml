@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-code-injection-instance-variable-set
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      instance_variable_set is called with a variable name derived from external
+      input, letting an attacker write to arbitrary instance variables — including
+      internal flags, cached credentials, or fields that gate authorization.
+      Restrict writable attributes to a fixed allowlist rather than naming them
+      from request data.
+    metadata:
+      vr-id: RB-SG-0228
+      category: code-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md metaprogramming setters; CWE-94"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Object.html#method-i-instance_variable_set"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $X.instance_variable_set(params[...], ...)
+          - pattern: instance_variable_set(params[...], ...)

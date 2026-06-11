@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-ssrf-excon-new
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Excon.new is initialized with a URL built from interpolated external input,
+      so requests on that client reach an attacker-chosen host (CWE-918). This
+      enables requests to internal services or the instance metadata endpoint.
+      Construct the client from a host validated against an allowlist and confirm
+      the resolved address is public before sending requests.
+    metadata:
+      vr-id: RB-SG-0517
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from Excon.new sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://github.com/excon/excon"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Excon.new("...#{...}...")
+          - pattern: Excon.new("...#{...}...", ...)

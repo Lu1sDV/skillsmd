@@ -1,0 +1,59 @@
+edges
+| tests/HardcodedDataAsCode/hardcoded_as_code.rb:4:3:4:6 | blob : String | tests/HardcodedDataAsCode/hardcoded_as_code.rb:5:14:5:17 | blob : String | provenance |  |
+| tests/HardcodedDataAsCode/hardcoded_as_code.rb:4:10:4:27 | "deadbeef1337cafe" : String | tests/HardcodedDataAsCode/hardcoded_as_code.rb:4:3:4:6 | blob : String | provenance |  |
+| tests/HardcodedDataAsCode/hardcoded_as_code.rb:5:3:5:9 | payload | tests/HardcodedDataAsCode/hardcoded_as_code.rb:6:17:6:23 | payload | provenance |  |
+| tests/HardcodedDataAsCode/hardcoded_as_code.rb:5:13:5:18 | call to [] : Array [element 0] : String | tests/HardcodedDataAsCode/hardcoded_as_code.rb:5:13:5:29 | call to pack | provenance | Config |
+| tests/HardcodedDataAsCode/hardcoded_as_code.rb:5:13:5:29 | call to pack | tests/HardcodedDataAsCode/hardcoded_as_code.rb:5:3:5:9 | payload | provenance |  |
+| tests/HardcodedDataAsCode/hardcoded_as_code.rb:5:14:5:17 | blob : String | tests/HardcodedDataAsCode/hardcoded_as_code.rb:5:13:5:18 | call to [] : Array [element 0] : String | provenance |  |
+| tests/HardcodedDataToEval/hardcoded_eval.rb:4:3:4:6 | blob : String | tests/HardcodedDataToEval/hardcoded_eval.rb:5:14:5:17 | blob : String | provenance |  |
+| tests/HardcodedDataToEval/hardcoded_eval.rb:4:10:4:27 | "6465616462656566" : String | tests/HardcodedDataToEval/hardcoded_eval.rb:4:3:4:6 | blob : String | provenance |  |
+| tests/HardcodedDataToEval/hardcoded_eval.rb:5:3:5:9 | payload | tests/HardcodedDataToEval/hardcoded_eval.rb:6:8:6:14 | payload | provenance |  |
+| tests/HardcodedDataToEval/hardcoded_eval.rb:5:13:5:18 | call to [] : Array [element 0] : String | tests/HardcodedDataToEval/hardcoded_eval.rb:5:13:5:29 | call to pack | provenance | Config |
+| tests/HardcodedDataToEval/hardcoded_eval.rb:5:13:5:29 | call to pack | tests/HardcodedDataToEval/hardcoded_eval.rb:5:3:5:9 | payload | provenance |  |
+| tests/HardcodedDataToEval/hardcoded_eval.rb:5:14:5:17 | blob : String | tests/HardcodedDataToEval/hardcoded_eval.rb:5:13:5:18 | call to [] : Array [element 0] : String | provenance |  |
+| tests/HardcodedDataToRequire/hardcoded_require.rb:4:3:4:6 | blob : String | tests/HardcodedDataToRequire/hardcoded_require.rb:5:11:5:14 | blob : String | provenance |  |
+| tests/HardcodedDataToRequire/hardcoded_require.rb:4:10:4:33 | "6c69622f7061796c6f6164" : String | tests/HardcodedDataToRequire/hardcoded_require.rb:4:3:4:6 | blob : String | provenance |  |
+| tests/HardcodedDataToRequire/hardcoded_require.rb:5:3:5:6 | path | tests/HardcodedDataToRequire/hardcoded_require.rb:6:11:6:14 | path | provenance |  |
+| tests/HardcodedDataToRequire/hardcoded_require.rb:5:10:5:15 | call to [] : Array [element 0] : String | tests/HardcodedDataToRequire/hardcoded_require.rb:5:10:5:26 | call to pack | provenance | Config |
+| tests/HardcodedDataToRequire/hardcoded_require.rb:5:10:5:26 | call to pack | tests/HardcodedDataToRequire/hardcoded_require.rb:5:3:5:6 | path | provenance |  |
+| tests/HardcodedDataToRequire/hardcoded_require.rb:5:11:5:14 | blob : String | tests/HardcodedDataToRequire/hardcoded_require.rb:5:10:5:15 | call to [] : Array [element 0] : String | provenance |  |
+| tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:4:3:4:6 | blob : String | tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:5:14:5:17 | blob : String | provenance |  |
+| tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:4:10:4:35 | "\\x70\\x75\\x74\\x73\\x20\\x31" : String | tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:4:3:4:6 | blob : String | provenance |  |
+| tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:5:3:5:9 | payload | tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:6:8:6:14 | payload | provenance |  |
+| tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:5:13:5:18 | call to [] : Array [element 0] : String | tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:5:13:5:29 | call to pack | provenance | Config |
+| tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:5:13:5:29 | call to pack | tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:5:3:5:9 | payload | provenance |  |
+| tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:5:14:5:17 | blob : String | tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:5:13:5:18 | call to [] : Array [element 0] : String | provenance |  |
+nodes
+| tests/HardcodedDataAsCode/hardcoded_as_code.rb:4:3:4:6 | blob : String | semmle.label | blob : String |
+| tests/HardcodedDataAsCode/hardcoded_as_code.rb:4:10:4:27 | "deadbeef1337cafe" : String | semmle.label | "deadbeef1337cafe" : String |
+| tests/HardcodedDataAsCode/hardcoded_as_code.rb:5:3:5:9 | payload | semmle.label | payload |
+| tests/HardcodedDataAsCode/hardcoded_as_code.rb:5:13:5:18 | call to [] : Array [element 0] : String | semmle.label | call to [] : Array [element 0] : String |
+| tests/HardcodedDataAsCode/hardcoded_as_code.rb:5:13:5:29 | call to pack | semmle.label | call to pack |
+| tests/HardcodedDataAsCode/hardcoded_as_code.rb:5:14:5:17 | blob : String | semmle.label | blob : String |
+| tests/HardcodedDataAsCode/hardcoded_as_code.rb:6:17:6:23 | payload | semmle.label | payload |
+| tests/HardcodedDataToEval/hardcoded_eval.rb:4:3:4:6 | blob : String | semmle.label | blob : String |
+| tests/HardcodedDataToEval/hardcoded_eval.rb:4:10:4:27 | "6465616462656566" : String | semmle.label | "6465616462656566" : String |
+| tests/HardcodedDataToEval/hardcoded_eval.rb:5:3:5:9 | payload | semmle.label | payload |
+| tests/HardcodedDataToEval/hardcoded_eval.rb:5:13:5:18 | call to [] : Array [element 0] : String | semmle.label | call to [] : Array [element 0] : String |
+| tests/HardcodedDataToEval/hardcoded_eval.rb:5:13:5:29 | call to pack | semmle.label | call to pack |
+| tests/HardcodedDataToEval/hardcoded_eval.rb:5:14:5:17 | blob : String | semmle.label | blob : String |
+| tests/HardcodedDataToEval/hardcoded_eval.rb:6:8:6:14 | payload | semmle.label | payload |
+| tests/HardcodedDataToRequire/hardcoded_require.rb:4:3:4:6 | blob : String | semmle.label | blob : String |
+| tests/HardcodedDataToRequire/hardcoded_require.rb:4:10:4:33 | "6c69622f7061796c6f6164" : String | semmle.label | "6c69622f7061796c6f6164" : String |
+| tests/HardcodedDataToRequire/hardcoded_require.rb:5:3:5:6 | path | semmle.label | path |
+| tests/HardcodedDataToRequire/hardcoded_require.rb:5:10:5:15 | call to [] : Array [element 0] : String | semmle.label | call to [] : Array [element 0] : String |
+| tests/HardcodedDataToRequire/hardcoded_require.rb:5:10:5:26 | call to pack | semmle.label | call to pack |
+| tests/HardcodedDataToRequire/hardcoded_require.rb:5:11:5:14 | blob : String | semmle.label | blob : String |
+| tests/HardcodedDataToRequire/hardcoded_require.rb:6:11:6:14 | path | semmle.label | path |
+| tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:4:3:4:6 | blob : String | semmle.label | blob : String |
+| tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:4:10:4:35 | "\\x70\\x75\\x74\\x73\\x20\\x31" : String | semmle.label | "\\x70\\x75\\x74\\x73\\x20\\x31" : String |
+| tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:5:3:5:9 | payload | semmle.label | payload |
+| tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:5:13:5:18 | call to [] : Array [element 0] : String | semmle.label | call to [] : Array [element 0] : String |
+| tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:5:13:5:29 | call to pack | semmle.label | call to pack |
+| tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:5:14:5:17 | blob : String | semmle.label | blob : String |
+| tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:6:8:6:14 | payload | semmle.label | payload |
+subpaths
+#select
+| tests/HardcodedDataAsCode/hardcoded_as_code.rb:6:17:6:23 | payload | tests/HardcodedDataAsCode/hardcoded_as_code.rb:4:10:4:27 | "deadbeef1337cafe" : String | tests/HardcodedDataAsCode/hardcoded_as_code.rb:6:17:6:23 | payload | Hard-coded data from $@ is evaluated as code. | tests/HardcodedDataAsCode/hardcoded_as_code.rb:4:10:4:27 | "deadbeef1337cafe" | this constant |
+| tests/HardcodedDataToEval/hardcoded_eval.rb:6:8:6:14 | payload | tests/HardcodedDataToEval/hardcoded_eval.rb:4:10:4:27 | "6465616462656566" : String | tests/HardcodedDataToEval/hardcoded_eval.rb:6:8:6:14 | payload | Hard-coded data from $@ is evaluated as code. | tests/HardcodedDataToEval/hardcoded_eval.rb:4:10:4:27 | "6465616462656566" | this constant |
+| tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:6:8:6:14 | payload | tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:4:10:4:35 | "\\x70\\x75\\x74\\x73\\x20\\x31" : String | tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:6:8:6:14 | payload | Hard-coded data from $@ is evaluated as code. | tests/HexEscapedDataAsCode/hex_escaped_as_code.rb:4:10:4:35 | "\\x70\\x75\\x74\\x73\\x20\\x31" | this constant |

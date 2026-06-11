@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-zip-slip-inputstream-getstream
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Entries streamed from Zip::InputStream are written to a path derived from
+      entry.name (IO.copy_stream / get_next_entry loop). Streaming APIs expose the
+      raw stored name, so an entry like "../../config/secrets.yml" overwrites a
+      file outside the destination (Zip Slip). Expand and bounds-check the target
+      path against the extraction root before copying the stream.
+    metadata:
+      vr-id: RB-SG-0709
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by rubyzip streaming-extraction guidance; CWE-22; ruby.md Zip::InputStream.open sink"
+      license: derived-original
+      references:
+        - "https://github.com/rubyzip/rubyzip"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: IO.copy_stream($IN, File.join($DEST, $ENTRY.name))
+          - pattern: IO.copy_stream($IN, "...#{$ENTRY.name}...")

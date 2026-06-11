@@ -1,0 +1,20 @@
+edges
+| tests/CommandInjection/CommandInjection.rb:3:5:3:8 | name | tests/CommandInjection/CommandInjection.rb:5:12:5:25 | "echo #{...}" | provenance | AdditionalTaintStep |
+| tests/CommandInjection/CommandInjection.rb:3:12:3:17 | call to params | tests/CommandInjection/CommandInjection.rb:3:12:3:24 | ...[...] | provenance |  |
+| tests/CommandInjection/CommandInjection.rb:3:12:3:24 | ...[...] | tests/CommandInjection/CommandInjection.rb:3:5:3:8 | name | provenance |  |
+| tests/RemoteCommandInjection/RemoteCommandInjection.rb:3:5:3:8 | host | tests/RemoteCommandInjection/RemoteCommandInjection.rb:5:24:5:30 | #{...} | provenance |  |
+| tests/RemoteCommandInjection/RemoteCommandInjection.rb:3:12:3:17 | call to params | tests/RemoteCommandInjection/RemoteCommandInjection.rb:3:12:3:24 | ...[...] | provenance |  |
+| tests/RemoteCommandInjection/RemoteCommandInjection.rb:3:12:3:24 | ...[...] | tests/RemoteCommandInjection/RemoteCommandInjection.rb:3:5:3:8 | host | provenance |  |
+nodes
+| tests/CommandInjection/CommandInjection.rb:3:5:3:8 | name | semmle.label | name |
+| tests/CommandInjection/CommandInjection.rb:3:12:3:17 | call to params | semmle.label | call to params |
+| tests/CommandInjection/CommandInjection.rb:3:12:3:24 | ...[...] | semmle.label | ...[...] |
+| tests/CommandInjection/CommandInjection.rb:5:12:5:25 | "echo #{...}" | semmle.label | "echo #{...}" |
+| tests/RemoteCommandInjection/RemoteCommandInjection.rb:3:5:3:8 | host | semmle.label | host |
+| tests/RemoteCommandInjection/RemoteCommandInjection.rb:3:12:3:17 | call to params | semmle.label | call to params |
+| tests/RemoteCommandInjection/RemoteCommandInjection.rb:3:12:3:24 | ...[...] | semmle.label | ...[...] |
+| tests/RemoteCommandInjection/RemoteCommandInjection.rb:5:24:5:30 | #{...} | semmle.label | #{...} |
+subpaths
+#select
+| tests/CommandInjection/CommandInjection.rb:5:12:5:25 | "echo #{...}" | tests/CommandInjection/CommandInjection.rb:3:12:3:17 | call to params | tests/CommandInjection/CommandInjection.rb:5:12:5:25 | "echo #{...}" | This OS command depends on a $@. | tests/CommandInjection/CommandInjection.rb:3:12:3:17 | call to params | user-provided value |
+| tests/RemoteCommandInjection/RemoteCommandInjection.rb:5:24:5:30 | #{...} | tests/RemoteCommandInjection/RemoteCommandInjection.rb:3:12:3:17 | call to params | tests/RemoteCommandInjection/RemoteCommandInjection.rb:5:24:5:30 | #{...} | This OS command depends on a $@. | tests/RemoteCommandInjection/RemoteCommandInjection.rb:3:12:3:17 | call to params | user-provided value |

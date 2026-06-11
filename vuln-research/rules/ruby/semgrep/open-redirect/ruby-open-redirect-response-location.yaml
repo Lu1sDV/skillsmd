@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-open-redirect-response-location
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      response.location is assigned from request input. This sets the redirect target
+      of the outgoing response to an attacker-controlled value, producing an open
+      redirect. Prefer redirect_to with default host enforcement, or only assign
+      response.location from a validated relative path.
+    metadata:
+      vr-id: RB-SG-1007
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by ruby sink catalog 'response.location = params[:url]'; CWE-601"
+      license: derived-original
+      references:
+        - "https://www.rubydoc.info/gems/actionpack/ActionDispatch/Response"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: response.location = params[...]
+          - pattern: response.location = "...#{...}..."
+          - pattern: self.response.location = params[...]
+      - pattern-not-regex: 'location\s*=\s*"/'

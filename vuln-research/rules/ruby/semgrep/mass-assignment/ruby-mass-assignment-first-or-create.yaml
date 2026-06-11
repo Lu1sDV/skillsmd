@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-mass-assignment-first-or-create
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      first_or_create / first_or_initialize is given a raw params slice, so when no
+      matching row exists the new record is built from the full request hash with no
+      whitelisting. An attacker can seed privileged columns on the freshly created
+      record. Pass a permitted hash to the create branch instead of params[:key].
+    metadata:
+      vr-id: RB-SG-1122
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/insecure-mass-assignment find-or-create variants; CWE-915"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/Relation.html#method-i-first_or_create"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $R.first_or_create(params[$K])
+          - pattern: $R.first_or_create!(params[$K])
+          - pattern: $R.first_or_initialize(params[$K])

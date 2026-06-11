@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-xxe-crack-xml
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Untrusted XML is parsed with Crack::XML.parse. The crack gem builds on
+      REXML and processes DOCTYPE declarations, so attacker-supplied documents
+      can trigger entity-expansion denial of service. Do not feed request bodies
+      to Crack::XML; validate and strip any DOCTYPE before parsing untrusted
+      input.
+    metadata:
+      vr-id: RB-SG-1513
+      category: xxe
+      cwe: ["CWE-611", "CWE-776"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby.md 'Crack::XML.parse' sink; CWE-776"
+      license: derived-original
+      references:
+        - "https://github.com/jnunemaker/crack"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Crack::XML.parse(params[...])
+          - pattern: Crack::XML.parse(request.body.read)
+          - pattern: Crack::XML.parse(request.raw_post)
+          - pattern: Crack::XML.parse($IO.read)

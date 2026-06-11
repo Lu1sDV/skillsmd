@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-insecure-randomness-rand-cipher-key
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A symmetric cipher key is derived from the non-cryptographic PRNG (rand /
+      Random). The key space collapses to the recoverable generator state, so an
+      attacker can reconstruct the key and decrypt all ciphertext. Generate keys
+      with cipher.random_key or SecureRandom.bytes.
+    metadata:
+      vr-id: RB-SG-2215
+      category: insecure-randomness
+      cwe: ["CWE-338"]
+      owasp: "A02:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from CodeQL InsecureRandomness CryptoKeySink; CWE-338"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/338.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $C.key = rand(...)
+          - pattern: $C.key = Array.new(...) { rand(...) }.pack(...)
+          - pattern: $C.key = [rand(...)].pack(...)

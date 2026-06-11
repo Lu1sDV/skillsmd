@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-deserialization-serialize-marshal-coder
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Declaring an ActiveRecord attribute with serialize :attr, coder: Marshal
+      stores and reloads the column through Marshal. If that column's bytes can
+      ever be influenced by an attacker (direct DB write, replicated cache, prior
+      injection), loading the record triggers Marshal gadget deserialization.
+      Use a data-only coder such as JSON or a typed column instead of Marshal.
+    metadata:
+      vr-id: RB-SG-0424
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md serialize :attr Marshal coder; CWE-502"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/AttributeMethods/Serialization/ClassMethods.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "serialize $ATTR, Marshal"
+          - pattern: "serialize $ATTR, coder: Marshal"

@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-rails-misc-send-data-tainted-type
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      send_data sets the response content type from request params. An attacker can
+      force an active content type (text/html, image/svg+xml) so the served bytes are
+      interpreted as a script in the victim's origin, enabling stored or reflected XSS
+      on the download endpoint. Pin the type to a fixed value and add
+      Content-Disposition: attachment.
+    metadata:
+      vr-id: RB-SG-2502
+      category: rails-misc
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ActionController::DataStreaming#send_data content-type sink; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/DataStreaming.html#method-i-send_data"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "send_data(..., type: params[...], ...)"
+          - pattern: "send_data(..., type: params[...].$M, ...)"

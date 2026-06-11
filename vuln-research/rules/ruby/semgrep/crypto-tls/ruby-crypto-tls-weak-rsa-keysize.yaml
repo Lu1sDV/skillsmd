@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-crypto-tls-weak-rsa-keysize
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An RSA key pair is generated with a modulus of 1024 bits or fewer, a size
+      considered factorable and below current minimums. Signatures and key
+      exchange built on such a key offer weak protection. Generate at least a
+      2048-bit RSA key (3072+ for long-lived keys) or use an elliptic-curve key
+      such as prime256v1.
+    metadata:
+      vr-id: RB-SG-1420
+      category: crypto-tls
+      cwe: ["CWE-326"]
+      owasp: "A02:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog weak RSA key size; CWE-326"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/326.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: OpenSSL::PKey::RSA.new($BITS)
+          - pattern: OpenSSL::PKey::RSA.generate($BITS)
+      - metavariable-comparison:
+          metavariable: $BITS
+          comparison: $BITS <= 1024

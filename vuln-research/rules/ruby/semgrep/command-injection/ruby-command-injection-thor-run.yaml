@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-command-injection-thor-run
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Thor::Actions#run executes its argument by handing it to the system shell. When the
+      command is built with interpolation from external input, an attacker can inject shell
+      metacharacters and run arbitrary commands. Build the command from a fixed template
+      and shell-escape any dynamic segment with Shellwords.escape.
+    metadata:
+      vr-id: RB-SG-0123
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived: Thor::Actions#run shell helper (ruby.md OS command execution); CWE-78"
+      license: derived-original
+      references:
+        - "https://www.rubydoc.info/gems/thor/Thor%2FActions:run"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: run("...#{...}...", ...)
+      - pattern-not: run(Shellwords.escape(...), ...)

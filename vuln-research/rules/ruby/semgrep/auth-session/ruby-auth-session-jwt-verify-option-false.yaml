@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-auth-session-jwt-verify-option-false
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      JWT.decode is passed verify: false in its options hash, so the signature
+      and registered-claim checks are skipped. Attackers can forge tokens with
+      arbitrary identity and expiry claims. Remove verify: false and supply the
+      verification key with an explicit algorithm so signatures are enforced.
+    metadata:
+      vr-id: RB-SG-1327
+      category: auth-session
+      cwe: ["CWE-347"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by ruby-jwt verify:false option; CWE-347"
+      license: derived-original
+      references:
+        - "https://github.com/jwt/ruby-jwt#verifying-tokens"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "JWT.decode($T, $K, true, verify: false, ...)"
+          - pattern: "JWT.decode($T, $K, verify: false, ...)"
+          - pattern: "JWT.decode($T, $K, $V, { ..., verify: false, ... })"

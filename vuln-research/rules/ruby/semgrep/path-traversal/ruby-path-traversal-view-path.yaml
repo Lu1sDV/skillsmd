@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-path-traversal-view-path
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      prepend_view_path or append_view_path registers a template lookup directory built
+      from request input. An attacker who controls this path can point Rails view
+      resolution at an unintended directory, causing arbitrary templates to be rendered
+      and disclosed. Derive view paths only from trusted configuration, never from request
+      parameters.
+    metadata:
+      vr-id: RB-SG-0627
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; Rails dynamic view-path resolution; CWE-22"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/ViewPaths/ClassMethods.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: prepend_view_path(params[...])
+          - pattern: prepend_view_path("...#{params[...]}...")
+          - pattern: append_view_path(params[...])
+          - pattern: append_view_path("...#{params[...]}...")

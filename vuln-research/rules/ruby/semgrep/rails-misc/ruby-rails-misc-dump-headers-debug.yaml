@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-rails-misc-dump-headers-debug
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The full request headers or environment hash is rendered or logged. This exposes
+      Authorization headers, cookies, session ids, and internal proxy data
+      (information exposure). Remove the debug dump and never serialize request.env or
+      request.headers wholesale.
+    metadata:
+      vr-id: RB-SG-2520
+      category: rails-misc
+      cwe: ["CWE-200"]
+      owasp: "A09:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by request.env/headers wholesale debug dump sink; CWE-200"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/200.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "render(json: request.headers.to_h, ...)"
+          - pattern: "render(json: request.headers.to_h)"
+          - pattern: "Rails.logger.$LEVEL(request.env.to_json)"
+          - pattern: "Rails.logger.$LEVEL(request.headers.to_h)"

@@ -1,0 +1,12 @@
+edges
+| tests/UnsafeShellCommandConstruction/lib/archiver.rb:7:21:7:24 | name | tests/UnsafeShellCommandConstruction/lib/archiver.rb:8:24:8:27 | name | provenance |  |
+| tests/UnsafeShellCommandConstruction/lib/archiver.rb:14:21:14:24 | path | tests/UnsafeShellCommandConstruction/lib/archiver.rb:15:23:15:29 | #{...} | provenance |  |
+nodes
+| tests/UnsafeShellCommandConstruction/lib/archiver.rb:7:21:7:24 | name | semmle.label | name |
+| tests/UnsafeShellCommandConstruction/lib/archiver.rb:8:24:8:27 | name | semmle.label | name |
+| tests/UnsafeShellCommandConstruction/lib/archiver.rb:14:21:14:24 | path | semmle.label | path |
+| tests/UnsafeShellCommandConstruction/lib/archiver.rb:15:23:15:29 | #{...} | semmle.label | #{...} |
+subpaths
+#select
+| tests/UnsafeShellCommandConstruction/lib/archiver.rb:8:11:8:43 | ... + ... | tests/UnsafeShellCommandConstruction/lib/archiver.rb:7:21:7:24 | name | tests/UnsafeShellCommandConstruction/lib/archiver.rb:8:24:8:27 | name | This string concatenation which depends on $@ is later used in a $@. | tests/UnsafeShellCommandConstruction/lib/archiver.rb:7:21:7:24 | name | library input | tests/UnsafeShellCommandConstruction/lib/archiver.rb:9:5:9:15 | call to system | shell command |
+| tests/UnsafeShellCommandConstruction/lib/archiver.rb:15:12:15:30 | "sha256sum #{...}" | tests/UnsafeShellCommandConstruction/lib/archiver.rb:14:21:14:24 | path | tests/UnsafeShellCommandConstruction/lib/archiver.rb:15:23:15:29 | #{...} | This string construction which depends on $@ is later used in a $@. | tests/UnsafeShellCommandConstruction/lib/archiver.rb:14:21:14:24 | path | library input | tests/UnsafeShellCommandConstruction/lib/archiver.rb:15:5:15:31 | call to system | shell command |

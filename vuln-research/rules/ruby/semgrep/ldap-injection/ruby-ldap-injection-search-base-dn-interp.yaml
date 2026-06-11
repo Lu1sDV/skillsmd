@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-ldap-injection-search-base-dn-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An LDAP search base DN is built from an interpolated string containing
+      request data. A tainted base DN lets an attacker relocate the search
+      subtree (DN injection) and enumerate entries outside the intended branch.
+      Map untrusted input to a fixed set of allowed base DNs rather than
+      interpolating it into the DN string.
+    metadata:
+      vr-id: RB-SG-2304
+      category: ldap-injection
+      cwe: ["CWE-90"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/ldap-injection base DN sink (ldap_handler example); CWE-90"
+      license: derived-original
+      references:
+        - "https://ldap.com/2018/05/04/understanding-and-defending-against-ldap-injection-attacks/"
+        - "https://www.rubydoc.info/gems/net-ldap/Net/LDAP"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: '$LDAP.search(..., base: "...#{...}...", ...)'

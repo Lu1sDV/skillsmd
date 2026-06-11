@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-ssti-erb-file-read-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The contents of a file are read and immediately compiled as an ERB template.
+      If the file path or the data being read is influenced by external input — for
+      example a user-uploaded file or a path from params — the attacker effectively
+      supplies the template body and their ERB tags execute as Ruby. Only compile
+      ERB from template files under your control, and never from user-supplied or
+      user-uploaded content.
+    metadata:
+      vr-id: RB-SG-0916
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ERB-from-file template-injection class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/ERB.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: ERB.new(File.read(params[...]))
+          - pattern: ERB.new(File.read(params[...])).result(...)

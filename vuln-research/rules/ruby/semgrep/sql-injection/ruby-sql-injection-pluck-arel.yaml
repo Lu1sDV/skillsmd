@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-sql-injection-pluck-arel
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Model.pluck is given an Arel.sql fragment built from interpolation. Arel.sql
+      deliberately marks the string as trusted raw SQL, bypassing ActiveRecord's
+      escaping, so an interpolated external value becomes a SQL injection. Only
+      wrap constant, developer-controlled SQL in Arel.sql; never interpolate
+      request data into it.
+    metadata:
+      vr-id: RB-SG-0317
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by GHSA Arel.sql unsafe raw SQL advisory pattern; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/Arel.html#method-c-sql"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $M.pluck(Arel.sql("...#{...}..."))

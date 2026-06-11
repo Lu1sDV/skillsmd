@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-deserialization-drb-start-service
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      DRb.start_service publishes a Ruby object over distributed Ruby, and the
+      protocol marshals arguments and return values with Marshal. Any client that
+      reaches the listening URI can invoke methods and send crafted Marshal
+      payloads, leading to remote code execution. Avoid exposing DRb to untrusted
+      networks; bind to localhost and enable DRb::ACL plus a SSLTunnel if remote
+      access is truly required.
+    metadata:
+      vr-id: RB-SG-0427
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md DRb.start_service; CWE-502"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/DRb.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: DRb.start_service($URI, $OBJ, ...)

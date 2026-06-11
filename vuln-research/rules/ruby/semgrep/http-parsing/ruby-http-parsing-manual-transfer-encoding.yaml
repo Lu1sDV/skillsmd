@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-http-parsing-manual-transfer-encoding
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The Transfer-Encoding header is inspected from the raw env to decide how to
+      read the body. Custom chunked-vs-length handling that diverges from the
+      upstream proxy is the core of TE.CL / TE.TE request smuggling. Do not branch
+      on Transfer-Encoding yourself; rely on the server's validated body decoding.
+    metadata:
+      vr-id: RB-SG-2018
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Transfer-Encoding framing / smuggling; CWE-444"
+      license: derived-original
+      references:
+        - "https://portswigger.net/web-security/request-smuggling"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: request.env["HTTP_TRANSFER_ENCODING"]
+          - pattern: $REQ.env["HTTP_TRANSFER_ENCODING"]
+          - pattern: env["HTTP_TRANSFER_ENCODING"]

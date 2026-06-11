@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-cache-poisoning-fragment-cache-tainted-key
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A view fragment cache block is keyed on request parameters. Two different
+      users hitting the same param value share the rendered fragment, so private
+      content rendered for one user can leak to another and an attacker can seed
+      a poisoned fragment. Key fragments on the model record or current_user,
+      never on raw params.
+    metadata:
+      vr-id: RB-SG-1806
+      category: cache-poisoning
+      cwe: ["CWE-349"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md cache(params[:key]) fragment poisoning; CWE-349"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/caching_with_rails.html#fragment-caching"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: cache(params[...]) { ... }
+          - pattern: cache("...#{params[...]}...") { ... }
+          - pattern: cache(params[...], ...) { ... }

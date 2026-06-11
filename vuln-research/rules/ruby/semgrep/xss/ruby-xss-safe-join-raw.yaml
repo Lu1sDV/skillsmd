@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-xss-safe-join-raw
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      `safe_join` joins an array and returns an HTML-safe buffer; when its elements
+      are pre-marked with `raw` or `html_safe`, those fragments bypass escaping. If a
+      raw element originates from request data, attacker markup is concatenated into
+      the page, causing cross-site scripting. Pass plain strings so `safe_join`
+      escapes each element, or sanitize untrusted fragments first.
+    metadata:
+      vr-id: RB-SG-0813
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Rails safe_join with raw elements; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/OutputSafetyHelper.html#method-i-safe_join"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'safe_join([..., raw(...), ...])'
+          - pattern: 'safe_join($ARR.map { |$X| raw(...) })'
+          - pattern: 'safe_join($ARR.map { |$X| "...#{...}...".html_safe })'

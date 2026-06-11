@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-xxe-libxml-string
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Attacker-controlled XML is parsed with LibXML::XML::Document.string. The
+      libxml-ruby parser honours parse options that enable DTD loading and
+      external-entity substitution (XML::Parser::Options::NOENT, DTDLOAD,
+      NONET). Without an explicit safe option set, a crafted external entity can
+      read local files or reach internal hosts. Parse untrusted XML with NONET
+      and without NOENT/DTDLOAD.
+    metadata:
+      vr-id: RB-SG-1508
+      category: xxe
+      cwe: ["CWE-611"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby.md 'LibXML::XML::Document.string' sink; CWE-611"
+      license: derived-original
+      references:
+        - "https://github.com/xml4r/libxml-ruby"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "LibXML::XML::Document.string($SRC, options: $OPTS)"
+          - pattern: "XML::Document.string($SRC, options: $OPTS)"

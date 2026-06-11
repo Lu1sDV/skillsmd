@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-ssti-haml-file-read-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Haml template is compiled from the contents of a file whose path is taken
+      from request input. Haml evaluates `=` lines and embedded Ruby, so if the
+      attacker controls the path (or the file is user-uploaded) they supply the
+      template body and execute server-side code. Restrict Haml compilation to
+      template files under your control and never to user-supplied paths or uploads.
+    metadata:
+      vr-id: RB-SG-0923
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Haml-from-file template-injection class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://haml.info/"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Haml::Engine.new(File.read(params[...]))

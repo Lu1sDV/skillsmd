@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-mass-assignment-update-attributes
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      update_attributes is invoked with a raw params slice, rewriting an existing
+      record from the request body. Because the hash is not whitelisted, an
+      attacker can overwrite columns the edit form never showed — flipping an
+      ownership or privilege flag on a record they can otherwise edit. Pass a
+      permitted hash (params.require(:user).permit(:name)) to update_attributes.
+    metadata:
+      vr-id: RB-SG-1104
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/insecure-mass-assignment; CWE-915"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/action_controller_overview.html#strong-parameters"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $O.update_attributes(params[$K])
+          - pattern: $O.update_attributes(params[$K], ...)
+      - pattern-not: $O.update_attributes(params.require(...).permit(...), ...)
+      - pattern-not: $O.update_attributes(params.require(...).permit(...))

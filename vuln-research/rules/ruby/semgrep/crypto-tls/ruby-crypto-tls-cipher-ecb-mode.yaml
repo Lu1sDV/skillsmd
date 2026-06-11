@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-crypto-tls-cipher-ecb-mode
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A block cipher is configured in ECB mode, which encrypts each block
+      independently so identical plaintext blocks produce identical ciphertext.
+      This leaks structure and patterns of the data and provides no integrity.
+      Use an authenticated mode such as AES-256-GCM with a unique IV per message.
+    metadata:
+      vr-id: RB-SG-1412
+      category: crypto-tls
+      cwe: ["CWE-327"]
+      owasp: "A02:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog OpenSSL::Cipher.new('*-ECB'); CWE-327"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/327.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: OpenSSL::Cipher.new("=~/(?i).*-ecb$/")
+          - pattern: OpenSSL::Cipher::AES.new(..., "ECB")
+          - pattern: OpenSSL::Cipher::AES.new(..., :ECB)

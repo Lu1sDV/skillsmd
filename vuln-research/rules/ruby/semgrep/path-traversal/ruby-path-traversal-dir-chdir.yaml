@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-path-traversal-dir-chdir
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Dir.chdir changes the process working directory to a path from external input.
+      Traversal lets an attacker move the process into an unexpected directory, which can
+      subvert later relative-path file operations and lead to access of unintended files.
+      Validate the target against an allow list and resolve it under a trusted base before
+      changing directory.
+    metadata:
+      vr-id: RB-SG-0614
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Dir.html#method-c-chdir"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Dir.chdir(params[...])
+          - pattern: Dir.chdir("...#{params[...]}...")

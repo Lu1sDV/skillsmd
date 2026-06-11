@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-sql-injection-arel-sql
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Arel.sql is called on a string built with interpolation. Arel.sql is an
+      escape hatch that tells ActiveRecord the string is trusted raw SQL, so any
+      interpolated external value flows unescaped into the query and is injectable
+      wherever the fragment is used. Reserve Arel.sql for constant SQL only.
+    metadata:
+      vr-id: RB-SG-0318
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Rails Arel.sql unsafe-raw-sql guidance; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/Arel.html#method-c-sql"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Arel.sql("...#{...}...")

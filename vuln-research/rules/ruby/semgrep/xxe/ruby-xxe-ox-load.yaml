@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-xxe-ox-load
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Ox.load is used in object or generic mode on untrusted input. In :object
+      mode Ox marshals arbitrary Ruby objects from the XML (an unsafe
+      deserialization vector), and any mode parses DOCTYPE/entity constructs.
+      Restrict Ox to :hash or :generic mode and never use :object mode on
+      attacker-controlled XML.
+    metadata:
+      vr-id: RB-SG-1515
+      category: xxe
+      cwe: ["CWE-611", "CWE-502"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby.md 'Ox.load unsafe entity/object' sink; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/ohler55/ox"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "Ox.load($SRC, mode: :object)"
+          - pattern: Ox.parse_obj($SRC)
+          - pattern: Ox.load($SRC, ...)
+      - pattern-not: Ox.load("...", ...)
+      - pattern-not: "Ox.load($SRC, mode: :hash)"
+      - pattern-not: "Ox.load($SRC, mode: :generic)"

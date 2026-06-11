@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-insecure-randomness-rand-iv
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A cipher initialization vector or nonce is assigned from the non-cryptographic
+      PRNG (rand / Random). Predictable IVs break the security of CBC, CTR, and GCM
+      modes and can enable plaintext recovery or nonce-reuse forgeries. Set the IV
+      from cipher.random_iv or SecureRandom.bytes.
+    metadata:
+      vr-id: RB-SG-2213
+      category: insecure-randomness
+      cwe: ["CWE-330", "CWE-329"]
+      owasp: "A02:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog 'Cipher with reused/static IVs'; CWE-329"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/329.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $C.iv = rand(...)
+          - pattern: $C.iv = Random.rand(...)
+          - pattern: $C.iv = Array.new(...) { rand(...) }.pack(...)

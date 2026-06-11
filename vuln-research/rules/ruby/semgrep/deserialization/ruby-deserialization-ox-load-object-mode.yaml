@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-deserialization-ox-load-object-mode
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Ox.load with mode: :object reconstructs arbitrary Ruby objects from XML,
+      the same behavior as Ox.parse_obj. On attacker-controlled XML this
+      instantiates attacker-chosen classes and enables gadget chains. Load
+      untrusted XML in mode: :hash so only plain data is returned.
+    metadata:
+      vr-id: RB-SG-0420
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Ox.load object mode; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/ohler55/ox"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: "Ox.load($X, ..., mode: :object, ...)"

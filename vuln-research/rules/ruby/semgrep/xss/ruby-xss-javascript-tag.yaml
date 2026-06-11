@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-xss-javascript-tag
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      `javascript_tag` wraps its argument in a `<script>` block emitted into the
+      page. Interpolating request data into that block lets an attacker run arbitrary
+      script in the application origin, causing cross-site scripting. Move dynamic
+      values into a JSON `data-` attribute or `gon`-style serialized payload and read
+      them from static client code instead of inlining them into script.
+    metadata:
+      vr-id: RB-SG-0815
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Rails javascript_tag inline script body; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/JavaScriptHelper.html#method-i-javascript_tag"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: javascript_tag("...#{...}...")
+          - pattern: javascript_tag(params[...])
+      - pattern-not: javascript_tag("...")

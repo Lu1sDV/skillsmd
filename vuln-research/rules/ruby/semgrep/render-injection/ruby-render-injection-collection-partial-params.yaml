@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-render-injection-collection-partial-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      render uses a collection with an attacker-controlled partial: name. Each
+      element is rendered through the user-chosen partial, allowing selection of
+      unintended templates or traversal to other view files. Fix the partial name
+      and pass the collection separately.
+    metadata:
+      vr-id: RB-SG-1918
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md 'render partial:' dynamic name; collection variant; CWE-98"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/layouts_and_rendering.html#rendering-collections"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "render(partial: params[...], collection: ...)"
+          - pattern: "render partial: params[...], collection: ..."
+          - pattern: "render(collection: ..., partial: params[...])"

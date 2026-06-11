@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-render-injection-interpolated-template
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      render builds the template name by interpolating a request parameter into a
+      string. The injected segment can contain ../ traversal or point at an
+      unintended template, leading to file disclosure or rendering of the wrong
+      view. Build the template name from a validated allow-list, not string
+      interpolation of raw input.
+    metadata:
+      vr-id: RB-SG-1907
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md dynamic render path construction; CWE-22"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/layouts_and_rendering.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: render("...#{params[...]}...")
+          - pattern: 'render(template: "...#{params[...]}...")'
+          - pattern: 'render(partial: "...#{params[...]}...")'

@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-crypto-tls-message-verifier-weak-digest
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      An ActiveSupport::MessageVerifier is created with a weak digest (MD5 or
+      SHA1) for its HMAC. A collision-prone digest weakens the integrity
+      guarantee that protects the signed payload from tampering. Use the default
+      SHA256 (or stronger) digest so the signature cannot be forged.
+    metadata:
+      vr-id: RB-SG-1422
+      category: crypto-tls
+      cwe: ["CWE-327", "CWE-328"]
+      owasp: "A02:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog weak MessageVerifier digest; CWE-327"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/327.html"
+        - "https://api.rubyonrails.org/classes/ActiveSupport/MessageVerifier.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "ActiveSupport::MessageVerifier.new(..., digest: \"MD5\", ...)"
+          - pattern: "ActiveSupport::MessageVerifier.new(..., digest: \"SHA1\", ...)"
+          - pattern: "ActiveSupport::MessageVerifier.new(..., digest: \"MD5\")"
+          - pattern: "ActiveSupport::MessageVerifier.new(..., digest: \"SHA1\")"

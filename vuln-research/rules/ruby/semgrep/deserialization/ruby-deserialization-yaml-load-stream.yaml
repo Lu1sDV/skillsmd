@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-deserialization-yaml-load-stream
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      YAML.load_stream parses a multi-document YAML stream with the unsafe loader
+      on older Psych, instantiating tagged objects from every document. Untrusted
+      stream contents therefore allow gadget-chain object materialization and
+      code execution. Iterate documents with a safe parser configured with an
+      explicit permitted_classes allowlist.
+    metadata:
+      vr-id: RB-SG-0407
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md YAML.load_stream; CWE-502"
+      license: derived-original
+      references:
+        - "https://ruby-doc.org/stdlib/libdoc/psych/rdoc/Psych.html#method-c-load_stream"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: YAML.load_stream($X)
+          - pattern: YAML.load_stream($X, ...)
+      - pattern-not: YAML.load_stream("...")

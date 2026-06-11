@@ -1,0 +1,33 @@
+rules:
+  - id: ruby-zip-slip-gzipreader-bomb
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Zlib::GzipReader fully reads a gzip stream from an untrusted source with no
+      size cap. A small "decompression bomb" can inflate to gigabytes, exhausting
+      memory and taking down the process (denial of service). Read in bounded
+      chunks and abort once the cumulative decompressed size exceeds a configured
+      limit instead of calling read with no argument.
+    metadata:
+      vr-id: RB-SG-0712
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by decompression-bomb DoS guidance; CWE-409/CWE-22; ruby.md Zlib::GzipReader decompression-bomb sink"
+      license: derived-original
+      references:
+        - "https://ruby-doc.org/stdlib/libdoc/zlib/rdoc/Zlib/GzipReader.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Zlib::GzipReader.open($PATH).read
+          - pattern: Zlib::GzipReader.new($IO).read
+          - pattern: |
+              $G = Zlib::GzipReader.new(...)
+              ...
+              $G.read
+      - pattern-not: $G.read($N)

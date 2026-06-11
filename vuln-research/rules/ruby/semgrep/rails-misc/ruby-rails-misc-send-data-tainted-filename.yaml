@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-rails-misc-send-data-tainted-filename
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      send_data is invoked with a filename taken straight from request params. An
+      attacker can inject newline or control characters into the Content-Disposition
+      header (header injection) or force a misleading download name. Sanitize the
+      name with File.basename and an allow-list of characters before passing it as
+      the filename option.
+    metadata:
+      vr-id: RB-SG-2501
+      category: rails-misc
+      cwe: ["CWE-200"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by ActionController::DataStreaming#send_data filename header-injection sink; CWE-200"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/DataStreaming.html#method-i-send_data"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "send_data(..., filename: params[...], ...)"
+          - pattern: "send_data(..., filename: params[...].$M, ...)"

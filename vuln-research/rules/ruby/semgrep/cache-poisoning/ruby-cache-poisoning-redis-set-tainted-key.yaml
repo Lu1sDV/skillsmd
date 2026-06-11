@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-cache-poisoning-redis-set-tainted-key
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Redis SET writes under a key derived from request input. An attacker can
+      overwrite keys owned by other tenants or seed entries a victim later reads,
+      poisoning the key space. Namespace Redis keys with a trusted server-side
+      identifier and validate any param used in the key.
+    metadata:
+      vr-id: RB-SG-1812
+      category: cache-poisoning
+      cwe: ["CWE-349"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Redis#set with tainted keys key-space pollution; CWE-349"
+      license: derived-original
+      references:
+        - "https://redis.io/docs/latest/commands/set/"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $REDIS.set(params[...], ...)
+          - pattern: $REDIS.set("...#{params[...]}...", ...)
+          - pattern: $REDIS.setex(params[...], ...)
+          - pattern: $REDIS.setex("...#{params[...]}...", ...)
+          - pattern: $REDIS.mset(params[...], ...)

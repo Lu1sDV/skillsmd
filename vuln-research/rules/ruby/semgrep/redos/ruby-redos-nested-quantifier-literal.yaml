@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-redos-nested-quantifier-literal
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      This regex literal contains a quantified group immediately followed by another
+      quantifier (for example (...)+ or (...)*), the classic catastrophic-backtracking
+      shape. When matched against attacker-controlled input the engine explores
+      exponentially many paths and freezes the request thread (ReDoS). Rewrite the
+      pattern to remove the nested quantifier, use possessive/atomic groups, or bound the
+      input length before matching.
+    metadata:
+      vr-id: RB-SG-1220
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink section; OWASP ReDoS nested-quantifier pattern; CWE-1333"
+      license: derived-original
+      references:
+        - "https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-regex: '/[^/\n]*\)[+*][^/\n]*/'

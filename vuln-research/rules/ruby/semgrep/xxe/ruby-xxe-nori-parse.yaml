@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-xxe-nori-parse
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Untrusted XML is parsed with Nori.parse, the XML-to-hash layer used by
+      SOAP stacks such as Savon. Nori delegates to Nokogiri or REXML and, on a
+      permissively configured parser, can resolve external entities defined in
+      the document — exposing file disclosure and SSRF. Parse SOAP/XML from
+      untrusted peers only with a parser that disables DTD and entity
+      resolution.
+    metadata:
+      vr-id: RB-SG-1514
+      category: xxe
+      cwe: ["CWE-611"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby.md 'Nori.parse' sink; CWE-611"
+      license: derived-original
+      references:
+        - "https://github.com/savonrb/nori"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Nori.parse($SRC)
+          - pattern: Nori.new(...).parse($SRC)
+      - pattern-not: Nori.parse("...")
+      - pattern-not: Nori.new(...).parse("...")

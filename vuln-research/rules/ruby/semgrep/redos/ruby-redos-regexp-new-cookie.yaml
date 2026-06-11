@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-redos-regexp-new-cookie
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Regexp.new compiles a value read from cookies, letting a client store an arbitrary
+      regular expression and have the application compile it on each request. A malicious
+      pattern causes catastrophic backtracking and stalls the worker (ReDoS). Do not build
+      regexes from cookie data; match against a fixed, reviewed pattern.
+    metadata:
+      vr-id: RB-SG-1223
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink Regexp.new(pattern) with cookie-sourced input; CWE-1333"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionDispatch/Cookies.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Regexp.new(cookies[...])

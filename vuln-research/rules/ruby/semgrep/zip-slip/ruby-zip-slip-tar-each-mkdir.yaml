@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-zip-slip-tar-each-mkdir
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      During TAR extraction a directory entry is materialized with FileUtils.mkdir
+      / mkdir_p on a path joined from the destination and entry.full_name, with no
+      traversal guard. A "../" directory entry creates folders outside the
+      destination, setting up a Tar Slip write. Expand the joined path and confirm
+      it stays within the extraction root before creating directories.
+    metadata:
+      vr-id: RB-SG-0718
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by tar extraction hardening; CWE-22; ruby.md TAR entry extraction sink"
+      license: derived-original
+      references:
+        - "https://ruby-doc.org/stdlib/libdoc/rubygems/rdoc/Gem/Package/TarReader.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: FileUtils.mkdir_p(File.join($DEST, $ENTRY.full_name))
+          - pattern: FileUtils.mkdir(File.join($DEST, $ENTRY.full_name))
+          - pattern: Dir.mkdir(File.join($DEST, $ENTRY.full_name))

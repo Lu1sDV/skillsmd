@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-sql-injection-sqlite3-execute
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The SQLite3 driver execute/execute_batch is called with a SQL string built
+      by interpolation. These run raw SQL with no binding (execute_batch even runs
+      multiple statements), so external input here is injectable. Pass bind
+      parameters as a second argument — db.execute("... ?", [value]) — instead.
+    metadata:
+      vr-id: RB-SG-0327
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sqlite3-ruby execute bind-parameter guidance; CWE-89"
+      license: derived-original
+      references:
+        - "https://www.rubydoc.info/gems/sqlite3/SQLite3/Database#execute-instance_method"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $DB.execute("...#{...}...")
+          - pattern: $DB.execute_batch("...#{...}...")

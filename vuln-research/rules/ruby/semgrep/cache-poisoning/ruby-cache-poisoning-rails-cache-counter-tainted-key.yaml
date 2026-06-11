@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-cache-poisoning-rails-cache-counter-tainted-key
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Rails.cache.increment or decrement mutates a counter whose key comes from
+      request parameters. An attacker can target arbitrary counters - inflating
+      rate-limit buckets for victims, resetting quotas, or polluting metrics.
+      Bind counter keys to authenticated, server-derived identifiers instead of
+      raw params.
+    metadata:
+      vr-id: RB-SG-1805
+      category: cache-poisoning
+      cwe: ["CWE-349"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Rails.cache.increment/decrement counter manipulation; CWE-349"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveSupport/Cache/Store.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Rails.cache.increment(params[...], ...)
+          - pattern: Rails.cache.decrement(params[...], ...)
+          - pattern: Rails.cache.increment("...#{params[...]}...", ...)
+          - pattern: Rails.cache.decrement("...#{params[...]}...", ...)

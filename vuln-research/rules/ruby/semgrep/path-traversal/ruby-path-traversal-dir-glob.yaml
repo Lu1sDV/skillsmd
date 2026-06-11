@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-path-traversal-dir-glob
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Dir.glob (or the Dir[] shorthand) expands a glob pattern built from external input.
+      Traversal and wildcard characters let an attacker enumerate or match files outside
+      the intended directory, leaking directory structure and filenames. Anchor the
+      pattern to a fixed base directory and reject path separators or "../" in the
+      user-controlled portion before globbing.
+    metadata:
+      vr-id: RB-SG-0613
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Dir.html#method-c-glob"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Dir.glob(params[...])
+          - pattern: Dir.glob("...#{params[...]}...")
+          - pattern: Dir["...#{params[...]}..."]

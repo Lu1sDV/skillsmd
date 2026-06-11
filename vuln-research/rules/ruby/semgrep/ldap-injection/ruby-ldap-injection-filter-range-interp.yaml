@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-ldap-injection-filter-range-interp
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A Net::LDAP::Filter range or presence assertion (ge, le, present, ex) is
+      built from an interpolated string holding request data. Unescaped input in
+      these assertions can still inject filter syntax and broaden matches. Pass
+      the value through Net::LDAP::Filter.escape before constructing the filter.
+    metadata:
+      vr-id: RB-SG-2312
+      category: ldap-injection
+      cwe: ["CWE-90"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql NetLdapFilter method set (ge,le,present,ex); CWE-90"
+      license: derived-original
+      references:
+        - "https://www.rubydoc.info/gems/net-ldap/Net/LDAP/Filter"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Net::LDAP::Filter.ge($ATTR, "...#{...}...")
+          - pattern: Net::LDAP::Filter.le($ATTR, "...#{...}...")
+          - pattern: Net::LDAP::Filter.ex("...#{...}...", $V)

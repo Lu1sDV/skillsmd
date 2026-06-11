@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-render-injection-mailer-template-name
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A mailer renders with a template_name taken from request input. The email
+      body is built from an attacker-chosen template, allowing disclosure of
+      unrelated view files or rendering of unintended content into outbound mail.
+      Use a fixed template_name and pass data through instance variables.
+    metadata:
+      vr-id: RB-SG-1928
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md dynamic render paths; ActionMailer template_name variant; CWE-98"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionMailer/Base.html#method-i-mail"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "mail(..., template_name: params[...])"
+          - pattern: "mail(template_name: params[...], ...)"
+          - pattern: "mail(template_name: params[...])"

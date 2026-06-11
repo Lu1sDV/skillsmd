@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-zip-slip-fileutils-mkdir-entry
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A directory is created from an archive entry name during extraction
+      (FileUtils.mkdir_p on File.join(dest, entry.name)). If the entry name
+      contains "../", the directory — and any files later written into it — land
+      outside the extraction root, which is the directory-creation half of a Zip
+      Slip exploit. Canonicalize the joined path and verify containment under the
+      destination before creating the directory.
+    metadata:
+      vr-id: RB-SG-0708
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Snyk Zip Slip advisory; CWE-22; ruby.md FileUtils extraction sink"
+      license: derived-original
+      references:
+        - "https://security.snyk.io/research/zip-slip-vulnerability"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: FileUtils.mkdir_p(File.join($DEST, $ENTRY.name))
+          - pattern: FileUtils.mkdir_p("...#{$ENTRY.name}...")
+          - pattern: Dir.mkdir(File.join($DEST, $ENTRY.name))

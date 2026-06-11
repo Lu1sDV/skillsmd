@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-open-redirect-mailer-url-host
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A mailer URL helper is given a host derived from request input. The links embedded
+      in the email (confirmation, password reset, invitation) then point at an
+      attacker-chosen host, so a victim clicking them hands credentials to the attacker.
+      Set the mailer host from a configured constant, never from params or request.host.
+    metadata:
+      vr-id: RB-SG-1027
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby sink catalog email links built from tainted host; CWE-601"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/action_mailer_basics.html#generating-urls-in-action-mailer-views"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "$URL_HELPER(..., host: params[...])"
+          - pattern: "$URL_HELPER(..., host: request.host)"
+          - pattern: "$URL_HELPER(..., host: request.host_with_port)"
+      - metavariable-regex:
+          metavariable: $URL_HELPER
+          regex: '.*_url$'

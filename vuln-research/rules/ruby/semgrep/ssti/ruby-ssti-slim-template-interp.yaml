@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-ssti-slim-template-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Slim template is compiled from a string assembled with interpolation. Slim
+      evaluates `= expression` and embedded Ruby, so attacker input concatenated
+      into the template source executes server-side (template injection to RCE).
+      Compile Slim from trusted template files and pass user data as locals instead
+      of building the template text from request input.
+    metadata:
+      vr-id: RB-SG-0909
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Slim engine template-injection class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://github.com/slim-template/slim"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Slim::Template.new { "...#{...}..." }
+          - pattern: Slim::Template.new("...#{...}...")
+      - pattern-not: Slim::Template.new("...")

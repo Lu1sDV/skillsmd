@@ -1,0 +1,18 @@
+edges
+| hardcoded_require.rb:4:3:4:6 | blob : String | hardcoded_require.rb:5:11:5:14 | blob : String | provenance |  |
+| hardcoded_require.rb:4:10:4:33 | "6c69622f7061796c6f6164" : String | hardcoded_require.rb:4:3:4:6 | blob : String | provenance |  |
+| hardcoded_require.rb:5:3:5:6 | path | hardcoded_require.rb:6:11:6:14 | path | provenance |  |
+| hardcoded_require.rb:5:10:5:15 | call to [] : Array [element 0] : String | hardcoded_require.rb:5:10:5:26 | call to pack | provenance | Config |
+| hardcoded_require.rb:5:10:5:26 | call to pack | hardcoded_require.rb:5:3:5:6 | path | provenance |  |
+| hardcoded_require.rb:5:11:5:14 | blob : String | hardcoded_require.rb:5:10:5:15 | call to [] : Array [element 0] : String | provenance |  |
+nodes
+| hardcoded_require.rb:4:3:4:6 | blob : String | semmle.label | blob : String |
+| hardcoded_require.rb:4:10:4:33 | "6c69622f7061796c6f6164" : String | semmle.label | "6c69622f7061796c6f6164" : String |
+| hardcoded_require.rb:5:3:5:6 | path | semmle.label | path |
+| hardcoded_require.rb:5:10:5:15 | call to [] : Array [element 0] : String | semmle.label | call to [] : Array [element 0] : String |
+| hardcoded_require.rb:5:10:5:26 | call to pack | semmle.label | call to pack |
+| hardcoded_require.rb:5:11:5:14 | blob : String | semmle.label | blob : String |
+| hardcoded_require.rb:6:11:6:14 | path | semmle.label | path |
+subpaths
+#select
+| hardcoded_require.rb:6:11:6:14 | path | hardcoded_require.rb:4:10:4:33 | "6c69622f7061796c6f6164" : String | hardcoded_require.rb:6:11:6:14 | path | Hard-coded data from $@ is interpreted as an import path. | hardcoded_require.rb:4:10:4:33 | "6c69622f7061796c6f6164" | this constant |

@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-mail-header-injection-mail-to-array-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The To: of a mail(...) call is built by joining a request-supplied list of
+      addresses. Without per-address validation a single entry carrying CR/LF
+      injects headers, and the unbounded list itself enables open-relay fan-out.
+      Validate every address and cap the recipient count before assigning the header.
+    metadata:
+      vr-id: RB-SG-1617
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog 'mail(to:...)' from tainted recipient list; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'mail(to: params[...].join(...), ...)'
+          - pattern: 'mail(to: params[...].split(...), ...)'
+          - pattern: 'mail(to: params[...], ...)'

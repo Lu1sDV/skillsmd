@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-session-cookie-not-httponly
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The session store is configured with httponly: false, exposing the session
+      cookie to client-side JavaScript and turning any reflected or stored XSS
+      into full session theft. Keep httponly: true so script in the page cannot
+      read document.cookie for the session identifier.
+    metadata:
+      vr-id: RB-SG-2408
+      category: secure-config
+      cwe: ["CWE-1004"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog session_store httponly:false; CWE-1004"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/1004.html"
+        - "https://guides.rubyonrails.org/action_controller_overview.html"
+    patterns:
+      - pattern: "$APP.session_store $STORE, ..., httponly: false, ..."

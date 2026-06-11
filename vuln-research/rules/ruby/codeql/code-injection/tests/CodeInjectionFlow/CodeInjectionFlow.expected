@@ -1,0 +1,20 @@
+edges
+| CodeInjectionFlow.rb:3:5:3:8 | expr | CodeInjectionFlow.rb:5:10:5:13 | expr | provenance |  |
+| CodeInjectionFlow.rb:3:5:3:8 | expr | CodeInjectionFlow.rb:5:10:5:13 | expr | provenance |  |
+| CodeInjectionFlow.rb:3:12:3:17 | call to params | CodeInjectionFlow.rb:3:12:3:24 | ...[...] | provenance |  |
+| CodeInjectionFlow.rb:3:12:3:17 | call to params | CodeInjectionFlow.rb:3:12:3:24 | ...[...] | provenance |  |
+| CodeInjectionFlow.rb:3:12:3:24 | ...[...] | CodeInjectionFlow.rb:3:5:3:8 | expr | provenance |  |
+| CodeInjectionFlow.rb:3:12:3:24 | ...[...] | CodeInjectionFlow.rb:3:5:3:8 | expr | provenance |  |
+nodes
+| CodeInjectionFlow.rb:3:5:3:8 | expr | semmle.label | expr |
+| CodeInjectionFlow.rb:3:5:3:8 | expr | semmle.label | expr |
+| CodeInjectionFlow.rb:3:12:3:17 | call to params | semmle.label | call to params |
+| CodeInjectionFlow.rb:3:12:3:17 | call to params | semmle.label | call to params |
+| CodeInjectionFlow.rb:3:12:3:24 | ...[...] | semmle.label | ...[...] |
+| CodeInjectionFlow.rb:3:12:3:24 | ...[...] | semmle.label | ...[...] |
+| CodeInjectionFlow.rb:5:10:5:13 | expr | semmle.label | expr |
+| CodeInjectionFlow.rb:5:10:5:13 | expr | semmle.label | expr |
+subpaths
+#select
+| CodeInjectionFlow.rb:5:10:5:13 | expr | CodeInjectionFlow.rb:3:12:3:17 | call to params | CodeInjectionFlow.rb:5:10:5:13 | expr | Ruby code execution depends on a $@. | CodeInjectionFlow.rb:3:12:3:17 | call to params | user-provided value |
+| CodeInjectionFlow.rb:5:10:5:13 | expr | CodeInjectionFlow.rb:3:12:3:17 | call to params | CodeInjectionFlow.rb:5:10:5:13 | expr | Ruby code execution depends on a $@. | CodeInjectionFlow.rb:3:12:3:17 | call to params | user-provided value |

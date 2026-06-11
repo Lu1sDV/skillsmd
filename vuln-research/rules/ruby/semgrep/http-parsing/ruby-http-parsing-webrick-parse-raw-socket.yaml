@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-http-parsing-webrick-parse-raw-socket
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      WEBrick::HTTPRequest#parse is invoked directly on an attacker-controlled
+      socket. Hand-rolling request parsing in front of (or behind) another proxy
+      invites request smuggling because WEBrick's framing can disagree with the
+      upstream parser on Content-Length / Transfer-Encoding precedence. Prefer a
+      single hardened application server and never re-parse raw client bytes.
+    metadata:
+      vr-id: RB-SG-2001
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md WEBrick::HTTPRequest#parse smuggling sink; CWE-444"
+      license: derived-original
+      references:
+        - "https://github.com/ruby/webrick"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: WEBrick::HTTPRequest.new(...).parse($SOCK)
+          - patterns:
+              - pattern: $REQ.parse($SOCK)
+              - pattern-inside: |
+                  $REQ = WEBrick::HTTPRequest.new(...)
+                  ...

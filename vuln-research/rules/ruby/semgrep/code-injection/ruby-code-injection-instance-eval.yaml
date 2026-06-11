@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-code-injection-instance-eval
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A string built with interpolation is passed to instance_eval, executing
+      Ruby in the receiver's context with full access to its private state. When
+      the string contains external input, an attacker can call private methods
+      and run arbitrary code. Pass a block with fixed logic instead of an
+      evaluated string, or look up the intended behaviour from an allowlist.
+    metadata:
+      vr-id: RB-SG-0203
+      category: code-injection
+      cwe: ["CWE-94", "CWE-95"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md instance_eval; CWE-95"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/BasicObject.html#method-i-instance_eval"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $X.instance_eval("...#{...}...")
+          - pattern: instance_eval("...#{...}...")
+      - pattern-not: $X.instance_eval("...")

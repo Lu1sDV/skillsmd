@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-delayed-job-marshal-payload
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Delayed::Job handler is being built by unmarshalling a stored payload.
+      Delayed Job's default YAML/Marshal handler is reconstructed when the worker
+      runs, so an attacker who can write to the delayed_jobs table or its backing
+      store can embed a gadget chain that executes on load. Never feed raw stored
+      bytes to Marshal.load; rely on signed, type-restricted serialization.
+    metadata:
+      vr-id: RB-SG-1705
+      category: job-injection
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Delayed::Job.enqueue object/YAML-backed payload; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/collectiveidea/delayed_job"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Delayed::Job.enqueue(Marshal.load(...))
+          - pattern: Delayed::Job.enqueue(YAML.load(...))
+          - pattern: Delayed::Job.enqueue(YAML.unsafe_load(...))

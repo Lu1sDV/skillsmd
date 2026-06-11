@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-sql-injection-select-value
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An interpolated SQL string reaches connection.select_value, which executes
+      it to fetch a single scalar. Even a scalar query becomes an injection point
+      when external input is concatenated in — attackers can use subqueries or
+      stacked statements. Use bound parameters or a sanitized query fragment.
+    metadata:
+      vr-id: RB-SG-0305
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/sql-injection select_value sink; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/DatabaseStatements.html#method-i-select_value"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $C.select_value("...#{...}...")
+          - pattern: $C.select_one("...#{...}...")
+          - pattern: $C.select_rows("...#{...}...")

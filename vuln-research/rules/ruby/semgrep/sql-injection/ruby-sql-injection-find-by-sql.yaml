@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-sql-injection-find-by-sql
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A raw SQL string built with interpolation is handed to ActiveRecord
+      find_by_sql, which executes it verbatim against the database. When any
+      interpolated fragment comes from request parameters or other external
+      input, an attacker can break out of the intended query and read or modify
+      arbitrary data. Pass the query as an array with bind placeholders —
+      find_by_sql(["... WHERE id = ?", id]) — so values are escaped by the driver.
+    metadata:
+      vr-id: RB-SG-0301
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by semgrep ruby.rails.security.brakeman.sql-injection; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/Querying.html#method-i-find_by_sql"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $M.find_by_sql("...#{...}...")
+          - pattern: $M.find_by_sql("...#{...}...", ...)
+      - pattern-not: $M.find_by_sql([...])

@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-job-injection-sidekiq-worker-perform-async-params
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Raw request parameters are enqueued as Sidekiq worker arguments with
+      perform_async. The args are serialized, stored, and later replayed by a
+      worker process, so any unvalidated structure flows into the job where it
+      may reach SQL, file, or command sinks under a privileged context. Pass
+      only scalar identifiers and re-load and authorize records inside the job.
+    metadata:
+      vr-id: RB-SG-1703
+      category: job-injection
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Sidekiq::Worker.perform_async(params); CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/sidekiq/sidekiq/wiki/Best-Practices"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $W.perform_async(params)
+          - pattern: $W.perform_async(params[...])
+          - pattern: $W.perform_async(params.to_h, ...)
+          - pattern: $W.perform_async(..., params, ...)

@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-rails-misc-i18n-store-translations-tainted
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      I18n.backend.store_translations stores translation data taken from request
+      params. User-supplied translations are rendered html_safe when the key ends in
+      _html, so an attacker can poison the locale store and inject persistent XSS into
+      every page that renders the key. Load translations only from trusted, reviewed
+      sources, never from request input.
+    metadata:
+      vr-id: RB-SG-2510
+      category: rails-misc
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by I18n.backend.store_translations translation-poisoning sink; CWE-79"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/i18n.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: I18n.backend.store_translations(..., params[...])
+          - pattern: I18n.backend.store_translations(..., params[...], ...)

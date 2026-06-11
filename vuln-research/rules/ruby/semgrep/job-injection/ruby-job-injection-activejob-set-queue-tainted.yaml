@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-activejob-set-queue-tainted
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The target queue for an ActiveJob is selected from request parameters via
+      set(queue:). Letting clients route their own jobs lets an attacker starve
+      or flood privileged queues, bypass per-queue rate limits, or have work run
+      by a worker pool with different trust. Choose the queue server-side based on
+      the job type, not on user input.
+    metadata:
+      vr-id: RB-SG-1708
+      category: job-injection
+      cwe: ["CWE-94"]
+      owasp: "A04:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md SomeJob.set(queue: params[:queue]).perform_later; CWE-94"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/active_job_basics.html#queues"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: '$J.set(queue: params[...]).perform_later(...)'
+          - pattern: '$J.set(queue: params[...], ...).perform_later(...)'
+          - pattern: '$J.set(queue: params[...]).perform_now(...)'

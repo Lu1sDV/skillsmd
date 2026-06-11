@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-code-injection-class-variable-set
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      class_variable_set assigns a class variable whose name comes from external
+      input, allowing an attacker to overwrite shared class-level state that the
+      whole application relies on. Derive class-variable names only from a fixed,
+      internal allowlist, never from request parameters.
+    metadata:
+      vr-id: RB-SG-0229
+      category: code-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md metaprogramming setters; CWE-94"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Module.html#method-i-class_variable_set"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $K.class_variable_set(params[...], ...)
+          - pattern: class_variable_set(params[...], ...)

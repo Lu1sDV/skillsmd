@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-deserialization-oj-marshal-load
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Oj.marshal_load is Oj's Marshal-compatible deserializer and rebuilds
+      arbitrary Ruby objects from a serialized payload. Supplying it
+      attacker-controlled bytes opens the same gadget-chain code-execution path
+      as Marshal.load. Do not deserialize untrusted input with it; exchange data
+      as plain JSON parsed in strict mode.
+    metadata:
+      vr-id: RB-SG-0416
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Oj.marshal_load; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/ohler55/oj/blob/develop/pages/security.md"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Oj.marshal_load($X)
+          - pattern: Oj.marshal_load($X, ...)
+      - pattern-not: Oj.marshal_load("...")

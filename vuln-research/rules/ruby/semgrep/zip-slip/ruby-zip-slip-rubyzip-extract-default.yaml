@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-zip-slip-rubyzip-extract-default
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      rubyzip's Zip::File#extract / Zip::Entry#extract is called inside an entry
+      loop with no path validation, letting the archive's own entry name decide
+      the on-disk target. A crafted entry name like "../../etc/cron.d/x" escapes
+      the destination directory and writes attacker content elsewhere (Zip Slip).
+      Compute File.expand_path of the join, verify it is contained under the
+      extraction root, and only then extract.
+    metadata:
+      vr-id: RB-SG-0702
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Snyk Zip Slip research; CWE-22; ruby.md Zip::Entry#extract sink"
+      license: derived-original
+      references:
+        - "https://security.snyk.io/research/zip-slip-vulnerability"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $ARCHIVE.extract($ENTRY, "...#{$ENTRY.name}...")

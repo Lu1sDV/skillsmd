@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-crypto-tls-rand-for-token
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A security token, password, or key is built from Kernel#rand or a seeded
+      Random instance. These use a non-cryptographic Mersenne Twister whose
+      output is predictable once a few values are observed, letting an attacker
+      forge tokens. Generate secrets with SecureRandom (hex/urlsafe_base64/uuid),
+      which draws from the OS CSPRNG.
+    metadata:
+      vr-id: RB-SG-1421
+      category: crypto-tls
+      cwe: ["CWE-330", "CWE-338"]
+      owasp: "A02:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog rand/Random for secrets; CWE-330"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/338.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $TOKEN = rand(...).to_s
+          - pattern: $TOKEN = Random.rand(...).to_s
+          - pattern: $TOKEN = Random.new(...).rand(...).to_s
+          - pattern: $TOKEN = Random.new(...).bytes(...)

@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-redos-matchq-dynamic
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      String#match? receives a regex built from request input, so the attacker controls
+      the expression that is evaluated. Even the boolean match? form backtracks
+      catastrophically on a malicious pattern, blocking the thread (ReDoS). Validate
+      against a fixed, audited regex rather than one assembled from params.
+    metadata:
+      vr-id: RB-SG-1205
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink String#match?(regex) boolean match with attacker-supplied regex; CWE-1333"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/String.html#method-i-match-3F"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $S.match?(Regexp.new(params[...]))

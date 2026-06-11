@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-mass-assignment-privileged-setter
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A privilege or tenancy attribute (admin, role, user_id, account_id,
+      tenant_id, organization_id) is set directly from a request parameter. Even
+      without a hash-based mass assignment, sourcing such a flag from the client
+      lets a user escalate privileges or cross tenants. Derive these values from the
+      authenticated session, not from params.
+    metadata:
+      vr-id: RB-SG-1120
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md privileged-attribute list; CWE-915; CWE-639"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/915.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $O.admin = params[$K]
+          - pattern: $O.role = params[$K]
+          - pattern: $O.user_id = params[$K]
+          - pattern: $O.account_id = params[$K]
+          - pattern: $O.tenant_id = params[$K]
+          - pattern: $O.organization_id = params[$K]

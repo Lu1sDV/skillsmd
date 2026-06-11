@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-mass-assignment-update-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The instance #update method is handed a raw params slice, so every key in
+      the request body is assigned to the record before saving. An attacker can
+      append columns the controller never intended to expose (admin, plan,
+      tenant_id) and persist them. Replace params[:record] with
+      params.require(:record).permit(:allowed, :fields).
+    metadata:
+      vr-id: RB-SG-1106
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/insecure-mass-assignment; CWE-915"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/action_controller_overview.html#strong-parameters"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $O.update(params[$K])
+          - pattern: $O.update(params[$K], ...)
+      - pattern-not: $O.update(params.require(...).permit(...), ...)
+      - pattern-not: $O.update(params.require(...).permit(...))
+      - pattern-not: $O.update(params[$K], params.require(...).permit(...))

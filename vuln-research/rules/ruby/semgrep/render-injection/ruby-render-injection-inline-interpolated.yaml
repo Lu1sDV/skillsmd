@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-render-injection-inline-interpolated
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      render inline: embeds a request parameter inside an ERB template string. The
+      input is evaluated as template code, so an attacker can inject ERB tags to
+      run arbitrary Ruby (server-side template injection) in addition to controlling
+      rendered output. Never build inline templates from user input; render a fixed
+      template and pass data through locals.
+    metadata:
+      vr-id: RB-SG-1920
+      category: render-injection
+      cwe: ["CWE-94", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md dynamic render paths; render inline: ERB evaluation; CWE-94"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Rendering.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'render(inline: "...#{params[...]}...")'
+          - pattern: 'render inline: "...#{params[...]}..."'
+          - pattern: "render(inline: params[...])"
+          - pattern: "render inline: params[...]"

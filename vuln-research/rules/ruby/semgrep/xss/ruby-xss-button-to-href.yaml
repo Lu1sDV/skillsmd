@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-xss-button-to-href
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      `button_to` generates a form whose action URL is taken from the supplied value.
+      A request-controlled URL allows an attacker to point the form at a hostile
+      endpoint (open redirect / CSRF target) and, with a `javascript:` action in some
+      contexts, to execute script — cross-site scripting. Build the action from a
+      named route helper and validate any external URL scheme against an allow-list.
+    metadata:
+      vr-id: RB-SG-0821
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by Rails button_to attacker-controlled action; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/UrlHelper.html#method-i-button_to"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: button_to($BODY, params[...])
+          - pattern: button_to($BODY, params.fetch(...))

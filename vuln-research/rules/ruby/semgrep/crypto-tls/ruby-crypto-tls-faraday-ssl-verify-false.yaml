@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-crypto-tls-faraday-ssl-verify-false
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Faraday connection is created with ssl: { verify: false }, which
+      disables peer certificate validation for every request on that
+      connection. This exposes the traffic to man-in-the-middle attacks where a
+      forged certificate is silently accepted. Drop the verify: false setting or
+      provide ssl: { ca_file: ... } / ca_path so certificates are checked
+      against a trusted store.
+    metadata:
+      vr-id: RB-SG-1404
+      category: crypto-tls
+      cwe: ["CWE-295"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog Faraday.new(ssl:{verify:false}); CWE-295"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/295.html"
+        - "https://lostisland.github.io/faraday/"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "Faraday.new(..., ssl: { ..., verify: false, ... }, ...)"
+          - pattern: "Faraday::Connection.new(..., ssl: { ..., verify: false, ... }, ...)"

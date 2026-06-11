@@ -1,5 +1,6 @@
 ---
 name: vuln-research
+version: 0.5.0
 description: >
   Use when performing vulnerability research, security auditing, code analysis,
   bug bounty hunting, CTF challenges, penetration testing, or exploit development.
@@ -15,6 +16,32 @@ description: >
 ---
 
 # Vulnerability Research
+
+## v2 Phase Architecture (DuckDB-Persisted Pipeline)
+
+The skill now runs an explicit, DuckDB-persisted phase pipeline. Every artifact (sources, sinks, defenses, slices, agent steps, findings, refutations, audit outcomes, critic notes, knowledge chunks, defense bypasses) lives in a single DuckDB database keyed by stable hashes. Schema: [`db/schema.sql`](db/schema.sql). Forward-only migrations: [`db/migrations/`](db/migrations/). Oversize payload sidecars: [`db/sidecars/`](db/sidecars/) (any payload > 16 KB stored on disk, referenced by `payload_sidecar_path`).
+
+| Phase | Name | Writers | What it produces |
+|---|---|---|---|
+| **0** | Decompose | orchestrator | `sources`, `sinks`, `defenses`, `phase0_priorities`, `intended_feature_classification` (Semgrep + LLM batch) |
+| **0.5** | Plan | orchestrator | `input_slices`, scheduled `agent_steps` |
+| **1** | Hunt | swarm → queue → orchestrator flush | `gr_findings` (status=candidate) |
+| **2** | Confirm | swarm → queue → orchestrator flush | `gr_findings` status updates + `refutations` |
+| **3** | Bypass-Hunt | swarm → queue → orchestrator flush | `defense_bypasses` + cascade triggers |
+| **4** | Proof | swarm → queue → orchestrator flush | `gr_findings.payload`, `audit_outcomes` |
+| **5** | Report | critic agent → orchestrator | `critic_findings`; final report |
+
+**Single-writer rule (load-bearing).** The orchestrator is the only DuckDB writer. Swarm agents emit row-shaped JSON events to an in-memory queue; the orchestrator flushes per phase under one transaction. This preserves idempotency (every NK has a UNIQUE constraint, every payload row has a stable hash) and lets re-runs over the same `commit_sha` update rather than duplicate.
+
+**Doctrine for S2 bypass-hunting: "there always is a bypass."** A bypass lane reporting `exhausted` MUST have evidence it iterated every applicable corpus family on the target defense_type. The LLM in Stage 2 acts as a corpus-anchored oversight agent — it may not detach from the known-bypass corpus to invent novel categories. Categories, payload patterns, and `parsed_logic_json` triggers live in a **global DuckDB catalogue** (`bypasses` table), separate from per-target audit DBs. Source data: [`db/catalogue/bypasses.json`](db/catalogue/bypasses.json); schema + loader: [`db/catalogue/schema.sql`](db/catalogue/schema.sql) + [`db/catalogue/load.sql`](db/catalogue/load.sql); tiered fetch protocol that keeps payloads out of agent context until attempt time: [`references/bypass-catalogue.md`](references/bypass-catalogue.md).
+
+**REPORT critic.** Every confirmed finding goes through three checks (comprehension / eligibility / attack-scenario). WARNING is stored structurally; CRITICAL blocks the report. Rubric with worked examples: [`references/critic-rubric.md`](references/critic-rubric.md).
+
+**Canonical name:** the findings table is `gr_findings`; `confirmed_vulns` is a view selecting `confirmation_status = 'confirmed'`.
+
+> Full spec lives in `.omc/specs/deep-interview-vr-v2-consolidated.md`. Do not inline the schema here — link to `db/schema.sql`.
+
+---
 
 > **Think Beyond This Document**
 >
@@ -51,6 +78,8 @@ Choose a mode based on scope and intent before starting work:
 | **Swarm Pipeline** | Multi-agent SAST with effort tiers; invoked via `/vuln-swarm <path> [--effort=low\|medium\|deep] [--freeform=detached\|grounded]` | See `references/swarm-pipeline.md` § Effort Tiers. LOW = Phase 0 + freeform + Phase 3-lite; MEDIUM = full module fan-out + 2-check; DEEP = static-first lane + slice-type fan-out + 3-check + cross-slice reconciliation. |
 
 **Phase 0 (Latest Commits Security Review)** runs first in every mode whenever the target has git history — a brownfield-only recency pass executed by a single focused subagent before the broader audit begins. See Phase 0 below.
+
+**Weakness Registry** under v2 is DuckDB-native — `gr_findings` rows with `confirmation_status = 'confirmed'` ARE the registry. Cross-audit priors are recovered by querying the per-target DuckDB on `target_id` (or `targets.repo_url`) before Phase 1; `variant-of` / `enables` / `co-occurs-with` edges are derived at read time from `(finding_kind, sink_id, source_id)` overlap rather than persisted as a second store. The legacy on-disk JSONL+Markdown registry at `<target>/.vuln-registry/` is read-only fallback: load `references/weakness-registry.md` only when working with a pre-v2 target that still has that directory.
 
 **Default routing:**
 - "audit this codebase" / "find vulns" (unscoped) → **Hybrid**
@@ -155,16 +184,26 @@ Load references on-demand based on the active testing domain. **Do not load all 
 | Python sinks | `references/sinks/python.md` | Python code audit (exec, pickle, SSTI, subprocess) |
 | Node.js sinks | `references/sinks/javascript.md` | JS/Node code audit (child_process, prototype pollution) |
 | Java sinks | `references/sinks/java.md` | Java code audit (Runtime, JNDI, ysoserial, format-specific deser) |
+| **Scala sinks** | **`references/sinks/scala.md`** | **Scala code audit (ToolBox.eval, LazyList/TrieMap deser, Akka, Play, Slick/Doobie/Quill SQLi, Spark, effect systems, build system)** |
 | Ruby sinks | `references/sinks/ruby.md` | Ruby code audit (system/eval, Marshal, ActiveRecord) |
 | .NET sinks | `references/sinks/dotnet.md` | .NET code audit (Process.Start, BinaryFormatter, Json.NET) |
 | Systems sinks (Go/Rust/C/Elixir) | `references/sinks/systems.md` | Systems code audit (memory corruption, os/exec, ETF deser) |
 | Mobile sinks (Android/iOS) | `references/sinks/mobile.md` | Mobile code audit (WebView, intents, URL schemes) |
+| Scala sinks | `references/sinks/scala.md` | Scala code audit (ToolBox.eval, LazyList/TrieMap deser, Akka, Play, Slick/Doobie/Quill SQLi, Spark, effect systems, build system) |
 | Binary / RE / firmware / kernel: triage, static RE, fuzzing, memory-corruption classes, binary-level races, patch diffing, exploit primitives, mitigations | `references/binary-code-analysis.md` (thin index → `binary-triage-and-re.md`, `binary-bug-classes.md`, `binary-exploit-and-specialties.md`) | Target is a compiled binary, firmware image, kernel/driver, closed-source blob, or native source whose ABI/compiler/ordering behavior matters. Load only the lifecycle file the active trigger cites (see Phase 3.5). |
 | Vulnerability chaining, scanning tools, blind spots | `references/chaining-advanced-techniques.md` | Building exploit chains, tool augmentation |
 | Formal audit, PoC development, report writing | `references/audit-poc-report.md` | **On-demand only** — when asked for audit/PoC/report |
 | Agent sweep methodology, file iteration, verification loops | `references/agent-sweep.md` | Running Agent Sweep or Hybrid mode |
 | Swarm pipeline: module decomposition, orthogonal strategies, three-stage pass, analog cascade, weighted scoring, Phase 4 continuous-learning | `references/swarm-pipeline.md` | Running the Swarm Pipeline command / hypothesis-driven multi-agent audit |
 | DAG-structured vulnerability reasoning (DAGVul): source/intermediate/sink nodes, 12 failure-pattern taxonomy, logical closure | `references/dag-reasoning.md` | Writing a finding's source→sink trace, running the Swarm JUDGE check, or mechanically answering Phase 7 Exploitability Gate Q1–Q3 |
+| Weakness Registry: per-target persistent graph of Confirmed weaknesses (JSONL nodes + edges), prior-injection for future audits, dedup-by-deterministic-id, edge types (`variant-of`, `co-occurs-with`, `enables`, `bypasses`) | `references/weakness-registry.md` | Starting an audit on a target with `.vuln-registry/`, OR after Phase 7 marks any finding Confirmed (Phase 8 promotion writes to the registry) |
+| **DuckDB schema** (16 tables + `confirmed_vulns` view) — persistence layer for the v2 phase pipeline | `db/schema.sql` (DDL) + `db/migrations/0001-initial.sql` (forward-only) + `db/sidecars/` (>16 KB payload BLOBs) | v2 pipeline runs — load when wiring orchestrator writes, debugging FK/CHECK failures, or migrating the database |
+| **Critic rubric** for Phase 5 REPORT critic — comprehension / eligibility / attack_scenario checks, WARNING vs CRITICAL, 17 worked examples | `references/critic-rubric.md` | Phase 5 critic runs, or hand-classifying a finding's critic verdicts |
+| **Bypass catalogue** for Phase 3 (S2) — global DuckDB `bypasses` table (sanitizer / blacklist / allowlist / generic families) with tag-indexed parsed-logic triggers + tiered fetch protocol | `db/catalogue/bypasses.json` (data) + `db/catalogue/schema.sql` (DDL) + `db/catalogue/load.sql` (idempotent loader) + `references/bypass-catalogue.md` (3-stage fetch protocol) | Bypass-hunting lanes (`defense_base_lane`, `defense_context_verification_lane`, `isolation_fuzz_lane`) — Stage A enumerate labels, Stage B record skip-with-reason, Stage C lazy-fetch one family's payloads at attempt time |
+| **Confirmation Rigor Doctrine (C1)** — the four gates (taint reach / defense gap / intended-feature filter / reproduction artifact w/ `config_state`) for promoting `gr_findings.confirmation_status` from `candidate` → `confirmed`, plus refutation row shape | `references/confirmation-rigor-doctrine.md` | Phase 2 confirm runs, gate-by-gate refutation triage, or `gr_findings.config_state` column wiring |
+| **Forward-Slicing Lanes (C2)** — slice tuple + `slice_kind` discriminator (`forward_taint` / `backward_sink` / `defense_callsite`), lane lifecycle, `coverage_json` shape, cascade-on-bypass + cascade-on-reach semantics | `references/forward-slicing-lanes.md` | Spawning lanes, debugging `success_without_artifact` / `incomplete_coverage` rewrites, or reasoning about cascade scheduling |
+| **Autoloading Knowledge Layer (C3)** — seed (top-K=10) vs expand (cap 50, version-pinned), tri-signal acceptance (`ref_count`, `repeat_suppressions`, `growth_rate`, `staleness_days`), bootstrap rule R8 for first-audit single-signal admit, decay sweep | `references/autoloading-knowledge-layer.md` | Wiring `autoload_seed_lane` / `autoload_expand_lane`, or debugging why a chunk did/didn't graduate to core |
+| **REPORT Critic Phase (C4)** — three checks (comprehension / eligibility / attack-scenario), `config_state` eligibility table (`vanilla` Pass / `non_vanilla` WARNING / `unknown` CRITICAL), severity storage contract that demotes CRITICAL findings to `refuted` at orchestrator flush | `references/report-phase.md` | Phase 5 critic runs, debugging blocked-report flushes, or deciding WARNING-vs-CRITICAL on a borderline `critic_findings` row |
 
 ---
 
@@ -183,6 +222,8 @@ Spawn exactly one agent with this prompt:
 > For every file touched by the selected commits, analyze **only the changed hunks and their immediate call graph**. Do not audit code the commits did not touch — that is Phase 3's and Agent Sweep's job, not yours. Consider all bug classes — injection, memory corruption, auth bypass, deserialization, race conditions, type confusion, logic flaws, missing authorization, unsafe defaults, exposed secrets, regressions that reintroduce previously-fixed CVEs, and weakened security controls (removed validators, loosened regex, new `@ts-ignore`/`# type: ignore` on security-adjacent code).
 >
 > For each finding write: vuln type, affected function/file, source→sink trace, controllability, exploitability assessment (High/Medium/Low), and a suggested payload or PoC direction. Flag commits that touch security-adjacent paths (auth, crypto, input parsing, session handling, access control, deser, SSRF-prone callers) even when no bug is found — the auditor needs to know where recent changes raise risk.
+>
+> **Fix-bypass analysis (n-day vector):** when a commit *fixes* a security bug, do not trust the fix. Enumerate inputs, encodings, types, code paths, and state-machine transitions the patch does **not** cover (e.g., alternate decoder, sibling endpoint, case/normalization differential, race window, deeper nesting, non-string type, second-order sink) and attempt to reach the original sink despite the patch. Incomplete patches are one of the highest-yield n-day sources — treat every security fix as a hypothesis "this specific path is now blocked," then try to falsify it.
 >
 > Stay **very accurate and very focused**: no speculation, no "theoretical" findings without a controllability trace, no drift into untouched code. If the chosen range surfaces no real vulnerabilities, say so explicitly and list which security-adjacent files were examined so the rest of the audit can trust the recency pass.
 >
@@ -495,6 +536,22 @@ When a defense layer blocks exploitation, don't stop — treat it as **a new ite
 4. **Chain across boundaries** — vuln in app + sandbox escape + kernel bug = full-chain exploit
 
 Layered defenses (hardened allocators, sandboxes, user/kernel barriers, virtualization) are iterated versions of the same problem. Agents can generate full-chain exploits by solving each layer independently and composing the results.
+
+---
+
+## Phase 8: Registry Promotion (DuckDB-Native)
+
+Under v2 there is **no separate JSONL/Markdown registry write step**. A finding becoming `confirmation_status = 'confirmed'` in `gr_findings` *is* the promotion — the per-target DuckDB IS the registry. Phase 8 is a conceptual checkpoint over the same row, not an additional persistence write.
+
+What the orchestrator does at phase flush (single-writer rule, B3a):
+
+1. The promotion itself happened at Phase 2 confirm: `gr_findings.confirmation_status` flipped from `candidate` to `confirmed` under the four-gate doctrine (`references/confirmation-rigor-doctrine.md`).
+2. Dedup is enforced by the `gr_findings.finding_hash` UNIQUE constraint over `(target_id, finding_kind, sink_id, source_id)`-derived hash — re-runs over the same `commit_sha` update rather than duplicate.
+3. Edge types (`variant-of`, `co-occurs-with`, `enables`) are **derived at read time by query**, not persisted as a separate table. Example: variants of a sink within a target are `SELECT … FROM gr_findings WHERE target_id = ? AND finding_kind = ? AND confirmation_status = 'confirmed'`.
+4. Cross-audit priors injected into future audits come from `gr_findings WHERE target_id = ? AND confirmation_status = 'confirmed'` filtered by recency and module — no `.vuln-registry/` directory is read or written.
+5. The legacy on-disk `<target>/.vuln-registry/` writer is retained only for backwards compatibility with pre-v2 targets that still carry that directory; new audits do not create it.
+
+> **Pre-v2 fallback only.** Load `references/weakness-registry.md` if you are auditing a target whose history already contains a `.vuln-registry/` directory and you need to read the legacy JSONL+Markdown corpus. New audits should not load it.
 
 ---
 

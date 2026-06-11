@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-render-injection-find-template-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      lookup_context.find_template resolves a template by name taken from request
+      input. Attacker-chosen names can locate templates outside the intended set or
+      traverse the lookup paths, leading to disclosure of unrelated view source.
+      Restrict the template name to a server-defined allow-list before lookup.
+    metadata:
+      vr-id: RB-SG-1914
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md dynamic template resolution; ActionView lookup_context; CWE-22"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/LookupContext.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $LC.find_template(params[...])
+          - pattern: $LC.find_template(params[...], ...)
+          - pattern: $LC.find(params[...], ...)

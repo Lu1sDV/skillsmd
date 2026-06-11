@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-render-injection-prepend-view-path
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      prepend_view_path is given a request-controlled directory, inserting an
+      attacker-chosen path at the front of the template lookup chain. Subsequent
+      renders can then resolve templates from a directory the attacker controls or
+      points at, enabling file disclosure or template hijacking. Use a fixed,
+      vetted view path, never one derived from request input.
+    metadata:
+      vr-id: RB-SG-1908
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md 'prepend_view_path(params[:path])'; CWE-98"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/ViewPaths/ClassMethods.html#method-i-prepend_view_path"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: prepend_view_path(params[...])
+          - pattern: prepend_view_path params[...]
+          - pattern: $X.prepend_view_path(params[...])

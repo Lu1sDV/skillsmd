@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-deserialization-cookies-serializer-marshal
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Setting action_dispatch.cookies_serializer to :marshal makes Rails
+      deserialize session cookie values with Marshal. If the signing secret ever
+      leaks or a downgrade is possible, an attacker can forge a cookie carrying a
+      Marshal gadget and execute code on deserialization. Use the :json
+      serializer so cookie contents are restricted to plain data.
+    metadata:
+      vr-id: RB-SG-0425
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md cookies_serializer=:marshal; CWE-502"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/security.html#session-storage"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "$CFG.action_dispatch.cookies_serializer = :marshal"
+          - pattern: "$CFG.action_dispatch.cookies_serializer = :hybrid"

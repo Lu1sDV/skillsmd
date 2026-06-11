@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-deserialization-psych-unsafe-load
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Psych.unsafe_load explicitly opts into full object instantiation from YAML,
+      including arbitrary tagged Ruby objects. With attacker-controlled input it
+      yields a deserialization gadget chain and remote code execution. Use
+      Psych.safe_load constrained by an explicit permitted_classes allowlist.
+    metadata:
+      vr-id: RB-SG-0409
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Psych.unsafe_load; CWE-502"
+      license: derived-original
+      references:
+        - "https://ruby-doc.org/stdlib/libdoc/psych/rdoc/Psych.html#method-c-unsafe_load"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Psych.unsafe_load($X)
+          - pattern: Psych.unsafe_load($X, ...)
+      - pattern-not: Psych.unsafe_load("...")

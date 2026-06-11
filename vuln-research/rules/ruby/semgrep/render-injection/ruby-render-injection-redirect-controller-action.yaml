@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-render-injection-redirect-controller-action
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      redirect_to resolves its destination from controller: and action: values
+      taken from request input. An attacker can route the request to an arbitrary
+      controller action, reaching endpoints outside the intended flow. Hard-code
+      the controller and action or map the input through a strict allow-list.
+    metadata:
+      vr-id: RB-SG-1910
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md 'redirect_to controller: params[:c], action: params[:a]'; CWE-22"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Redirecting.html#method-i-redirect_to"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "redirect_to(controller: params[...], action: params[...])"
+          - pattern: "redirect_to controller: params[...], action: params[...]"
+          - pattern: "redirect_to(controller: params[...], ...)"
+          - pattern: "redirect_to(action: params[...], ...)"

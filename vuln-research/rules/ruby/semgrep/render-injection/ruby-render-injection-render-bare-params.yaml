@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-render-injection-render-bare-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      render is called with a bare request parameter as the template name. Rails
+      resolves the value as a template path, so an attacker can steer rendering to
+      an unintended view or, combined with path traversal, disclose arbitrary
+      template files. Render a fixed template name and pass user data through
+      locals or instance variables instead of the template argument.
+    metadata:
+      vr-id: RB-SG-1901
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md 'render params[:template]'; CWE-98 remote file inclusion via dynamic render"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/layouts_and_rendering.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: render(params[...])
+          - pattern: render params[...]

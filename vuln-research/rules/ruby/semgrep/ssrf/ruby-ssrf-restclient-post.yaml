@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-ssrf-restclient-post
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      RestClient.post sends a request to a URL assembled from interpolated
+      external input, letting an attacker direct the POST at internal services
+      or metadata endpoints and exfiltrate the payload there (CWE-918). Restrict
+      the destination to an allowlist of approved hosts and validate the scheme
+      before posting instead of trusting the user-supplied URL.
+    metadata:
+      vr-id: RB-SG-0508
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from RestClient.post sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://github.com/rest-client/rest-client"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: RestClient.post("...#{...}...", ...)

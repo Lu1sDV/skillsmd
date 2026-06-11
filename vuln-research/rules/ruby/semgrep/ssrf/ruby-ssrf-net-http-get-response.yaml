@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-ssrf-net-http-get-response
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Net::HTTP.get_response receives a URI whose string is assembled from
+      external input. An attacker who controls the host or path can force the
+      server to issue requests to internal-only endpoints or metadata services
+      and read the returned response body (CWE-918). Constrain the URL to an
+      approved allowlist and reject private/link-local addresses after DNS
+      resolution rather than passing user data straight into the URI.
+    metadata:
+      vr-id: RB-SG-0502
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from CodeQL rb/server-side-request-forgery sink Net::HTTP.get_response; CWE-918"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Net/HTTP.html#method-c-get_response"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Net::HTTP.get_response(URI("...#{...}..."))
+          - pattern: Net::HTTP.get_response(URI.parse("...#{...}..."))
+          - pattern: Net::HTTP.get_response("...#{...}...")
+          - pattern: Net::HTTP.get_response("...#{...}...", ...)

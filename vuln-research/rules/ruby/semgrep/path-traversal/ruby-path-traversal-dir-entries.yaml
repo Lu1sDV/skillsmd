@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-path-traversal-dir-entries
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Dir.entries, Dir.children, or Dir.foreach lists a directory whose path comes from
+      external input. Traversal lets an attacker enumerate the contents of directories
+      outside the intended root, disclosing filenames and structure. Validate the path
+      against an allow list and resolve it under a trusted base before listing.
+    metadata:
+      vr-id: RB-SG-0616
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Dir.html#method-c-entries"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Dir.entries(params[...])
+          - pattern: Dir.entries("...#{params[...]}...")
+          - pattern: Dir.children(params[...])
+          - pattern: Dir.children("...#{params[...]}...")
+          - pattern: Dir.foreach(params[...])
+          - pattern: Dir.foreach("...#{params[...]}...")

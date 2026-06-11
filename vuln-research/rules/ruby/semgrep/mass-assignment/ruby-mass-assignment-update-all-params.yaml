@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-mass-assignment-update-all-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      update_all is given an attribute hash sourced from request params. It issues a
+      single UPDATE across the whole relation, skipping validations and callbacks,
+      so the client controls which columns are overwritten on every matched row.
+      Build the SET hash from explicitly permitted, server-validated keys.
+    metadata:
+      vr-id: RB-SG-1125
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md bulk update_all; CWE-915"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/Relation.html#method-i-update_all"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $R.update_all(params[$K])
+          - pattern: $R.update_all(params.to_unsafe_h)
+          - pattern: $R.update_all(params.to_unsafe_hash)

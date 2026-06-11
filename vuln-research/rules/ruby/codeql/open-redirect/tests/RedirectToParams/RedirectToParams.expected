@@ -1,0 +1,8 @@
+edges
+| redirect_to_params.rb:5:17:5:22 | call to params | redirect_to_params.rb:5:17:5:34 | ...[...] | provenance |  |
+nodes
+| redirect_to_params.rb:5:17:5:22 | call to params | semmle.label | call to params |
+| redirect_to_params.rb:5:17:5:34 | ...[...] | semmle.label | ...[...] |
+subpaths
+#select
+| redirect_to_params.rb:5:17:5:34 | ...[...] | redirect_to_params.rb:5:17:5:22 | call to params | redirect_to_params.rb:5:17:5:34 | ...[...] | Untrusted URL redirection depends on a $@. | redirect_to_params.rb:5:17:5:22 | call to params | user-provided value |

@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-job-injection-sidekiq-job-args-string-eval
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Sidekiq worker's perform body evaluates one of its stored arguments as
+      Ruby with eval. Because worker arguments are persisted and replayed from the
+      queue, anyone who can enqueue or tamper with a job controls the evaluated
+      string and gains code execution in the worker. Never eval job arguments;
+      treat them as inert data and branch on a fixed set of operations.
+    metadata:
+      vr-id: RB-SG-1722
+      category: job-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md queue payloads flowing to code sinks; CWE-94"
+      license: derived-original
+      references:
+        - "https://github.com/sidekiq/sidekiq/wiki/Best-Practices"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: |
+          def perform($ARG, ...)
+            ...
+            eval($ARG)
+            ...
+          end

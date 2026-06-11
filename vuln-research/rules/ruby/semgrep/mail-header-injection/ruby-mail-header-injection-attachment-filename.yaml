@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-mail-header-injection-attachment-filename
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An attachment filename is taken from request params and used as the
+      attachments[...] key, which the mail gem writes into the Content-Disposition
+      header. CR/LF or quote characters in the filename inject extra MIME headers.
+      Sanitize the filename (basename, strip control characters) before using it.
+    metadata:
+      vr-id: RB-SG-1612
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog 'attachments[params[:filename]]' MIME header injection; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: attachments[params[...]] = ...
+          - pattern: 'attachments["...#{...}..."] = ...'

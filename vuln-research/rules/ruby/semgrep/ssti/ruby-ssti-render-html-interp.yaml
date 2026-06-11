@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-ssti-render-html-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      `render html:` is given an interpolated string. Rails treats a String passed
+      to `html:` as already-safe HTML when it is html_safe, and even when escaped it
+      bypasses the normal view pipeline; building it with interpolation lets tainted
+      input reach the response body and, in preview/templating features, feed back
+      into an engine. Render through a real template that auto-escapes, and pass
+      values via locals rather than interpolating into `html:`.
+    metadata:
+      vr-id: RB-SG-0924
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Rails render html injection class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Renderers.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: 'render(html: "...#{...}...".html_safe)'

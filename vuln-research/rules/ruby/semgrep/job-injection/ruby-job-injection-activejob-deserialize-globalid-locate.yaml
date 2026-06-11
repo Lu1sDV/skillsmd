@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-activejob-deserialize-globalid-locate
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A GlobalID string taken from request input is resolved with
+      GlobalID::Locator.locate before being passed into a job. A crafted GID lets
+      an attacker pick an arbitrary record of any model class for the job to
+      operate on, defeating authorization that should scope which objects a user
+      can enqueue work against. Authorize the located record before enqueueing.
+    metadata:
+      vr-id: RB-SG-1716
+      category: job-injection
+      cwe: ["CWE-94"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md ActiveJob GlobalID object materialization; CWE-94"
+      license: derived-original
+      references:
+        - "https://github.com/rails/globalid"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: GlobalID::Locator.locate(params[...])
+          - pattern: GlobalID::Locator.locate_many(params[...])
+          - pattern: GlobalID::Locator.locate_signed(params[...])

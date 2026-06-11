@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-open-redirect-link-to-javascript-scheme
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A link href is built by interpolating user input behind an unrestricted scheme.
+      Without scheme validation an attacker can pass a javascript: or data: URL that
+      executes script on click, or an absolute URL that redirects off-site. Constrain
+      the value to http(s) and to an allow-listed host before rendering the link.
+    metadata:
+      vr-id: RB-SG-1013
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby sink catalog link_to dangerous schemes (javascript:/data:); CWE-601"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/601.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: link_to(..., "...#{...}...")
+          - pattern: button_to(..., "...#{...}...")
+      - pattern-not-regex: ',\s*"/'

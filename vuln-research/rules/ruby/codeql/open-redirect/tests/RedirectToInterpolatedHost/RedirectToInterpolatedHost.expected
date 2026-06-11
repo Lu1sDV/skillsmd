@@ -1,0 +1,10 @@
+edges
+| redirect_interpolated_host.rb:5:20:5:25 | call to params | redirect_interpolated_host.rb:5:20:5:32 | ...[...] | provenance |  |
+| redirect_interpolated_host.rb:5:20:5:32 | ...[...] | redirect_interpolated_host.rb:5:17:5:42 | "#{...}/welcome" | provenance | AdditionalTaintStep |
+nodes
+| redirect_interpolated_host.rb:5:17:5:42 | "#{...}/welcome" | semmle.label | "#{...}/welcome" |
+| redirect_interpolated_host.rb:5:20:5:25 | call to params | semmle.label | call to params |
+| redirect_interpolated_host.rb:5:20:5:32 | ...[...] | semmle.label | ...[...] |
+subpaths
+#select
+| redirect_interpolated_host.rb:5:17:5:42 | "#{...}/welcome" | redirect_interpolated_host.rb:5:20:5:25 | call to params | redirect_interpolated_host.rb:5:17:5:42 | "#{...}/welcome" | Untrusted URL redirection depends on a $@. | redirect_interpolated_host.rb:5:20:5:25 | call to params | user-provided value |

@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-sql-injection-select-all
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A raw SELECT built by interpolation is passed to connection.select_all,
+      which returns rows for whatever SQL it is given without escaping. Tainted
+      input here yields classic SQL injection. Pass the statement plus binds, or
+      use a relation method with placeholders instead of string-concatenated SQL.
+    metadata:
+      vr-id: RB-SG-0304
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/sql-injection select_all sink; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/DatabaseStatements.html#method-i-select_all"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $C.select_all("...#{...}...")

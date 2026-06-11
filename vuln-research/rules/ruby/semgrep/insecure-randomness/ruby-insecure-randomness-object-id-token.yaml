@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-insecure-randomness-object-id-token
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A token or identifier is derived from object_id. Object ids are allocation
+      counters or pointer-derived values, not random, and they can collide or be
+      inferred. They provide no unpredictability for security identifiers. Use
+      SecureRandom.uuid or SecureRandom.hex for unguessable identifiers.
+    metadata:
+      vr-id: RB-SG-2217
+      category: insecure-randomness
+      cwe: ["CWE-330", "CWE-340"]
+      owasp: "A02:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by 'object_id is not random' anti-pattern; CWE-340"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/340.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $V = $OBJ.object_id
+          - pattern: $V = $OBJ.object_id.to_s(...)
+          - pattern: $V = "...#{$OBJ.object_id}..."
+      - metavariable-regex:
+          metavariable: $V
+          regex: (?i).*(token|secret|id|nonce|key).*

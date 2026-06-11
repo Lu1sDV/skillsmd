@@ -1,0 +1,33 @@
+rules:
+  - id: ruby-path-traversal-file-join
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A path is built with File.join using request input and then read. File.join only
+      concatenates segments — it does not strip "../", so the joined path can escape the
+      base directory and read arbitrary files. After joining, call File.expand_path and
+      verify the result still starts with the intended base directory, or look the value
+      up from a fixed allow list.
+    metadata:
+      vr-id: RB-SG-0624
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; File.join non-sanitizing behaviour; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/File.html#method-c-join"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: File.read(File.join(..., params[...]))
+          - pattern: File.read(File.join(..., params[...], ...))
+          - pattern: File.open(File.join(..., params[...], ...), ...)
+          - pattern: File.open(File.join(..., params[...], ...))
+          - pattern: File.open(File.join(..., params[...]), ...)
+          - pattern: File.open(File.join(..., params[...]))
+          - pattern: IO.read(File.join(..., params[...]))

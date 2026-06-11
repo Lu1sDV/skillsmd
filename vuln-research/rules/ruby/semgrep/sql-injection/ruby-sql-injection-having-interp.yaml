@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-sql-injection-having-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A HAVING clause is built with interpolation and passed to Model.having as a
+      bare string, which ActiveRecord emits as raw SQL. External input here is
+      injectable. Use the placeholder form having("count(*) > ?", n) so the value
+      is bound rather than concatenated.
+    metadata:
+      vr-id: RB-SG-0310
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by brakeman SQL injection HAVING check; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/QueryMethods.html#method-i-having"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $M.having("...#{...}...")

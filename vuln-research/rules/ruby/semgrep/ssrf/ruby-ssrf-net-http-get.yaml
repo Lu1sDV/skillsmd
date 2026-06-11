@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-ssrf-net-http-get
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A URL or host string built by interpolating external input is passed to
+      Net::HTTP.get. Because the destination is attacker-controllable, a request
+      can be steered at internal services, cloud metadata endpoints, or other
+      hosts the server can reach (CWE-918). Validate the target against a strict
+      allowlist of permitted hosts/schemes and resolve+pin the address before the
+      fetch instead of building the destination from raw request data.
+    metadata:
+      vr-id: RB-SG-0501
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from CodeQL rb/server-side-request-forgery sink Net::HTTP.get; CWE-918"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Net/HTTP.html#method-c-get"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Net::HTTP.get("...#{...}...")
+          - pattern: Net::HTTP.get("...#{...}...", ...)
+          - pattern: Net::HTTP.get(URI("...#{...}..."))
+          - pattern: Net::HTTP.get(URI.parse("...#{...}..."))

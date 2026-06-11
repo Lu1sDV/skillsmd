@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-insecure-randomness-rand-salt
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A cryptographic salt is generated from the non-cryptographic PRNG (rand /
+      Random). Predictable salts undermine password-hash and KDF protections by
+      letting an attacker precompute rainbow tables. Derive salts from
+      SecureRandom.bytes / SecureRandom.hex.
+    metadata:
+      vr-id: RB-SG-2214
+      category: insecure-randomness
+      cwe: ["CWE-330", "CWE-760"]
+      owasp: "A02:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog 'PBKDF2 with tainted salts'; CWE-760"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/760.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $S = rand(...).to_s
+          - pattern: $S = rand(...)
+          - pattern: $S = Random.rand(...)
+      - metavariable-regex:
+          metavariable: $S
+          regex: (?i).*salt.*

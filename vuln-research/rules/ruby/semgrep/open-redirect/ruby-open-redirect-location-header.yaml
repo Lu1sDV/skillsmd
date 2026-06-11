@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-open-redirect-location-header
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The HTTP Location header is written directly from a request parameter. A 3xx
+      response with an attacker-chosen Location sends the browser anywhere, enabling
+      phishing and OAuth token theft. Emit redirects through redirect_to with host
+      checks, or validate that the Location value is a relative path on this origin.
+    metadata:
+      vr-id: RB-SG-1006
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by ruby sink catalog 'headers[\"Location\"] = params[:url]'; CWE-601"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/601.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'headers["Location"] = params[...]'
+          - pattern: "headers['Location'] = params[...]"
+          - pattern: 'response.headers["Location"] = params[...]'
+          - pattern: 'headers["Location"] = "...#{...}..."'
+      - pattern-not-regex: '"Location"\]\s*=\s*"/'

@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-deserialization-pstore-marshal
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      PStore persists Ruby objects with Marshal by default, so reads inside a
+      transaction deserialize whatever bytes are on disk. If the store path or
+      file is attacker-writable, loading it triggers Marshal gadget execution.
+      Keep PStore files on trusted storage, or use YAML::Store with a safe loader
+      for data you do not fully control.
+    metadata:
+      vr-id: RB-SG-0426
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md PStore.new/transaction; CWE-502"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/PStore.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: PStore.new($PATH)
+      - pattern-not: PStore.new("...")

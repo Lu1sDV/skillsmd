@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-command-injection-exec
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Kernel#exec receives a single interpolated string, which it runs through a shell
+      and which then replaces the current process. Interpolating attacker-controlled
+      input allows shell metacharacter injection and arbitrary command execution. Pass
+      the program and arguments as separate strings — `exec("cmd", arg)` — to skip the
+      shell entirely.
+    metadata:
+      vr-id: RB-SG-0103
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql CommandInjectionQuery (Kernel.exec sink); CWE-78"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Kernel.html#method-i-exec"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: exec("...#{...}...")
+          - pattern: Kernel.exec("...#{...}...")
+      - pattern-not: exec("...", ...)

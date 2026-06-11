@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-code-injection-liquid-parse
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A Liquid template is parsed from external input and rendered with the host
+      object exposed as drops or custom filters. Although Liquid is sandboxed,
+      attacker-controlled template source combined with unsafe drops, filters, or
+      registers can leak internal data or reach unintended methods. Treat
+      user-supplied Liquid as untrusted: render in a strict sandbox and never
+      expose method-bearing objects as drops.
+    metadata:
+      vr-id: RB-SG-0224
+      category: code-injection
+      cwe: ["CWE-94", "CWE-1336"]
+      owasp: "A03:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md Liquid::Template.parse(template); CWE-1336"
+      license: derived-original
+      references:
+        - "https://shopify.github.io/liquid/"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Liquid::Template.parse(params[...], ...)
+          - pattern: Liquid::Template.parse("...#{...}...", ...)
+      - pattern-not: Liquid::Template.parse("...")

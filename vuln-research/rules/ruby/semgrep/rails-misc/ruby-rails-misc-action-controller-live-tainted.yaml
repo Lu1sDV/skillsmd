@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-rails-misc-action-controller-live-tainted
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      An ActionController::Live stream writes request-controlled data to the open
+      response without encoding. Because the connection stays open and the bytes are
+      delivered verbatim, attacker input can inject active content or be replayed to
+      other viewers (persistent client-side injection). HTML-escape values written to
+      the live stream and bound the stream lifetime.
+    metadata:
+      vr-id: RB-SG-2524
+      category: rails-misc
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by ActionController::Live tainted stream write sink; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Live.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "response.stream.write(params[...])"
+          - pattern: "response.stream.write(\"...#{params[...]}...\")"

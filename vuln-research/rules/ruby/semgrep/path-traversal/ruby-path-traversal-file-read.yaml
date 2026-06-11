@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-path-traversal-file-read
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      File.read is invoked with a path derived from a request parameter. Because the
+      argument is not constrained to a known directory, an attacker can supply a value
+      such as "../../etc/passwd" to read files outside the intended root. Canonicalize
+      the path with File.expand_path and verify it starts with an allow-listed base
+      directory, or map the parameter through a fixed lookup table instead of using it
+      as a filename.
+    metadata:
+      vr-id: RB-SG-0601
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection (cwe-022 PathInjection.ql); CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/File.html#method-c-read"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: File.read(params[...])
+          - pattern: File.read("...#{params[...]}...")
+          - pattern: File.read("...#{request.params[...]}...")

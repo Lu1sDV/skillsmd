@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-csrf-protection-disabled
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      protect_from_forgery is configured with with: :null_session or :none for
+      the whole controller, disabling CSRF token verification so a third-party
+      site can forge authenticated state-changing requests. Use with: :exception
+      and scope any API exemptions to token-authenticated actions only.
+    metadata:
+      vr-id: RB-SG-2418
+      category: secure-config
+      cwe: ["CWE-352"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog protect_from_forgery with::null_session; CWE-352"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/352.html"
+        - "https://guides.rubyonrails.org/security.html"
+    patterns:
+      - pattern: "protect_from_forgery with: :null_session"

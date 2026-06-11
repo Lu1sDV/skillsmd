@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-open-redirect-meta-refresh
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      An HTML meta refresh tag is rendered with a request-controlled URL. A meta
+      refresh navigates the browser just like a 3xx redirect, so a tainted URL produces
+      a client-side open redirect that also evades server-side redirect host checks.
+      Use a server redirect with host validation instead of injecting user input into a
+      meta refresh.
+    metadata:
+      vr-id: RB-SG-1025
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by client-side meta-refresh open-redirect pattern; CWE-601"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/601.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-regex: '(?i)<meta\s+http-equiv=\\?.refresh\\?.[^>]*url=#\{'

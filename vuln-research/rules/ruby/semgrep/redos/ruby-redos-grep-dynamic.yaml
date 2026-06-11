@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-redos-grep-dynamic
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Enumerable#grep filters a collection with a regex compiled from request input, so
+      the attacker controls the matching expression that runs against every element. A
+      malicious pattern with nested quantifiers backtracks catastrophically on each
+      element and stalls the worker (ReDoS). Filter with a fixed, audited pattern rather
+      than one built from params.
+    metadata:
+      vr-id: RB-SG-1214
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink grep(regex)/grep_v(regex) on attacker-supplied pattern; CWE-1333"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Enumerable.html#method-i-grep"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $L.grep(Regexp.new(params[...]))
+          - pattern: $L.grep_v(Regexp.new(params[...]))

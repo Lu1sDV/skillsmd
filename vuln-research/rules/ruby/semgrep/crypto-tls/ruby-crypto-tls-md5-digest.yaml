@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-crypto-tls-md5-digest
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A value is hashed with MD5, a broken algorithm vulnerable to collisions
+      and far too fast for password storage. When the input is a password,
+      token, signature, or any security-relevant value, MD5 offers no real
+      protection. Use a vetted password hash such as BCrypt or Argon2 for
+      secrets, or SHA-256/SHA-3 for non-password integrity needs.
+    metadata:
+      vr-id: RB-SG-1408
+      category: crypto-tls
+      cwe: ["CWE-327", "CWE-328"]
+      owasp: "A02:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/weak-sensitive-data-hashing; CWE-327"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/327.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Digest::MD5.hexdigest(...)
+          - pattern: Digest::MD5.digest(...)
+          - pattern: Digest::MD5.base64digest(...)
+          - pattern: OpenSSL::Digest::MD5.new(...)
+          - pattern: OpenSSL::Digest.new("MD5")
+          - pattern: OpenSSL::Digest.new("md5")

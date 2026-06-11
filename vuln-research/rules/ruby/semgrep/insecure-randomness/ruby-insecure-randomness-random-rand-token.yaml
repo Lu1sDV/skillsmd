@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-insecure-randomness-random-rand-token
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A sensitive value is produced by the Random class (Random.rand or
+      Random.new.rand), a Mersenne-Twister PRNG that is not cryptographically
+      secure. Its full internal state can be recovered from a handful of outputs,
+      letting an attacker predict every subsequent token. Use SecureRandom for
+      anything security-relevant.
+    metadata:
+      vr-id: RB-SG-2202
+      category: insecure-randomness
+      cwe: ["CWE-338"]
+      owasp: "A02:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from CodeQL InsecureRandomness Source (Random#rand); CWE-338"
+      license: derived-original
+      references:
+        - "https://ruby-doc.org/core/Random.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $V = Random.rand(...)
+          - pattern: $V = Random.new.rand(...)
+          - pattern: $V = Random.new(...).rand(...)
+      - metavariable-regex:
+          metavariable: $V
+          regex: (?i).*(token|secret|key|nonce|otp|session|csrf).*

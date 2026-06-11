@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-http-parsing-env-http-host-raw
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The raw HTTP_HOST entry of the Rack env is read and reused in a URL, redirect,
+      or cache key. This value is the unvalidated client Host header and is the
+      classic host-header injection vector for poisoned reset links and cache
+      poisoning. Read the validated host through Host Authorization or compare
+      against a server-side allowlist instead.
+    metadata:
+      vr-id: RB-SG-2005
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Rack::Request#env['HTTP_HOST']; CWE-444"
+      license: derived-original
+      references:
+        - "https://www.rfc-editor.org/rfc/rfc7230"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $REQ.env["HTTP_HOST"]
+          - pattern: request.env["HTTP_HOST"]
+          - pattern: env["HTTP_HOST"]

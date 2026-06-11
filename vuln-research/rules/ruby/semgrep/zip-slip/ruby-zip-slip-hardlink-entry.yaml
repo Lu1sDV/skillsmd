@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-zip-slip-hardlink-entry
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A hard link is created during archive extraction with a link target taken
+      from the archive (File.link using the entry's linkname). A malicious archive
+      can hard-link a destination entry to a sensitive file outside the extraction
+      directory, and the subsequent content write then corrupts that external file
+      (hardlink-based Zip Slip / arbitrary write). Skip link entries during
+      extraction, or resolve and bounds-check the link target against the root.
+    metadata:
+      vr-id: RB-SG-0720
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by tar hardlink-extraction advisories; CWE-22; ruby.md symlinks/hardlinks extraction sink"
+      license: derived-original
+      references:
+        - "https://security.snyk.io/research/zip-slip-vulnerability"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: File.link($ENTRY.header.linkname, File.join($DEST, $ENTRY.full_name))
+          - pattern: File.link($ENTRY.read, "...#{$ENTRY.full_name}...")

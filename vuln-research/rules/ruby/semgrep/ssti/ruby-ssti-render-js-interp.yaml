@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-ssti-render-js-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      `render js:` sends an interpolated string as an executable JavaScript
+      response. Values spliced into that string are emitted into a script context
+      without HTML/JS escaping, so attacker-controlled input runs in the victim's
+      browser and, where the JS is built from server-side template fragments, can
+      feed back into template evaluation. Build the script from a `.js.erb` view
+      that escapes interpolated values with `escape_javascript`/`j`.
+    metadata:
+      vr-id: RB-SG-0921
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Rails render js injection class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Renderers.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: 'render(js: "...#{...}...")'

@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-open-redirect-omniauth-origin
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An OmniAuth callback redirects to the origin/return_to value carried through the
+      OAuth flow (request.env["omniauth.origin"] or params[:return_to]). That value is
+      attacker-influenced, so the post-login redirect can land on an external host and
+      leak the authenticated session. Validate the return target against an in-app
+      allow-list before redirecting after sign-in.
+    metadata:
+      vr-id: RB-SG-1015
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby sink catalog OmniAuth 'omniauth.origin'/'params[:return_to]'; CWE-601"
+      license: derived-original
+      references:
+        - "https://github.com/omniauth/omniauth/wiki/Saving-User-Location"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'redirect_to request.env["omniauth.origin"]'
+          - pattern: "redirect_to(request.env['omniauth.origin'])"
+          - pattern: 'redirect_to request.env["omniauth.origin"], ...'
+          - pattern: redirect_to params[:return_to]
+          - pattern: redirect_to(params[:origin])

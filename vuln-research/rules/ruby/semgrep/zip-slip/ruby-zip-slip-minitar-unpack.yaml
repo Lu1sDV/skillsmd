@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-zip-slip-minitar-unpack
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Minitar.unpack / Archive::Tar::Minitar.unpack extracts every entry of a TAR
+      stream into a destination directory. On vulnerable versions and without an
+      entry-name guard, paths containing "../" or absolute leading slashes are
+      honoured, letting a malicious archive write files outside the destination
+      (Tar Slip, e.g. CVE-2016-10173). Upgrade minitar and/or pre-filter entries,
+      rejecting any whose canonicalized path leaves the target directory.
+    metadata:
+      vr-id: RB-SG-0705
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by CVE-2016-10173 (minitar directory traversal); CWE-22; ruby.md Archive::Tar::Minitar.unpack sink"
+      license: derived-original
+      references:
+        - "https://github.com/halostatue/minitar/security/advisories"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Minitar.unpack($SRC, $DEST)
+          - pattern: Archive::Tar::Minitar.unpack($SRC, $DEST)
+      - pattern-not: Minitar.unpack($SRC, $DEST, $NAMES)

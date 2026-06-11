@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-xss-response-body-html
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The Rack/Rails response body is assigned a string built from request input.
+      With the default `text/html` content type the browser parses the payload as
+      markup, so attacker-supplied script executes — cross-site scripting. Render
+      through a view that escapes output, or set a non-HTML content type and escape
+      the value with `ERB::Util.html_escape` before writing it.
+    metadata:
+      vr-id: RB-SG-0817
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Rack response.body= tainted assignment; CWE-79"
+      license: derived-original
+      references:
+        - "https://www.rubydoc.info/gems/rack/Rack/Response"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: response.body = "...#{...}..."
+          - pattern: response.body = params[...]
+          - pattern: self.response_body = "...#{...}..."

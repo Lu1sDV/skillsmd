@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-open-redirect-grape-redirect
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Grape API endpoint calls redirect with a value taken from params. Grape's
+      redirect sets the Location header without host validation, so an attacker-supplied
+      absolute URL drives the client off-site. Redirect only to fixed relative paths or
+      validate the destination host against an allow-list first.
+    metadata:
+      vr-id: RB-SG-1028
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Grape redirect helper open-redirect pattern; CWE-601"
+      license: derived-original
+      references:
+        - "https://github.com/ruby-grape/grape#redirecting"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: redirect params[...]
+          - pattern: redirect(params[...])
+          - pattern: "redirect params[...], ..."
+          - pattern: redirect "...#{...}..."
+          - pattern: redirect("...#{...}...")
+      - pattern-not: redirect("/...#{...}...")
+      - pattern-not: redirect "/...#{...}..."

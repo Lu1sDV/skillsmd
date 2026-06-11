@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-cookie-samesite-none
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The session cookie is configured with same_site: :none, so the browser
+      attaches it to cross-site requests and removes the SameSite protection
+      against CSRF. Use :lax or :strict unless a third-party context truly
+      requires :none paired with the Secure flag and CSRF tokens.
+    metadata:
+      vr-id: RB-SG-2410
+      category: secure-config
+      cwe: ["CWE-1275", "CWE-352"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog session_store same_site::none; CWE-1275"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/1275.html"
+        - "https://guides.rubyonrails.org/action_controller_overview.html"
+    patterns:
+      - pattern: "$APP.session_store $STORE, ..., same_site: :none, ..."

@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-sql-injection-sequel-dataset-fetch
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Sequel dataset fetch is given a SQL string built with interpolation. The
+      string form of DB.fetch executes raw SQL, so interpolated external input is
+      injectable. Use Sequel placeholders — DB.fetch("... WHERE x = ?", value) —
+      so the value is escaped by the adapter.
+    metadata:
+      vr-id: RB-SG-0322
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Sequel raw SQL fetch advisory; CWE-89"
+      license: derived-original
+      references:
+        - "https://sequel.jeremyevans.net/rdoc/classes/Sequel/Database.html#method-i-fetch"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $DB.fetch("...#{...}...")

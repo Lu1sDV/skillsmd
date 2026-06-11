@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-rails-misc-default-headers-from-request
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A response header value is assigned directly from request input. CR/LF or
+      attacker-chosen header content leads to response splitting, header injection, or
+      reflected values that weaken security headers. Validate against an allow-list and
+      strip control characters before writing a header.
+    metadata:
+      vr-id: RB-SG-2519
+      category: rails-misc
+      cwe: ["CWE-200"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by tainted response header assignment sink; CWE-200"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionDispatch/Response.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "response.headers[$K] = params[...]"
+          - pattern: "response.set_header($K, params[...])"
+          - pattern: "headers[$K] = request.headers[...]"

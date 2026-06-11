@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-path-traversal-file-chmod
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      File.chmod changes permissions on a path supplied by external input. With "../"
+      an attacker can target files outside the intended directory and, for example,
+      make a sensitive file world-readable or world-writable. Validate the path against
+      an allow list and resolve it under a trusted base before changing its mode.
+    metadata:
+      vr-id: RB-SG-0610
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/File.html#method-c-chmod"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: File.chmod(..., params[...])
+          - pattern: File.chmod(..., "...#{params[...]}...")

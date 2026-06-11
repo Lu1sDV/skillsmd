@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-auth-session-find-current-user-from-params
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      current_user is resolved by looking up a user with an id taken from request
+      parameters instead of from the authenticated session. This is an
+      insecure-direct-object-reference: any caller can set user_id to another
+      account and act as that user. Derive current_user only from session or
+      warden, never from a client-supplied identifier.
+    metadata:
+      vr-id: RB-SG-1320
+      category: auth-session
+      cwe: ["CWE-639"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by IDOR current_user-from-params anti-pattern; CWE-639"
+      license: derived-original
+      references:
+        - "https://owasp.org/Top10/A01_2021-Broken_Access_Control/"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "User.find(params[...])"
+          - pattern: "User.find_by(id: params[...])"
+      - pattern-inside: |
+          def current_user
+            ...
+          end

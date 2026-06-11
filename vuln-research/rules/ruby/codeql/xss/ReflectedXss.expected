@@ -1,0 +1,12 @@
+edges
+| tests/ReflectedXss/app.rb:5:5:5:8 | name | tests/ReflectedXss/app.rb:6:17:6:20 | name | provenance |  |
+| tests/ReflectedXss/app.rb:5:12:5:17 | call to params | tests/ReflectedXss/app.rb:5:12:5:24 | ...[...] | provenance |  |
+| tests/ReflectedXss/app.rb:5:12:5:24 | ...[...] | tests/ReflectedXss/app.rb:5:5:5:8 | name | provenance |  |
+nodes
+| tests/ReflectedXss/app.rb:5:5:5:8 | name | semmle.label | name |
+| tests/ReflectedXss/app.rb:5:12:5:17 | call to params | semmle.label | call to params |
+| tests/ReflectedXss/app.rb:5:12:5:24 | ...[...] | semmle.label | ...[...] |
+| tests/ReflectedXss/app.rb:6:17:6:20 | name | semmle.label | name |
+subpaths
+#select
+| tests/ReflectedXss/app.rb:6:17:6:20 | name | tests/ReflectedXss/app.rb:5:12:5:17 | call to params | tests/ReflectedXss/app.rb:6:17:6:20 | name | Reflected XSS: unescaped $@ is written into the HTTP response body. | tests/ReflectedXss/app.rb:5:12:5:17 | call to params | request-derived value |

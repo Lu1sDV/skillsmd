@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-open-redirect-redirect-back-fallback
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      redirect_back uses a request parameter as its fallback_location. Although
+      redirect_back normally trusts only the HTTP_REFERER, supplying an attacker
+      value as the fallback means a request without a referer redirects off-site.
+      Set fallback_location to a fixed in-app path such as root_path so the fallback
+      can never point at an external host.
+    metadata:
+      vr-id: RB-SG-1005
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby sink catalog 'redirect_back(fallback_location:)'; CWE-601"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Redirecting.html#method-i-redirect_back"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "redirect_back(fallback_location: params[...])"
+          - pattern: "redirect_back(fallback_location: params[...], ...)"

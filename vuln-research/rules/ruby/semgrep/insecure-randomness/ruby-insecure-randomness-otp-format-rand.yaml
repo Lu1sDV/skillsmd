@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-insecure-randomness-otp-format-rand
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A numeric one-time code is formatted from Kernel#rand (for example
+      format("%06d", rand(1_000_000))). One-time passcodes authenticate users, yet
+      Kernel#rand is predictable and the value space is tiny. Draw the code from
+      SecureRandom.random_number(1_000_000) over a CSPRNG.
+    metadata:
+      vr-id: RB-SG-2210
+      category: insecure-randomness
+      cwe: ["CWE-338"]
+      owasp: "A02:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from numeric-OTP rand idiom; CWE-338"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/338.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: format($FMT, rand(...))
+          - pattern: sprintf($FMT, rand(...))
+          - pattern: $FMT % rand(...)
+      - metavariable-regex:
+          metavariable: $FMT
+          regex: (?s).*%[-+ 0]?\d*d.*

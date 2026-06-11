@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-xss-sinatra-erb-body
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Sinatra's `erb` renderer is given a template string built by interpolation
+      instead of a template symbol. Embedding request data in the template body lets
+      an attacker control both markup and ERB expressions, leading to cross-site
+      scripting and server-side template injection. Reference a named template
+      (`erb :show`) and pass dynamic values through the `locals:` option.
+    metadata:
+      vr-id: RB-SG-0816
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Sinatra erb inline-string template rendering; CWE-79"
+      license: derived-original
+      references:
+        - "https://sinatrarb.com/intro.html#views--templates"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: erb("...#{...}...")
+          - pattern: erb(params[...])

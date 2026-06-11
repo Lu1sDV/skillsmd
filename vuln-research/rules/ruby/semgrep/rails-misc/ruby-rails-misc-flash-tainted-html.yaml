@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-rails-misc-flash-tainted-html
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A flash message is built from request params and rendered as raw HTML. Many
+      layouts emit flash via raw or html_safe, so attacker-controlled markup in the
+      flash becomes reflected cross-site scripting on the next page. Store only plain
+      text in flash and let the view escape it.
+    metadata:
+      vr-id: RB-SG-2527
+      category: rails-misc
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by flash message built from params rendered html_safe sink; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionDispatch/Flash.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "flash[$K] = params[...].html_safe"
+          - pattern: "flash[$K] = raw(params[...])"
+          - pattern: "flash.now[$K] = params[...].html_safe"

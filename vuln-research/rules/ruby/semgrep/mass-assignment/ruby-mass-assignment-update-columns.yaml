@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-mass-assignment-update-columns
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      update_columns writes a hash straight to the database, skipping validations,
+      callbacks, and the mass-assignment guard. When the hash derives from request
+      params this is the most dangerous form of mass assignment because even
+      model-level defenses are bypassed. Build the column hash explicitly from
+      permitted, server-validated values.
+    metadata:
+      vr-id: RB-SG-1117
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md update_columns bypass; CWE-915"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/Persistence.html#method-i-update_columns"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $O.update_columns(params[$K])
+          - pattern: $O.update_columns(params.to_unsafe_h)
+          - pattern: $O.update_columns(params.to_unsafe_hash)

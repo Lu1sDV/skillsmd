@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-zip-slip-binwrite-entry
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      File.binwrite is called with a destination assembled from an archive entry
+      name and the decompressed contents of that entry. The stored name is
+      attacker-controlled, so a traversal sequence redirects the binary write to
+      an arbitrary path outside the unpack directory (Zip Slip). Resolve the path
+      with File.expand_path and reject any target that is not contained within the
+      destination directory before writing.
+    metadata:
+      vr-id: RB-SG-0710
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Snyk Zip Slip advisory; CWE-22; ruby.md File.open/FileUtils extraction sink"
+      license: derived-original
+      references:
+        - "https://security.snyk.io/research/zip-slip-vulnerability"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: File.binwrite(File.join($DEST, $ENTRY.name), ...)
+          - pattern: File.binwrite("...#{$ENTRY.name}...", ...)

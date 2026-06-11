@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-open-redirect-polymorphic-url-host
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      polymorphic_url is given a host taken from request input. The generated URL then
+      resolves to an attacker-chosen host, and any redirect or email built from it
+      leaks the victim off-site. Keep the host fixed to the configured application host
+      and never pass a request-derived host option to URL builders.
+    metadata:
+      vr-id: RB-SG-1014
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby sink catalog 'polymorphic_url(record)'; CWE-601"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionDispatch/Routing/PolymorphicRoutes.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "polymorphic_url(..., host: params[...])"
+          - pattern: "polymorphic_url(..., host: request.host)"
+          - pattern: "polymorphic_url(..., host: request.host_with_port)"

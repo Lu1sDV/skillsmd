@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-sql-injection-mysql2-query
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The Mysql2 client query method is given a SQL string built with
+      interpolation. query sends raw SQL with no binding, so external input
+      concatenated into it is injectable. Use a prepared statement
+      (client.prepare("... ?").execute(value)) so the driver binds the value.
+    metadata:
+      vr-id: RB-SG-0326
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by mysql2 query vs prepare guidance; CWE-89"
+      license: derived-original
+      references:
+        - "https://github.com/brianmario/mysql2#prepared-statements"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $C.query("...#{...}...")

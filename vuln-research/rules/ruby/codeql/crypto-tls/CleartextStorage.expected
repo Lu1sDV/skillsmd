@@ -1,0 +1,6 @@
+edges
+nodes
+| tests/CleartextStorage/cleartext_store.rb:4:34:4:41 | password | semmle.label | password |
+subpaths
+#select
+| tests/CleartextStorage/cleartext_store.rb:4:34:4:41 | password | tests/CleartextStorage/cleartext_store.rb:4:34:4:41 | password | tests/CleartextStorage/cleartext_store.rb:4:34:4:41 | password | This stores sensitive data returned by $@ as clear text. | tests/CleartextStorage/cleartext_store.rb:4:34:4:41 | password | a parameter password |

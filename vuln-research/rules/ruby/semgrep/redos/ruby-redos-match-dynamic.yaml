@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-redos-match-dynamic
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      String#match is invoked with a regex compiled at runtime from params[:pattern],
+      meaning the client supplies the matching expression. A pattern crafted with nested
+      quantifiers makes match backtrack exponentially and hangs the worker (ReDoS). Match
+      against a server-defined pattern, or never let request data become the regex.
+    metadata:
+      vr-id: RB-SG-1204
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink String#match(regex) with attacker-supplied regex; CWE-1333"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/String.html#method-i-match"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $S.match(Regexp.new(params[...]))

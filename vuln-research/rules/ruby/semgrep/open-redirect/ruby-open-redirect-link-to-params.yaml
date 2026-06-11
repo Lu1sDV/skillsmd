@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-open-redirect-link-to-params
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      link_to builds an href from a request parameter. An attacker-supplied URL can
+      point at an external phishing host, or use a javascript: or data: scheme to run
+      script when clicked. Render links only to known in-app routes, and sanitize the
+      scheme/host before placing user input into the href.
+    metadata:
+      vr-id: RB-SG-1011
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby sink catalog 'link_to(text, url)' (javascript:/data:/untrusted host); CWE-601"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/UrlHelper.html#method-i-link_to"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: link_to(..., params[...])
+          - pattern: link_to(..., params[...], ...)

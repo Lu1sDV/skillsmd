@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-xxe-nokogiri-noent
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Nokogiri::XML is invoked with the NOENT parse option, which turns on
+      external entity substitution. When the parsed document comes from a
+      request body, upload, or any other attacker-controlled source, a crafted
+      DOCTYPE with an external entity can read local files, trigger SSRF, or
+      mount a billion-laughs denial of service. Parse without NOENT (Nokogiri
+      keeps entity expansion off by default) so untrusted XML cannot pull in
+      external resources.
+    metadata:
+      vr-id: RB-SG-1501
+      category: xxe
+      cwe: ["CWE-611"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/xxe (Nokogiri NOENT example); CWE-611"
+      license: derived-original
+      references:
+        - "https://nokogiri.org/rdoc/Nokogiri/XML/ParseOptions.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Nokogiri::XML($SRC, ..., Nokogiri::XML::ParseOptions::NOENT)
+          - pattern: Nokogiri::XML::Document.parse($SRC, ..., Nokogiri::XML::ParseOptions::NOENT)
+          - pattern: Nokogiri::XML.parse($SRC, ..., Nokogiri::XML::ParseOptions::NOENT)

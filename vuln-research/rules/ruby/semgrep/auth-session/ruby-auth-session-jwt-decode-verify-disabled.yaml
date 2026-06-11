@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-auth-session-jwt-decode-verify-disabled
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      JWT.decode is called with the verify flag set to false (third positional
+      argument), so the token signature is never checked. An attacker can forge
+      any claims — including identity or role fields — and the application will
+      trust them, enabling authentication bypass and privilege escalation. Pass
+      true with the verification key and an explicit algorithm allowlist:
+      JWT.decode(token, key, true, algorithm: "HS256").
+    metadata:
+      vr-id: RB-SG-1306
+      category: auth-session
+      cwe: ["CWE-347"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by ruby-jwt insecure-decode pattern; CWE-347"
+      license: derived-original
+      references:
+        - "https://github.com/jwt/ruby-jwt#verifying-tokens"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: JWT.decode($T, $K, false, ...)
+          - pattern: JWT.decode($T, $K, false)
+          - pattern: JWT.decode($T, nil, false, ...)

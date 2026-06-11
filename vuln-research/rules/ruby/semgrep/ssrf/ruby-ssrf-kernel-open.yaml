@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-ssrf-kernel-open
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A bare Kernel#open call receives a string built from interpolated external
+      input. With open-uri required, open treats http(s)/ftp URLs as remote
+      fetches and a leading pipe as a shell command, so attacker-controlled input
+      can trigger server-side requests to internal hosts or even command
+      execution (CWE-918). Use a dedicated HTTP client with an allowlisted,
+      scheme-checked URL, or File.open for genuine file access only.
+    metadata:
+      vr-id: RB-SG-0506
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "re-expressed from legacy Kernel#open + open-uri sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Kernel.html#method-i-open"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: open("...#{...}...", ...)

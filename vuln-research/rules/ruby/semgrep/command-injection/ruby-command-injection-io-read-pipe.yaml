@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-command-injection-io-read-pipe
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      IO.read is called with an interpolated path string. If the resolved string starts
+      with a pipe character, IO.read executes the remainder as a shell command instead of
+      reading a file, so attacker-controlled input can both choose the command and inject
+      shell operators. Read files with File.read and reject any leading "|".
+    metadata:
+      vr-id: RB-SG-0118
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql frameworks/core/IO.qll (IO.read pipe path); CWE-78"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/IO.html#method-c-read"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: IO.read("...#{...}...")

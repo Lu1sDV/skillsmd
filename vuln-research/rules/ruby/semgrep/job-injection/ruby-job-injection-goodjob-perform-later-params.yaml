@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-job-injection-goodjob-perform-later-params
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Raw params are handed directly to a GoodJob-backed ActiveJob via
+      perform_later. GoodJob persists the serialized arguments in Postgres and a
+      worker replays them later, so unvalidated nested structures flow into the
+      job under a privileged context and may reach downstream sinks. Pass minimal
+      scalar identifiers and reload authorized records inside perform.
+    metadata:
+      vr-id: RB-SG-1710
+      category: job-injection
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md GoodJob.perform_later raw params; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/bensheldon/good_job"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $J.perform_later(params)
+          - pattern: $J.perform_later(params.to_h, ...)
+          - pattern: $J.perform_later(params.permit!, ...)
+          - pattern: $J.perform_later(..., params, ...)

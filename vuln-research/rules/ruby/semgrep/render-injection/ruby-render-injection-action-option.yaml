@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-render-injection-action-option
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      render action: resolves a view by action name taken from request input. An
+      attacker can render the view template of another action, exposing data
+      intended for a different context. Render an explicit, hard-coded view name
+      rather than the action: parameter.
+    metadata:
+      vr-id: RB-SG-1906
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md dynamic action/template resolution; CWE-22"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/layouts_and_rendering.html#rendering-an-action-s-view"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "render(action: params[...])"
+          - pattern: "render action: params[...]"
+          - pattern: "render(action: params[...], ...)"

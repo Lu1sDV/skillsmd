@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-mass-assignment-create-bang-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Model.create! persists a record from a raw params slice, raising on
+      validation failure but doing nothing to limit which attributes the request
+      may set. Validations rarely cover authorization columns, so an attacker can
+      still set role or owner_id. Whitelist with permit(:field, ...) before passing
+      the hash to create!.
+    metadata:
+      vr-id: RB-SG-1103
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/insecure-mass-assignment; CWE-915"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/action_controller_overview.html#strong-parameters"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $M.create!(params[$K])
+          - pattern: $M.create!(params[$K], ...)
+      - pattern-not: $M.create!(params.require(...).permit(...), ...)
+      - pattern-not: $M.create!(params.require(...).permit(...))

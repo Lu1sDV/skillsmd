@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-open-redirect-default-url-options-host
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      default_url_options[:host] is set from request input (parameter or request.host).
+      This poisons the host used for every generated URL in the request, so password
+      reset and confirmation links are emitted pointing at an attacker host. Pin the
+      host to a configured constant and never derive it from untrusted request data.
+    metadata:
+      vr-id: RB-SG-1009
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by ruby sink catalog 'default_url_options[:host] = params[:host]' (host header poisoning); CWE-601"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/601.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "default_url_options[:host] = params[...]"
+          - pattern: "default_url_options[:host] = request.host"
+          - pattern: "default_url_options[:host] = request.host_with_port"
+          - pattern: "Rails.application.routes.default_url_options[:host] = params[...]"

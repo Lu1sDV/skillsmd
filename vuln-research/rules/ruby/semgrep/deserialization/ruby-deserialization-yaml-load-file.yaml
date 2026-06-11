@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-deserialization-yaml-load-file
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      YAML.load_file reads a file and deserializes it with the unsafe loader on
+      older Psych versions, instantiating any tagged objects it contains. When
+      the path or the file's contents can be influenced by an attacker (uploads,
+      shared volumes, user-writable config), this enables gadget-chain code
+      execution. Read the file and parse with YAML.safe_load and an explicit
+      permitted_classes allowlist.
+    metadata:
+      vr-id: RB-SG-0405
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md YAML.load_file; CWE-502"
+      license: derived-original
+      references:
+        - "https://ruby-doc.org/stdlib/libdoc/psych/rdoc/Psych.html#method-c-load_file"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: YAML.load_file($X)
+          - pattern: YAML.load_file($X, ...)
+      - pattern-not: "YAML.load_file($X, permitted_classes: [...])"

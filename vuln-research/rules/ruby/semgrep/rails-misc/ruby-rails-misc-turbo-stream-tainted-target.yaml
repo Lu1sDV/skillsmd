@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-rails-misc-turbo-stream-tainted-target
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Turbo Stream action renders with a target DOM id taken from request params.
+      An attacker can aim the update/replace at an arbitrary element id, enabling DOM
+      clobbering and client-side state manipulation in another user's view. Compute
+      the target from server-side records, not from request input.
+    metadata:
+      vr-id: RB-SG-2506
+      category: rails-misc
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Turbo Stream tainted target/action rendering sink; CWE-79"
+      license: derived-original
+      references:
+        - "https://turbo.hotwired.dev/handbook/streams"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "turbo_stream.replace(params[...], ...)"
+          - pattern: "turbo_stream.update(params[...], ...)"
+          - pattern: "turbo_stream.append(params[...], ...)"

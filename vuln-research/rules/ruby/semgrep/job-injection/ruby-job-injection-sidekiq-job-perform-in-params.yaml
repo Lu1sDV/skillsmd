@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-sidekiq-job-perform-in-params
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A delay interval and arguments for a Sidekiq job scheduled with perform_in
+      are taken from request input. A client-controlled delay can be abused to
+      defer or pile up scheduled work, and raw params as job arguments are
+      serialized and replayed later. Compute the schedule server-side and enqueue
+      only validated scalar identifiers.
+    metadata:
+      vr-id: RB-SG-1711
+      category: job-injection
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md Sidekiq async dispatch perform_in/perform_at; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/sidekiq/sidekiq/wiki/Scheduled-Jobs"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $W.perform_in(params[...], ...)
+          - pattern: $W.perform_at(params[...], ...)
+          - pattern: $W.perform_in($T, params)

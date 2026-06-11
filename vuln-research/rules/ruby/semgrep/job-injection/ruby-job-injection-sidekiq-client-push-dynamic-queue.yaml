@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-job-injection-sidekiq-client-push-dynamic-queue
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Sidekiq::Client.push selects the target queue from request input while
+      keeping a fixed worker class. A client that chooses its own queue can route
+      work to a pool with different concurrency, priority, or trust, undermining
+      isolation between tenants and job types. Derive the queue from the job
+      class on the server, not from params.
+    metadata:
+      vr-id: RB-SG-1724
+      category: job-injection
+      cwe: ["CWE-94"]
+      owasp: "A04:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Sidekiq::Client.push queue: params[:queue]; CWE-94"
+      license: derived-original
+      references:
+        - "https://github.com/sidekiq/sidekiq/wiki/The-Basics"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'Sidekiq::Client.push(class: $K, queue: params[...], ...)'
+          - pattern: 'Sidekiq::Client.push("class" => $K, "queue" => params[...], ...)'

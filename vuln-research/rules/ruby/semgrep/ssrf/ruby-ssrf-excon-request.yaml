@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-ssrf-excon-request
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An Excon request is issued with a :path or :host option built from
+      interpolated external input. The attacker-controlled value steers the
+      request toward an arbitrary destination, enabling reach into internal
+      services or the metadata endpoint (CWE-918). Validate the host against an
+      allowlist and reject private/link-local resolved addresses before the
+      request rather than interpolating untrusted input into the options.
+    metadata:
+      vr-id: RB-SG-0528
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "re-expressed from Excon::Connection#request sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://github.com/excon/excon"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'Excon.get(host: "...#{...}...", ...)'
+          - pattern: 'Excon.post(host: "...#{...}...", ...)'
+          - pattern: 'Excon.new(host: "...#{...}...", ...)'

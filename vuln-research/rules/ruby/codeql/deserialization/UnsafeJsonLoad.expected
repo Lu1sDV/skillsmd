@@ -1,0 +1,33 @@
+edges
+| tests/UnsafeJsonLoad/json_load.rb:3:5:3:7 | raw | tests/UnsafeJsonLoad/json_load.rb:5:21:5:23 | raw | provenance |  |
+| tests/UnsafeJsonLoad/json_load.rb:3:11:3:16 | call to params | tests/UnsafeJsonLoad/json_load.rb:3:11:3:22 | ...[...] | provenance |  |
+| tests/UnsafeJsonLoad/json_load.rb:3:11:3:22 | ...[...] | tests/UnsafeJsonLoad/json_load.rb:3:5:3:7 | raw | provenance |  |
+| tests/UnsafeMarshalLoad/marshal_load.rb:3:5:3:8 | blob | tests/UnsafeMarshalLoad/marshal_load.rb:5:24:5:27 | blob | provenance |  |
+| tests/UnsafeMarshalLoad/marshal_load.rb:3:12:3:17 | call to params | tests/UnsafeMarshalLoad/marshal_load.rb:3:12:3:25 | ...[...] | provenance |  |
+| tests/UnsafeMarshalLoad/marshal_load.rb:3:12:3:25 | ...[...] | tests/UnsafeMarshalLoad/marshal_load.rb:3:5:3:8 | blob | provenance |  |
+| tests/UnsafeOjLoad/oj_load.rb:5:5:5:8 | body | tests/UnsafeOjLoad/oj_load.rb:7:19:7:22 | body | provenance |  |
+| tests/UnsafeOjLoad/oj_load.rb:5:12:5:17 | call to params | tests/UnsafeOjLoad/oj_load.rb:5:12:5:27 | ...[...] | provenance |  |
+| tests/UnsafeOjLoad/oj_load.rb:5:12:5:27 | ...[...] | tests/UnsafeOjLoad/oj_load.rb:5:5:5:8 | body | provenance |  |
+| tests/UnsafeYamlLoad/yaml_load.rb:3:5:3:8 | data | tests/UnsafeYamlLoad/yaml_load.rb:5:28:5:31 | data | provenance |  |
+| tests/UnsafeYamlLoad/yaml_load.rb:3:12:3:17 | call to params | tests/UnsafeYamlLoad/yaml_load.rb:3:12:3:26 | ...[...] | provenance |  |
+| tests/UnsafeYamlLoad/yaml_load.rb:3:12:3:26 | ...[...] | tests/UnsafeYamlLoad/yaml_load.rb:3:5:3:8 | data | provenance |  |
+nodes
+| tests/UnsafeJsonLoad/json_load.rb:3:5:3:7 | raw | semmle.label | raw |
+| tests/UnsafeJsonLoad/json_load.rb:3:11:3:16 | call to params | semmle.label | call to params |
+| tests/UnsafeJsonLoad/json_load.rb:3:11:3:22 | ...[...] | semmle.label | ...[...] |
+| tests/UnsafeJsonLoad/json_load.rb:5:21:5:23 | raw | semmle.label | raw |
+| tests/UnsafeMarshalLoad/marshal_load.rb:3:5:3:8 | blob | semmle.label | blob |
+| tests/UnsafeMarshalLoad/marshal_load.rb:3:12:3:17 | call to params | semmle.label | call to params |
+| tests/UnsafeMarshalLoad/marshal_load.rb:3:12:3:25 | ...[...] | semmle.label | ...[...] |
+| tests/UnsafeMarshalLoad/marshal_load.rb:5:24:5:27 | blob | semmle.label | blob |
+| tests/UnsafeOjLoad/oj_load.rb:5:5:5:8 | body | semmle.label | body |
+| tests/UnsafeOjLoad/oj_load.rb:5:12:5:17 | call to params | semmle.label | call to params |
+| tests/UnsafeOjLoad/oj_load.rb:5:12:5:27 | ...[...] | semmle.label | ...[...] |
+| tests/UnsafeOjLoad/oj_load.rb:7:19:7:22 | body | semmle.label | body |
+| tests/UnsafeYamlLoad/yaml_load.rb:3:5:3:8 | data | semmle.label | data |
+| tests/UnsafeYamlLoad/yaml_load.rb:3:12:3:17 | call to params | semmle.label | call to params |
+| tests/UnsafeYamlLoad/yaml_load.rb:3:12:3:26 | ...[...] | semmle.label | ...[...] |
+| tests/UnsafeYamlLoad/yaml_load.rb:5:28:5:31 | data | semmle.label | data |
+subpaths
+#select
+| tests/UnsafeJsonLoad/json_load.rb:5:21:5:23 | raw | tests/UnsafeJsonLoad/json_load.rb:3:11:3:16 | call to params | tests/UnsafeJsonLoad/json_load.rb:5:21:5:23 | raw | Unsafe JSON.load deserialization of a $@ may instantiate arbitrary objects. | tests/UnsafeJsonLoad/json_load.rb:3:11:3:16 | call to params | user-provided value |

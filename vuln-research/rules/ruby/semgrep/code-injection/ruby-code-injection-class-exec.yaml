@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-code-injection-class-exec
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      class_exec (or module_exec) executes a block in a class/module definition
+      scope. Forwarding request-derived arguments into that block lets attacker
+      data steer method generation and class-level state. Keep the block static
+      and validate forwarded names against a fixed allowlist before defining
+      anything.
+    metadata:
+      vr-id: RB-SG-0206
+      category: code-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md class_exec/module_exec; CWE-94"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Module.html#method-i-class_exec"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $K.class_exec(params[...], ...)
+          - pattern: $K.module_exec(params[...], ...)

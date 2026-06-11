@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-open-redirect-url-for-host
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      url_for is given a host taken from request input. The generated absolute URL
+      then points at an attacker-chosen host, and any redirect or link built from it
+      becomes an open redirect or host-injection vector. Do not let user input set the
+      host option; rely on the configured application host instead.
+    metadata:
+      vr-id: RB-SG-1008
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby sink catalog 'url_for(host: params[:host])'; CWE-601"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionDispatch/Routing/UrlFor.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "url_for(host: params[...])"
+          - pattern: "url_for(host: params[...], ...)"
+          - pattern: "url_for(..., host: params[...])"
+          - pattern: "url_for(..., host: params[...], ...)"

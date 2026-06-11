@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-command-injection-open3-capture2
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Open3.capture2 runs an interpolated command string and returns its stdout. Because
+      the single-string form is parsed by the shell, interpolating attacker-controlled
+      input enables shell metacharacter injection and arbitrary command execution. Pass
+      the command and arguments separately — `Open3.capture2("cmd", arg)` — to avoid the shell.
+    metadata:
+      vr-id: RB-SG-0111
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql frameworks/stdlib/Open3.qll (capture2 sink); CWE-78"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Open3.html#method-c-capture2"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Open3.capture2("...#{...}...")
+      - pattern-not: Open3.capture2("...", ...)

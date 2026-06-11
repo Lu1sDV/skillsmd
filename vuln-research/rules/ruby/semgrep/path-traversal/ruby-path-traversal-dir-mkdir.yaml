@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-path-traversal-dir-mkdir
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Dir.mkdir or Dir.rmdir operates on a directory path built from external input.
+      With "../" an attacker can create or remove directories outside the intended root,
+      causing pollution or denial of service. Validate the name against an allow list and
+      resolve it under a trusted base with File.expand_path before the operation.
+    metadata:
+      vr-id: RB-SG-0615
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Dir.html#method-c-mkdir"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Dir.mkdir(params[...])
+          - pattern: Dir.mkdir("...#{params[...]}...")
+          - pattern: Dir.rmdir(params[...])
+          - pattern: Dir.rmdir("...#{params[...]}...")

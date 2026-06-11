@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-redos-slice-regex-dynamic
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      String#slice (or slice!) is called with a regex compiled from request input, so the
+      attacker decides which pattern is applied to extract or remove a substring. A
+      malicious pattern with nested quantifiers backtracks catastrophically and blocks the
+      worker (ReDoS). Slice with a fixed pattern rather than one derived from params.
+    metadata:
+      vr-id: RB-SG-1216
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sinks (String#match family) extended to String#slice regex; CWE-1333"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/String.html#method-i-slice"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $S.slice(Regexp.new(params[...]))
+          - pattern: $S.slice!(Regexp.new(params[...]))

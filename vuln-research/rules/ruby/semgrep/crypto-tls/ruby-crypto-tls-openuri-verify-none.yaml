@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-crypto-tls-openuri-verify-none
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An open-uri call passes ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE, so the
+      remote server's certificate is fetched without being validated. This
+      defeats TLS authentication and lets an attacker on the path serve forged
+      content. Omit the option to keep default validation, or set it to
+      OpenSSL::SSL::VERIFY_PEER.
+    metadata:
+      vr-id: RB-SG-1407
+      category: crypto-tls
+      cwe: ["CWE-295"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog OpenURI ssl_verify_mode VERIFY_NONE; CWE-295"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/295.html"
+        - "https://ruby-doc.org/stdlib/libdoc/open-uri/rdoc/OpenURI.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "open($URL, ..., ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE, ...)"
+          - pattern: "URI.open($URL, ..., ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE, ...)"
+          - pattern: "URI.parse($URL).open(..., ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE, ...)"

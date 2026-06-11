@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-crypto-tls-cipher-des
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An OpenSSL cipher is instantiated with single DES (or two-key 3DES),
+      algorithms with a 56-bit effective key that is brute-forceable and a small
+      64-bit block prone to birthday/Sweet32 attacks. Data encrypted this way is
+      not adequately protected. Use AES-256-GCM (authenticated) instead.
+    metadata:
+      vr-id: RB-SG-1410
+      category: crypto-tls
+      cwe: ["CWE-327"]
+      owasp: "A02:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/broken-cryptographic-algorithm; CWE-327"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/327.html"
+        - "https://sweet32.info/"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: OpenSSL::Cipher::DES.new(...)
+          - pattern: OpenSSL::Cipher.new("DES")
+          - pattern: OpenSSL::Cipher.new("des")
+          - pattern: OpenSSL::Cipher.new("DES-EDE-CBC")
+          - pattern: OpenSSL::Cipher.new("des-cbc")
+          - pattern: OpenSSL::Cipher.new("DES-CBC")

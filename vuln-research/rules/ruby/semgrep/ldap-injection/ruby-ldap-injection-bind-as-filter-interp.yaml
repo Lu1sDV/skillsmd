@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-ldap-injection-bind-as-filter-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Net::LDAP#bind_as authentication call uses a :filter built from an
+      interpolated string with request data. Because bind_as both searches and
+      authenticates, an injected filter such as *)(uid=* can match an
+      unintended account and authenticate an attacker. Construct the bind_as
+      filter from typed assertions with Net::LDAP::Filter.escape.
+    metadata:
+      vr-id: RB-SG-2311
+      category: ldap-injection
+      cwe: ["CWE-90"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by net-ldap bind_as authentication filter sink; CWE-90"
+      license: derived-original
+      references:
+        - "https://www.rubydoc.info/gems/net-ldap/Net/LDAP#bind_as-instance_method"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: '$LDAP.bind_as(..., filter: "...#{...}...", ...)'

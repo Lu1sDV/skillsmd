@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-sql-injection-where-not-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A negated condition is passed to where.not as an interpolated string
+      literal, which ActiveRecord treats as raw SQL just like a positive string
+      condition. External input spliced in is injectable. Use the placeholder or
+      Hash form — where.not(col: value) — so the value is bound and escaped.
+    metadata:
+      vr-id: RB-SG-0328
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by brakeman SQL injection where.not check; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/QueryMethods/WhereChain.html#method-i-not"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $M.where.not("...#{...}...")

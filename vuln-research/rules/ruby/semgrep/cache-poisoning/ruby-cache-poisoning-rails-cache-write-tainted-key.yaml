@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-cache-poisoning-rails-cache-write-tainted-key
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Rails.cache.write stores a value under a key derived from request input.
+      An attacker can overwrite cache entries used by other users or controllers
+      (cache poisoning) or flood the key space. Build write keys from trusted
+      server-side identifiers and namespace per tenant instead of raw params.
+    metadata:
+      vr-id: RB-SG-1802
+      category: cache-poisoning
+      cwe: ["CWE-349"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Rails.cache.write(key, value) poisoning; CWE-349"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/caching_with_rails.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Rails.cache.write(params[...], ...)
+          - pattern: Rails.cache.write("...#{params[...]}...", ...)

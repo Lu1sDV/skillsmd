@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-ldap-injection-filter-string-concat
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An LDAP filter string is assembled with the + concatenation operator and a
+      request parameter. Concatenating raw input into a filter expression lets
+      an attacker inject closing parentheses and extra assertions to rewrite the
+      query. Use typed Net::LDAP::Filter helpers and escape values with
+      Net::LDAP::Filter.escape instead of string concatenation.
+    metadata:
+      vr-id: RB-SG-2309
+      category: ldap-injection
+      cwe: ["CWE-90"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/ldap-injection string-concatenation filter construction; CWE-90"
+      license: derived-original
+      references:
+        - "https://en.wikipedia.org/wiki/LDAP_injection"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Net::LDAP::Filter.construct("(uid=" + params[...] + ")")
+          - pattern: Net::LDAP::Filter.construct($PREFIX + params[...] + $SUFFIX)
+          - pattern: Net::LDAP::Filter.construct($PREFIX + params[...])

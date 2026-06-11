@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-ssti-erubi-new
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Erubi::Eruby (the ERB engine Rails uses internally) is instantiated with a
+      template string assembled from interpolation. If external input flows into
+      that string, the attacker controls template source and their embedded tags
+      are compiled to Ruby and executed. Build the engine from fixed template
+      files and pass dynamic values as locals rather than splicing input into the
+      template text.
+    metadata:
+      vr-id: RB-SG-0903
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Erubi engine template-injection class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://github.com/jeremyevans/erubi"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Erubi::Eruby.new("...#{...}...")
+          - pattern: Erubi::Eruby.new("...#{...}...", ...)
+      - pattern-not: Erubi::Eruby.new("...")

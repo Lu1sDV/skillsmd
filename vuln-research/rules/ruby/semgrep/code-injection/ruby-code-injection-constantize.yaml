@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-code-injection-constantize
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      ActiveSupport's constantize turns an external string into a live class
+      object. With attacker-controlled input this enables resolution of arbitrary
+      classes that can then be instantiated or used as deserialization gadgets,
+      a frequent root cause of Rails RCE. Use a hardcoded mapping from accepted
+      tokens to classes instead of constantizing untrusted strings.
+    metadata:
+      vr-id: RB-SG-0210
+      category: code-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md ActiveSupport::Inflector.constantize; CWE-94"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/String.html#method-i-constantize"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: params[...].constantize
+          - pattern: params[...].safe_constantize
+          - pattern: request.$M.constantize
+          - pattern: request.$M.safe_constantize

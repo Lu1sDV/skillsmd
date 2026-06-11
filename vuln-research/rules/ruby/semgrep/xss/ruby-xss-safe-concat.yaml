@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-xss-safe-concat
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      `safe_concat` appends a string to the ActionView output buffer without HTML
+      escaping it, treating the argument as trusted markup. Passing interpolated or
+      request-derived content lets an attacker write script directly into the page,
+      causing cross-site scripting. Use `concat` with an escaped value, or sanitize
+      the fragment before appending.
+    metadata:
+      vr-id: RB-SG-0804
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Rails OutputBuffer#safe_concat semantics; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/OutputBuffer.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: safe_concat("...#{...}...")
+          - pattern: safe_concat(params[...])
+      - pattern-not: safe_concat("...")

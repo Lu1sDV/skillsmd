@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-ssl-options-hsts-disabled
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      ssl_options disables HSTS via hsts: false, so browsers will not remember to
+      use HTTPS and remain vulnerable to SSL-stripping on the next plaintext
+      request. Leave HSTS enabled with a meaningful max-age so subsequent visits
+      are forced over TLS.
+    metadata:
+      vr-id: RB-SG-2421
+      category: secure-config
+      cwe: ["CWE-16", "CWE-319"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog ssl_options hsts:false; CWE-319"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/319.html"
+        - "https://guides.rubyonrails.org/configuring.html"
+    patterns:
+      - pattern: "$CFG.ssl_options = { hsts: false }"

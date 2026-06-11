@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-zip-slip-shell-bsdtar
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The application extracts an archive by shelling out to bsdtar or 7z with the
+      archive path interpolated into the command. These extractors restore stored
+      member names without traversal checks unless explicitly told otherwise, so a
+      hostile archive containing "../" entries escapes the destination (Zip Slip),
+      in addition to the shell-injection exposure on the interpolated path. Prefer
+      a library that validates each entry, or pass the tool's secure-extract flags.
+    metadata:
+      vr-id: RB-SG-0717
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by Zip Slip research (Snyk); CWE-22; ruby.md shelling out to 7z/bsdtar sink"
+      license: derived-original
+      references:
+        - "https://security.snyk.io/research/zip-slip-vulnerability"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: system("...#{...}...")
+          - pattern: '`...#{...}...`'
+      - pattern-regex: "\\b(bsdtar|7z|7za)\\b"

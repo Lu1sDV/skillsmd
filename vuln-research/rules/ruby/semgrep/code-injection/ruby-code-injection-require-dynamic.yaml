@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-code-injection-require-dynamic
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A library is required using a feature name or path built from external
+      input. An attacker who controls the value can force loading of an
+      unexpected file (for example via traversal or a planted gem path), causing
+      its top-level code to execute. Require only constant, internally known
+      feature names; never pass request data into require or require_relative.
+    metadata:
+      vr-id: RB-SG-0215
+      category: code-injection
+      cwe: ["CWE-94", "CWE-95"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md Kernel.require/require_relative; CWE-95"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Kernel.html#method-i-require"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: require(params[...], ...)
+          - pattern: require("...#{...}...")
+          - pattern: require_relative(params[...], ...)
+          - pattern: require_relative("...#{...}...")
+      - pattern-not: require("...")
+      - pattern-not: require_relative("...")

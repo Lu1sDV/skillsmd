@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-ldap-injection-dn-format-percent
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An LDAP filter or DN is produced with the String % format operator using a
+      request parameter. format-style substitution performs no LDAP escaping, so
+      filter metacharacters in the parameter are injected verbatim. Build the
+      query from typed Net::LDAP::Filter assertions with escaped values.
+    metadata:
+      vr-id: RB-SG-2310
+      category: ldap-injection
+      cwe: ["CWE-90"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/ldap-injection format-string filter construction; CWE-90"
+      license: derived-original
+      references:
+        - "https://cheatsheetseries.owasp.org/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Net::LDAP::Filter.construct($FMT % params[...])
+          - pattern: Net::LDAP::Filter.construct($FMT % [..., params[...], ...])
+          - pattern: Net::LDAP::Filter.construct(format($FMT, ..., params[...], ...))

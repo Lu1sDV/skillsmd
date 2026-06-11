@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-insecure-randomness-timestamp-token
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A token or identifier is derived from the current time (Time.now). Timestamps
+      have very little entropy and are externally observable, so an attacker can
+      enumerate likely values within a small window. Generate identifiers with
+      SecureRandom.uuid or SecureRandom.hex rather than clock-based values.
+    metadata:
+      vr-id: RB-SG-2205
+      category: insecure-randomness
+      cwe: ["CWE-330"]
+      owasp: "A02:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog 'timestamp/PID-derived values'; CWE-330"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/330.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $T = Time.now.to_i
+          - pattern: $T = Time.now.to_f
+          - pattern: $T = (Time.now.to_f * ...).to_i
+          - pattern: $T = Time.now.to_i.to_s
+      - metavariable-regex:
+          metavariable: $T
+          regex: (?i).*(token|secret|id|nonce|otp|key).*

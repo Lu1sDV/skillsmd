@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-resque-args-raw-params
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Raw request parameters are enqueued as Resque job arguments. Resque encodes
+      args to JSON and a worker decodes and replays them later, so unvalidated
+      nested input flows into the job where it may reach SQL, file, or shell
+      sinks under worker privileges. Enqueue only validated scalar identifiers and
+      reload authorized records inside the perform method.
+    metadata:
+      vr-id: RB-SG-1725
+      category: job-injection
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Resque.enqueue(klass, *args) raw args; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/resque/resque"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Resque.enqueue($K, params)
+          - pattern: Resque.enqueue($K, params.to_h, ...)
+          - pattern: Resque.enqueue($K, ..., params, ...)

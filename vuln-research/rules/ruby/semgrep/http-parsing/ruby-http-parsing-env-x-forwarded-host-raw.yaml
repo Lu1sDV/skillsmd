@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-http-parsing-env-x-forwarded-host-raw
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The raw HTTP_X_FORWARDED_HOST env entry is consumed when building a host or
+      URL. Because this header is fully client-controlled, using it for redirects
+      or absolute links yields host-header injection and open-redirect / cache
+      poisoning. Build hosts from a configured canonical value, not the forwarded
+      host header.
+    metadata:
+      vr-id: RB-SG-2008
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Rack::Request#env['HTTP_X_FORWARDED_HOST']; CWE-444"
+      license: derived-original
+      references:
+        - "https://www.rfc-editor.org/rfc/rfc7239"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $REQ.env["HTTP_X_FORWARDED_HOST"]
+          - pattern: request.env["HTTP_X_FORWARDED_HOST"]
+          - pattern: env["HTTP_X_FORWARDED_HOST"]

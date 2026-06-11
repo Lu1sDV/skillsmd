@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-redos-regexp-union-dynamic
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Regexp.union builds a combined pattern from request input, so an attacker controls
+      one or more alternatives in the resulting regular expression. Overlapping
+      alternatives or embedded nested quantifiers produce catastrophic backtracking when
+      the union is matched, causing denial of service. Union only fixed, reviewed
+      sub-patterns; escape any dynamic fragment with Regexp.escape first.
+    metadata:
+      vr-id: RB-SG-1217
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink Regexp.new(pattern) family extended to Regexp.union; CWE-1333"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Regexp.html#method-c-union"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Regexp.union(params[...])

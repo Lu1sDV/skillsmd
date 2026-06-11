@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-ssti-actionview-template-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      ActionView::Template is constructed directly from a source string built with
+      interpolation. The handler compiles this source to Ruby and evaluates it, so
+      external input concatenated into the source executes as template code
+      (server-side template injection). Render registered view files through the
+      normal lookup context and pass dynamic data as locals instead of constructing
+      a Template from an interpolated source string.
+    metadata:
+      vr-id: RB-SG-0926
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by ActionView::Template manual-construction class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Template.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: ActionView::Template.new("...#{...}...", ...)
+          - pattern: ActionView::Template.new("...#{...}...")
+      - pattern-not: ActionView::Template.new("...", ...)

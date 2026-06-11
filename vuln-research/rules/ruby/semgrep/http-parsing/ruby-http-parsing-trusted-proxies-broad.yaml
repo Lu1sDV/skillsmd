@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-http-parsing-trusted-proxies-broad
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      config.action_dispatch.trusted_proxies is widened to a broad range (e.g.
+      0.0.0.0/0 or /0). Trusting every upstream means the X-Forwarded-For chain
+      is accepted verbatim, so request.remote_ip becomes attacker-controlled and
+      any IP-based allowlist or throttle can be spoofed. List only the exact CIDR
+      of your real edge proxies.
+    metadata:
+      vr-id: RB-SG-2011
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md config.action_dispatch.trusted_proxies broad/attacker-controlled; CWE-444"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionDispatch/RemoteIp.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: config.action_dispatch.trusted_proxies = [..., IPAddr.new("0.0.0.0/0"), ...]
+          - pattern: config.action_dispatch.trusted_proxies = [..., "0.0.0.0/0", ...]
+          - pattern: config.action_dispatch.trusted_proxies = IPAddr.new("0.0.0.0/0")
+          - pattern: $C.action_dispatch.trusted_proxies = [..., IPAddr.new("0.0.0.0/0"), ...]

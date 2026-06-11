@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-mass-assignment-insert-all
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      insert_all writes an array of attribute hashes straight to the database,
+      skipping validations, callbacks, and mass-assignment protection. When the
+      rows come from request params, the client controls every column on every
+      inserted record. Construct the rows from explicitly permitted keys before
+      bulk-inserting.
+    metadata:
+      vr-id: RB-SG-1118
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md insert_all bulk-write; CWE-915"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/Persistence/ClassMethods.html#method-i-insert_all"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $M.insert_all(params[$K])
+          - pattern: $M.insert_all(params[$K], ...)
+          - pattern: $M.insert_all!(params[$K])
+          - pattern: $M.insert_all!(params[$K], ...)

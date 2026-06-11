@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-insecure-randomness-digest-time-token
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A token is built by hashing time/PID with Digest (e.g.
+      Digest::MD5.hexdigest(Time.now.to_s)). Hashing low-entropy, attacker-knowable
+      inputs does not create unpredictability: the digest is fully determined by the
+      guessable input. Seed the token from SecureRandom rather than hashed clock data.
+    metadata:
+      vr-id: RB-SG-2211
+      category: insecure-randomness
+      cwe: ["CWE-330"]
+      owasp: "A02:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from digest-of-timestamp token idiom; CWE-330"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/330.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Digest::MD5.hexdigest(Time.now.to_s)
+          - pattern: Digest::SHA1.hexdigest(Time.now.to_s)
+          - pattern: Digest::SHA256.hexdigest(Time.now.to_s)
+          - pattern: Digest::MD5.hexdigest("...#{Time.now}...")
+          - pattern: Digest::SHA1.hexdigest("...#{Time.now}...")

@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-deserialization-json-load
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      JSON.load enables JSON additions by default, so a document containing a
+      "json_class" key reconstructs arbitrary Ruby objects via their json_create
+      hook. Parsing attacker-controlled input with JSON.load therefore allows
+      object materialization beyond plain data. Use JSON.parse, which returns
+      only hashes, arrays, and primitives and ignores json_class.
+    metadata:
+      vr-id: RB-SG-0412
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by semgrep ruby.lang.security.deserialization.json-load; CWE-502"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/JSON.html#method-i-load"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: JSON.load($X)
+          - pattern: JSON.load($X, ...)
+      - pattern-not: JSON.load("...")

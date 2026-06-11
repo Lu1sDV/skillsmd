@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-deserialization-activesupport-json-decode
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      ActiveSupport::JSON.decode parses JSON into Ruby data, but on legacy
+      backends or with custom decoding handlers it can be coaxed into building
+      objects beyond plain data. Decoding attacker-controlled input here warrants
+      review; prefer JSON.parse and map trusted fields to objects explicitly.
+    metadata:
+      vr-id: RB-SG-0422
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md ActiveSupport::JSON.decode; CWE-502"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveSupport/JSON.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: ActiveSupport::JSON.decode($X)
+          - pattern: ActiveSupport::JSON.decode($X, ...)
+      - pattern-not: ActiveSupport::JSON.decode("...")

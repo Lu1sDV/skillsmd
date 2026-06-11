@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-ssti-render-inline-hashrocket
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Legacy hash-rocket form `render :inline =>` is invoked with an interpolated
+      template string. As with the modern syntax, Rails evaluates the inline string
+      as ERB, so attacker input concatenated into it executes as Ruby code. Replace
+      the inline render with a static template plus `:locals` so external values are
+      never treated as template source.
+    metadata:
+      vr-id: RB-SG-0905
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Rails render :inline SSTI class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/RenderingHelper.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: render(:inline => "...#{...}...", ...)
+          - pattern: render(:inline => "...#{...}...")
+      - pattern-not: render(:inline => "...", ...)

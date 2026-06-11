@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-xss-html-safe
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Calling `html_safe` on a string built from interpolation or request data
+      tells Rails the content needs no HTML escaping, so it is written to the
+      response verbatim. Attacker-controlled fragments then execute as markup,
+      yielding cross-site scripting. Drop `html_safe` and let ERB escape the value,
+      or sanitize with an allow-list of tags first.
+    metadata:
+      vr-id: RB-SG-0802
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql ruby HtmlSafeCall sink (XSS.qll); CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveSupport/SafeBuffer.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "\"...#{...}...\".html_safe"
+          - pattern: params[...].html_safe
+          - pattern: params.fetch(...).html_safe
+      - pattern-not: "\"...\".html_safe"

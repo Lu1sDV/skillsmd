@@ -1,0 +1,33 @@
+rules:
+  - id: ruby-mass-assignment-permit-sensitive
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A strong-parameters allow-list explicitly permits a privilege or tenancy
+      column such as admin, role, user_id, or account_id. Whitelisting these keys
+      lets the client set them directly, which is the classic mass-assignment
+      escalation even though permit is used. Drop the sensitive keys from permit and
+      set them server-side from the authenticated context.
+    metadata:
+      vr-id: RB-SG-1113
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md mass-assignment privileged-key list; CWE-915"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/action_controller_overview.html#strong-parameters"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $P.permit(..., :admin, ...)
+          - pattern: $P.permit(..., :role, ...)
+          - pattern: $P.permit(..., :user_id, ...)
+          - pattern: $P.permit(..., :account_id, ...)
+          - pattern: $P.permit(..., :organization_id, ...)
+          - pattern: $P.permit(..., :tenant_id, ...)
+          - pattern: $P.permit(..., :encrypted_password, ...)

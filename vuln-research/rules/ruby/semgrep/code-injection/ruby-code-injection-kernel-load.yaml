@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-code-injection-kernel-load
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Kernel#load executes a Ruby file whose path is derived from external input.
+      If an attacker can influence the path (including via traversal to an
+      uploaded or writable file), the loaded file's code runs with the process's
+      privileges. Load only fixed, internally chosen files; never feed request
+      data into load.
+    metadata:
+      vr-id: RB-SG-0214
+      category: code-injection
+      cwe: ["CWE-94", "CWE-95"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md Kernel.load(path); CWE-95"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Kernel.html#method-i-load"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: load(params[...], ...)
+          - pattern: load("...#{...}...", ...)
+          - pattern: Kernel.load(params[...], ...)
+      - pattern-not: load("...")

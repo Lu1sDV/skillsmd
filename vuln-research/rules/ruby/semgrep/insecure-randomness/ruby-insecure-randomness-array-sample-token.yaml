@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-insecure-randomness-array-sample-token
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A token is built by mapping over a range and calling Array#sample (or
+      .sample(n)) on a character set. Array#sample draws from the non-cryptographic
+      default PRNG, so the resulting string is predictable. Pass a CSPRNG with
+      sample(n, random: SecureRandom), or use SecureRandom.alphanumeric directly.
+    metadata:
+      vr-id: RB-SG-2208
+      category: insecure-randomness
+      cwe: ["CWE-338"]
+      owasp: "A02:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from common Array#sample token-builder idiom; CWE-338"
+      license: derived-original
+      references:
+        - "https://ruby-doc.org/core/Array.html#method-i-sample"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $CHARS.sample($N).join
+          - pattern: (...).map { |$I| $CHARS.sample }.join
+          - pattern: Array.new(...) { $CHARS.sample }.join
+      - pattern-not: "$CHARS.sample(..., random: SecureRandom)"
+      - pattern-not: "$CHARS.sample($N, random: $R)"

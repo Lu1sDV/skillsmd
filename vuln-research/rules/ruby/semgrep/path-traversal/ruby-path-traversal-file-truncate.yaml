@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-path-traversal-file-truncate
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      File.truncate shortens a file identified by a path from external input. With "../"
+      an attacker can target files outside the intended directory and destroy or corrupt
+      their contents, causing data loss. Validate the path against an allow list and
+      resolve it under a trusted base before truncating.
+    metadata:
+      vr-id: RB-SG-0629
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/File.html#method-c-truncate"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: File.truncate(params[...], ...)
+          - pattern: File.truncate("...#{params[...]}...", ...)

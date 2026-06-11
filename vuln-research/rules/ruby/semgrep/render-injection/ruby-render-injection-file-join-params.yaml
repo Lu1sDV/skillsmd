@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-render-injection-file-join-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      render file: is given a path built with File.join from request input. A
+      parameter containing ../ escapes the intended directory, turning this into a
+      local file disclosure primitive. Resolve and confirm the path stays within an
+      allowed base directory, or avoid rendering user-derived files entirely.
+    metadata:
+      vr-id: RB-SG-1915
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md 'render file:' path traversal; CWE-22"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/layouts_and_rendering.html#rendering-an-arbitrary-file"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "render(file: File.join(..., params[...], ...))"
+          - pattern: "render file: File.join(..., params[...], ...)"
+          - pattern: "render(file: File.join(..., params[...]))"
+          - pattern: "render file: File.join(..., params[...])"

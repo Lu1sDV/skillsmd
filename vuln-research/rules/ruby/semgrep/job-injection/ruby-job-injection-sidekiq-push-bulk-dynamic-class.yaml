@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-sidekiq-push-bulk-dynamic-class
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Sidekiq::Client.push_bulk enqueues many jobs at once using a worker class
+      taken from request input. As with single pushes, an attacker-controlled
+      class string lets arbitrary workers be invoked, amplified across the bulk
+      batch. Pin the class to a server-defined worker and only let the caller
+      supply scalar argument lists.
+    metadata:
+      vr-id: RB-SG-1709
+      category: job-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Sidekiq::Client.push_bulk; CWE-94"
+      license: derived-original
+      references:
+        - "https://github.com/sidekiq/sidekiq/wiki/Bulk-Queueing"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'Sidekiq::Client.push_bulk(class: params[...], ...)'
+          - pattern: 'Sidekiq::Client.push_bulk("class" => params[...], ...)'
+          - pattern: 'Sidekiq::Client.new.push_bulk(class: params[...], ...)'

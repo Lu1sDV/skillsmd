@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-open-redirect-redirect-to-referer
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      redirect_to is driven by request.referer (the Referer header). The Referer is
+      fully attacker-controlled, so this lets a crafted request bounce the victim to
+      an arbitrary external site. Use redirect_back_or_to with a trusted fallback and
+      let Rails reject off-host referers, or validate the referer host before using it.
+    metadata:
+      vr-id: RB-SG-1004
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by ruby sink catalog 'redirect_to request.referer'; CWE-601"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/601.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: redirect_to request.referer
+          - pattern: redirect_to(request.referer)
+          - pattern: redirect_to request.referrer
+          - pattern: redirect_to(request.referrer)

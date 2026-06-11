@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-http-parsing-manual-content-length
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The Content-Length header is read straight from the request env and used to
+      slice or read the body. Hand-rolled length framing that disagrees with the
+      upstream parser is a request-smuggling primitive (CL.TE / CL.CL desync). Let
+      the application server own body framing and read via the parsed body
+      interface.
+    metadata:
+      vr-id: RB-SG-2017
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md manual Content-Length framing / smuggling; CWE-444"
+      license: derived-original
+      references:
+        - "https://portswigger.net/web-security/request-smuggling"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $IO.read(request.env["CONTENT_LENGTH"].to_i)
+          - pattern: $IO.read($REQ.env["CONTENT_LENGTH"].to_i)
+          - pattern: $IO.read(env["CONTENT_LENGTH"].to_i)

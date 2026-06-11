@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-sql-injection-count-by-sql
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      ActiveRecord count_by_sql executes a raw COUNT statement. When the SQL is
+      built with interpolation of external input, the count query becomes a SQL
+      injection vector usable for blind data extraction. Use a relation with
+      bound conditions (Model.where(col: value).count) instead of raw SQL.
+    metadata:
+      vr-id: RB-SG-0306
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by semgrep ruby.rails count_by_sql sink; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/Calculations.html#method-i-count_by_sql"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $M.count_by_sql("...#{...}...")

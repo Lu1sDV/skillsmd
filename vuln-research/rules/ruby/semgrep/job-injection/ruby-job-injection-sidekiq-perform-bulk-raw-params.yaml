@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-sidekiq-perform-bulk-raw-params
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      An argument batch built directly from request input is enqueued with
+      perform_bulk. Each entry becomes the argument list of a separately
+      persisted and replayed job, so unvalidated nested params fan out across many
+      jobs that later reach downstream sinks. Build the batch from validated
+      scalar identifiers, not from raw params structures.
+    metadata:
+      vr-id: RB-SG-1730
+      category: job-injection
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md Sidekiq bulk enqueueing of tainted args; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/sidekiq/sidekiq/wiki/Bulk-Queueing"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $W.perform_bulk(params[...])
+          - pattern: $W.perform_bulk(params.to_h.values)
+          - pattern: $W.perform_bulk(params[...].map { |$X| [$X] })

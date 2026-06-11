@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-ssrf-net-smtp-start
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Net::SMTP.start opens an SMTP connection to a host built from interpolated
+      external input. A caller who controls the host can force the server to
+      connect to internal SMTP services or arbitrary internal ports, a
+      non-HTTP SSRF vector (CWE-918). Validate the host against an allowlist and
+      reject private and link-local resolved addresses before connecting.
+    metadata:
+      vr-id: RB-SG-0525
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "re-expressed from Net::SMTP.start sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Net/SMTP.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Net::SMTP.start("...#{...}...", ...)
+          - pattern: Net::SMTP.start("...#{...}...")

@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-sql-injection-exec-query
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A connection.exec_query call receives a SQL string assembled with
+      interpolation. exec_query runs the text directly, so any external value
+      spliced into it becomes injectable SQL. Supply the SQL with positional
+      binds via the binds: argument, or sanitize fragments with sanitize_sql_array
+      rather than interpolating untrusted data.
+    metadata:
+      vr-id: RB-SG-0303
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/sql-injection raw exec_query sink; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/DatabaseStatements.html#method-i-exec_query"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $C.exec_query("...#{...}...")
+          - pattern: $C.exec_query("...#{...}...", ...)

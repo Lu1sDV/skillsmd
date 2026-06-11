@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-insecure-randomness-rand-uniq-coupon
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A coupon, voucher, or referral code is produced by upcasing a base-36
+      rand value (e.g. rand(36**6).to_s(36).upcase). Because Kernel#rand is
+      predictable, valid codes can be enumerated and redeemed by an attacker.
+      Generate redeemable codes from SecureRandom.alphanumeric.
+    metadata:
+      vr-id: RB-SG-2220
+      category: insecure-randomness
+      cwe: ["CWE-338"]
+      owasp: "A02:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "re-expressed from coupon-code rand idiom; CWE-338"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/338.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: rand(...).to_s(36).upcase
+          - pattern: rand(...).to_s(36).upcase[...]
+          - pattern: Random.rand(...).to_s(36).upcase

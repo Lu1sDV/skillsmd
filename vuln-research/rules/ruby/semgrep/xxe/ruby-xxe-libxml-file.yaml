@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-xxe-libxml-file
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      LibXML::XML::Document.file parses an XML file with explicit parse options.
+      When those options include NOENT or DTDLOAD and the file (or its declared
+      external subset) is attacker-influenced, libxml-ruby will substitute
+      external entities and load remote DTDs — enabling file disclosure and
+      SSRF. Omit NOENT/DTDLOAD and pass NONET for untrusted documents.
+    metadata:
+      vr-id: RB-SG-1509
+      category: xxe
+      cwe: ["CWE-611"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby.md 'LibXML::XML::Document.file' sink; CWE-611"
+      license: derived-original
+      references:
+        - "https://github.com/xml4r/libxml-ruby"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "LibXML::XML::Document.file($PATH, options: $OPTS)"
+          - pattern: "XML::Document.file($PATH, options: $OPTS)"

@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-xss-render-json-callback
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      `render json:` with a request-controlled `callback:` produces a JSONP response
+      whose function-name prefix is attacker-controlled and unescaped. An attacker
+      can inject script that executes when the response is loaded in a browser
+      context, causing cross-site scripting. Drop JSONP, or validate the callback
+      against a strict identifier pattern before echoing it.
+    metadata:
+      vr-id: RB-SG-0811
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Rails render json callback JSONP injection; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Renderers.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'render(json: ..., callback: params[...])'
+          - pattern: 'render json: ..., callback: params[...]'

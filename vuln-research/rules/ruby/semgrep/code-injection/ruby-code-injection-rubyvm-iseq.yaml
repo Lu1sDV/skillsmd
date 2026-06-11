@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-code-injection-rubyvm-iseq
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      RubyVM::InstructionSequence.compile turns a string into executable bytecode
+      that is then run with eval. When the source string comes from external
+      input this is equivalent to eval'ing attacker code and yields arbitrary
+      execution. Do not compile dynamic source; express the intended behaviour as
+      ordinary, static Ruby.
+    metadata:
+      vr-id: RB-SG-0216
+      category: code-injection
+      cwe: ["CWE-94", "CWE-95"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md RubyVM::InstructionSequence.compile(code).eval; CWE-95"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/RubyVM/InstructionSequence.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: RubyVM::InstructionSequence.compile(params[...], ...).eval
+          - pattern: RubyVM::InstructionSequence.compile("...#{...}...", ...).eval
+          - pattern: RubyVM::InstructionSequence.load_from_binary(...).eval

@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-http-parsing-env-forwarded-header-raw
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The RFC 7239 Forwarded header (HTTP_FORWARDED) is parsed directly from the
+      Rack env. This header is client-supplied and trivially forged, so deriving
+      the client host, proto, or IP from it for any trust decision enables proxy
+      spoofing. Only honor Forwarded values appended by a proxy you operate.
+    metadata:
+      vr-id: RB-SG-2009
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Rack::Request#env['HTTP_FORWARDED'] RFC 7239; CWE-444"
+      license: derived-original
+      references:
+        - "https://www.rfc-editor.org/rfc/rfc7239"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $REQ.env["HTTP_FORWARDED"]
+          - pattern: request.env["HTTP_FORWARDED"]
+          - pattern: env["HTTP_FORWARDED"]

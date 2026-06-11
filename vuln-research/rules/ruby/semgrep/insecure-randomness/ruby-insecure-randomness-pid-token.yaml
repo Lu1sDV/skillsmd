@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-insecure-randomness-pid-token
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A sensitive value incorporates the process identifier (Process.pid / $$).
+      PIDs come from a small, often sequential space and are frequently leaked in
+      logs and error pages, so they add negligible unpredictability to a token or
+      key. Use SecureRandom for the entropy instead of process metadata.
+    metadata:
+      vr-id: RB-SG-2206
+      category: insecure-randomness
+      cwe: ["CWE-330"]
+      owasp: "A02:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog 'timestamp/PID-derived values'; CWE-330"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/330.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $V = Process.pid
+          - pattern: $V = $$
+          - pattern: $V = "...#{Process.pid}..."
+      - metavariable-regex:
+          metavariable: $V
+          regex: (?i).*(token|secret|id|nonce|key|seed).*

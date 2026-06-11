@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-path-traversal-file-write
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      File.write stores data at a path taken from external input. An attacker who
+      controls the path can use "../" sequences to write or overwrite files outside
+      the intended directory — for example dropping a file into a startup or cron
+      location to gain code execution. Resolve the destination with File.expand_path
+      and confirm it remains under a trusted base directory before writing, and never
+      build the path directly from request parameters.
+    metadata:
+      vr-id: RB-SG-0602
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection (cwe-022 PathInjection.ql); CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/File.html#method-c-write"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: File.write(params[...], ...)
+          - pattern: File.write("...#{params[...]}...", ...)

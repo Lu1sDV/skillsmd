@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-auth-session-skip-forgery-protection
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      skip_forgery_protection disables Rails request-forgery protection for the
+      controller's actions, so the framework no longer verifies the CSRF token.
+      State-changing endpoints become exploitable cross-site because the session
+      cookie is still sent automatically. Drop this call on cookie-authenticated
+      controllers; reserve it for token-authenticated API surfaces.
+    metadata:
+      vr-id: RB-SG-1302
+      category: auth-session
+      cwe: ["CWE-352"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/csrf-protection-disabled; CWE-352"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection/ClassMethods.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: skip_forgery_protection
+          - pattern: skip_forgery_protection ...

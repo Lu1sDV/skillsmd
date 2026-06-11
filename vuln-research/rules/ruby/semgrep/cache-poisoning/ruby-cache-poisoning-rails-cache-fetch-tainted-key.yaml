@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-cache-poisoning-rails-cache-fetch-tainted-key
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Rails.cache.fetch uses a key assembled from request parameters. Because
+      fetch both reads and writes, an attacker who controls the key can read
+      another user's cached block or seed the cache so a later victim request
+      reuses attacker-influenced content, bypassing the authorization boundary.
+      Compute the key from authenticated server-side state, not from params.
+    metadata:
+      vr-id: RB-SG-1803
+      category: cache-poisoning
+      cwe: ["CWE-349"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Rails.cache.fetch(key) authorization-boundary bypass; CWE-349"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/caching_with_rails.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Rails.cache.fetch(params[...], ...)
+          - pattern: Rails.cache.fetch("...#{params[...]}...", ...)

@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-cache-poisoning-dalli-tainted-key
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A Dalli/Memcached get or set uses a key taken from request parameters.
+      Memcached has a flat global key space, so an attacker who controls the key
+      can read or overwrite entries belonging to other tenants (cross-tenant
+      key poisoning). Namespace keys with a trusted identifier and validate any
+      param used in the key.
+    metadata:
+      vr-id: RB-SG-1815
+      category: cache-poisoning
+      cwe: ["CWE-349"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Dalli::Client#get/set with tainted keys key poisoning; CWE-349"
+      license: derived-original
+      references:
+        - "https://github.com/petergoldstein/dalli"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $DC.get(params[...], ...)
+          - pattern: $DC.set(params[...], ...)
+          - pattern: $DC.get("...#{params[...]}...", ...)
+          - pattern: $DC.set("...#{params[...]}...", ...)

@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-ldap-injection-attributes-tainted
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The :attributes list passed to an LDAP search is taken directly from
+      request parameters. A tainted attribute name lets an attacker request
+      directory attributes the application never intended to expose, leaking
+      sensitive data. Restrict the requested attributes to a fixed allow-list of
+      constant names.
+    metadata:
+      vr-id: RB-SG-2306
+      category: ldap-injection
+      cwe: ["CWE-90"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql LdapInjectionCustomizations attributeArrayTaintStep; CWE-90"
+      license: derived-original
+      references:
+        - "https://www.rubydoc.info/gems/net-ldap/Net/LDAP"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: '$LDAP.search(..., attributes: params[...], ...)'
+          - pattern: '$LDAP.search(..., attributes: [..., params[...], ...], ...)'

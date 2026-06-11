@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-deserialization-plist-marshal
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Plist.parse_xml with marshal: true (the historical default) feeds plist
+      <data> blobs through Marshal.load, so a crafted property list can carry a
+      Marshal gadget payload and execute code. Parse untrusted plists with
+      marshal: false so binary data stays opaque rather than being deserialized.
+    metadata:
+      vr-id: RB-SG-0421
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Plist.parse_xml marshal:true; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/patsplat/plist"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: "Plist.parse_xml($X, ..., marshal: true, ...)"

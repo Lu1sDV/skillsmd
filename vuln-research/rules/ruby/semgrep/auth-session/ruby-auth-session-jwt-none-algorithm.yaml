@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-auth-session-jwt-none-algorithm
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A JWT is decoded or encoded with the "none" algorithm, which produces or
+      accepts tokens that carry no signature at all. Any party can mint a valid
+      token with arbitrary claims, defeating authentication. Use a real
+      asymmetric or HMAC algorithm and pin it explicitly; never permit "none".
+    metadata:
+      vr-id: RB-SG-1321
+      category: auth-session
+      cwe: ["CWE-347"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by JWT alg:none vulnerability; CWE-347"
+      license: derived-original
+      references:
+        - "https://github.com/jwt/ruby-jwt#support-for-reserved-claim-names"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'JWT.decode($T, $K, $V, algorithm: "none", ...)'
+          - pattern: 'JWT.decode($T, $K, $V, algorithm: "None", ...)'
+          - pattern: 'JWT.encode($P, $K, "none")'
+          - pattern: 'JWT.encode($P, nil, "none")'

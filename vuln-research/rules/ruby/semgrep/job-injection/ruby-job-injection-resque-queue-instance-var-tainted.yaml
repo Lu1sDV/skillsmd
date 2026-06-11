@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-job-injection-resque-queue-instance-var-tainted
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A Resque job's @queue is assigned from request input, letting the caller
+      choose which named queue the work lands in. Client-controlled queue routing
+      lets an attacker target queues served by higher-privilege workers or starve
+      critical queues. Set @queue to a constant symbol per job class rather than
+      from params.
+    metadata:
+      vr-id: RB-SG-1717
+      category: job-injection
+      cwe: ["CWE-94"]
+      owasp: "A04:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md Resque dynamic queue/class/args; CWE-94"
+      license: derived-original
+      references:
+        - "https://github.com/resque/resque#queues"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Resque.enqueue_to(params[...], ...)
+          - pattern: Resque::Job.create(params[...], ...)

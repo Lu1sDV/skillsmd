@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-auth-session-samesite-none
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      cookies_same_site_protection is set to :none, so the default SameSite
+      attribute on outgoing cookies is None instead of Lax. Session cookies are
+      then attached to cross-site requests, re-opening the CSRF surface that
+      SameSite was meant to close. Use :lax (the framework default) or :strict
+      unless a documented cross-site flow truly requires None plus Secure.
+    metadata:
+      vr-id: RB-SG-1314
+      category: auth-session
+      cwe: ["CWE-352", "CWE-1275"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/weak-cookie-configuration SameSite example; CWE-1275"
+      license: derived-original
+      references:
+        - "https://owasp.org/www-community/SameSite"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: "$CONFIG.action_dispatch.cookies_same_site_protection = :none"

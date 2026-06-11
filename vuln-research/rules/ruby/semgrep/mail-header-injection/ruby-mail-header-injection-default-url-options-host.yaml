@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-mail-header-injection-default-url-options-host
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      default_url_options[:host] is set from request.host (or params), so URLs baked
+      into emails inherit a host the attacker controls via the Host / X-Forwarded-Host
+      header. Password-reset and confirmation links then point at the attacker's
+      domain, enabling token theft. Pin the host to a configured value.
+    metadata:
+      vr-id: RB-SG-1614
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog host-header poisoning of email URLs via default_url_options; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'default_url_options[:host] = request.host'
+          - pattern: 'default_url_options[:host] = request.host_with_port'
+          - pattern: 'default_url_options[:host] = params[...]'
+          - pattern: 'self.default_url_options = { host: request.host, ... }'

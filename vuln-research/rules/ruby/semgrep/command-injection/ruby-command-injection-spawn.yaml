@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-command-injection-spawn
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Kernel#spawn is invoked with a single interpolated command string, so Ruby runs
+      it through /bin/sh. When the interpolated value comes from external input, an
+      attacker can inject shell operators and execute arbitrary commands in the new
+      process. Use the multi-argument form `spawn("cmd", arg)` so arguments bypass the
+      shell.
+    metadata:
+      vr-id: RB-SG-0104
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql CommandInjectionQuery (Kernel.spawn sink); CWE-78"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Kernel.html#method-i-spawn"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: spawn("...#{...}...")
+          - pattern: Kernel.spawn("...#{...}...")
+      - pattern-not: spawn("...", ...)

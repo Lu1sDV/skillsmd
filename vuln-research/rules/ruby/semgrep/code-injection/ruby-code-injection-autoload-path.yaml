@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-code-injection-autoload-path
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      autoload registers a constant to be loaded from a path built from external
+      input. When the constant is first referenced, that path's file executes;
+      an attacker who controls the path can trigger loading of arbitrary Ruby.
+      Register autoloads only with fixed, internally known paths.
+    metadata:
+      vr-id: RB-SG-0217
+      category: code-injection
+      cwe: ["CWE-94", "CWE-95"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md autoload(name, path); CWE-95"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Module.html#method-i-autoload"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: autoload($N, params[...])
+          - pattern: autoload($N, "...#{...}...")
+      - pattern-not: autoload($N, "...")

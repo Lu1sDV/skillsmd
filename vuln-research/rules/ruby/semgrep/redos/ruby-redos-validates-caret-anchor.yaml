@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-redos-validates-caret-anchor
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A Rails format validation begins with the ^ anchor, which matches start-of-line
+      rather than start-of-string in Ruby. With multiline input the regex can match on
+      an inner line and accept data the validator was meant to reject. Anchor with \A at
+      the start (and \z at the end) so the whole string is validated.
+    metadata:
+      vr-id: RB-SG-1212
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink validates format with ^/$ anchors; CWE-1333; Rails line-anchor pitfall"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/active_record_validations.html#format"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-regex: 'validates\b.*format:\s*\{\s*with:\s*/\^[^$]*/'

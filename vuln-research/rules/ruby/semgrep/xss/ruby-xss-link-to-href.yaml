@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-xss-link-to-href
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      `link_to` builds an anchor whose href is taken directly from the supplied URL.
+      A request-controlled URL beginning with `javascript:` makes the link execute
+      script on click, a DOM-based cross-site scripting vector, and also enables
+      open redirects. Validate the URL scheme against an allow-list (http/https) or
+      build the link from a fixed route helper rather than raw input.
+    metadata:
+      vr-id: RB-SG-0808
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Rails link_to javascript: scheme XSS; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/UrlHelper.html#method-i-link_to"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: link_to($BODY, params[...])
+          - pattern: link_to($BODY, params.fetch(...))

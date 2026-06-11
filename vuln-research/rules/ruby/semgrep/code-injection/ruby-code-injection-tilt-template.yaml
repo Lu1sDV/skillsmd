@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-code-injection-tilt-template
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Tilt dispatches to a template engine based on a path or source taken from
+      external input. An attacker can select an engine that evaluates embedded
+      Ruby (ERB, Haml, Slim) or point at a tainted file, yielding template
+      injection and code execution. Resolve template choices from a fixed
+      allowlist instead of from request data.
+    metadata:
+      vr-id: RB-SG-0220
+      category: code-injection
+      cwe: ["CWE-94", "CWE-1336"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md Tilt.new(path_or_template).render; CWE-94"
+      license: derived-original
+      references:
+        - "https://github.com/jeremyevans/tilt"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Tilt.new(params[...], ...).render(...)
+          - pattern: Tilt.new("...#{...}...", ...).render(...)
+          - pattern: Tilt[$E].new(params[...], ...).render(...)
+      - pattern-not: Tilt.new("...").render(...)

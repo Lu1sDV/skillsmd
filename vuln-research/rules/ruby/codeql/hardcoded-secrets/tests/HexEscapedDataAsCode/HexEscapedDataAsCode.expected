@@ -1,0 +1,18 @@
+edges
+| hex_escaped_as_code.rb:4:3:4:6 | blob : String | hex_escaped_as_code.rb:5:14:5:17 | blob : String | provenance |  |
+| hex_escaped_as_code.rb:4:10:4:35 | "\\x70\\x75\\x74\\x73\\x20\\x31" : String | hex_escaped_as_code.rb:4:3:4:6 | blob : String | provenance |  |
+| hex_escaped_as_code.rb:5:3:5:9 | payload | hex_escaped_as_code.rb:6:8:6:14 | payload | provenance |  |
+| hex_escaped_as_code.rb:5:13:5:18 | call to [] : Array [element 0] : String | hex_escaped_as_code.rb:5:13:5:29 | call to pack | provenance | Config |
+| hex_escaped_as_code.rb:5:13:5:29 | call to pack | hex_escaped_as_code.rb:5:3:5:9 | payload | provenance |  |
+| hex_escaped_as_code.rb:5:14:5:17 | blob : String | hex_escaped_as_code.rb:5:13:5:18 | call to [] : Array [element 0] : String | provenance |  |
+nodes
+| hex_escaped_as_code.rb:4:3:4:6 | blob : String | semmle.label | blob : String |
+| hex_escaped_as_code.rb:4:10:4:35 | "\\x70\\x75\\x74\\x73\\x20\\x31" : String | semmle.label | "\\x70\\x75\\x74\\x73\\x20\\x31" : String |
+| hex_escaped_as_code.rb:5:3:5:9 | payload | semmle.label | payload |
+| hex_escaped_as_code.rb:5:13:5:18 | call to [] : Array [element 0] : String | semmle.label | call to [] : Array [element 0] : String |
+| hex_escaped_as_code.rb:5:13:5:29 | call to pack | semmle.label | call to pack |
+| hex_escaped_as_code.rb:5:14:5:17 | blob : String | semmle.label | blob : String |
+| hex_escaped_as_code.rb:6:8:6:14 | payload | semmle.label | payload |
+subpaths
+#select
+| hex_escaped_as_code.rb:6:8:6:14 | payload | hex_escaped_as_code.rb:4:10:4:35 | "\\x70\\x75\\x74\\x73\\x20\\x31" : String | hex_escaped_as_code.rb:6:8:6:14 | payload | Hard-coded data from $@ is interpreted as code. | hex_escaped_as_code.rb:4:10:4:35 | "\\x70\\x75\\x74\\x73\\x20\\x31" | this constant |

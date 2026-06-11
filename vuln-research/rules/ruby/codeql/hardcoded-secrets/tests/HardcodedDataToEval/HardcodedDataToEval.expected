@@ -1,0 +1,18 @@
+edges
+| hardcoded_eval.rb:4:3:4:6 | blob : String | hardcoded_eval.rb:5:14:5:17 | blob : String | provenance |  |
+| hardcoded_eval.rb:4:10:4:27 | "6465616462656566" : String | hardcoded_eval.rb:4:3:4:6 | blob : String | provenance |  |
+| hardcoded_eval.rb:5:3:5:9 | payload | hardcoded_eval.rb:6:8:6:14 | payload | provenance |  |
+| hardcoded_eval.rb:5:13:5:18 | call to [] : Array [element 0] : String | hardcoded_eval.rb:5:13:5:29 | call to pack | provenance | Config |
+| hardcoded_eval.rb:5:13:5:29 | call to pack | hardcoded_eval.rb:5:3:5:9 | payload | provenance |  |
+| hardcoded_eval.rb:5:14:5:17 | blob : String | hardcoded_eval.rb:5:13:5:18 | call to [] : Array [element 0] : String | provenance |  |
+nodes
+| hardcoded_eval.rb:4:3:4:6 | blob : String | semmle.label | blob : String |
+| hardcoded_eval.rb:4:10:4:27 | "6465616462656566" : String | semmle.label | "6465616462656566" : String |
+| hardcoded_eval.rb:5:3:5:9 | payload | semmle.label | payload |
+| hardcoded_eval.rb:5:13:5:18 | call to [] : Array [element 0] : String | semmle.label | call to [] : Array [element 0] : String |
+| hardcoded_eval.rb:5:13:5:29 | call to pack | semmle.label | call to pack |
+| hardcoded_eval.rb:5:14:5:17 | blob : String | semmle.label | blob : String |
+| hardcoded_eval.rb:6:8:6:14 | payload | semmle.label | payload |
+subpaths
+#select
+| hardcoded_eval.rb:6:8:6:14 | payload | hardcoded_eval.rb:4:10:4:27 | "6465616462656566" : String | hardcoded_eval.rb:6:8:6:14 | payload | Hard-coded data from $@ is evaluated as code. | hardcoded_eval.rb:4:10:4:27 | "6465616462656566" | this constant |

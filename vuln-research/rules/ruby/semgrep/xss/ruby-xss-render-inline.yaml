@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-xss-render-inline
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      `render inline:` compiles its argument as an ERB template at request time.
+      When the template string is built from interpolation or request parameters,
+      an attacker controls template markup and embedded Ruby, leading to cross-site
+      scripting and frequently server-side template injection. Render a fixed
+      template file and pass dynamic data through locals, never as the template body.
+    metadata:
+      vr-id: RB-SG-0805
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Rails ActionController render inline ERB compilation; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/RenderingHelper.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'render(inline: "...#{...}...")'
+          - pattern: 'render(inline: params[...])'
+          - pattern: 'render inline: "...#{...}..."'
+          - pattern: 'render inline: params[...]'

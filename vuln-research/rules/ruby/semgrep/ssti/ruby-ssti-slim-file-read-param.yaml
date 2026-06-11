@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-ssti-slim-file-read-param
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Slim template is compiled from a file whose path comes from request input.
+      Slim evaluates `=` expressions and embedded Ruby, so an attacker who controls
+      the path (or uploads the file) supplies the template body and executes code on
+      the server. Compile Slim only from a server-controlled allowlist of template
+      files, never from a path derived from `params` or from user uploads.
+    metadata:
+      vr-id: RB-SG-0925
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Slim-from-file template-injection class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://github.com/slim-template/slim"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Slim::Template.new(params[...])

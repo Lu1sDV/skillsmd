@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-code-injection-const-set
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      const_set creates a constant whose name comes from external input, letting
+      an attacker pollute the namespace and potentially overwrite existing
+      classes or constants that other code trusts. Derive constant names only
+      from internal, validated values, never directly from request parameters.
+    metadata:
+      vr-id: RB-SG-0211
+      category: code-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md Object.const_set; CWE-94"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Module.html#method-i-const_set"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $M.const_set(params[...], ...)
+          - pattern: const_set(params[...], ...)

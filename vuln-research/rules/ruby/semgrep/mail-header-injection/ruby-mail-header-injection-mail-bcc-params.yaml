@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-mail-header-injection-mail-bcc-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The Bcc: header of a mail(...) call is set from request params. Because Bcc
+      recipients are invisible to the visible audience, attacker-controlled values
+      enable silent exfiltration of message content and open-relay abuse. Source Bcc
+      addresses from server configuration, not from the request.
+    metadata:
+      vr-id: RB-SG-1605
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog 'mail(bcc:...)' silent recipient injection; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: 'mail(..., bcc: params[...], ...)'

@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-ldap-injection-filter-join-raw-subfilter
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A composite LDAP filter is built by ANDing a typed assertion with a raw
+      sub-filter parsed from an interpolated string via
+      Net::LDAP::Filter.construct. The interpolated branch reintroduces an
+      injectable RFC 2254 fragment even though the other branch is typed. Build
+      every branch from escaped, typed Net::LDAP::Filter assertions.
+    metadata:
+      vr-id: RB-SG-2316
+      category: ldap-injection
+      cwe: ["CWE-90"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by net-ldap Filter#& composite-filter construction; CWE-90"
+      license: derived-original
+      references:
+        - "https://www.rubydoc.info/gems/net-ldap/Net/LDAP/Filter"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $BASE & Net::LDAP::Filter.construct("...#{...}...")
+          - pattern: $BASE | Net::LDAP::Filter.construct("...#{...}...")

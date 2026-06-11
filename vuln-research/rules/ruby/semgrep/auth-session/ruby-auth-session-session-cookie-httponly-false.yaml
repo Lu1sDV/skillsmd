@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-auth-session-session-cookie-httponly-false
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The session store is configured with httponly: false, allowing client-side
+      JavaScript to read document.cookie. If the page has any XSS, the attacker
+      can exfiltrate the session cookie and hijack the user's session. Leave
+      httponly at its default true so the session cookie is inaccessible to
+      scripts.
+    metadata:
+      vr-id: RB-SG-1315
+      category: auth-session
+      cwe: ["CWE-1004"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Rails session_store httponly option; CWE-1004"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionDispatch/Session/CookieStore.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "$APP.config.session_store $STORE, ..., httponly: false, ..."
+          - pattern: "$APP.config.session_store $STORE, httponly: false"
+          - pattern: "$APP.config.session_store $STORE, httponly: false, ..."

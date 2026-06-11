@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-xss-sanitize-user-tags
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The `sanitize` allow-list of permitted tags or attributes is taken from request
+      parameters. An attacker can widen the policy to permit `script`, `onerror`, or
+      `href` with dangerous schemes, defeating the sanitizer and enabling cross-site
+      scripting. Define the allow-list as a fixed server-side constant; never let the
+      client choose which tags survive sanitization.
+    metadata:
+      vr-id: RB-SG-0810
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Rails sanitize with user-controlled tags/attributes policy; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/SanitizeHelper.html#method-i-sanitize"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'sanitize(..., tags: params[...], ...)'
+          - pattern: 'sanitize(..., attributes: params[...], ...)'
+          - pattern: 'sanitize(..., protocols: params[...], ...)'

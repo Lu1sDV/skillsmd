@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-que-dynamic-class
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Que.enqueue receives a job class derived from request input. The class is
+      persisted and the worker constantizes it before running, so attacker
+      control over the class string lets any registered job be triggered with
+      arbitrary arguments. Resolve the job class from a fixed allow-list instead
+      of constantizing untrusted data.
+    metadata:
+      vr-id: RB-SG-1706
+      category: job-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Que.enqueue(job_class, *args); CWE-94"
+      license: derived-original
+      references:
+        - "https://github.com/que-rb/que"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Que.enqueue(params[...].constantize, ...)
+          - pattern: Que.enqueue(params[...].safe_constantize, ...)
+          - pattern: 'Que.enqueue(job_class: params[...], ...)'

@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-xxe-nokogiri-nonet-missing
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A Nokogiri parse configuration block enables DTD validation
+      (config.dtdvalid), which tells libxml2 to load and validate against the
+      document's DTD — fetching an external subset over the network if one is
+      referenced. On attacker-controlled XML this is a server-side request
+      forgery and remote-DTD vector. Drop DTD validation for untrusted input
+      and always combine any DTD option with config.nonet.
+    metadata:
+      vr-id: RB-SG-1504
+      category: xxe
+      cwe: ["CWE-611"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby.md Nokogiri 'omitted cfg.nonet' sink; CWE-611"
+      license: derived-original
+      references:
+        - "https://nokogiri.org/rdoc/Nokogiri/XML/ParseOptions.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-inside: |
+          Nokogiri::XML(...) { |$CFG| ... }
+      - pattern-either:
+          - pattern: $CFG.dtdvalid
+          - pattern: $CFG.dtdvalid(...)

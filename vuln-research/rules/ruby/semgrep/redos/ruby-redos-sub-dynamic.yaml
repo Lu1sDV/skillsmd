@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-redos-sub-dynamic
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      String#sub performs a single substitution using a regex compiled from request
+      input, putting the search expression under attacker control. A malicious pattern
+      with ambiguous quantifiers backtracks catastrophically and blocks the thread
+      (ReDoS). Use a fixed pattern rather than one assembled from params.
+    metadata:
+      vr-id: RB-SG-1209
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink sub(regex, replacement) with attacker-supplied regex; CWE-1333"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/String.html#method-i-sub"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $S.sub(Regexp.new(params[...]), ...)

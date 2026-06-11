@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-ldap-injection-base-dn-concat
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An LDAP search base DN is assembled with the + concatenation operator and
+      a request parameter. A tainted DN component lets an attacker inject extra
+      relative distinguished names and pivot the search to another subtree (DN
+      injection). Resolve untrusted input to an allowed DN constant rather than
+      concatenating it into the base.
+    metadata:
+      vr-id: RB-SG-2315
+      category: ldap-injection
+      cwe: ["CWE-90"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/ldap-injection base DN injection; CWE-90"
+      license: derived-original
+      references:
+        - "https://ldap.com/2018/05/04/understanding-and-defending-against-ldap-injection-attacks/"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: '$LDAP.search(..., base: $PREFIX + params[...] + $SUFFIX, ...)'
+          - pattern: '$LDAP.search(..., base: $PREFIX + params[...], ...)'

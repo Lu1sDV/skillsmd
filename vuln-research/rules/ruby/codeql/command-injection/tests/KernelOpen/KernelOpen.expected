@@ -1,0 +1,12 @@
+edges
+| KernelOpen.rb:3:5:3:8 | path | KernelOpen.rb:5:21:5:24 | path | provenance |  |
+| KernelOpen.rb:3:12:3:17 | call to params | KernelOpen.rb:3:12:3:24 | ...[...] | provenance |  |
+| KernelOpen.rb:3:12:3:24 | ...[...] | KernelOpen.rb:3:5:3:8 | path | provenance |  |
+nodes
+| KernelOpen.rb:3:5:3:8 | path | semmle.label | path |
+| KernelOpen.rb:3:12:3:17 | call to params | semmle.label | call to params |
+| KernelOpen.rb:3:12:3:24 | ...[...] | semmle.label | ...[...] |
+| KernelOpen.rb:5:21:5:24 | path | semmle.label | path |
+subpaths
+#select
+| KernelOpen.rb:5:21:5:24 | path | KernelOpen.rb:3:12:3:17 | call to params | KernelOpen.rb:5:21:5:24 | path | This call to Kernel.open depends on a $@. | KernelOpen.rb:3:12:3:17 | call to params | user-provided value |

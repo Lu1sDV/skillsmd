@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-command-injection-cocaine-line
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Cocaine::CommandLine is built with an interpolated command template. Splicing
+      attacker-controlled input into the template bypasses Cocaine's placeholder escaping,
+      so an attacker can inject shell metacharacters and execute arbitrary commands. Keep
+      the template constant and pass dynamic values as named interpolations so the library
+      escapes them.
+    metadata:
+      vr-id: RB-SG-0126
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived: Cocaine::CommandLine wrapper (ruby.md OS command execution); CWE-78"
+      license: derived-original
+      references:
+        - "https://github.com/thoughtbot/cocaine"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Cocaine::CommandLine.new("...#{...}...", ...)

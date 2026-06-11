@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-sql-injection-sequel-run
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Sequel database run/execute call receives an interpolated SQL string,
+      which it sends to the server verbatim. External input concatenated into the
+      statement is injectable and, with stacked statements, can run arbitrary
+      commands. Use a parameterized dataset or bound literals instead of building
+      the SQL by interpolation.
+    metadata:
+      vr-id: RB-SG-0323
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Sequel Database#run raw execution advisory; CWE-89"
+      license: derived-original
+      references:
+        - "https://sequel.jeremyevans.net/rdoc/classes/Sequel/Database.html#method-i-run"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $DB.run("...#{...}...")
+          - pattern: $DB.execute("...#{...}...")
+          - pattern: $DB.execute_dui("...#{...}...")

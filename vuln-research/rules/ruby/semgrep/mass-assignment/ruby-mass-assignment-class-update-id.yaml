@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-mass-assignment-class-update-id
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The class-level Model.update(id, attributes) is called with both the record
+      id and the attribute hash taken from params. Beyond the mass-assignment
+      exposure of the unfiltered hash, the attacker also controls which record is
+      loaded by id, combining IDOR with privilege escalation. Look the record up
+      through a scoped relation and pass a permitted hash.
+    metadata:
+      vr-id: RB-SG-1109
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/insecure-mass-assignment; CWE-915; CWE-639"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/Persistence/ClassMethods.html#method-i-update"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $M.update(params[$K1], params[$K2])

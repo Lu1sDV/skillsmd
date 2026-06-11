@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-redos-split-dynamic
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      String#split divides the subject on a regex compiled from request input, so the
+      delimiter expression is attacker-controlled. A pattern with nested quantifiers
+      makes the split engine backtrack catastrophically, hanging the worker (ReDoS).
+      Split on a literal delimiter or a fixed pattern, never one built from params.
+    metadata:
+      vr-id: RB-SG-1210
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink split(regex) with user-controlled regex; CWE-1333"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/String.html#method-i-split"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $S.split(Regexp.new(params[...]))

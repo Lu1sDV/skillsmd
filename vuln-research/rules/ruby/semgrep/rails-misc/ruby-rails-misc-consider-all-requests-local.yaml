@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-rails-misc-consider-all-requests-local
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      consider_all_requests_local is enabled, which makes Rails render the verbose
+      developer exception page with full backtraces and source snippets for every
+      request. In production this discloses internal implementation details to any
+      visitor. Leave this false in production and rely on the custom public error pages.
+    metadata:
+      vr-id: RB-SG-2513
+      category: rails-misc
+      cwe: ["CWE-209"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by consider_all_requests_local production debug-page exposure; CWE-209"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/configuring.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "config.consider_all_requests_local = true"
+          - pattern: "$C.consider_all_requests_local = true"

@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-http-parsing-host-authorization-exclude-broad
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      config.host_authorization is configured with an exclude proc that matches
+      broadly (e.g. always true or any path), turning off the Host header check for
+      most or all routes. Excluded requests accept a forged Host, re-enabling
+      host-header injection on those paths. Scope the exclusion to a single
+      well-known health-check path only.
+    metadata:
+      vr-id: RB-SG-2013
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md broad config.host_authorization.exclude; CWE-444"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/configuring.html#actiondispatch-hostauthorization"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "config.host_authorization = { exclude: ->(request) { true } }"
+          - pattern: "config.host_authorization = { exclude: ->(req) { true } }"
+          - pattern: "config.host_authorization = { exclude: proc { true } }"

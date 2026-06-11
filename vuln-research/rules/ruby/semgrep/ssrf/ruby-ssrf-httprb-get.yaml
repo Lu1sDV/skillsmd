@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-ssrf-httprb-get
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      HTTP.get (the http.rb gem) requests a URL assembled from interpolated
+      external input. Because the destination is attacker-controlled, the server
+      can be made to reach internal services or the cloud metadata endpoint
+      (CWE-918). Restrict the URL to allowlisted hosts and a validated scheme,
+      and pin the resolved address before performing the request.
+    metadata:
+      vr-id: RB-SG-0513
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from http.rb HTTP.get sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://github.com/httprb/http"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: HTTP.get("...#{...}...")
+          - pattern: HTTP.get("...#{...}...", ...)
+          - pattern: HTTP. ... .get("...#{...}...")
+          - pattern: HTTP. ... .get("...#{...}...", ...)

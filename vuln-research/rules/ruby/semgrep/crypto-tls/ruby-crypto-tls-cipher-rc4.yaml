@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-crypto-tls-cipher-rc4
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An OpenSSL cipher is created with RC4, a stream cipher with well-known
+      keystream biases that allow plaintext recovery; it is prohibited for TLS
+      and unsafe for application data. Replace it with AES-256-GCM or
+      ChaCha20-Poly1305 for authenticated encryption.
+    metadata:
+      vr-id: RB-SG-1411
+      category: crypto-tls
+      cwe: ["CWE-327"]
+      owasp: "A02:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/broken-cryptographic-algorithm; CWE-327"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/327.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: OpenSSL::Cipher::RC4.new(...)
+          - pattern: OpenSSL::Cipher.new("RC4")
+          - pattern: OpenSSL::Cipher.new("rc4")
+          - pattern: OpenSSL::Cipher.new("RC4-40")

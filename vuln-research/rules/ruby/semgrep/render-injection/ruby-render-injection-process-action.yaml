@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-render-injection-process-action
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A controller's process method is invoked with an action name from request
+      input, dispatching to an attacker-chosen handler. This reaches actions
+      outside the routed surface and bypasses route-level constraints. Dispatch
+      only to explicitly permitted action names.
+    metadata:
+      vr-id: RB-SG-1923
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md custom dispatch using params[:action]; CWE-98"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/AbstractController/Base.html#method-i-process"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $C.process(params[...])
+          - pattern: $C.process(params[...], ...)

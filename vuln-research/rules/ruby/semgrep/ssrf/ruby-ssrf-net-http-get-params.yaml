@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-ssrf-net-http-get-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A request parameter is passed straight into Net::HTTP.get as the URL,
+      typically via URI() around params[...]. The destination is fully
+      attacker-controlled, so the server can be coerced into fetching internal
+      services or the cloud metadata endpoint (CWE-918). Never fetch a raw
+      request parameter; resolve it, enforce an allowlist of hosts and schemes,
+      and reject private/link-local addresses first.
+    metadata:
+      vr-id: RB-SG-0527
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from CodeQL rb/server-side-request-forgery params-to-fetch flow; CWE-918"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/918.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Net::HTTP.get(URI(params[...]))
+          - pattern: Net::HTTP.get(URI.parse(params[...]))
+          - pattern: Net::HTTP.get(params[...])
+          - pattern: Net::HTTP.get_response(URI(params[...]))

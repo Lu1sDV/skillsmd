@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-command-injection-rake-sh
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Rake's sh helper is called with a single interpolated string. With one string
+      argument, sh routes the command through a shell, so interpolating attacker-controlled
+      input allows shell metacharacter injection and arbitrary command execution. Pass the
+      command and arguments as a multi-element list — `sh "cmd", arg` — to bypass the shell.
+    metadata:
+      vr-id: RB-SG-0122
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived: Rake::FileUtilsExt#sh shell helper (ruby.md OS command execution); CWE-78"
+      license: derived-original
+      references:
+        - "https://ruby.github.io/rake/FileUtils.html#method-i-sh"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: sh("...#{...}...")
+          - pattern: sh "...#{...}..."
+      - pattern-not: sh("...", ...)

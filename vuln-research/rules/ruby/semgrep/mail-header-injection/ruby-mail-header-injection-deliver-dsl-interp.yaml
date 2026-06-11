@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-mail-header-injection-deliver-dsl-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The Mail.deliver / Mail.new block DSL sets a recipient via to "...#{...}..."
+      with interpolated input. A CR/LF in that value injects extra headers into the
+      generated message. Assign the address as a validated value and reject control
+      characters rather than building the header by string interpolation.
+    metadata:
+      vr-id: RB-SG-1616
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by mail gem block DSL 'to' with interpolated recipient; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'to "...#{...}..."'
+          - pattern: 'from "...#{...}..."'
+          - pattern: 'subject "...#{...}..."'

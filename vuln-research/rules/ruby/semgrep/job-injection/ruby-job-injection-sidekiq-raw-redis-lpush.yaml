@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-sidekiq-raw-redis-lpush
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A job payload is pushed straight onto a Sidekiq queue list in Redis using a
+      request-derived JSON string. Writing directly to the queue with raw input
+      bypasses client middleware and lets an attacker forge the job class, args,
+      and queue fields that the worker will trust and execute. Enqueue through the
+      Sidekiq client API with a fixed worker class instead of crafting list items.
+    metadata:
+      vr-id: RB-SG-1715
+      category: job-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md Sidekiq queue payloads + Redis push; CWE-94"
+      license: derived-original
+      references:
+        - "https://github.com/sidekiq/sidekiq/wiki/Job-Format"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $REDIS.lpush("queue:#{...}", params[...])
+          - pattern: $REDIS.lpush($Q, params[...].to_json)
+          - pattern: $REDIS.rpush($Q, params[...])

@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-sql-injection-arel-named-function
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An Arel::Nodes::NamedFunction is built with a function name taken from
+      request params. The function-name argument is emitted into the SQL as a raw
+      identifier, so a tainted name lets an attacker invoke arbitrary SQL
+      functions or inject SQL. Restrict the function name to a fixed allow-list of
+      constants before constructing the node.
+    metadata:
+      vr-id: RB-SG-0330
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/sql-injection Arel NamedFunction sink; CWE-89"
+      license: derived-original
+      references:
+        - "https://www.rubydoc.info/gems/arel/Arel/Nodes/NamedFunction"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Arel::Nodes::NamedFunction.new(params[...], ...)

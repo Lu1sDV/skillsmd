@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-path-traversal-tempfile-dir
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Tempfile.new, Tempfile.create, or Dir.mktmpdir is given a prefix or target directory
+      taken from external input. A traversal prefix lets an attacker influence where the
+      temporary file or directory lands, which can place attacker-named files in unexpected
+      locations. Use a fixed prefix and confine temporary files to a trusted directory
+      rather than one derived from request parameters.
+    metadata:
+      vr-id: RB-SG-0628
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; Tempfile prefix/dir control; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Tempfile.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Tempfile.new(params[...], ...)
+          - pattern: Tempfile.new(params[...])
+          - pattern: Tempfile.create(params[...], ...)
+          - pattern: Dir.mktmpdir(params[...], ...)
+          - pattern: Dir.mktmpdir(..., params[...])

@@ -1,0 +1,12 @@
+edges
+| yaml_load.rb:3:5:3:8 | data | yaml_load.rb:5:28:5:31 | data | provenance |  |
+| yaml_load.rb:3:12:3:17 | call to params | yaml_load.rb:3:12:3:26 | ...[...] | provenance |  |
+| yaml_load.rb:3:12:3:26 | ...[...] | yaml_load.rb:3:5:3:8 | data | provenance |  |
+nodes
+| yaml_load.rb:3:5:3:8 | data | semmle.label | data |
+| yaml_load.rb:3:12:3:17 | call to params | semmle.label | call to params |
+| yaml_load.rb:3:12:3:26 | ...[...] | semmle.label | ...[...] |
+| yaml_load.rb:5:28:5:31 | data | semmle.label | data |
+subpaths
+#select
+| yaml_load.rb:5:28:5:31 | data | yaml_load.rb:3:12:3:17 | call to params | yaml_load.rb:5:28:5:31 | data | Unsafe YAML deserialization of a $@ may execute arbitrary code. | yaml_load.rb:3:12:3:17 | call to params | user-provided value |

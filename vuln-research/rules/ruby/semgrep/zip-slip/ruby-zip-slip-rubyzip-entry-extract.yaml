@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-zip-slip-rubyzip-entry-extract
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A rubyzip entry is extracted to a destination built directly from the
+      archive-controlled entry name (entry.name / entry.to_s) via File.join with
+      the entry object. A malicious ZIP whose entry names contain "../" sequences
+      can escape the extraction directory and overwrite arbitrary files on disk
+      (Zip Slip). Before calling extract, canonicalize the path with
+      File.expand_path and reject any result that does not start with the
+      extraction root.
+    metadata:
+      vr-id: RB-SG-0701
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Snyk Zip Slip advisory (rubyzip); CWE-22; ruby.md Archive extraction sink Zip::Entry#extract"
+      license: derived-original
+      references:
+        - "https://github.com/rubyzip/rubyzip/blob/master/README.md"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $ENTRY.extract(File.join($DEST, $ENTRY.name))
+          - pattern: $ENTRY.extract(File.join($DEST, $ENTRY.to_s))
+          - pattern: $ENTRY.extract($ENTRY.name)

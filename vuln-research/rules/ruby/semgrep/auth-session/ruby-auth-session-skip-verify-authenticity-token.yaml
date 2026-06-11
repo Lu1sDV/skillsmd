@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-auth-session-skip-verify-authenticity-token
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A controller calls skip_before_action :verify_authenticity_token, which
+      turns off Rails' built-in CSRF token check for its actions. Any
+      state-changing endpoint on this controller can then be triggered
+      cross-site by an attacker who lures an authenticated victim to a malicious
+      page, because the browser still attaches the session cookie. Remove the
+      skip, or scope CSRF exemptions only to stateless API actions that
+      authenticate with a bearer token rather than the session cookie.
+    metadata:
+      vr-id: RB-SG-1301
+      category: auth-session
+      cwe: ["CWE-352"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/csrf-protection-disabled; CWE-352"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/security.html#cross-site-request-forgery-csrf"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: skip_before_action :verify_authenticity_token
+          - pattern: skip_before_action :verify_authenticity_token, ...
+          - pattern: skip_before_filter :verify_authenticity_token

@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-ssrf-net-http-new
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Net::HTTP.new is constructed with a host derived from interpolated
+      external input, so subsequent requests on that client target an
+      attacker-chosen destination (CWE-918). This lets a request be aimed at
+      internal services or the instance metadata endpoint. Build the client only
+      from a host that has been validated against an allowlist and whose resolved
+      address is confirmed to be outside private and link-local ranges.
+    metadata:
+      vr-id: RB-SG-0504
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "re-expressed from Net::HTTP.new sink listed in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Net/HTTP.html#method-c-new"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Net::HTTP.new("...#{...}...", ...)
+          - pattern: Net::HTTP.new("...#{...}...")

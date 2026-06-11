@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-render-injection-file-option
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      render file: is given a request-derived filesystem path. This reads and
+      renders an arbitrary file from disk, enabling local file disclosure such as
+      /etc/passwd or application secrets via path traversal. Never build the file:
+      argument from user input; render a fixed template or serve vetted files only.
+    metadata:
+      vr-id: RB-SG-1903
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md 'render file: params[:file]'; CWE-22 local file inclusion"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/layouts_and_rendering.html#rendering-an-arbitrary-file"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "render(file: params[...])"
+          - pattern: "render file: params[...]"
+          - pattern: "render(file: params[...], ...)"
+          - pattern: "render file: params[...], ..."

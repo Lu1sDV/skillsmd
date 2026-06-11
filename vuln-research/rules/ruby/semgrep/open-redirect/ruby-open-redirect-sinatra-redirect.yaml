@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-open-redirect-sinatra-redirect
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Sinatra/Rack handler calls redirect with a value taken from params. Sinatra's
+      redirect performs no host validation, so an attacker-supplied absolute URL drives
+      the victim to an external site. Redirect only to fixed relative paths, or check
+      that the target stays on the application host before redirecting.
+    metadata:
+      vr-id: RB-SG-1021
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Sinatra redirect helper open-redirect pattern; CWE-601"
+      license: derived-original
+      references:
+        - "https://sinatrarb.com/intro.html#Browser%20Redirect"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: redirect(params[...])
+          - pattern: redirect params[...]
+          - pattern: redirect to(params[...])
+          - pattern: redirect "...#{...}..."
+          - pattern: redirect("...#{...}...")
+      - pattern-not: redirect("/...#{...}...")
+      - pattern-not: redirect "/...#{...}..."

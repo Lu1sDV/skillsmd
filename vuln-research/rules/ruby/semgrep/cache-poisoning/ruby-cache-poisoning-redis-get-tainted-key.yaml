@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-cache-poisoning-redis-get-tainted-key
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A Redis GET reads a value under a key taken from request parameters.
+      Without server-side namespacing an attacker can read keys belonging to
+      other tenants or sessions (key-space pollution and cross-tenant reads).
+      Prefix Redis keys with a trusted tenant/user identifier and never embed
+      raw params directly.
+    metadata:
+      vr-id: RB-SG-1811
+      category: cache-poisoning
+      cwe: ["CWE-349"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Redis#get with tainted keys key-space pollution; CWE-349"
+      license: derived-original
+      references:
+        - "https://redis.io/docs/latest/commands/get/"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $REDIS.get(params[...])
+          - pattern: $REDIS.get("...#{params[...]}...")
+          - pattern: $REDIS.mget(params[...], ...)

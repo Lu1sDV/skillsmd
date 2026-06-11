@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-ldap-injection-filter-eq-param-direct
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Net::LDAP::Filter assertion takes a request parameter directly as its
+      value with no escaping. An attacker can supply * or )(cn=*) to widen the
+      assertion and match unintended entries. Wrap the parameter in
+      Net::LDAP::Filter.escape, or validate it against an allow-list, before
+      building the filter.
+    metadata:
+      vr-id: RB-SG-2305
+      category: ldap-injection
+      cwe: ["CWE-90"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/ldap-injection Filter.eq(foo, name) example; CWE-90"
+      license: derived-original
+      references:
+        - "https://owasp.org/www-community/attacks/LDAP_Injection"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Net::LDAP::Filter.eq($ATTR, params[...])
+          - pattern: Net::LDAP::Filter.contains($ATTR, params[...])
+          - pattern: Net::LDAP::Filter.begins($ATTR, params[...])
+          - pattern: Net::LDAP::Filter.ends($ATTR, params[...])

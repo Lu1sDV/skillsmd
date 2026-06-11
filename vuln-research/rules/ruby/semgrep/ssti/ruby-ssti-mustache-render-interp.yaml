@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-ssti-mustache-render-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Mustache.render is called with a template string built from interpolation.
+      When external input is concatenated into the template, the attacker controls
+      Mustache sections and partial references; combined with custom context objects
+      this enables information disclosure and, via partial loading, file read. Keep
+      the template literal static and pass dynamic values through the context hash
+      that Mustache substitutes for `{{ }}` tags.
+    metadata:
+      vr-id: RB-SG-0912
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Mustache template-injection class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://github.com/mustache/mustache"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Mustache.render("...#{...}...", ...)
+          - pattern: Mustache.render("...#{...}...")
+      - pattern-not: Mustache.render("...", ...)

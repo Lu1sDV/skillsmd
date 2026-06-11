@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-mailer-dynamic-action-deliver-later
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A mailer action name taken from request input is invoked through public_send
+      and then dispatched asynchronously with deliver_later. Attacker-controlled
+      method names let any public mailer method run as a background job, enabling
+      unintended side effects or information disclosure. Whitelist the allowed
+      action names before dispatch rather than forwarding params to public_send.
+    metadata:
+      vr-id: RB-SG-1707
+      category: job-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Mailer.public_send(params[:action]).deliver_later; CWE-94"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/action_mailer_basics.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $M.public_send(params[...], ...).deliver_later(...)
+          - pattern: $M.public_send(params[...], ...).deliver_later
+          - pattern: $M.send(params[...], ...).deliver_later(...)

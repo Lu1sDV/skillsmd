@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-http-parsing-url-for-host-from-request
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      url_for / a *_url helper is given host: request.host (or the raw Host header),
+      so the generated absolute URL inherits the client-controlled Host. This
+      poisons emails and shared links. Pass a host taken from server configuration,
+      or set default_url_options on the server side.
+    metadata:
+      vr-id: RB-SG-2020
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md host-derived absolute link generation; CWE-444"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionDispatch/Http/URL.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "url_for(..., host: request.host, ...)"
+          - pattern: "url_for(..., host: request.headers[\"Host\"], ...)"
+          - pattern: "$H.url(..., host: request.host, ...)"

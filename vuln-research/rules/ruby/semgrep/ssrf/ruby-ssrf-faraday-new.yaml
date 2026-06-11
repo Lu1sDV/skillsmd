@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-ssrf-faraday-new
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Faraday.new is initialized with a base URL built from interpolated
+      external input, so every request on that connection targets an
+      attacker-chosen host (CWE-918). This can drive requests at internal
+      services or the instance metadata endpoint. Build the connection from a
+      host validated against an allowlist and confirm its resolved address is
+      public before issuing requests.
+    metadata:
+      vr-id: RB-SG-0511
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from Faraday.new sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://lostisland.github.io/faraday/"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Faraday.new("...#{...}...")
+          - pattern: Faraday.new("...#{...}...", ...)
+          - pattern: 'Faraday.new(url: "...#{...}...", ...)'
+          - pattern: 'Faraday.new(url: "...#{...}...")'

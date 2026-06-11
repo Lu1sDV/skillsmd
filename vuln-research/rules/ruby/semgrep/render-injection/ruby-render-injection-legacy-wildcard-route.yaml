@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-render-injection-legacy-wildcard-route
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A legacy wildcard route maps :controller and :action segments directly from
+      the URL. This exposes every public controller method as a reachable action,
+      letting an attacker invoke endpoints that were never meant to be routable.
+      Replace the wildcard with explicit resource or member routes.
+    metadata:
+      vr-id: RB-SG-1916
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md legacy route ':controller(/:action(/:id))'; CWE-98"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/routing.html#controller-namespaces-and-routing"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: match $ROUTE
+          - pattern: match $ROUTE, ...
+          - pattern: get $ROUTE
+          - pattern: get $ROUTE, ...
+      - metavariable-regex:
+          metavariable: $ROUTE
+          regex: '^"?.*:controller.*:action.*"?$'

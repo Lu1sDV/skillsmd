@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-mail-header-injection-headers-assign
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A mail header is assigned directly from request params via headers[...] = .
+      Raw header values that contain CR/LF let an attacker inject new headers or a
+      body, splitting the message. Whitelist the header name and sanitize the value
+      (strip newlines) before writing it.
+    metadata:
+      vr-id: RB-SG-1607
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog 'headers[...] = params' direct header assignment; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: headers[...] = params[...]
+          - pattern: 'headers["...#{...}..."] = ...'
+          - pattern: 'headers[...] = "...#{...}..."'

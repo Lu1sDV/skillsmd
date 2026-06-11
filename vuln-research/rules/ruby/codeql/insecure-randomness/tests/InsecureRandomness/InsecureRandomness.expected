@@ -1,0 +1,6 @@
+edges
+nodes
+| InsecureRandomness.rb:5:54:5:61 | call to rand | semmle.label | call to rand |
+subpaths
+#select
+| InsecureRandomness.rb:5:54:5:61 | call to rand | InsecureRandomness.rb:5:54:5:61 | call to rand | InsecureRandomness.rb:5:54:5:61 | call to rand | Insecure random value from $@ flows into a security-sensitive context. | InsecureRandomness.rb:5:54:5:61 | call to rand | call to rand |

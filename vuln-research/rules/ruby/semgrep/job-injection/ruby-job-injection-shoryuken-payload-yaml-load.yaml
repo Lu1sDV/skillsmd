@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-shoryuken-payload-yaml-load
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Shoryuken SQS message body is deserialized with an unsafe YAML loader
+      inside the worker. The queue payload is fully attacker-influenced when the
+      producer is untrusted or the queue is shared, so YAML.load on the body can
+      instantiate gadget objects and execute code. Parse the body as JSON or use
+      YAML.safe_load with an explicit permitted-class list.
+    metadata:
+      vr-id: RB-SG-1712
+      category: job-injection
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Shoryuken message handlers flowing to deserialization; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/ruby-shoryuken/shoryuken"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: YAML.load($SQS_MSG.body)
+          - pattern: YAML.unsafe_load($SQS_MSG.body)
+          - pattern: Psych.load($SQS_MSG.body)

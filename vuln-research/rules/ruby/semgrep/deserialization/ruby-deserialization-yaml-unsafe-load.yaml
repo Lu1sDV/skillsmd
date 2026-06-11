@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-deserialization-yaml-unsafe-load
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      YAML.unsafe_load deliberately re-enables full object instantiation,
+      including arbitrary tagged Ruby objects. Passing externally sourced YAML
+      lets an attacker build a deserialization gadget chain and run code in the
+      process. Replace it with YAML.safe_load and an explicit permitted_classes
+      allowlist scoped to the types you actually expect.
+    metadata:
+      vr-id: RB-SG-0404
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md YAML.unsafe_load; CWE-502"
+      license: derived-original
+      references:
+        - "https://ruby-doc.org/stdlib/libdoc/psych/rdoc/Psych.html#method-c-unsafe_load"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: YAML.unsafe_load($X)
+          - pattern: YAML.unsafe_load($X, ...)
+      - pattern-not: YAML.unsafe_load("...")

@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-code-injection-public-send
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      public_send dispatches to a method whose name is built from external input.
+      Although it cannot reach private methods, an attacker can still invoke any
+      public method on the receiver, which often includes destructive or
+      state-changing actions. Restrict the callable surface with an explicit
+      allowlist of method names rather than passing tainted data through.
+    metadata:
+      vr-id: RB-SG-0208
+      category: code-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md public_send; CWE-94"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Object.html#method-i-public_send"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $X.public_send(params[...], ...)
+          - pattern: $X.public_send("...#{...}...", ...)
+      - pattern-not: $X.public_send("...")

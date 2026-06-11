@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-perform-deep-munge-disabled
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      perform_deep_munge is disabled, which restores the legacy parameter
+      handling that allowed crafted nested query strings to bypass presence and
+      type checks (the historical CVE-2013-0155 class of issues). Leave deep
+      munge enabled so empty-array and null injection through params is filtered.
+    metadata:
+      vr-id: RB-SG-2407
+      category: secure-config
+      cwe: ["CWE-16"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog perform_deep_munge=false; CVE-2013-0155"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/16.html"
+        - "https://guides.rubyonrails.org/configuring.html"
+    patterns:
+      - pattern: $CFG.action_dispatch.perform_deep_munge = false

@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-http-parsing-hosts-clear
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      config.hosts.clear (or assigning config.hosts = nil/[]) disables Rails Host
+      Authorization, removing the only defense against host-header injection. With
+      the allowlist empty, attacker-supplied Host headers flow into URL helpers and
+      caches. Keep an explicit list of permitted hosts instead of clearing it.
+    metadata:
+      vr-id: RB-SG-2012
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md config.hosts.clear Host Authorization disabled; CWE-444"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/configuring.html#actiondispatch-hostauthorization"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: config.hosts.clear
+          - pattern: $C.hosts.clear
+          - pattern: config.hosts = nil
+          - pattern: config.hosts = []

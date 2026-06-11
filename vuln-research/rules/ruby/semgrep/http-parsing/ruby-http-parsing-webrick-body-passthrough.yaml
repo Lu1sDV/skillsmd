@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-http-parsing-webrick-body-passthrough
+    languages: [ruby]
+    severity: INFO
+    message: >
+      The raw WEBrick request body is forwarded verbatim to an upstream HTTP client.
+      Proxying an unparsed body while re-emitting client framing headers can desync
+      the upstream parser (request smuggling) and forwards any embedded smuggled
+      request. Reconstruct the request from validated fields instead of relaying raw
+      bytes.
+    metadata:
+      vr-id: RB-SG-2025
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md WEBrick::HTTPRequest#body raw passthrough; CWE-444"
+      license: derived-original
+      references:
+        - "https://portswigger.net/web-security/request-smuggling"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Net::HTTP.post($URI, req.body, ...)
+          - pattern: $HTTP.post($URI, req.body, req.header)
+          - pattern: $HTTP.request_post($PATH, req.body, req.header)

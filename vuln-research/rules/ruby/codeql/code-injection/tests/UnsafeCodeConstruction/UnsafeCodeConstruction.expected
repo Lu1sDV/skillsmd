@@ -1,0 +1,11 @@
+edges
+| lib/codegen.rb:4:26:4:29 | attr | lib/codegen.rb:5:17:5:23 | #{...} | provenance |  |
+| lib/codegen.rb:4:26:4:29 | attr | lib/codegen.rb:5:27:5:33 | #{...} | provenance |  |
+nodes
+| lib/codegen.rb:4:26:4:29 | attr | semmle.label | attr |
+| lib/codegen.rb:5:17:5:23 | #{...} | semmle.label | #{...} |
+| lib/codegen.rb:5:27:5:33 | #{...} | semmle.label | #{...} |
+subpaths
+#select
+| lib/codegen.rb:5:17:5:23 | #{...} | lib/codegen.rb:4:26:4:29 | attr | lib/codegen.rb:5:17:5:23 | #{...} | This string interpolation which depends on $@ is later $@. | lib/codegen.rb:4:26:4:29 | attr | library input | lib/codegen.rb:6:5:6:14 | call to eval | interpreted as code |
+| lib/codegen.rb:5:27:5:33 | #{...} | lib/codegen.rb:4:26:4:29 | attr | lib/codegen.rb:5:27:5:33 | #{...} | This string interpolation which depends on $@ is later $@. | lib/codegen.rb:4:26:4:29 | attr | library input | lib/codegen.rb:6:5:6:14 | call to eval | interpreted as code |

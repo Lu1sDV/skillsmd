@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-ssti-erubis-eval-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The legacy Erubis engine compiles a template assembled from interpolation.
+      Erubis converts the template to Ruby and evaluates it, so external input
+      concatenated into the template body becomes executable code (server-side
+      template injection). Compile Erubis from fixed template files and pass dynamic
+      values as the context/binding, never by building the template string from
+      input.
+    metadata:
+      vr-id: RB-SG-0918
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Erubis engine template-injection class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://github.com/kwatch/erubis"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Erubis::Eruby.new("...#{...}...")
+          - pattern: Erubis::Eruby.new("...#{...}...").result(...)
+      - pattern-not: Erubis::Eruby.new("...")

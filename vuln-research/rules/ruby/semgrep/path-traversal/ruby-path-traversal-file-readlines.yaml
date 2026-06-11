@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-path-traversal-file-readlines
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      File.readlines or File.foreach iterates the contents of a path taken from request
+      input. Traversal sequences allow disclosure of arbitrary files line by line.
+      Constrain the parameter to a fixed allow list, or join it to a known base and
+      reject the result if File.expand_path leaves that base directory.
+    metadata:
+      vr-id: RB-SG-0607
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/File.html#method-c-readlines"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: File.readlines(params[...])
+          - pattern: File.readlines("...#{params[...]}...")
+          - pattern: File.foreach(params[...])
+          - pattern: File.foreach("...#{params[...]}...")

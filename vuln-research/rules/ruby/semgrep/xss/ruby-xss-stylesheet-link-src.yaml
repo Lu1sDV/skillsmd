@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-xss-stylesheet-link-src
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      `stylesheet_link_tag` and `javascript_include_tag` build asset references whose
+      URL comes from request input. A request-controlled value lets an attacker load
+      script or CSS from a hostile origin (or a `data:`/`javascript:` URL), executing
+      code in the page — cross-site scripting and resource injection. Reference fixed
+      asset names from the manifest, never a client-supplied URL.
+    metadata:
+      vr-id: RB-SG-0828
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by Rails asset tag helpers with tainted URL; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/AssetTagHelper.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: javascript_include_tag(params[...])
+          - pattern: stylesheet_link_tag(params[...])

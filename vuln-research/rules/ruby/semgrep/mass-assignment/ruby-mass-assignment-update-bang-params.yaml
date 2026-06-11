@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-mass-assignment-update-bang-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The instance #update! method is given a raw params slice; it saves the
+      record with every request key assigned and raises only on validation
+      failure, which does not stop privilege columns from being written. Pass a
+      permitted hash from params.require(:record).permit(...) instead.
+    metadata:
+      vr-id: RB-SG-1107
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/insecure-mass-assignment; CWE-915"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/action_controller_overview.html#strong-parameters"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $O.update!(params[$K])
+          - pattern: $O.update!(params[$K], ...)
+      - pattern-not: $O.update!(params.require(...).permit(...), ...)
+      - pattern-not: $O.update!(params.require(...).permit(...))

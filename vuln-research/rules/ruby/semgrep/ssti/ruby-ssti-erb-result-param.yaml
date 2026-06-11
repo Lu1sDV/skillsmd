@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-ssti-erb-result-param
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A request parameter is passed directly as the source string to ERB.new and
+      then evaluated. The parameter is interpreted as a full ERB template, so an
+      attacker can supply tags such as `<%= system('id') %>` and execute arbitrary
+      commands on the server. Never compile templates from `params`; use a fixed
+      set of trusted template files chosen by an allowlisted key.
+    metadata:
+      vr-id: RB-SG-0906
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by ERB params-to-template SSTI class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/ERB.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: ERB.new(params[...]).result(...)
+          - pattern: ERB.new(params[...], ...).result(...)

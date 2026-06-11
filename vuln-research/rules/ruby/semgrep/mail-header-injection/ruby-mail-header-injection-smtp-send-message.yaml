@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-mail-header-injection-smtp-send-message
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Net::SMTP#send_message is called with a request-controlled raw message or
+      envelope address. The attacker can craft the full SMTP DATA payload, injecting
+      headers and extra recipients, or pass a tainted MAIL FROM / RCPT TO. Build the
+      message from validated fields and constrain the envelope addresses.
+    metadata:
+      vr-id: RB-SG-1611
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog 'Net::SMTP#send_message' tainted raw/envelope; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $SMTP.send_message(params[...], ...)
+          - pattern: $SMTP.send_message(..., params[...], ...)
+          - pattern: '$SMTP.send_message("...#{...}...", ...)'

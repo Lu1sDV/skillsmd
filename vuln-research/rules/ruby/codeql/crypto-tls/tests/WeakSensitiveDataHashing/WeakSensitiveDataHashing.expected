@@ -1,0 +1,8 @@
+edges
+| weak_hash.rb:6:22:6:29 | password | weak_hash.rb:7:36:7:43 | password | provenance |  |
+nodes
+| weak_hash.rb:6:22:6:29 | password | semmle.label | password |
+| weak_hash.rb:7:36:7:43 | password | semmle.label | password |
+subpaths
+#select
+| weak_hash.rb:7:36:7:43 | password | weak_hash.rb:6:22:6:29 | password | weak_hash.rb:7:36:7:43 | password | $@ is used in a hashing algorithm (MD5) that is insecure for password hashing, since it is not a computationally expensive hash function. | weak_hash.rb:6:22:6:29 | password | Sensitive data (password) |

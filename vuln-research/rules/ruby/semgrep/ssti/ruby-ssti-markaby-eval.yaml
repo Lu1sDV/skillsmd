@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-ssti-markaby-eval
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Markaby builds HTML by evaluating Ruby, and here the markup source is created
+      from interpolation. Because Markaby instance-evals the supplied code, external
+      input concatenated into that source runs as Ruby, not as escaped text
+      (template injection to RCE). Construct Markaby markup with literal blocks and
+      feed user data as method arguments rather than building the source string from
+      input.
+    metadata:
+      vr-id: RB-SG-0913
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Markaby eval-based template-injection class; CWE-94"
+      license: derived-original
+      references:
+        - "https://github.com/markaby/markaby"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Markaby::Builder.new.instance_eval("...#{...}...")
+          - pattern: Markaby::Template.new("...#{...}...")

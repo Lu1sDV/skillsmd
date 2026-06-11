@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-mail-header-injection-headers-bulk
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      headers(...) is called with a request params hash, applying every
+      attacker-supplied key and value as a mail header in bulk. This lets an attacker
+      overwrite security headers or inject new ones with CR/LF payloads. Build the
+      header hash explicitly from a fixed allow-list of keys.
+    metadata:
+      vr-id: RB-SG-1608
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog 'headers(params_hash)' bulk header assignment; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: headers(params)
+          - pattern: headers(params[...])
+          - pattern: headers(params.permit(...))

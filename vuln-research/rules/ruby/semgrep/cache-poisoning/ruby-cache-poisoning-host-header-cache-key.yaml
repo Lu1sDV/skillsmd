@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-cache-poisoning-host-header-cache-key
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A cache key is built from request.host or the raw Host header. The Host
+      value is attacker-controllable, so an attacker can set an arbitrary host
+      to write a cache entry that a victim on a different host later reads -
+      classic Host-header web cache poisoning. Key the cache on validated,
+      server-configured host values, not on the inbound header.
+    metadata:
+      vr-id: RB-SG-1817
+      category: cache-poisoning
+      cwe: ["CWE-444"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Rack::Request#host / HTTP_HOST as cache key; CWE-444"
+      license: derived-original
+      references:
+        - "https://portswigger.net/web-security/host-header"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Rails.cache.write("...#{request.host}...", ...)
+          - pattern: Rails.cache.fetch("...#{request.host}...", ...)
+          - pattern: Rails.cache.read("...#{request.host}...")
+          - pattern: Rails.cache.write("...#{request.env["HTTP_HOST"]}...", ...)
+          - pattern: Rails.cache.fetch("...#{request.env["HTTP_HOST"]}...", ...)

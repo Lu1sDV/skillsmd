@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-path-traversal-file-open
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      File.open is called with a path that comes from request input. Beyond traversal
+      with "../", a leading "|" in the path makes Ruby's File/IO open the value as a
+      command pipe, so an unconstrained path can become both a file-disclosure and a
+      command-execution primitive. Validate the input against an allow list and resolve
+      it under a fixed base with File.expand_path before opening.
+    metadata:
+      vr-id: RB-SG-0603
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; ruby IO pipe-open behaviour; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/File.html#method-c-open"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: File.open(params[...], ...)
+          - pattern: File.open(params[...])
+          - pattern: File.open("...#{params[...]}...", ...)
+          - pattern: File.open("...#{params[...]}...")

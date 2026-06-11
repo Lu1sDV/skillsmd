@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-cache-poisoning-rails-cache-delete-matched-tainted
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Rails.cache.delete_matched receives a glob/regex pattern built from
+      request input. An attacker can supply a broad pattern (for example "*")
+      to wipe the entire cache, causing a denial of service through forced
+      recomputation, or selectively evict other tenants' entries. Use a fixed,
+      narrowly-scoped pattern derived from trusted identifiers only.
+    metadata:
+      vr-id: RB-SG-1804
+      category: cache-poisoning
+      cwe: ["CWE-349"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Rails.cache.delete_matched(pattern) glob invalidation; CWE-349"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveSupport/Cache/Store.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Rails.cache.delete_matched(params[...], ...)
+          - pattern: Rails.cache.delete_matched("...#{params[...]}...", ...)

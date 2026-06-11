@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-command-injection-minimagick-combine
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A MiniMagick tool option is set from an interpolated string built with external
+      input. MiniMagick forwards merged option strings to the ImageMagick binary, so
+      interpolating untrusted data lets an attacker smuggle extra ImageMagick flags or
+      shell-affecting tokens. Pass user values as discrete arguments via merge!/<< rather
+      than splicing them into one interpolated option string.
+    metadata:
+      vr-id: RB-SG-0128
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived: MiniMagick::Tool external invocation (ruby.md OS command execution); CWE-78"
+      license: derived-original
+      references:
+        - "https://github.com/minimagick/minimagick"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $TOOL.merge!(["...#{...}..."])

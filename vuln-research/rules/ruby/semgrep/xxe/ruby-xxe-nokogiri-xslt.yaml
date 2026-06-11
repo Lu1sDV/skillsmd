@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-xxe-nokogiri-xslt
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A stylesheet is compiled from attacker-controlled input with
+      Nokogiri::XSLT. libxslt supports the document() function and external
+      stylesheet imports, so a hostile stylesheet can read local files and reach
+      internal URLs during transformation (SSRF and file disclosure). Never
+      compile or apply XSLT supplied by an untrusted party.
+    metadata:
+      vr-id: RB-SG-1527
+      category: xxe
+      cwe: ["CWE-611", "CWE-918"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Nokogiri::XSLT document()/import surface; CWE-611"
+      license: derived-original
+      references:
+        - "https://nokogiri.org/rdoc/Nokogiri/XSLT.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Nokogiri::XSLT($SRC)
+          - pattern: Nokogiri::XSLT.parse($SRC)
+      - pattern-not: Nokogiri::XSLT("...")
+      - pattern-not: Nokogiri::XSLT.parse("...")

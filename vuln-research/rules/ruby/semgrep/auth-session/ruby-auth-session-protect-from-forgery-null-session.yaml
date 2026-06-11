@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-auth-session-protect-from-forgery-null-session
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      protect_from_forgery with: :null_session only empties the session when a
+      CSRF token is invalid instead of raising. If any part of the session is
+      memoized or the action does not depend on the nulled session value, the
+      forged cross-site request still succeeds. Prefer
+      protect_from_forgery with: :exception so an invalid token aborts the
+      request outright.
+    metadata:
+      vr-id: RB-SG-1303
+      category: auth-session
+      cwe: ["CWE-352"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/csrf-protection-disabled discussion of null_session; CWE-352"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection/ClassMethods.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: "protect_from_forgery with: :null_session"

@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-ssti-tilt-engine-bracket-param
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Tilt engine resolved via Tilt[...] is instantiated with a template body
+      taken from request input. The chosen engine (ERB, Erubi, Haml, etc.) compiles
+      and evaluates that body, so attacker-supplied content runs as server-side code
+      (template injection to RCE). Build the engine from a fixed, trusted template
+      and pass user values as render locals rather than handing the template body
+      from `params` to the engine.
+    metadata:
+      vr-id: RB-SG-0927
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Tilt engine-bracket user-source class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://github.com/jeremyevans/tilt"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Tilt[$ENGINE].new { params[...] }

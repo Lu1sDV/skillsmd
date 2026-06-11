@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-command-injection-process-spawn
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Process.spawn is called with a single interpolated string. The single-string form
+      is parsed by the shell, so external input interpolated into it enables shell
+      metacharacter injection and arbitrary command execution. Provide the executable
+      and each argument separately — `Process.spawn("cmd", arg)` — to avoid the shell.
+    metadata:
+      vr-id: RB-SG-0105
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql CommandInjectionQuery (Process.spawn sink); CWE-78"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Process.html#method-c-spawn"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Process.spawn("...#{...}...")
+      - pattern-not: Process.spawn("...", ...)

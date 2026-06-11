@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-sql-injection-exists-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Model.exists? is called with an interpolated string condition, which
+      ActiveRecord interprets as raw SQL. Tainted input here can turn the boolean
+      check into a blind SQL-injection oracle leaking data row by row. Use a Hash
+      or placeholder condition — exists?(col: value) — so the value is bound.
+    metadata:
+      vr-id: RB-SG-0329
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by brakeman SQL injection exists? check; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/FinderMethods.html#method-i-exists-3F"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $M.exists?("...#{...}...")

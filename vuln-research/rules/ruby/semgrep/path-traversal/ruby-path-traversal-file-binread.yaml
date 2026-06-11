@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-path-traversal-file-binread
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      File.binread reads raw bytes from a path built out of external input. An attacker
+      supplying "../" segments can exfiltrate arbitrary files such as private keys or
+      configuration secrets. Restrict the parameter to a known set of names, or join it
+      onto a fixed root and reject the result if File.expand_path escapes that root.
+    metadata:
+      vr-id: RB-SG-0604
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/File.html#method-c-binread"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: File.binread(params[...])
+          - pattern: File.binread("...#{params[...]}...")

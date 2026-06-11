@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-code-injection-send-interp
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The method name passed to send is an interpolated string that splices in a
+      dynamic value (for example "process_#{type}"). If the interpolated fragment
+      is attacker-controlled, the prefix offers no protection — crafted input can
+      still steer dispatch to unintended methods. Build the target name from a
+      validated token mapped through an allowlist before calling send.
+    metadata:
+      vr-id: RB-SG-0226
+      category: code-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md send/__send__ (interpolated name); CWE-94"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Object.html#method-i-send"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $X.send("...#{...}...", ...)
+          - pattern: $X.__send__("...#{...}...", ...)
+      - pattern-not: $X.send("...")
+      - pattern-not: $X.__send__("...")

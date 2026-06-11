@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-redos-scan-dynamic
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      String#scan iterates the whole subject looking for every match of a regex that is
+      compiled here from request input. A client-controlled pattern with overlapping
+      quantifiers makes each scan step backtrack catastrophically, stalling the worker
+      (ReDoS). Scan with a fixed, reviewed pattern rather than one built from params.
+    metadata:
+      vr-id: RB-SG-1207
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink scan(regex) with attacker-supplied pattern; CWE-1333"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/String.html#method-i-scan"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $S.scan(Regexp.new(params[...]))

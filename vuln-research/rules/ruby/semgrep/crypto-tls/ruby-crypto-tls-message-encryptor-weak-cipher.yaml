@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-crypto-tls-message-encryptor-weak-cipher
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An ActiveSupport::MessageEncryptor is configured with a non-authenticated
+      cipher such as aes-256-cbc. Without an AEAD mode the encrypted payload has
+      no built-in integrity, exposing it to padding-oracle and bit-flipping
+      attacks. Use the default aes-256-gcm so tampering is detected.
+    metadata:
+      vr-id: RB-SG-1423
+      category: crypto-tls
+      cwe: ["CWE-327", "CWE-326"]
+      owasp: "A02:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog weak MessageEncryptor cipher; CWE-327"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/327.html"
+        - "https://api.rubyonrails.org/classes/ActiveSupport/MessageEncryptor.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "ActiveSupport::MessageEncryptor.new(..., cipher: \"aes-256-cbc\")"
+          - pattern: "ActiveSupport::MessageEncryptor.new(..., cipher: \"aes-128-cbc\")"
+          - pattern: "ActiveSupport::MessageEncryptor.new(..., cipher: \"aes-256-cbc\", ...)"

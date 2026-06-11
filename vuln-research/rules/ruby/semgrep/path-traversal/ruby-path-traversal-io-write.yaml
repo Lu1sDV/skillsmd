@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-path-traversal-io-write
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      IO.write writes data to a path derived from external input. Traversal sequences let
+      an attacker overwrite files outside the intended directory, and a leading "|" can
+      cause IO to launch a subprocess instead of writing a file. Validate the destination
+      against an allow list and resolve it under a trusted base before writing.
+    metadata:
+      vr-id: RB-SG-0612
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; ruby IO pipe-open behaviour; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/IO.html#method-c-write"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: IO.write(params[...], ...)
+          - pattern: IO.write("...#{params[...]}...", ...)
+          - pattern: IO.binwrite(params[...], ...)
+          - pattern: IO.binwrite("...#{params[...]}...", ...)

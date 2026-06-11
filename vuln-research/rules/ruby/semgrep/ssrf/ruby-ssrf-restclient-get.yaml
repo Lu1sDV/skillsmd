@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-ssrf-restclient-get
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      RestClient.get is called with a URL built from interpolated external input.
+      Because the destination is attacker-controlled, the server can be coerced
+      into fetching internal endpoints or cloud metadata (CWE-918). Validate the
+      URL against an allowlist of permitted hosts and schemes and resolve+pin the
+      address before issuing the request rather than passing user data directly.
+    metadata:
+      vr-id: RB-SG-0507
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from RestClient.get sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://github.com/rest-client/rest-client"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: RestClient.get("...#{...}...")
+          - pattern: RestClient.get("...#{...}...", ...)

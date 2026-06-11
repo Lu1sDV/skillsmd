@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-sql-injection-lock-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A locking clause is interpolated into the string passed to Model.lock. The
+      lock fragment is appended as raw SQL, so tainted input can inject arbitrary
+      SQL after the FOR UPDATE clause. Pass a fixed locking string (lock(true) or
+      a constant) rather than interpolating external data.
+    metadata:
+      vr-id: RB-SG-0316
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by brakeman SQL injection lock check; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/QueryMethods.html#method-i-lock"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $M.lock("...#{...}...")

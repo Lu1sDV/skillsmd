@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-ssrf-socket-tcp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Socket.tcp opens a raw TCP connection to a host built from interpolated
+      external input. Because the host (and possibly port) is
+      attacker-controlled, this is a protocol-agnostic SSRF primitive that can
+      reach internal services on any port, including the metadata endpoint
+      (CWE-918). Resolve the host and reject private, loopback, and link-local
+      addresses, and accept only allowlisted host/port pairs before connecting.
+    metadata:
+      vr-id: RB-SG-0522
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "re-expressed from Socket.tcp sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Socket.html#method-c-tcp"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Socket.tcp("...#{...}...", ...)
+          - pattern: Socket.tcp("...#{...}...")

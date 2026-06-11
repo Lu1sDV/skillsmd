@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-cache-poisoning-forwarded-header-cache-key
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A cache key incorporates an unkeyed request header such as
+      X-Forwarded-Host, X-Forwarded-Scheme or X-Original-URL read from request
+      headers. These headers are attacker-supplied and usually excluded from the
+      shared cache key, so an attacker can poison the entry that legitimate
+      users receive. Do not fold untrusted request headers into cache keys.
+    metadata:
+      vr-id: RB-SG-1818
+      category: cache-poisoning
+      cwe: ["CWE-444"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md tainted headers shared-cache poisoning; CWE-444 (unkeyed-input cache poisoning)"
+      license: derived-original
+      references:
+        - "https://portswigger.net/research/practical-web-cache-poisoning"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Rails.cache.fetch("...#{request.headers[...]}...", ...)
+          - pattern: Rails.cache.write("...#{request.headers[...]}...", ...)
+          - pattern: Rails.cache.read("...#{request.headers[...]}...")
+          - pattern: Rails.cache.fetch("...#{request.x_forwarded_host}...", ...)

@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-path-traversal-send-file
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The Rails send_file helper streams a file from a path built out of request input.
+      Without canonicalization an attacker can use "../" to download files outside the
+      intended directory, such as application secrets or system files. Map the parameter
+      through a fixed lookup or join it to a known root and confirm File.expand_path keeps
+      the result inside that root before sending.
+    metadata:
+      vr-id: RB-SG-0622
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; Rails send_file disclosure pattern; CWE-22"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/DataStreaming.html#method-i-send_file"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: send_file(params[...], ...)
+          - pattern: send_file(params[...])
+          - pattern: send_file("...#{params[...]}...", ...)
+          - pattern: send_file("...#{params[...]}...")

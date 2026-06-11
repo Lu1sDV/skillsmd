@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-http-parsing-header-in-redirect
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      redirect_to is built from a raw request header (Referer, X-Forwarded-Host,
+      or similar). Clients fully control these headers, so this is an open redirect
+      and host-poisoning sink. Redirect to a fixed allowlisted target or a verified
+      relative path rather than a reflected header.
+    metadata:
+      vr-id: RB-SG-2015
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md request headers used in redirects; CWE-444"
+      license: derived-original
+      references:
+        - "https://owasp.org/www-community/attacks/Unvalidated_Redirects_and_Forwards_Cheat_Sheet"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: redirect_to request.headers[...]
+          - pattern: redirect_to request.headers["Referer"]
+          - pattern: redirect_to request.referer
+          - pattern: redirect_to "...#{request.headers[...]}..."

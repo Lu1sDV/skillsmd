@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-http-parsing-raw-header-logging
+    languages: [ruby]
+    severity: INFO
+    message: >
+      A raw request header is written to the application log without sanitization.
+      Newline-bearing header values forge log entries (log injection) and headers
+      such as Host or X-Forwarded-* poison any monitoring keyed on them. Log a
+      validated, single-line representation rather than the raw header.
+    metadata:
+      vr-id: RB-SG-2022
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A09:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md request headers used in logs; CWE-444"
+      license: derived-original
+      references:
+        - "https://owasp.org/www-community/attacks/Log_Injection"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: logger.info("...#{request.headers[...]}...")
+          - pattern: logger.warn("...#{request.headers[...]}...")
+          - pattern: Rails.logger.info("...#{request.headers[...]}...")
+          - pattern: logger.info("...#{request.host}...")

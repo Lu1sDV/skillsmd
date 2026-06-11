@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-cache-poisoning-rails-cache-multi-tainted-keys
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Rails.cache.read_multi or write_multi is invoked with keys spread from
+      request parameters. Bulk access over attacker-chosen keys lets an attacker
+      enumerate or overwrite large swaths of the cache key space across tenants.
+      Build the key list from validated, server-side identifiers rather than
+      splatting params.
+    metadata:
+      vr-id: RB-SG-1816
+      category: cache-poisoning
+      cwe: ["CWE-349"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Rails.cache.read_multi/write_multi bulk key-space access; CWE-349"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveSupport/Cache/Store.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Rails.cache.read_multi(*params[...])
+          - pattern: Rails.cache.read_multi(params[...], ...)
+          - pattern: Rails.cache.write_multi(params[...])

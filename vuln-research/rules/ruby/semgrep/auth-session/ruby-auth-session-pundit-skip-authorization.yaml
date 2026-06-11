@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-auth-session-pundit-skip-authorization
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      skip_authorization (or skip_policy_scope) tells Pundit's
+      verify_authorized / verify_policy_scoped after-action checks to pass even
+      though no policy was consulted. The action then runs without an
+      authorization decision, allowing users to act on records they should not
+      reach. Call authorize/policy_scope on the resource instead of suppressing
+      the verification.
+    metadata:
+      vr-id: RB-SG-1313
+      category: auth-session
+      cwe: ["CWE-862", "CWE-285"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Pundit skip_authorization/skip_policy_scope; CWE-862"
+      license: derived-original
+      references:
+        - "https://github.com/varvet/pundit#ensuring-policies-and-scopes-are-used"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "skip_authorization"
+          - pattern: "skip_policy_scope"

@@ -1,0 +1,6 @@
+edges
+nodes
+| RandomTokenIndexing.rb:4:54:4:61 | call to rand | semmle.label | call to rand |
+subpaths
+#select
+| RandomTokenIndexing.rb:4:54:4:61 | call to rand | RandomTokenIndexing.rb:4:54:4:61 | call to rand | RandomTokenIndexing.rb:4:54:4:61 | call to rand | Insecure random value from $@ indexes a character set, yielding a predictable token. | RandomTokenIndexing.rb:4:54:4:61 | call to rand | call to rand |

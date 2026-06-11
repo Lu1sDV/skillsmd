@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-insecure-randomness-rand-string-interpolated-token
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A string token interpolates Kernel#rand output (e.g. "user-#{rand(9999)}").
+      The embedded value is drawn from the predictable global PRNG, so the token is
+      guessable. If the string is used as an identifier for access control or
+      uniqueness guarantees, build it from SecureRandom instead.
+    metadata:
+      vr-id: RB-SG-2216
+      category: insecure-randomness
+      cwe: ["CWE-338"]
+      owasp: "A02:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "re-expressed from interpolated-rand identifier idiom; CWE-338"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/338.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $V = "...#{rand(...)}..."
+          - pattern: $V = "...#{rand}..."
+      - metavariable-regex:
+          metavariable: $V
+          regex: (?i).*(token|secret|key|nonce|session|reset|invite).*

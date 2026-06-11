@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-open-redirect-redirect-to-request-host
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      redirect_to targets a URL built from request.host or request.original_url. The
+      Host header that drives request.host is attacker-controlled unless a trusted
+      proxy enforces it, so this can redirect the victim to an external host. Build the
+      redirect target from a configured host constant or a fixed relative path.
+    metadata:
+      vr-id: RB-SG-1024
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby sink catalog host header poisoning via request.host/request.original_url; CWE-601"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/601.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: redirect_to request.original_url
+          - pattern: redirect_to(request.original_url)
+          - pattern: redirect_to "...#{request.host}..."
+          - pattern: redirect_to("...#{request.host}...")
+          - pattern: redirect_to "...#{request.host_with_port}..."

@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-rails-misc-current-tenant-from-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The multi-tenant Current context is set by looking up an account directly from a
+      request param. An attacker substitutes another tenant's account id and the whole
+      request runs in that tenant's context, leaking and mutating cross-tenant data.
+      Resolve the tenant from the authenticated session or subdomain and authorize the
+      membership.
+    metadata:
+      vr-id: RB-SG-2511
+      category: rails-misc
+      cwe: ["CWE-200"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Current.account = Account.find(params[...]) tenant-context sink; CWE-200"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveSupport/CurrentAttributes.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "Current.account = Account.find(params[...])"
+          - pattern: "Current.account = Account.find_by(..., params[...])"
+          - pattern: "Current.tenant = $T.find(params[...])"

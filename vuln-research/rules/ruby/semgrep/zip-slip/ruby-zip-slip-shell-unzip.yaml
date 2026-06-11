@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-zip-slip-shell-unzip
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The code invokes the system "unzip" binary on an attacker-supplied archive,
+      with the destination interpolated into the shell command. Beyond the obvious
+      shell-injection risk on the path, unzip restores stored member names as-is,
+      so an archive carrying "../" entries can write outside the -d directory
+      (Zip Slip). Extract with a library that validates each entry against the
+      destination root rather than shelling out to unzip.
+    metadata:
+      vr-id: RB-SG-0707
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Zip Slip research (Snyk); CWE-22; ruby.md shelling out to unzip sink"
+      license: derived-original
+      references:
+        - "https://security.snyk.io/research/zip-slip-vulnerability"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: system("...#{...}...")
+          - pattern: '`...#{...}...`'
+          - pattern: IO.popen("...#{...}...")
+      - pattern-regex: "\\bunzip\\b"

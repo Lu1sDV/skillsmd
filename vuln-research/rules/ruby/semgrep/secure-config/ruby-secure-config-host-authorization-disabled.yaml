@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-secure-config-host-authorization-disabled
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      hosts is cleared, disabling the Rails Host Authorization middleware that
+      blocks requests with a forged Host header. Without it the application is
+      open to DNS-rebinding and host-header poisoning that can taint absolute
+      URLs and cache keys; keep an explicit allowlist of permitted hosts instead.
+    metadata:
+      vr-id: RB-SG-2415
+      category: secure-config
+      cwe: ["CWE-16", "CWE-350"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog config.hosts.clear; CWE-350"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/350.html"
+        - "https://guides.rubyonrails.org/configuring.html"
+    patterns:
+      - pattern-either:
+          - pattern: $CFG.hosts.clear
+          - pattern: $CFG.hosts = []

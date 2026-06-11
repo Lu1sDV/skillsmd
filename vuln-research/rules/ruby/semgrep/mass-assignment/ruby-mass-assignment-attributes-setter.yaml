@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-mass-assignment-attributes-setter
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The bulk attributes= setter is assigned a raw params slice, which is
+      equivalent to mass-assigning every key onto the record. The unfiltered hash
+      lets the client set columns the form never offered. Assign a permitted hash
+      from params.require(:record).permit(...) rather than the raw params key.
+    metadata:
+      vr-id: RB-SG-1116
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md Model#attributes = params; CWE-915"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveModel/AttributeAssignment.html#method-i-attributes-3D"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $O.attributes = params[$K]

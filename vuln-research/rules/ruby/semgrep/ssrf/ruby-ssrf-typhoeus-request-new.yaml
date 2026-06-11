@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-ssrf-typhoeus-request-new
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Typhoeus::Request.new is constructed with a URL built from interpolated
+      external input. When the request is run, it targets an attacker-chosen
+      destination, enabling requests to internal hosts or metadata endpoints
+      (CWE-918). Build the request only from a host validated against an
+      allowlist and a checked scheme, with the resolved address confirmed public.
+    metadata:
+      vr-id: RB-SG-0516
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from Typhoeus::Request.new sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://github.com/typhoeus/typhoeus"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Typhoeus::Request.new("...#{...}...", ...)
+          - pattern: Typhoeus::Request.new("...#{...}...")

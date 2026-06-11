@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-ssrf-typhoeus-get
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Typhoeus.get is called with a URL built from interpolated external input,
+      letting an attacker steer the request at internal services or the cloud
+      metadata endpoint (CWE-918). Validate the host against an allowlist and
+      verify the resolved address is a public one before issuing the request
+      instead of using the raw user-supplied URL.
+    metadata:
+      vr-id: RB-SG-0515
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from Typhoeus.get sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://github.com/typhoeus/typhoeus"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Typhoeus.get("...#{...}...")
+          - pattern: Typhoeus.get("...#{...}...", ...)

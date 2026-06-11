@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-auth-session-devise-bypass-sign-in
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Devise bypass_sign_in establishes a session without running the normal
+      authentication callbacks, warden hooks, or two-factor checks. Used outside
+      a tightly controlled flow it can silently skip account-state validations
+      (locked, unconfirmed, expired). Prefer sign_in so the full callback chain
+      runs, and reserve bypass_sign_in for narrowly audited cases.
+    metadata:
+      vr-id: RB-SG-1311
+      category: auth-session
+      cwe: ["CWE-287"]
+      owasp: "A07:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Devise bypass_sign_in semantics; CWE-287"
+      license: derived-original
+      references:
+        - "https://www.rubydoc.info/github/heartcombo/devise/Devise/Controllers/SignInOut"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "bypass_sign_in(...)"
+          - pattern: "bypass_sign_in ..."

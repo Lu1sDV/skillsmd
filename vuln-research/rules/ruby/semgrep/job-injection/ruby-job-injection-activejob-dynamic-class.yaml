@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-activejob-dynamic-class
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The ActiveJob worker class is resolved from request data via constantize
+      before perform_later is invoked. An attacker who controls the job-class
+      string can dispatch any job in the application, reaching privileged async
+      work or deserialization gadgets. Map a fixed allow-list of permitted job
+      names to their classes instead of constantizing untrusted input.
+    metadata:
+      vr-id: RB-SG-1701
+      category: job-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md params[:job_class].constantize.perform_later; CWE-94"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/active_job_basics.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: params[...].constantize.perform_later(...)
+          - pattern: params[...].safe_constantize.perform_later(...)
+          - pattern: params[...].constantize.perform_now(...)

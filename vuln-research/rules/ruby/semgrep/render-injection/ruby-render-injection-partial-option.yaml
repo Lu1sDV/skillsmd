@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-render-injection-partial-option
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      render partial: is fed a request parameter, so the partial name is chosen by
+      the attacker. This can surface unintended partials and, via traversal, leak
+      template source or trigger rendering side effects. Select the partial from a
+      fixed set keyed by validated input rather than passing the parameter directly.
+    metadata:
+      vr-id: RB-SG-1904
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md 'render partial: params[:partial]'; CWE-98"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/layouts_and_rendering.html#using-partials"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "render(partial: params[...])"
+          - pattern: "render partial: params[...]"
+          - pattern: "render(partial: params[...], ...)"
+          - pattern: "render partial: params[...], ..."

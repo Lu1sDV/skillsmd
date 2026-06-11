@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-sql-injection-order-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An ORDER BY clause is built by interpolating a value into the string passed
+      to Model.order. order does not bind values, so tainted sort columns or
+      directions allow SQL injection and data disclosure through ordering tricks.
+      Validate the column against an allow-list and pass a Hash or symbol —
+      order(column => :asc) — rather than an interpolated string.
+    metadata:
+      vr-id: RB-SG-0308
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by brakeman SQL injection ORDER BY check; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/QueryMethods.html#method-i-order"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $M.order("...#{...}...")
+          - pattern: $M.reorder("...#{...}...")

@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-sql-injection-like-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A LIKE pattern is assembled by interpolating a value directly into the
+      where-string. Even when the surrounding query looks parameterized, splicing
+      input into the LIKE literal lets an attacker inject SQL and abuse wildcard
+      metacharacters. Bind the pattern as a value — where("name LIKE ?",
+      "%#{sanitize_sql_like(q)}%") — escaping LIKE wildcards separately.
+    metadata:
+      vr-id: RB-SG-0321
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by brakeman LIKE string-built query advisory; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/Sanitization/ClassMethods.html#method-i-sanitize_sql_like"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-regex: '\.where\(\s*"[^"]*LIKE[^"]*#\{'

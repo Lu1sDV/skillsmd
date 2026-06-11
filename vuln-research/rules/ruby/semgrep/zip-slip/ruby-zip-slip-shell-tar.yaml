@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-zip-slip-shell-tar
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The application shells out to the system tar binary to extract an archive
+      without "--no-absolute-names" / "-P" disabled and without restricting member
+      paths. GNU tar will happily restore entries containing "../" or absolute
+      paths into arbitrary filesystem locations, so a hostile archive escapes the
+      destination (Zip Slip via shell tar). Extract through a vetted library that
+      canonicalizes entry names, or pass "--no-absolute-names" plus a path filter.
+    metadata:
+      vr-id: RB-SG-0706
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by GNU tar extraction-traversal guidance; CWE-22; ruby.md shelling out to tar sink"
+      license: derived-original
+      references:
+        - "https://www.gnu.org/software/tar/manual/html_node/absolute.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: system("...#{...}...")
+          - pattern: '`...#{...}...`'
+          - pattern: IO.popen("...#{...}...")
+      - pattern-regex: "tar\\s+(-[A-Za-z]*x|--extract)"
+      - pattern-not-regex: "--no-absolute-names"

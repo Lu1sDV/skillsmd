@@ -1,0 +1,8 @@
+edges
+| tests/UnsafeHtmlConstruction/lib/widget.rb:6:15:6:18 | name | tests/UnsafeHtmlConstruction/lib/widget.rb:7:10:7:16 | #{...} | provenance |  |
+nodes
+| tests/UnsafeHtmlConstruction/lib/widget.rb:6:15:6:18 | name | semmle.label | name |
+| tests/UnsafeHtmlConstruction/lib/widget.rb:7:10:7:16 | #{...} | semmle.label | #{...} |
+subpaths
+#select
+| tests/UnsafeHtmlConstruction/lib/widget.rb:7:10:7:16 | #{...} | tests/UnsafeHtmlConstruction/lib/widget.rb:6:15:6:18 | name | tests/UnsafeHtmlConstruction/lib/widget.rb:7:10:7:16 | #{...} | Unsafe HTML construction: this string interpolation built from $@ may later enable $@. | tests/UnsafeHtmlConstruction/lib/widget.rb:6:15:6:18 | name | library input | tests/UnsafeHtmlConstruction/lib/widget.rb:7:5:7:22 | "<h2>#{...}</h2>" | cross-site scripting |

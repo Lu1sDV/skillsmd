@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-open-redirect-button-to-params
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      button_to submits to a URL derived from a request parameter. A crafted value
+      makes the rendered form post to an external host, which can be abused for
+      phishing or CSRF-style redirection. Target button_to at named routes only and
+      reject off-host or non-http(s) destinations.
+    metadata:
+      vr-id: RB-SG-1012
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby sink catalog 'button_to(text, url)'; CWE-601"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/UrlHelper.html#method-i-button_to"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: button_to(..., params[...])
+          - pattern: button_to(..., params[...], ...)

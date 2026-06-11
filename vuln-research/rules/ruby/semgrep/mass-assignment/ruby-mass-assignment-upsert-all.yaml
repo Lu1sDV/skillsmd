@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-mass-assignment-upsert-all
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      upsert_all inserts or updates rows directly in the database from an array of
+      attribute hashes, bypassing validations, callbacks, and mass-assignment
+      protection. With request-derived rows the client can both create and
+      overwrite arbitrary columns. Build each row from a permitted allow-list first.
+    metadata:
+      vr-id: RB-SG-1119
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md upsert_all bulk-write; CWE-915"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/Persistence/ClassMethods.html#method-i-upsert_all"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $M.upsert_all(params[$K])
+          - pattern: $M.upsert_all(params[$K], ...)

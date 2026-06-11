@@ -1,0 +1,9 @@
+name: skillsmd/ruby-security
+version: 0.1.0
+library: false
+extractor: ruby
+dependencies:
+  codeql/ruby-all: "*"
+# Authored Ruby security queries for the vuln-research MegaDB.
+# `extractor: ruby` is REQUIRED for `codeql test run` to build test databases.
+# Resolve deps with: codeql pack install   (uses the local package cache)

@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-insecure-randomness-rand-base36-token
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The common "rand(...).to_s(36)" idiom builds a short alphanumeric token from
+      the non-cryptographic global PRNG. Because Kernel#rand is a Mersenne Twister,
+      the token is predictable once the generator state is recovered. Replace with
+      SecureRandom.urlsafe_base64 or SecureRandom.alphanumeric.
+    metadata:
+      vr-id: RB-SG-2207
+      category: insecure-randomness
+      cwe: ["CWE-338"]
+      owasp: "A02:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from common Rails token idiom rand(36**n).to_s(36); CWE-338"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/338.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: rand(...).to_s(36)
+          - pattern: rand(...).to_s(16)
+          - pattern: Random.rand(...).to_s(36)

@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-insecure-randomness-rand-reset-attribute
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A model or hash attribute used for authentication (reset, confirmation,
+      remember, or auth token) is assigned from Kernel#rand. Predictable
+      authentication tokens let an attacker forge password-reset or confirmation
+      links. Assign SecureRandom.urlsafe_base64(32) to such attributes.
+    metadata:
+      vr-id: RB-SG-2219
+      category: insecure-randomness
+      cwe: ["CWE-338", "CWE-640"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from weak password-reset token anti-pattern; CWE-640"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/640.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $OBJ.$ATTR = rand(...)
+          - pattern: $OBJ[$ATTR] = rand(...)
+          - pattern: "$OBJ.update($ATTR: rand(...))"
+      - metavariable-regex:
+          metavariable: $ATTR
+          regex: (?i).*(reset|confirm|remember|auth|activation|verification)_?token.*

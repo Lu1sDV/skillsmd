@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-auth-session-cancancan-skip-authorization-check
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      skip_authorization_check disables CanCanCan's controller-wide guarantee
+      that every action runs an authorize! call. Actions on this controller can
+      then operate on records the current user has no ability for. Remove the
+      skip and call authorize! (or load_and_authorize_resource) in each action so
+      ability checks are enforced.
+    metadata:
+      vr-id: RB-SG-1326
+      category: auth-session
+      cwe: ["CWE-862", "CWE-285"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by CanCanCan skip_authorization_check; CWE-862"
+      license: derived-original
+      references:
+        - "https://github.com/CanCanCommunity/cancancan/blob/develop/docs/Ensure-Authorization.md"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "skip_authorization_check"
+          - pattern: "skip_authorization_check ..."

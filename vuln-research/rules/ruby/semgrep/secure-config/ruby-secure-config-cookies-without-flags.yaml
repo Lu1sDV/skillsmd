@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-secure-config-cookies-without-flags
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A persistent cookie is written with cookies.permanent without httponly or
+      secure flags, so it is readable by JavaScript and sent over plaintext HTTP.
+      If the value is a session or auth token this exposes it to XSS theft and
+      network capture; set httponly: true and secure: true (or use the encrypted
+      cookie jar).
+    metadata:
+      vr-id: RB-SG-2429
+      category: secure-config
+      cwe: ["CWE-1004", "CWE-614"]
+      owasp: "A05:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by sink catalog cookies.permanent without flags; CWE-1004"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/1004.html"
+        - "https://api.rubyonrails.org/classes/ActionDispatch/Cookies.html"
+    patterns:
+      - pattern: cookies.permanent[$K] = $V
+      - pattern-not: cookies.permanent.signed[$K] = $V
+      - pattern-not: cookies.permanent.encrypted[$K] = $V

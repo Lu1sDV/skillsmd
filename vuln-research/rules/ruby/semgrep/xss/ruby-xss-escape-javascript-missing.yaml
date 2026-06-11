@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-xss-escape-javascript-missing
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A value is interpolated directly into a `<script>` block string without
+      `escape_javascript`/`j`. Request-derived data can close the script context or
+      inject a new statement, executing attacker code in the page — cross-site
+      scripting. Wrap the value in `escape_javascript(value)` (or serialize it as
+      JSON) before placing it inside script markup.
+    metadata:
+      vr-id: RB-SG-0827
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Rails missing escape_javascript in script context; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/JavaScriptHelper.html#method-i-escape_javascript"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'raw("...#{...}...")'
+          - pattern: '"...#{...}...".html_safe'
+      - pattern-regex: "<script"

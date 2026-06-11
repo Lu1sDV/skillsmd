@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-mass-assignment-without-protection
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A model write passes without_protection: true, which disables the legacy
+      attr_accessible / attr_protected mass-assignment guard entirely. Combined
+      with attacker-controlled attributes this lets every column be set, defeating
+      the whole point of the protection list. Remove without_protection and rely
+      on strong parameters (permit) for the allowed keys.
+    metadata:
+      vr-id: RB-SG-1110
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by protected_attributes without_protection option; CWE-915"
+      license: derived-original
+      references:
+        - "https://github.com/rails/protected_attributes"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "$M.new(..., without_protection: true)"
+          - pattern: "$M.create(..., without_protection: true)"
+          - pattern: "$M.create!(..., without_protection: true)"
+          - pattern: "$O.update_attributes(..., without_protection: true)"
+          - pattern: "$O.assign_attributes(..., without_protection: true)"

@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-mass-assignment-find-or-create-by
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      find_or_create_by is passed a raw params slice, so the create path builds a
+      record from the full request hash without strong-parameters filtering. The
+      client can therefore dictate every column on records that get created on
+      demand. Filter the lookup/seed hash through permit before calling it.
+    metadata:
+      vr-id: RB-SG-1123
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/insecure-mass-assignment find_or_create_by; CWE-915"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/Relation.html#method-i-find_or_create_by"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $R.find_or_create_by(params[$K])
+          - pattern: $R.find_or_create_by!(params[$K])
+          - pattern: $R.find_or_initialize_by(params[$K])

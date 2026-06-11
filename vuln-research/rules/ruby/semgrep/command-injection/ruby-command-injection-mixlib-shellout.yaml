@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-command-injection-mixlib-shellout
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Mixlib::ShellOut.new is constructed with an interpolated command string. When given a
+      single string, ShellOut runs it through a shell, so interpolating attacker-controlled
+      input allows shell metacharacter injection and arbitrary command execution. Pass the
+      command and arguments as separate strings — `Mixlib::ShellOut.new("cmd", arg)`.
+    metadata:
+      vr-id: RB-SG-0124
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived: Mixlib::ShellOut command wrapper (ruby.md OS command execution); CWE-78"
+      license: derived-original
+      references:
+        - "https://github.com/chef/mixlib-shellout"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Mixlib::ShellOut.new("...#{...}...")
+      - pattern-not: Mixlib::ShellOut.new("...", ...)

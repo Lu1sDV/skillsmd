@@ -1,0 +1,35 @@
+rules:
+  - id: ruby-zip-slip-fileutils-write-entry
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Decompressed archive bytes are written to a File.open destination whose
+      path interpolates the archive entry name. Because the entry name is fully
+      controlled by whoever produced the archive, a "../" prefix redirects the
+      write outside the intended folder, enabling arbitrary file creation and
+      overwrite (Zip Slip). Resolve the join with File.expand_path and confirm
+      it is still inside the target directory before opening the file for write.
+    metadata:
+      vr-id: RB-SG-0703
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Snyk Zip Slip advisory; CWE-22; ruby.md extraction using File.open sink"
+      license: derived-original
+      references:
+        - "https://security.snyk.io/research/zip-slip-vulnerability"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: |
+              File.open(File.join($DEST, $ENTRY.name), ...) do |$F|
+                ...
+              end
+          - pattern: |
+              File.open("...#{$ENTRY.name}...", ...) do |$F|
+                ...
+              end

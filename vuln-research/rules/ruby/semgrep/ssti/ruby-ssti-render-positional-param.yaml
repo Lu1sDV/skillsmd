@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-ssti-render-positional-param
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      `render params[...]` resolves the template or partial name from request input
+      using the positional render form. Rails interprets the argument as a view path
+      to compile and evaluate, so attacker-controlled values steer which template is
+      executed and can reach unintended or tainted views. Map the user's selection
+      through a fixed allowlist before rendering instead of handing `params` to
+      render directly.
+    metadata:
+      vr-id: RB-SG-0915
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Rails positional dynamic-render class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/RenderingHelper.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: render(params[...])

@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-ssrf-curl-get
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Curl.get is called with a URL built from interpolated external input. The
+      libcurl request goes to an attacker-controlled destination and can be used
+      to reach internal services or the cloud metadata endpoint (CWE-918).
+      Validate the host against an allowlist and limit the scheme to https before
+      issuing the request.
+    metadata:
+      vr-id: RB-SG-0519
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from Curl.get sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://github.com/taf2/curb"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Curl.get("...#{...}...")
+          - pattern: Curl.get("...#{...}...", ...)

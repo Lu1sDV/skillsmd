@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-redos-regexp-new-var
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Regexp.new is called on the raw request parameter params[:pattern], letting the
+      client supply the entire regular expression. A crafted pattern with nested or
+      overlapping quantifiers triggers catastrophic backtracking and hangs the worker.
+      Never compile a client-controlled string as a regex; match against a fixed,
+      reviewed pattern instead, or constrain the input with Regexp.escape.
+    metadata:
+      vr-id: RB-SG-1202
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink Regexp.new(params[:pattern]); CWE-1333"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Regexp.html#method-c-new"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Regexp.new(params[...])
+          - pattern: Regexp.new(params[...], ...)

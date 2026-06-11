@@ -1,0 +1,12 @@
+edges
+| RemoteCommandInjection.rb:3:5:3:8 | host | RemoteCommandInjection.rb:5:24:5:30 | #{...} | provenance |  |
+| RemoteCommandInjection.rb:3:12:3:17 | call to params | RemoteCommandInjection.rb:3:12:3:24 | ...[...] | provenance |  |
+| RemoteCommandInjection.rb:3:12:3:24 | ...[...] | RemoteCommandInjection.rb:3:5:3:8 | host | provenance |  |
+nodes
+| RemoteCommandInjection.rb:3:5:3:8 | host | semmle.label | host |
+| RemoteCommandInjection.rb:3:12:3:17 | call to params | semmle.label | call to params |
+| RemoteCommandInjection.rb:3:12:3:24 | ...[...] | semmle.label | ...[...] |
+| RemoteCommandInjection.rb:5:24:5:30 | #{...} | semmle.label | #{...} |
+subpaths
+#select
+| RemoteCommandInjection.rb:5:24:5:30 | #{...} | RemoteCommandInjection.rb:3:12:3:17 | call to params | RemoteCommandInjection.rb:5:24:5:30 | #{...} | This OS command depends on an $@. | RemoteCommandInjection.rb:3:12:3:17 | call to params | HTTP request value |

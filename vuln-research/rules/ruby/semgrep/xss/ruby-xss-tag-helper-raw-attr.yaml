@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-xss-tag-helper-raw-attr
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A `tag` helper attribute value is wrapped in `raw`/`html_safe`, suppressing the
+      attribute-context escaping Rails would normally apply. A request-controlled
+      value can then break out of the attribute and inject an event handler such as
+      `onmouseover`, causing cross-site scripting. Pass the plain value so the helper
+      escapes it for the attribute context.
+    metadata:
+      vr-id: RB-SG-0818
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Rails tag helper raw attribute value; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/TagHelper.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'tag.$NAME(..., title: raw(...), ...)'
+          - pattern: 'tag.$NAME(..., data: raw(...), ...)'
+          - pattern: 'tag($NAME, title: raw(...))'

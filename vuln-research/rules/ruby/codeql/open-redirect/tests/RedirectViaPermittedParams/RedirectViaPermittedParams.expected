@@ -1,0 +1,15 @@
+edges
+| redirect_permitted_params.rb:5:5:5:8 | safe | redirect_permitted_params.rb:6:17:6:20 | safe | provenance |  |
+| redirect_permitted_params.rb:5:12:5:17 | call to params | redirect_permitted_params.rb:5:12:5:35 | call to permit | provenance |  |
+| redirect_permitted_params.rb:5:12:5:17 | call to params | redirect_permitted_params.rb:5:12:5:35 | call to permit | provenance | Config |
+| redirect_permitted_params.rb:5:12:5:35 | call to permit | redirect_permitted_params.rb:5:5:5:8 | safe | provenance |  |
+| redirect_permitted_params.rb:6:17:6:20 | safe | redirect_permitted_params.rb:6:17:6:31 | ...[...] | provenance |  |
+nodes
+| redirect_permitted_params.rb:5:5:5:8 | safe | semmle.label | safe |
+| redirect_permitted_params.rb:5:12:5:17 | call to params | semmle.label | call to params |
+| redirect_permitted_params.rb:5:12:5:35 | call to permit | semmle.label | call to permit |
+| redirect_permitted_params.rb:6:17:6:20 | safe | semmle.label | safe |
+| redirect_permitted_params.rb:6:17:6:31 | ...[...] | semmle.label | ...[...] |
+subpaths
+#select
+| redirect_permitted_params.rb:6:17:6:31 | ...[...] | redirect_permitted_params.rb:5:12:5:17 | call to params | redirect_permitted_params.rb:6:17:6:31 | ...[...] | Untrusted URL redirection depends on a $@. | redirect_permitted_params.rb:5:12:5:17 | call to params | user-provided value |

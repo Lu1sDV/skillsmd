@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-auth-session-admin-flag-from-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A privilege flag is stored in the session straight from request
+      parameters. An attacker can submit admin=true and escalate to an
+      administrative role, because the value is never derived from a trusted
+      authorization decision. Compute privilege state server-side from the
+      authenticated user record and never echo client-supplied role data into
+      the session.
+    metadata:
+      vr-id: RB-SG-1309
+      category: auth-session
+      cwe: ["CWE-639", "CWE-862"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by privilege-from-request anti-pattern; CWE-639"
+      license: derived-original
+      references:
+        - "https://owasp.org/Top10/A01_2021-Broken_Access_Control/"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "session[:admin] = params[...]"
+          - pattern: "session[:role] = params[...]"
+          - pattern: "session[:admin] = params[...][...]"

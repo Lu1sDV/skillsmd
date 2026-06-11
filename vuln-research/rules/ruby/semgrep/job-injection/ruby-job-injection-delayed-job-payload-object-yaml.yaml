@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-delayed-job-payload-object-yaml
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Delayed::Job record's handler column is loaded back into an object with an
+      unsafe YAML parser. The handler is the YAML-serialized payload that the
+      worker materializes to run the job, so parsing attacker-writable handler
+      text with YAML.load reconstructs arbitrary objects and can execute a gadget
+      chain. Use YAML.safe_load with an explicit permitted-class allow-list.
+    metadata:
+      vr-id: RB-SG-1732
+      category: job-injection
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Delayed::Job YAML-backed payload materialization; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/collectiveidea/delayed_job#gory-details"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: YAML.load($JOB.handler)
+          - pattern: YAML.unsafe_load($JOB.handler)
+          - pattern: Psych.load($JOB.handler)

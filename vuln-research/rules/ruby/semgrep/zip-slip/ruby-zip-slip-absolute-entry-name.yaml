@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-zip-slip-absolute-entry-name
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An extraction target is built by passing the raw archive entry name to
+      File.expand_path WITHOUT a trusted base directory (or by writing to it
+      directly). When an entry name is absolute — like "/etc/passwd" — expand_path
+      returns that absolute path verbatim and File.join/leading-slash handling lets
+      the write land anywhere on disk (absolute-path Zip Slip). Always join against
+      the destination and re-check containment after expansion.
+    metadata:
+      vr-id: RB-SG-0714
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by absolute-path archive-traversal advisories; CWE-22; ruby.md absolute-path archive entries sink"
+      license: derived-original
+      references:
+        - "https://security.snyk.io/research/zip-slip-vulnerability"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: File.write(File.expand_path($ENTRY.name), ...)

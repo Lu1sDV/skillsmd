@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-csp-unsafe-inline
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The Content Security Policy script_src directive allows :unsafe_inline,
+      which permits inline script and event handlers and removes the main XSS
+      mitigation CSP is meant to provide. Drop :unsafe_inline and adopt nonces or
+      hashes for the scripts that must run.
+    metadata:
+      vr-id: RB-SG-2412
+      category: secure-config
+      cwe: ["CWE-16", "CWE-1021"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog content_security_policy unsafe_inline; CWE-1021"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/1021.html"
+        - "https://guides.rubyonrails.org/security.html"
+    patterns:
+      - pattern: $P.script_src ..., :unsafe_inline, ...

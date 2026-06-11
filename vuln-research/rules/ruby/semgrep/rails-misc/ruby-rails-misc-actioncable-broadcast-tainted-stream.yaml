@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-rails-misc-actioncable-broadcast-tainted-stream
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      ActionCable.server.broadcast targets a stream name built from request params.
+      An attacker who controls the stream identifier can push payloads onto another
+      tenant's channel, causing a cross-tenant data leak or client-side injection.
+      Derive the stream name from server-side, authorized identifiers only.
+    metadata:
+      vr-id: RB-SG-2504
+      category: rails-misc
+      cwe: ["CWE-200"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by ActionCable.server.broadcast cross-tenant stream sink; CWE-200"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/action_cable_overview.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: ActionCable.server.broadcast(params[...], ...)
+          - pattern: ActionCable.server.broadcast("...#{params[...]}...", ...)

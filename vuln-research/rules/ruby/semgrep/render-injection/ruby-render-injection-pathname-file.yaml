@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-render-injection-pathname-file
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      render file: receives a Pathname constructed from request input. The
+      parameter can traverse out of any intended base via ../ and cause an
+      arbitrary file on disk to be read and rendered. Do not build the file:
+      argument from user input; render fixed templates only.
+    metadata:
+      vr-id: RB-SG-1924
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md 'render file:' traversal; Pathname variant; CWE-22"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/layouts_and_rendering.html#rendering-an-arbitrary-file"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "render(file: Pathname.new(params[...]))"
+          - pattern: "render file: Pathname.new(params[...])"
+          - pattern: "render(file: Pathname.new(params[...]), ...)"

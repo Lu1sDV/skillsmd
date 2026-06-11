@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-render-injection-layout-option
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      render layout: is driven by a request parameter, letting the attacker choose
+      the layout template that wraps the response. This permits selection of
+      arbitrary layout files and traversal-based disclosure. Pick the layout from a
+      server-side allow-list instead of trusting the parameter.
+    metadata:
+      vr-id: RB-SG-1905
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md 'render layout: params[:layout]'; CWE-22"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/layouts_and_rendering.html#finding-layouts"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "render(layout: params[...])"
+          - pattern: "render layout: params[...]"
+          - pattern: "render(..., layout: params[...])"
+          - pattern: "render ..., layout: params[...]"

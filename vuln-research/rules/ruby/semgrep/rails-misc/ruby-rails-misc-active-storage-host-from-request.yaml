@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-rails-misc-active-storage-host-from-request
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      ActiveStorage::Current url options are set from the inbound request host. An
+      attacker who controls the Host header poisons every generated blob URL, so
+      signed download links point at attacker infrastructure (host poisoning).
+      Configure the host from a trusted, fixed setting rather than request.host.
+    metadata:
+      vr-id: RB-SG-2518
+      category: rails-misc
+      cwe: ["CWE-200"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ActiveStorage::Current.url_options host-poisoning sink; CWE-200"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveStorage/Current.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "ActiveStorage::Current.url_options = { host: request.host }"
+          - pattern: "ActiveStorage::Current.url_options = { host: request.host, ... }"
+          - pattern: "ActiveStorage::Current.host = request.host"

@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-command-injection-pty-spawn
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      PTY.spawn is given an interpolated command string, which it runs through a shell
+      attached to a pseudo-terminal. Interpolating attacker-controlled input lets an
+      attacker inject shell metacharacters and execute arbitrary commands. Supply the
+      command and its arguments as separate strings — `PTY.spawn("cmd", arg)`.
+    metadata:
+      vr-id: RB-SG-0116
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql CommandInjectionQuery (PTY.spawn sink); CWE-78"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/PTY.html#method-c-spawn"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: PTY.spawn("...#{...}...")
+      - pattern-not: PTY.spawn("...", ...)

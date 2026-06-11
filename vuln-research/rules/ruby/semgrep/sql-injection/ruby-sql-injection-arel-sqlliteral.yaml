@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-sql-injection-arel-sqlliteral
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An Arel::Nodes::SqlLiteral node is constructed from an interpolated string.
+      A SqlLiteral is injected verbatim into the generated SQL with no escaping,
+      so tainted input wrapped this way is directly injectable. Build query
+      fragments from bound parameters instead of wrapping interpolated data in a
+      SqlLiteral.
+    metadata:
+      vr-id: RB-SG-0319
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/sql-injection Arel SqlLiteral sink; CWE-89"
+      license: derived-original
+      references:
+        - "https://www.rubydoc.info/gems/arel/Arel/Nodes/SqlLiteral"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Arel::Nodes::SqlLiteral.new("...#{...}...")

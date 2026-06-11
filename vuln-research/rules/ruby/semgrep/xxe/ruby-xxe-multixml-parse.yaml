@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-xxe-multixml-parse
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      MultiXml.parse handles attacker-controlled XML. MultiXml delegates to
+      Nokogiri, LibXML, REXML, or Ox, and earlier versions were affected by an
+      entity-expansion / type-coercion vulnerability (CVE-2013-0175). Parse
+      untrusted XML with a current MultiXml that disables entities, and never
+      enable the typecast/symbolize features on hostile input.
+    metadata:
+      vr-id: RB-SG-1522
+      category: xxe
+      cwe: ["CWE-611", "CWE-776"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by MultiXml.parse; CVE-2013-0175; CWE-776"
+      license: derived-original
+      references:
+        - "https://github.com/sferik/multi_xml"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: MultiXml.parse(params[...])
+          - pattern: MultiXml.parse(request.body.read)
+          - pattern: MultiXml.parse(request.raw_post)
+          - pattern: MultiXml.parse($IO.read)

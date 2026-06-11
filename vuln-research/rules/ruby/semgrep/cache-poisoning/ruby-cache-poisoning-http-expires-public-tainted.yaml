@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-cache-poisoning-http-expires-public-tainted
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A response is marked publicly cacheable via expires_in ..., public: true.
+      If the response body varies on request parameters or the authenticated
+      user, shared/CDN caches store it under a key that ignores that variation,
+      so one user's response is served to another (web cache poisoning /
+      cross-user leak). Keep personalized responses public: false or set a
+      correct Vary header and cache key.
+    metadata:
+      vr-id: RB-SG-1807
+      category: cache-poisoning
+      cwe: ["CWE-444"]
+      owasp: "A05:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md expires_in public: true shared-cache poisoning; CWE-444"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/ConditionalGet.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: "expires_in(..., public: true)"

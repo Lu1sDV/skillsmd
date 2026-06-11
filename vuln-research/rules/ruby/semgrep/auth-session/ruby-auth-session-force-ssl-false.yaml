@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-auth-session-force-ssl-false
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      config.force_ssl = false in a production-style configuration disables the
+      redirect to HTTPS and the Secure flag that Rails would otherwise add to
+      session cookies. Session and CSRF cookies can then travel over plaintext
+      and be sniffed or replayed. Enable force_ssl in production so all
+      session-bearing traffic is encrypted.
+    metadata:
+      vr-id: RB-SG-1329
+      category: auth-session
+      cwe: ["CWE-319", "CWE-614"]
+      owasp: "A05:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by Rails force_ssl session-cookie protection; CWE-319"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionDispatch/SSL.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: "$CONFIG.force_ssl = false"

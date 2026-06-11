@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-path-traversal-file-delete
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      File.delete or File.unlink removes a file whose path is attacker-controlled.
+      Traversal sequences let an attacker delete files anywhere the process can reach,
+      causing data loss or denial of service. Confirm the resolved path stays inside an
+      allow-listed directory before deleting, and prefer deleting by a database-backed
+      record id rather than a raw filename from the request.
+    metadata:
+      vr-id: RB-SG-0605
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/File.html#method-c-delete"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: File.delete(params[...])
+          - pattern: File.delete("...#{params[...]}...")
+          - pattern: File.unlink(params[...])
+          - pattern: File.unlink("...#{params[...]}...")

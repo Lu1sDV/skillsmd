@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-deserialization-json-parse-create-additions
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      JSON.parse called with create_additions: true honors the "json_class" key
+      and instantiates the named class through its json_create hook. With
+      attacker-controlled JSON this reintroduces object-materialization risk that
+      plain JSON.parse avoids. Drop create_additions (or set it to false) and map
+      trusted fields to objects explicitly after parsing.
+    metadata:
+      vr-id: RB-SG-0413
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md JSON.parse create_additions; CWE-502"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/JSON.html#method-i-parse"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: "JSON.parse($X, ..., create_additions: true, ...)"

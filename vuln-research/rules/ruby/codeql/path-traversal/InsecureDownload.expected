@@ -1,0 +1,8 @@
+edges
+nodes
+| tests/InsecureDownload/InsecureDownload.rb:6:15:6:58 | "http://downloads.example.com/..." | semmle.label | "http://downloads.example.com/..." |
+| tests/InsecureDownload/InsecureDownload.rb:6:15:6:58 | "http://downloads.example.com/..." | semmle.label | "http://downloads.example.com/..." |
+subpaths
+#select
+| tests/InsecureDownload/InsecureDownload.rb:6:15:6:58 | "http://downloads.example.com/..." | tests/InsecureDownload/InsecureDownload.rb:6:15:6:58 | "http://downloads.example.com/..." | tests/InsecureDownload/InsecureDownload.rb:6:15:6:58 | "http://downloads.example.com/..." | $@ of a sensitive file from an insecure $@. | tests/InsecureDownload/InsecureDownload.rb:6:5:6:59 | call to get | Download | tests/InsecureDownload/InsecureDownload.rb:6:15:6:58 | "http://downloads.example.com/..." | HTTP source |
+| tests/InsecureDownload/InsecureDownload.rb:6:15:6:58 | "http://downloads.example.com/..." | tests/InsecureDownload/InsecureDownload.rb:6:15:6:58 | "http://downloads.example.com/..." | tests/InsecureDownload/InsecureDownload.rb:6:15:6:58 | "http://downloads.example.com/..." | $@ of a sensitive file from an insecure $@. | tests/InsecureDownload/InsecureDownload.rb:6:5:6:59 | call to get | Download | tests/InsecureDownload/InsecureDownload.rb:6:15:6:58 | "http://downloads.example.com/..." | HTTP source |

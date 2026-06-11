@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-path-traversal-pathname-open
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Pathname built from request input is opened or deleted. Pathname#open and
+      Pathname#delete do not neutralize "../" segments, so the operation can act on files
+      outside the intended directory. Construct the Pathname under a fixed base, call
+      expand_path, and confirm the result stays inside that base before opening or deleting.
+    metadata:
+      vr-id: RB-SG-0630
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Pathname.html#method-i-open"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Pathname.new(params[...]).open(...)
+          - pattern: Pathname.new(params[...]).open
+          - pattern: Pathname.new(params[...]).delete
+          - pattern: Pathname.new("...#{params[...]}...").open(...)
+          - pattern: Pathname.new("...#{params[...]}...").delete

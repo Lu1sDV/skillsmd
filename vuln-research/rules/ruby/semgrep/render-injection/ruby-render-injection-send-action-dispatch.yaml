@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-render-injection-send-action-dispatch
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A method is invoked via send/public_send using a request parameter as the
+      method name to dispatch a controller action. The attacker controls which
+      method runs, reaching private or unintended handlers and bypassing routing
+      constraints. Dispatch only through an explicit allow-list of permitted action
+      names.
+    metadata:
+      vr-id: RB-SG-1917
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md custom dispatch using params[:action]; CWE-98"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Object.html#method-i-send"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: send(params[...])
+          - pattern: public_send(params[...])
+          - pattern: $X.send(params[...])
+          - pattern: $X.public_send(params[...])

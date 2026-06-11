@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-render-injection-append-view-path
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      append_view_path adds a request-controlled directory to the template lookup
+      chain. Templates not found in the default paths can then be resolved from an
+      attacker-influenced location, enabling template hijacking or file disclosure.
+      Register only fixed, application-owned view paths.
+    metadata:
+      vr-id: RB-SG-1909
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md 'append_view_path(params[:path])'; CWE-98"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/ViewPaths/ClassMethods.html#method-i-append_view_path"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: append_view_path(params[...])
+          - pattern: append_view_path params[...]
+          - pattern: $X.append_view_path(params[...])

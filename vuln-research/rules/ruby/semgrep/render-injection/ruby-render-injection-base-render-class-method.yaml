@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-render-injection-base-render-class-method
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      ActionController::Base.render is called as a class method with a
+      request-controlled template name, often to render outside a normal request
+      (mailers, jobs, background rendering). User-chosen templates can disclose
+      arbitrary view files. Render a fixed template and pass data via assigns.
+    metadata:
+      vr-id: RB-SG-1919
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md dynamic render paths; ActionController.render class API; CWE-98"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/AbstractController/Rendering.html#method-i-render"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: ApplicationController.render(params[...])
+          - pattern: "ApplicationController.render(template: params[...])"
+          - pattern: "ActionController::Base.render(template: params[...])"
+          - pattern: ActionController::Base.render(params[...])

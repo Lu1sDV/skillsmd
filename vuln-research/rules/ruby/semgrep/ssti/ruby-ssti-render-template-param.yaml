@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-ssti-render-template-param
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      `render template:` selects the template to evaluate from a request parameter.
+      An attacker who controls the template path can force evaluation of an
+      unintended view — potentially one that interpolates other tainted data — and,
+      on some setups, traverse to templates outside the intended directory. Resolve
+      the template name from a server-side allowlist keyed by the user's choice
+      rather than passing `params` straight into `template:`.
+    metadata:
+      vr-id: RB-SG-0914
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Rails dynamic-template selection class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/RenderingHelper.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'render(template: params[...], ...)'
+          - pattern: 'render(template: params[...])'

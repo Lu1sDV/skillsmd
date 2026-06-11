@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-redos-regexp-new-options-param
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Regexp.new is built from request input while also enabling options, but the pattern
+      argument still comes from the client, so the attacker controls the compiled
+      expression. A crafted pattern with nested quantifiers triggers catastrophic
+      backtracking and hangs the worker (ReDoS). Compile only fixed patterns; never let a
+      param become the pattern argument, regardless of the option flags.
+    metadata:
+      vr-id: RB-SG-1221
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink Regexp.new(params[:pattern]) with options argument; CWE-1333"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Regexp.html#method-c-new"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Regexp.new(params[...], $OPTS)

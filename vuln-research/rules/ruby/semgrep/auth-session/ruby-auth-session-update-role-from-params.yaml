@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-auth-session-update-role-from-params
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A user's role or admin attribute is updated with a value taken straight
+      from request parameters. This lets a caller grant themselves elevated
+      privileges by supplying the field. Authorization level must be changed only
+      through a guarded administrative path, never assigned from raw client
+      input.
+    metadata:
+      vr-id: RB-SG-1325
+      category: auth-session
+      cwe: ["CWE-639", "CWE-862"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by direct privilege assignment from params; CWE-639"
+      license: derived-original
+      references:
+        - "https://owasp.org/Top10/A01_2021-Broken_Access_Control/"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "$U.update(role: params[...])"
+          - pattern: "$U.update(admin: params[...])"
+          - pattern: "$U.role = params[...]"
+          - pattern: "$U.admin = params[...]"

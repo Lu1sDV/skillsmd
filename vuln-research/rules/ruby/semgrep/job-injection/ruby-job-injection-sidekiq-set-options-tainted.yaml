@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-sidekiq-set-options-tainted
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Sidekiq job options such as the destination queue are taken from request
+      input via the set builder. Allowing clients to choose the queue lets them
+      route work to a higher-privilege worker pool or evade per-queue concurrency
+      and rate controls. Pin the queue and other dispatch options server-side per
+      job class.
+    metadata:
+      vr-id: RB-SG-1720
+      category: job-injection
+      cwe: ["CWE-94"]
+      owasp: "A04:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md Sidekiq queue/routing controlled by input; CWE-94"
+      license: derived-original
+      references:
+        - "https://github.com/sidekiq/sidekiq/wiki/Advanced-Options"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: '$W.set(queue: params[...]).perform_async(...)'
+          - pattern: '$W.set(queue: params[...], ...).perform_async(...)'
+          - pattern: '$W.set(queue: params[...]).perform_in(...)'

@@ -1,0 +1,8 @@
+edges
+| lib/widget.rb:6:15:6:18 | name | lib/widget.rb:7:10:7:16 | #{...} | provenance |  |
+nodes
+| lib/widget.rb:6:15:6:18 | name | semmle.label | name |
+| lib/widget.rb:7:10:7:16 | #{...} | semmle.label | #{...} |
+subpaths
+#select
+| lib/widget.rb:7:10:7:16 | #{...} | lib/widget.rb:6:15:6:18 | name | lib/widget.rb:7:10:7:16 | #{...} | Unsafe HTML construction: this string interpolation built from $@ may later enable $@. | lib/widget.rb:6:15:6:18 | name | library input | lib/widget.rb:7:5:7:22 | "<h2>#{...}</h2>" | cross-site scripting |

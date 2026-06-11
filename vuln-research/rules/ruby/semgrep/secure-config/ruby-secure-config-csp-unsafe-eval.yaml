@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-csp-unsafe-eval
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The Content Security Policy script_src directive allows :unsafe_eval, which
+      re-enables eval, new Function and similar string-to-code APIs in the
+      browser and weakens protection against DOM-based XSS. Remove :unsafe_eval
+      and refactor any code that depends on runtime evaluation.
+    metadata:
+      vr-id: RB-SG-2413
+      category: secure-config
+      cwe: ["CWE-16", "CWE-1021"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog content_security_policy unsafe_eval; CWE-1021"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/1021.html"
+        - "https://guides.rubyonrails.org/security.html"
+    patterns:
+      - pattern: $P.script_src ..., :unsafe_eval, ...

@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-ssrf-faraday-conn-get
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Faraday connection issues a GET to a path/URL built from interpolated
+      external input. When the connection has no fixed base URL, the
+      attacker-controlled string acts as a full destination and can be aimed at
+      internal hosts or metadata endpoints (CWE-918). Validate the target host
+      against an allowlist before the request rather than interpolating untrusted
+      input into the path.
+    metadata:
+      vr-id: RB-SG-0512
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "re-expressed from Faraday::Connection#get sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://lostisland.github.io/faraday/"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $CONN.get("...#{...}...")
+          - pattern: $CONN.get("...#{...}...", ...)
+      - metavariable-regex:
+          metavariable: $CONN
+          regex: ^(conn|connection|faraday|client|http)$

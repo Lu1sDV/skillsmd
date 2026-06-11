@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-rails-misc-verbose-query-logs
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      verbose_query_logs (or enabling debug-level SQL logging) is turned on in a
+      configuration block. Full SQL with bound values, including sensitive column
+      data, is then written to logs that may be aggregated or shipped off-host
+      (information exposure). Keep verbose query logging off outside local development.
+    metadata:
+      vr-id: RB-SG-2522
+      category: rails-misc
+      cwe: ["CWE-200"]
+      owasp: "A09:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by active_record.verbose_query_logs SQL log exposure sink; CWE-200"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/configuring.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "config.active_record.verbose_query_logs = true"
+          - pattern: "$C.active_record.verbose_query_logs = true"
+          - pattern: "ActiveRecord::Base.verbose_query_logs = true"

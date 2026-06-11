@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-auth-session-params-permit-bang
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      params.permit! whitelists every request attribute for mass assignment.
+      When the underlying model exposes privilege columns (admin, role,
+      account_id), an attacker can set them by adding fields to the request,
+      escalating privilege or hijacking ownership. Permit an explicit list of
+      attributes instead of calling permit! on the whole params hash.
+    metadata:
+      vr-id: RB-SG-1323
+      category: auth-session
+      cwe: ["CWE-915", "CWE-639"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Strong Parameters permit! over-permissive sink; CWE-915"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Parameters.html#method-i-permit-21"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "params.permit!"
+          - pattern: "$P.permit!"
+      - pattern-not: "$P.permit(...)"

@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-redos-regex-literal-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An interpolated regex literal (/.../ with #{...}) embeds a runtime value directly
+      into the compiled pattern. When that value reaches the code from request data,
+      the attacker effectively writes part of the regular expression and can introduce
+      catastrophic backtracking that stalls the request thread. Anchor and escape the
+      dynamic fragment with Regexp.escape, or match against a static literal.
+    metadata:
+      vr-id: RB-SG-1203
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink /#{pattern}/ interpolated regex literal; CWE-1333"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Regexp.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: /...#{...}.../

@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-path-traversal-uploaded-filename
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The original_filename of an uploaded file is used to build a destination path for a
+      write. Browsers and crafted multipart requests can place "../" or absolute paths in
+      that field, so the upload can be written outside the intended directory and overwrite
+      sensitive files. Generate a server-side name (for example from a UUID) or sanitize
+      with File.basename and confirm the resolved path stays under the upload root.
+    metadata:
+      vr-id: RB-SG-0626
+      category: path-traversal
+      cwe: ["CWE-434"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; UploadedFile#original_filename misuse; CWE-434"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionDispatch/Http/UploadedFile.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: File.write("...#{$F.original_filename}...", ...)
+          - pattern: File.open("...#{$F.original_filename}...", ...)
+          - pattern: File.binwrite("...#{$F.original_filename}...", ...)
+          - pattern: File.join(..., $F.original_filename)

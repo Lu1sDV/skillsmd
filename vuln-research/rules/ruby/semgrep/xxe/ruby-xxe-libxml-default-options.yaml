@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-xxe-libxml-default-options
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      libxml-ruby's global default parser options are mutated to enable NOENT or
+      DTDLOAD via LibXML::XML.default_substitute_entities= or
+      .default_load_external_dtd=. This silently turns on external-entity
+      substitution and DTD loading for every subsequent parse in the process,
+      including untrusted input. Leave these global defaults off and pass
+      hardened options per parse instead.
+    metadata:
+      vr-id: RB-SG-1528
+      category: xxe
+      cwe: ["CWE-611"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by libxml-ruby global default_substitute_entities; CWE-611"
+      license: derived-original
+      references:
+        - "https://github.com/xml4r/libxml-ruby"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: LibXML::XML.default_substitute_entities = true
+          - pattern: LibXML::XML.default_load_external_dtd = true
+          - pattern: XML.default_substitute_entities = true

@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-rails-misc-log-injection-newline
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Raw request input is interpolated into a log line without stripping control
+      characters. An attacker embeds CR/LF to forge additional log entries, hide
+      their activity, or mislead a SIEM (log injection / forging). Strip newline and
+      control characters from user input before logging it.
+    metadata:
+      vr-id: RB-SG-2515
+      category: rails-misc
+      cwe: ["CWE-117"]
+      owasp: "A09:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by log-injection via unsanitized newlines sink; CWE-117"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/117.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "Rails.logger.$LEVEL(\"...#{params[...]}...\")"
+          - pattern: "logger.$LEVEL(\"...#{params[...]}...\")"
+      - pattern-not-regex: 'gsub|delete|tr|scrub|strip'

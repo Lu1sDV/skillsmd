@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-crypto-tls-httparty-verify-false
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An HTTParty request passes verify: false, disabling TLS certificate
+      validation for the call. An attacker positioned on the network can present
+      a bogus certificate and intercept the exchange, capturing credentials or
+      injecting responses. Remove verify: false or supply a ssl_ca_file so the
+      server certificate is validated against a trusted root.
+    metadata:
+      vr-id: RB-SG-1406
+      category: crypto-tls
+      cwe: ["CWE-295"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog HTTParty.get(verify:false); CWE-295"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/295.html"
+        - "https://github.com/jnunemaker/httparty"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "HTTParty.get(..., verify: false, ...)"
+          - pattern: "HTTParty.post(..., verify: false, ...)"
+          - pattern: "HTTParty.put(..., verify: false, ...)"
+          - pattern: "HTTParty.delete(..., verify: false, ...)"

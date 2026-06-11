@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-cache-poisoning-rails-cache-read-tainted-key
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Rails.cache.read is called with a key built from request parameters. An
+      attacker who controls the key can read entries written for other tenants
+      or users, leaking cross-account data, and can probe the key space. Derive
+      cache keys from server-side identifiers (current_user.id, record ids) and
+      namespace them rather than embedding raw params.
+    metadata:
+      vr-id: RB-SG-1801
+      category: cache-poisoning
+      cwe: ["CWE-349"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Rails.cache.read(key) cross-tenant key; CWE-349"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/caching_with_rails.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Rails.cache.read(params[...], ...)
+          - pattern: Rails.cache.read("...#{params[...]}...", ...)

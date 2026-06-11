@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-ldap-injection-filter-eq-interp-value
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Net::LDAP::Filter.eq assertion value is built from an interpolated
+      string containing request data. Even inside the typed helper, an
+      unescaped value can carry filter metacharacters such as * and )( that
+      alter the assertion. Pass the raw value through Net::LDAP::Filter.escape
+      before interpolating it.
+    metadata:
+      vr-id: RB-SG-2302
+      category: ldap-injection
+      cwe: ["CWE-90"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/ldap-injection NetLdapFilter getQuery sink; CWE-90"
+      license: derived-original
+      references:
+        - "https://owasp.org/www-community/attacks/LDAP_Injection"
+        - "https://www.rubydoc.info/gems/net-ldap/Net/LDAP/Filter"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Net::LDAP::Filter.eq($ATTR, "...#{...}...")
+          - pattern: Net::LDAP::Filter.contains($ATTR, "...#{...}...")
+          - pattern: Net::LDAP::Filter.begins($ATTR, "...#{...}...")
+          - pattern: Net::LDAP::Filter.ends($ATTR, "...#{...}...")

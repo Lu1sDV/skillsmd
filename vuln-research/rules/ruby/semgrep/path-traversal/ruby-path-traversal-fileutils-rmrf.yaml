@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-path-traversal-fileutils-rmrf
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      FileUtils.rm_rf or FileUtils.rm recursively deletes a path taken from external
+      input. A traversal payload lets an attacker wipe directories anywhere the process
+      can write, causing catastrophic data loss. Never derive a delete target directly
+      from request input — look it up from a trusted record and confirm the resolved path
+      stays under an allow-listed base before removing it.
+    metadata:
+      vr-id: RB-SG-0617
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; FileUtils recursive-delete weakness; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/FileUtils.html#method-c-rm_rf"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: FileUtils.rm_rf(params[...])
+          - pattern: FileUtils.rm_rf("...#{params[...]}...")
+          - pattern: FileUtils.rm(params[...])
+          - pattern: FileUtils.rm("...#{params[...]}...")
+          - pattern: FileUtils.rm_r(params[...])
+          - pattern: FileUtils.rm_r("...#{params[...]}...")

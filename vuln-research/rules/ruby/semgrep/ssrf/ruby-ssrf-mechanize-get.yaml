@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-ssrf-mechanize-get
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Mechanize agent fetches a URL built from interpolated external input.
+      The browser-like client follows the attacker-controlled destination and
+      can be steered at internal services or metadata endpoints, and it follows
+      redirects by default (CWE-918). Validate the target host against an
+      allowlist and disable cross-host redirect following before navigating.
+    metadata:
+      vr-id: RB-SG-0520
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "re-expressed from Mechanize#get sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://github.com/sparklemotion/mechanize"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $AGENT.get("...#{...}...")
+          - pattern: $AGENT.get("...#{...}...", ...)
+      - metavariable-regex:
+          metavariable: $AGENT
+          regex: ^(agent|mechanize|browser|mech)$

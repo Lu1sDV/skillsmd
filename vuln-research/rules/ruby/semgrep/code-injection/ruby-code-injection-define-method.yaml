@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-code-injection-define-method
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      define_method is called with a method name derived from external input.
+      An attacker can register methods under arbitrary names, shadowing existing
+      behaviour or planting dispatch targets for later send-style calls. Generate
+      dynamic methods only from a fixed, internally controlled list of names.
+    metadata:
+      vr-id: RB-SG-0212
+      category: code-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md define_method/define_singleton_method; CWE-94"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Module.html#method-i-define_method"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: define_method(params[...], ...)
+          - pattern: $X.define_method(params[...], ...)
+          - pattern: define_singleton_method(params[...], ...)
+          - pattern: $X.define_singleton_method(params[...], ...)

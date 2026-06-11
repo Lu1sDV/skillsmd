@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-mail-header-injection-mail-new-raw
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Mail.new is constructed from a raw request-supplied string, letting the
+      attacker dictate the entire RFC 5322 message including arbitrary headers,
+      recipients and body. Never parse attacker-supplied raw mail; build the message
+      from validated fields instead.
+    metadata:
+      vr-id: RB-SG-1610
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog 'Mail.new(params[:raw])' raw message build; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Mail.new(params[...])
+          - pattern: Mail.read_from_string(params[...])

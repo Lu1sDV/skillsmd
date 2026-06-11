@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-ssrf-httparty-get
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      HTTParty.get fetches a URL composed from interpolated external input. An
+      attacker who controls the host or path can make the server request
+      internal-only services or cloud metadata and read the response (CWE-918).
+      Accept only allowlisted hosts and validated schemes, and reject private and
+      link-local resolved addresses before performing the request.
+    metadata:
+      vr-id: RB-SG-0510
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from HTTParty.get sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://github.com/jnunemaker/httparty"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: HTTParty.get("...#{...}...")
+          - pattern: HTTParty.get("...#{...}...", ...)

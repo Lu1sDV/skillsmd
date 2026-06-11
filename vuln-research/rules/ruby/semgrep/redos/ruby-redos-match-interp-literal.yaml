@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-redos-match-interp-literal
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      String#match is called with an interpolated regex literal, embedding a runtime
+      value into the compiled pattern. If that value comes from external input the
+      attacker controls part of the regular expression and can force catastrophic
+      backtracking (ReDoS). Match against a static literal, or escape the dynamic part
+      with Regexp.escape.
+    metadata:
+      vr-id: RB-SG-1225
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sinks /#{pattern}/ and String#match combined; CWE-1333"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/String.html#method-i-match"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $S.match(/...#{...}.../)

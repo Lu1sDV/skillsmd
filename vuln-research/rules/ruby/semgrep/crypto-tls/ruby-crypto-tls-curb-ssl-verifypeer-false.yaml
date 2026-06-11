@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-crypto-tls-curb-ssl-verifypeer-false
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Curl::Easy client has ssl_verify_peer set to false, turning off
+      certificate-chain verification for the request. This lets an attacker on
+      the path present a forged certificate and intercept the connection. Leave
+      ssl_verify_peer true and configure cacert with a trusted bundle.
+    metadata:
+      vr-id: RB-SG-1419
+      category: crypto-tls
+      cwe: ["CWE-295"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog Curl::Easy ssl_verify_peer=false; CWE-295"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/295.html"
+        - "https://github.com/taf2/curb"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $C.ssl_verify_peer = false

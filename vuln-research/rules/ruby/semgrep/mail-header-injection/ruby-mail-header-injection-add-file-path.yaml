@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-mail-header-injection-add-file-path
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      attachments.add_file is given a request-controlled path. The basename becomes
+      the attachment filename in the Content-Disposition header and the path itself
+      is read from disk, combining MIME header injection with arbitrary file
+      disclosure. Resolve the path against a fixed directory and sanitize the name.
+    metadata:
+      vr-id: RB-SG-1613
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog 'add_file(params[:path])' attachment from tainted path; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $X.add_file(params[...])
+          - pattern: '$X.add_file(filename: params[...], ...)'
+          - pattern: '$X.add_file(filename: "...#{...}...", ...)'

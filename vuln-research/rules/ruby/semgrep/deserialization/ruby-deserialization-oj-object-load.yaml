@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-deserialization-oj-object-load
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Oj.object_load always parses in object mode regardless of the configured
+      default, materializing arbitrary Ruby objects from the JSON. Calling it on
+      attacker-controlled input is a direct deserialization gadget sink. Parse
+      untrusted JSON as plain data with Oj.strict_load or JSON.parse instead.
+    metadata:
+      vr-id: RB-SG-0417
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Oj.object_load; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/ohler55/oj/blob/develop/pages/security.md"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Oj.object_load($X)
+          - pattern: Oj.object_load($X, ...)
+      - pattern-not: Oj.object_load("...")

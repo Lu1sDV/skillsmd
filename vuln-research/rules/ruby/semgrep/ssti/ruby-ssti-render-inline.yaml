@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-ssti-render-inline
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A controller or view calls `render inline:` with a template string built
+      from interpolation. Rails compiles the inline string through ERB, so any
+      external input spliced into it becomes executable template code (server-side
+      template injection leading to remote code execution). Render a named template
+      or partial and pass user values through `locals:` instead of interpolating
+      them into the inline source.
+    metadata:
+      vr-id: RB-SG-0904
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Rails render inline SSTI class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/RenderingHelper.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'render(inline: "...#{...}...", ...)'
+          - pattern: 'render(inline: "...#{...}...")'
+      - pattern-not: 'render(inline: "...", ...)'

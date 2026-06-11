@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-que-job-args-raw-params
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Raw request parameters are enqueued as Que job arguments. Que serializes the
+      args to JSONB in Postgres and replays them when a worker runs the job, so
+      unvalidated structure crosses the async boundary into the job body and may
+      reach downstream sinks under worker privileges. Pass minimal validated
+      scalars and reload authorized records inside run.
+    metadata:
+      vr-id: RB-SG-1729
+      category: job-injection
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Que.enqueue(job_class, *args) raw args; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/que-rb/que"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Que.enqueue($K, params)
+          - pattern: Que.enqueue($K, params.to_h, ...)
+          - pattern: $K.enqueue(params)

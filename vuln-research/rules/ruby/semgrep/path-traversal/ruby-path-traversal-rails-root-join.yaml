@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-path-traversal-rails-root-join
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A filesystem path is built with Rails.root.join using request input and then read.
+      Pathname#join does not collapse "../" segments, so the resulting path can escape the
+      application root and disclose arbitrary files. Validate the parameter against an allow
+      list, then call expand_path and confirm the result is still under the intended
+      directory before reading.
+    metadata:
+      vr-id: RB-SG-0625
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; Rails.root.join non-sanitizing behaviour; CWE-22"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/Rails.html#method-c-root"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: File.read(Rails.root.join(..., params[...]))
+          - pattern: File.read(Rails.root.join(..., params[...], ...))
+          - pattern: File.open(Rails.root.join(..., params[...]), ...)
+          - pattern: File.open(Rails.root.join(..., params[...]))
+          - pattern: Rails.root.join(..., params[...]).read

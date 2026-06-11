@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-path-traversal-io-read
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      IO.read is called with a path that originates from request input. Like Kernel#open,
+      IO.read treats a leading "|" as a command to spawn, so an unconstrained argument is
+      both a traversal-based file-disclosure sink and a potential command-execution sink.
+      Validate the input and resolve it under a fixed base with File.expand_path before
+      reading, and prefer File.read on a vetted path over IO.read on raw input.
+    metadata:
+      vr-id: RB-SG-0611
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; ruby IO pipe-open behaviour; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/IO.html#method-c-read"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: IO.read(params[...])
+          - pattern: IO.read("...#{params[...]}...")
+          - pattern: IO.binread(params[...])
+          - pattern: IO.binread("...#{params[...]}...")

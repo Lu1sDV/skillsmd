@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-mass-assignment-update-attributes-bang
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      update_attributes! rewrites a record from a raw params slice and raises on
+      failure, but the unfiltered hash still lets an attacker set any column the
+      model exposes, including authorization fields. Whitelist the input with
+      params.require(:user).permit(...) before calling update_attributes!.
+    metadata:
+      vr-id: RB-SG-1105
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/insecure-mass-assignment; CWE-915"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/action_controller_overview.html#strong-parameters"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $O.update_attributes!(params[$K])
+          - pattern: $O.update_attributes!(params[$K], ...)
+      - pattern-not: $O.update_attributes!(params.require(...).permit(...), ...)
+      - pattern-not: $O.update_attributes!(params.require(...).permit(...))

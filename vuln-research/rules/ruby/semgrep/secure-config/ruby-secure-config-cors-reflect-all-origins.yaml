@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-secure-config-cors-reflect-all-origins
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Rack::Cors origins block unconditionally returns true, reflecting back any
+      Origin header and effectively allowing every site to make cross-origin
+      requests. With Access-Control-Allow-Credentials this leaks authenticated
+      responses; validate the origin against an allowlist and return false otherwise.
+    metadata:
+      vr-id: RB-SG-2406
+      category: secure-config
+      cwe: ["CWE-16", "CWE-942"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog Rack::Cors origins { true }; CWE-942"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/942.html"
+        - "https://github.com/cyu/rack-cors"
+    patterns:
+      - pattern-either:
+          - pattern: origins { true }
+          - pattern: origins { |source, env| true }

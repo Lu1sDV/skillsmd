@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-code-injection-remove-const
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      remove_const deletes a constant whose name is taken from external input.
+      An attacker can unload classes or constants that other code depends on,
+      causing denial of service or subverting later constant resolution. Only
+      remove constants chosen from a fixed, internally controlled set of names.
+    metadata:
+      vr-id: RB-SG-0223
+      category: code-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md remove_const; CWE-94"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Module.html#method-i-remove_const"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $M.send(:remove_const, params[...])
+          - pattern: remove_const(params[...])
+          - pattern: $M.remove_const(params[...])

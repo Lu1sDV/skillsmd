@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-code-injection-eval-with-binding
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Kernel#eval is invoked with an interpolated string and an explicit binding,
+      filename, and line number — the diagnostic-friendly form often used in
+      consoles and admin tooling. The extra arguments do not reduce risk: tainted
+      source still executes as Ruby in the supplied scope. Drop eval and dispatch
+      to a fixed set of console commands instead.
+    metadata:
+      vr-id: RB-SG-0225
+      category: code-injection
+      cwe: ["CWE-94", "CWE-95"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md eval/Kernel.eval (binding form); CWE-95"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Kernel.html#method-i-eval"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: eval("...#{...}...", $B, ...)
+          - pattern: eval(params[...], $B, ...)
+          - pattern: eval(request.$M, $B, ...)

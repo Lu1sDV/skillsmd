@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-xxe-rails-xml-params-enabled
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The application re-enables Rails' XML request-parameter parser by
+      registering the :xml parameter parser. Once enabled, Rails materializes
+      XML request bodies into params automatically, reviving the XXE and
+      type-coercion surface (CVE-2013-0156 family) that Rails disabled by
+      default. Leave XML parameter parsing off unless an endpoint truly needs
+      it, and then parse with a hardened, DTD-disabled backend.
+    metadata:
+      vr-id: RB-SG-1516
+      category: xxe
+      cwe: ["CWE-611"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby.md 'XML request parameter parsing re-enabled in Rails' sink; CVE-2013-0156"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/security.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "ActionDispatch::Request.parameter_parsers[Mime[:xml]] = $X"
+          - pattern: 'Mime::Type.register("application/xml", :xml)'
+          - pattern: Hash.from_xml($BODY.read)
+      - pattern-not: Hash.from_xml("...")

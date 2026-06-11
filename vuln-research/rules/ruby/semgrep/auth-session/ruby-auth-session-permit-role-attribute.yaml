@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-auth-session-permit-role-attribute
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A strong-parameters permit list explicitly includes a privilege attribute
+      such as :role, :admin, or :user_id. Allowing these through mass assignment
+      lets a user set their own authorization level by adding the field to the
+      request. Keep privilege columns out of the permitted list and assign them
+      only from a trusted server-side decision.
+    metadata:
+      vr-id: RB-SG-1324
+      category: auth-session
+      cwe: ["CWE-915", "CWE-639"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by mass-assignment of role/admin columns; CWE-915"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/action_controller_overview.html#strong-parameters"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "$P.permit(..., :admin, ...)"
+          - pattern: "$P.permit(..., :role, ...)"
+          - pattern: "$P.permit(..., :role_id, ...)"

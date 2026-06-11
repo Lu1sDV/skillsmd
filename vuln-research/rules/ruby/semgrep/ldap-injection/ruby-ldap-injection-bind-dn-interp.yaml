@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-ldap-injection-bind-dn-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An LDAP bind DN (auth :username) is assembled from an interpolated string
+      containing request data. Injecting DN metacharacters into the bind name
+      can alter which identity is authenticated and enable authentication
+      bypass. Build the bind DN from validated components, escaping each value.
+    metadata:
+      vr-id: RB-SG-2308
+      category: ldap-injection
+      cwe: ["CWE-90"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql NetLdapBind auth username sink; CWE-90"
+      license: derived-original
+      references:
+        - "https://cheatsheetseries.owasp.org/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: '{ method: :simple, username: "...#{...}...", ... }'

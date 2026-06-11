@@ -1,0 +1,12 @@
+edges
+| RandomCryptoKey.rb:5:1:5:5 | nonce | RandomCryptoKey.rb:9:20:9:24 | nonce | provenance |  |
+| RandomCryptoKey.rb:5:9:5:22 | call to rand | RandomCryptoKey.rb:5:1:5:5 | nonce | provenance |  |
+| RandomCryptoKey.rb:9:20:9:24 | nonce | RandomCryptoKey.rb:9:20:9:29 | call to to_s | provenance |  |
+nodes
+| RandomCryptoKey.rb:5:1:5:5 | nonce | semmle.label | nonce |
+| RandomCryptoKey.rb:5:9:5:22 | call to rand | semmle.label | call to rand |
+| RandomCryptoKey.rb:9:20:9:24 | nonce | semmle.label | nonce |
+| RandomCryptoKey.rb:9:20:9:29 | call to to_s | semmle.label | call to to_s |
+subpaths
+#select
+| RandomCryptoKey.rb:9:20:9:29 | call to to_s | RandomCryptoKey.rb:5:9:5:22 | call to rand | RandomCryptoKey.rb:9:20:9:29 | call to to_s | Insecure random value from $@ is used in a cryptographic operation. | RandomCryptoKey.rb:5:9:5:22 | call to rand | call to rand |

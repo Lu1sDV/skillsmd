@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-deserialization-oj-object-mode
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Oj.load with mode: :object reconstructs arbitrary Ruby objects, including
+      their instance variables, from the JSON. On attacker-controlled input this
+      is equivalent to Marshal and enables deserialization gadget chains. Parse
+      untrusted JSON with Oj.load in mode: :strict (or use JSON.parse) so only
+      plain data structures are produced.
+    metadata:
+      vr-id: RB-SG-0414
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by semgrep ruby.lang.security.deserialization.oj-object-mode; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/ohler55/oj/blob/develop/pages/security.md"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: "Oj.load($X, ..., mode: :object, ...)"

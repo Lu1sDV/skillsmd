@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-open-redirect-session-return-path
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A return path stored in the session from request input is later used as a redirect
+      target. If the stored value was an absolute URL when captured, redirecting to it
+      after login sends the victim off-site — a stored open redirect. Persist only
+      validated relative paths in the session, and re-check the value is same-origin
+      before redirecting.
+    metadata:
+      vr-id: RB-SG-1026
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by login-return-flow stored open-redirect pattern; CWE-601"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/601.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: redirect_to session[...]
+          - pattern: redirect_to(session[...])
+          - pattern: "redirect_to(session[...], ...)"

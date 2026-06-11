@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-secure-config-skip-csrf-verification
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      verify_authenticity_token is skipped without a guarding condition, turning
+      off CSRF defenses for every action in the controller. A malicious page can
+      then trigger state-changing requests on behalf of a logged-in user; limit
+      the skip to specific token-authenticated actions with only:.
+    metadata:
+      vr-id: RB-SG-2419
+      category: secure-config
+      cwe: ["CWE-352"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog skip_before_action :verify_authenticity_token; CWE-352"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/352.html"
+        - "https://guides.rubyonrails.org/security.html"
+    patterns:
+      - pattern: "skip_before_action :verify_authenticity_token"
+      - pattern-not: "skip_before_action :verify_authenticity_token, only: ..."
+      - pattern-not: "skip_before_action :verify_authenticity_token, if: ..."

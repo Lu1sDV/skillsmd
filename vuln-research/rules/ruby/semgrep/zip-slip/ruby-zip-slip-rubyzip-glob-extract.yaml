@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-zip-slip-rubyzip-glob-extract
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      rubyzip's Zip::File.foreach / get_entry result is extracted to a path that
+      concatenates the destination with the entry name using string addition or
+      interpolation. String concatenation does no traversal normalization, so an
+      entry name beginning with "../" walks out of the destination and overwrites
+      files elsewhere (Zip Slip). Build the path with File.expand_path against the
+      destination and reject any entry that escapes it.
+    metadata:
+      vr-id: RB-SG-0716
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by rubyzip extraction-traversal advisories; CWE-22; ruby.md Zip::File.open / Zip::Entry#extract sink"
+      license: derived-original
+      references:
+        - "https://github.com/rubyzip/rubyzip"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $ENTRY.extract($DEST + $ENTRY.name)
+          - pattern: $ENTRY.extract($DEST + "/" + $ENTRY.name)

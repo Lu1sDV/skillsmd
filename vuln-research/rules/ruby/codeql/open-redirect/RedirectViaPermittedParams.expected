@@ -1,0 +1,29 @@
+edges
+| tests/RedirectToBackParam/redirect_back_param.rb:5:17:5:22 | call to params | tests/RedirectToBackParam/redirect_back_param.rb:5:17:5:35 | ...[...] | provenance |  |
+| tests/RedirectToInterpolatedHost/redirect_interpolated_host.rb:5:20:5:25 | call to params | tests/RedirectToInterpolatedHost/redirect_interpolated_host.rb:5:20:5:32 | ...[...] | provenance |  |
+| tests/RedirectToInterpolatedHost/redirect_interpolated_host.rb:5:20:5:32 | ...[...] | tests/RedirectToInterpolatedHost/redirect_interpolated_host.rb:5:17:5:42 | "#{...}/welcome" | provenance | AdditionalTaintStep |
+| tests/RedirectToParams/redirect_to_params.rb:5:17:5:22 | call to params | tests/RedirectToParams/redirect_to_params.rb:5:17:5:34 | ...[...] | provenance |  |
+| tests/RedirectViaPermittedParams/redirect_permitted_params.rb:5:5:5:8 | safe | tests/RedirectViaPermittedParams/redirect_permitted_params.rb:6:17:6:20 | safe | provenance |  |
+| tests/RedirectViaPermittedParams/redirect_permitted_params.rb:5:12:5:17 | call to params | tests/RedirectViaPermittedParams/redirect_permitted_params.rb:5:12:5:35 | call to permit | provenance |  |
+| tests/RedirectViaPermittedParams/redirect_permitted_params.rb:5:12:5:17 | call to params | tests/RedirectViaPermittedParams/redirect_permitted_params.rb:5:12:5:35 | call to permit | provenance | Config |
+| tests/RedirectViaPermittedParams/redirect_permitted_params.rb:5:12:5:35 | call to permit | tests/RedirectViaPermittedParams/redirect_permitted_params.rb:5:5:5:8 | safe | provenance |  |
+| tests/RedirectViaPermittedParams/redirect_permitted_params.rb:6:17:6:20 | safe | tests/RedirectViaPermittedParams/redirect_permitted_params.rb:6:17:6:31 | ...[...] | provenance |  |
+nodes
+| tests/RedirectToBackParam/redirect_back_param.rb:5:17:5:22 | call to params | semmle.label | call to params |
+| tests/RedirectToBackParam/redirect_back_param.rb:5:17:5:35 | ...[...] | semmle.label | ...[...] |
+| tests/RedirectToInterpolatedHost/redirect_interpolated_host.rb:5:17:5:42 | "#{...}/welcome" | semmle.label | "#{...}/welcome" |
+| tests/RedirectToInterpolatedHost/redirect_interpolated_host.rb:5:20:5:25 | call to params | semmle.label | call to params |
+| tests/RedirectToInterpolatedHost/redirect_interpolated_host.rb:5:20:5:32 | ...[...] | semmle.label | ...[...] |
+| tests/RedirectToParams/redirect_to_params.rb:5:17:5:22 | call to params | semmle.label | call to params |
+| tests/RedirectToParams/redirect_to_params.rb:5:17:5:34 | ...[...] | semmle.label | ...[...] |
+| tests/RedirectViaPermittedParams/redirect_permitted_params.rb:5:5:5:8 | safe | semmle.label | safe |
+| tests/RedirectViaPermittedParams/redirect_permitted_params.rb:5:12:5:17 | call to params | semmle.label | call to params |
+| tests/RedirectViaPermittedParams/redirect_permitted_params.rb:5:12:5:35 | call to permit | semmle.label | call to permit |
+| tests/RedirectViaPermittedParams/redirect_permitted_params.rb:6:17:6:20 | safe | semmle.label | safe |
+| tests/RedirectViaPermittedParams/redirect_permitted_params.rb:6:17:6:31 | ...[...] | semmle.label | ...[...] |
+subpaths
+#select
+| tests/RedirectToBackParam/redirect_back_param.rb:5:17:5:35 | ...[...] | tests/RedirectToBackParam/redirect_back_param.rb:5:17:5:22 | call to params | tests/RedirectToBackParam/redirect_back_param.rb:5:17:5:35 | ...[...] | Untrusted URL redirection depends on a $@. | tests/RedirectToBackParam/redirect_back_param.rb:5:17:5:22 | call to params | user-provided value |
+| tests/RedirectToInterpolatedHost/redirect_interpolated_host.rb:5:17:5:42 | "#{...}/welcome" | tests/RedirectToInterpolatedHost/redirect_interpolated_host.rb:5:20:5:25 | call to params | tests/RedirectToInterpolatedHost/redirect_interpolated_host.rb:5:17:5:42 | "#{...}/welcome" | Untrusted URL redirection depends on a $@. | tests/RedirectToInterpolatedHost/redirect_interpolated_host.rb:5:20:5:25 | call to params | user-provided value |
+| tests/RedirectToParams/redirect_to_params.rb:5:17:5:34 | ...[...] | tests/RedirectToParams/redirect_to_params.rb:5:17:5:22 | call to params | tests/RedirectToParams/redirect_to_params.rb:5:17:5:34 | ...[...] | Untrusted URL redirection depends on a $@. | tests/RedirectToParams/redirect_to_params.rb:5:17:5:22 | call to params | user-provided value |
+| tests/RedirectViaPermittedParams/redirect_permitted_params.rb:6:17:6:31 | ...[...] | tests/RedirectViaPermittedParams/redirect_permitted_params.rb:5:12:5:17 | call to params | tests/RedirectViaPermittedParams/redirect_permitted_params.rb:6:17:6:31 | ...[...] | Untrusted URL redirection depends on a $@. | tests/RedirectViaPermittedParams/redirect_permitted_params.rb:5:12:5:17 | call to params | user-provided value |

@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-ssti-render-body-content-type
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      `render body:` returns an interpolated string with an explicit HTML content
+      type, bypassing the view layer and its automatic escaping. When external
+      input is interpolated into that body it is sent as active HTML and, in
+      template-preview features, may be re-fed to an engine — yielding XSS or
+      template injection. Render through a real template with auto-escaping, or set
+      a non-HTML content type for raw output.
+    metadata:
+      vr-id: RB-SG-0919
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Rails render body content-type abuse class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Renderers.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: 'render(body: "...#{...}...", content_type: "text/html")'

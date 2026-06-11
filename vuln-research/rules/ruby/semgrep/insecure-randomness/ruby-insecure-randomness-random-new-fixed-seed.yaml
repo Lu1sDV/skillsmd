@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-insecure-randomness-random-new-fixed-seed
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Random.new is constructed with an explicit seed, producing a deterministic
+      stream of values. If the resulting generator backs tokens, nonces, or keys,
+      any party who knows or brute-forces the seed reproduces the whole sequence.
+      Construct Random with no argument for entropy, and use SecureRandom for secrets.
+    metadata:
+      vr-id: RB-SG-2204
+      category: insecure-randomness
+      cwe: ["CWE-336", "CWE-338"]
+      owasp: "A02:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog 'Random with seed'; CWE-336"
+      license: derived-original
+      references:
+        - "https://ruby-doc.org/core/Random.html#method-c-new"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Random.new($SEED)
+      - pattern-not: Random.new()

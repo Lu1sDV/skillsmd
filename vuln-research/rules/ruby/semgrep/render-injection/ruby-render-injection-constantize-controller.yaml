@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-render-injection-constantize-controller
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A controller class is resolved by constantizing a request parameter. The
+      attacker controls which constant is loaded and dispatched to, allowing
+      invocation of arbitrary controllers or classes (remote class inclusion).
+      Resolve the controller through a fixed routing table, never constantize raw
+      input.
+    metadata:
+      vr-id: RB-SG-1913
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md custom dispatch using params[:controller]; CWE-98"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/String.html#method-i-constantize"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: params[...].constantize
+          - pattern: params[...].camelize.constantize
+          - pattern: "(params[...] + ...).constantize"
+          - pattern: '"...#{params[...]}...".constantize'

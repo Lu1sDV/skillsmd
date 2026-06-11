@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-karafka-consumer-yaml-payload
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Karafka Kafka consumer deserializes a message payload with an unsafe YAML
+      loader. Kafka topic data is attacker-influenced whenever an untrusted
+      producer can publish to the topic, so YAML.load on the raw message lets a
+      gadget object instantiate and run code inside the consumer. Decode the
+      payload as JSON or use YAML.safe_load with permitted classes.
+    metadata:
+      vr-id: RB-SG-1727
+      category: job-injection
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md queue payloads flowing to deserialization (Kafka/Karafka); CWE-502"
+      license: derived-original
+      references:
+        - "https://karafka.io/docs/"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: YAML.load($MSG.raw_payload)
+          - pattern: YAML.load($MSG.payload)
+          - pattern: YAML.unsafe_load($MSG.raw_payload)

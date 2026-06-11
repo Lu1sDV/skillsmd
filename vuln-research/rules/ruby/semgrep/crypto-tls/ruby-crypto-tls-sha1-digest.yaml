@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-crypto-tls-sha1-digest
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A value is hashed with SHA-1, which is collision-broken and unsuitable for
+      signatures, certificate fingerprints, or password storage. An attacker can
+      craft colliding inputs to forge integrity checks. Migrate to SHA-256 or
+      SHA-3 for integrity, and a memory-hard password hash (BCrypt/Argon2) for
+      secrets.
+    metadata:
+      vr-id: RB-SG-1409
+      category: crypto-tls
+      cwe: ["CWE-327", "CWE-328"]
+      owasp: "A02:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/weak-sensitive-data-hashing; CWE-327"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/328.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Digest::SHA1.hexdigest(...)
+          - pattern: Digest::SHA1.digest(...)
+          - pattern: Digest::SHA1.base64digest(...)
+          - pattern: OpenSSL::Digest::SHA1.new(...)
+          - pattern: OpenSSL::Digest.new("SHA1")
+          - pattern: OpenSSL::Digest.new("sha1")

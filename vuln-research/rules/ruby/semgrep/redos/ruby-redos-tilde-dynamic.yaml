@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-redos-tilde-dynamic
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The =~ operator matches a string against a regex compiled from request input,
+      so the attacker dictates the pattern being applied. A malicious expression with
+      nested quantifiers causes catastrophic backtracking and a denial of service. Use
+      a server-side fixed pattern instead of one derived from params.
+    metadata:
+      vr-id: RB-SG-1206
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink String#=~ regex with attacker-supplied pattern; CWE-1333"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/String.html#method-i-3D-7E"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $S =~ Regexp.new(params[...])

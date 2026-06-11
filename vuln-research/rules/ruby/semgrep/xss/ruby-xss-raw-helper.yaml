@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-xss-raw-helper
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The Rails `raw` helper marks a string as HTML-safe and emits it without
+      escaping. When the argument is built from request parameters, the model, or
+      any attacker-influenced value, injected markup and <script> tags reach the
+      browser unmodified, producing cross-site scripting. Render the value with
+      default ERB escaping (`<%= value %>`) or pass it through `sanitize` with an
+      allow-list before marking it safe.
+    metadata:
+      vr-id: RB-SG-0801
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql ruby Ast::Html::RawCall sink (XSS.qll); CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/OutputSafetyHelper.html#method-i-raw"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: raw(params[...])
+          - pattern: raw("...#{...}...")
+          - pattern: raw(params.fetch(...))
+      - pattern-not: raw("...")

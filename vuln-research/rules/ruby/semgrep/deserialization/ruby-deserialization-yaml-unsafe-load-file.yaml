@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-deserialization-yaml-unsafe-load-file
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      YAML.unsafe_load_file forces the full object-instantiating loader on a
+      file's contents. If the path or the file is attacker-controllable, tagged
+      Ruby objects in the document trigger gadget chains and code execution.
+      Parse files you do not fully control with YAML.safe_load_file and an
+      explicit permitted_classes allowlist.
+    metadata:
+      vr-id: RB-SG-0406
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md YAML.unsafe_load_file; CWE-502"
+      license: derived-original
+      references:
+        - "https://ruby-doc.org/stdlib/libdoc/psych/rdoc/Psych.html#method-c-unsafe_load_file"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: YAML.unsafe_load_file($X)
+          - pattern: YAML.unsafe_load_file($X, ...)

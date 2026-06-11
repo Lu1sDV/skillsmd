@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-mail-header-injection-mail-subject-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The Subject header of an ActionMailer mail(...) call interpolates a value into
+      a string. A newline embedded in the subject lets an attacker fold in extra
+      headers such as Bcc or rewrite the envelope. Treat the subject as opaque text
+      and strip CR/LF, or build it from a server-controlled template.
+    metadata:
+      vr-id: RB-SG-1602
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog 'mail(subject:...)' header field CR/LF; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: 'mail(..., subject: "...#{...}...", ...)'

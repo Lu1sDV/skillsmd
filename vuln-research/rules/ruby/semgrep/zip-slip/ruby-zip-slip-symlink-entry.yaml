@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-zip-slip-symlink-entry
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A symbolic link is created during archive extraction using a target taken
+      from the archive (File.symlink with entry.read / entry's link target). An
+      archive can pack a symlink pointing at an absolute path such as /etc, and a
+      later entry written "through" that link then lands outside the destination —
+      a symlink-based Zip Slip / arbitrary write. Skip symlink entries entirely, or
+      validate that the resolved link target stays within the extraction root.
+    metadata:
+      vr-id: RB-SG-0711
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by tar/zip symlink-extraction advisories; CWE-22; ruby.md symlinks/hardlinks extraction sink"
+      license: derived-original
+      references:
+        - "https://security.snyk.io/research/zip-slip-vulnerability"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: File.symlink($ENTRY.read, File.join($DEST, $ENTRY.full_name))
+          - pattern: File.symlink($ENTRY.header.linkname, ...)
+          - pattern: File.symlink($SRC, "...#{$ENTRY.name}...")

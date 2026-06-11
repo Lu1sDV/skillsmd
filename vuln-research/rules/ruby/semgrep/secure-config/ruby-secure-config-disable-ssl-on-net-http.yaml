@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-disable-ssl-on-net-http
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Net::HTTP client sets verify_mode to OpenSSL::SSL::VERIFY_NONE, disabling
+      TLS certificate validation so any man-in-the-middle with a self-signed
+      certificate can read and tamper with the traffic. Use VERIFY_PEER and a
+      proper CA bundle for outbound HTTPS requests.
+    metadata:
+      vr-id: RB-SG-2430
+      category: secure-config
+      cwe: ["CWE-16", "CWE-295"]
+      owasp: "A02:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog verify_mode=VERIFY_NONE; CWE-295"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/295.html"
+        - "https://docs.ruby-lang.org/en/master/Net/HTTP.html"
+    patterns:
+      - pattern: $HTTP.verify_mode = OpenSSL::SSL::VERIFY_NONE

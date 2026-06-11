@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-deserialization-oj-default-load
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Oj.load without an explicit mode falls back to the process default, which
+      can be :object if Oj.default_options was set that way elsewhere. Relying on
+      ambient configuration for untrusted JSON risks silent object instantiation.
+      Always pass an explicit safe mode (mode: :strict) when loading external
+      data rather than trusting the global default.
+    metadata:
+      vr-id: RB-SG-0415
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Oj.load generic; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/ohler55/oj/blob/develop/pages/security.md"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Oj.load($X)
+      - pattern-not: Oj.load("...")

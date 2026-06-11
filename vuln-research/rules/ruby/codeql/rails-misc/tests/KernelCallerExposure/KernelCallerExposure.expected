@@ -1,0 +1,11 @@
+edges
+| kernel_caller.rb:5:5:5:10 | frames | kernel_caller.rb:6:18:6:23 | frames | provenance |  |
+| kernel_caller.rb:5:14:5:21 | call to caller | kernel_caller.rb:5:5:5:10 | frames | provenance |  |
+nodes
+| kernel_caller.rb:5:5:5:10 | frames | semmle.label | frames |
+| kernel_caller.rb:5:14:5:21 | call to caller | semmle.label | call to caller |
+| kernel_caller.rb:6:18:6:23 | frames | semmle.label | frames |
+| kernel_caller.rb:14:18:14:28 | call to backtrace | semmle.label | call to backtrace |
+subpaths
+#select
+| kernel_caller.rb:6:18:6:23 | frames | kernel_caller.rb:5:14:5:21 | call to caller | kernel_caller.rb:6:18:6:23 | frames | $@ can be exposed to an external user. | kernel_caller.rb:5:14:5:21 | call to caller | Call stack from Kernel#caller |

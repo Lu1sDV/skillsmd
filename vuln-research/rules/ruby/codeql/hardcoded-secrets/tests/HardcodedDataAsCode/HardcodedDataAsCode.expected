@@ -1,0 +1,18 @@
+edges
+| hardcoded_as_code.rb:4:3:4:6 | blob : String | hardcoded_as_code.rb:5:14:5:17 | blob : String | provenance |  |
+| hardcoded_as_code.rb:4:10:4:27 | "deadbeef1337cafe" : String | hardcoded_as_code.rb:4:3:4:6 | blob : String | provenance |  |
+| hardcoded_as_code.rb:5:3:5:9 | payload | hardcoded_as_code.rb:6:17:6:23 | payload | provenance |  |
+| hardcoded_as_code.rb:5:13:5:18 | call to [] : Array [element 0] : String | hardcoded_as_code.rb:5:13:5:29 | call to pack | provenance | Config |
+| hardcoded_as_code.rb:5:13:5:29 | call to pack | hardcoded_as_code.rb:5:3:5:9 | payload | provenance |  |
+| hardcoded_as_code.rb:5:14:5:17 | blob : String | hardcoded_as_code.rb:5:13:5:18 | call to [] : Array [element 0] : String | provenance |  |
+nodes
+| hardcoded_as_code.rb:4:3:4:6 | blob : String | semmle.label | blob : String |
+| hardcoded_as_code.rb:4:10:4:27 | "deadbeef1337cafe" : String | semmle.label | "deadbeef1337cafe" : String |
+| hardcoded_as_code.rb:5:3:5:9 | payload | semmle.label | payload |
+| hardcoded_as_code.rb:5:13:5:18 | call to [] : Array [element 0] : String | semmle.label | call to [] : Array [element 0] : String |
+| hardcoded_as_code.rb:5:13:5:29 | call to pack | semmle.label | call to pack |
+| hardcoded_as_code.rb:5:14:5:17 | blob : String | semmle.label | blob : String |
+| hardcoded_as_code.rb:6:17:6:23 | payload | semmle.label | payload |
+subpaths
+#select
+| hardcoded_as_code.rb:6:17:6:23 | payload | hardcoded_as_code.rb:4:10:4:27 | "deadbeef1337cafe" : String | hardcoded_as_code.rb:6:17:6:23 | payload | Hard-coded data from $@ is interpreted as code. | hardcoded_as_code.rb:4:10:4:27 | "deadbeef1337cafe" | this constant |

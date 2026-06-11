@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-cache-poisoning-conditional-get-tainted-etag
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      fresh_when or stale? derives its ETag or Last-Modified validator from
+      request parameters. An attacker who controls the validator can force the
+      server to emit a 304 (or skip revalidation) for content that should
+      differ, enabling cache confusion and poisoning of intermediary caches.
+      Compute validators from server-side record state (updated_at, id), not
+      from params.
+    metadata:
+      vr-id: RB-SG-1808
+      category: cache-poisoning
+      cwe: ["CWE-444"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md fresh_when/stale? with tainted params; CWE-444"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/ConditionalGet.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "fresh_when(etag: params[...], ...)"
+          - pattern: fresh_when(params[...], ...)
+          - pattern: "stale?(etag: params[...], ...)"
+          - pattern: stale?(params[...], ...)

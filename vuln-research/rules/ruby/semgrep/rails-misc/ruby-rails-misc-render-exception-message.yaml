@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-rails-misc-render-exception-message
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A rescued exception's message is rendered back in the HTTP response. The message
+      and backtrace frequently contain internal paths, SQL fragments, or library
+      versions, handing an attacker a reconnaissance primitive (information exposure
+      through an error message). Log the detail server-side and return a generic error
+      to the client.
+    metadata:
+      vr-id: RB-SG-2512
+      category: rails-misc
+      cwe: ["CWE-209"]
+      owasp: "A04:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by CodeQL rb/stack-trace-exposure StackTraceExposure; CWE-209"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/209.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "render(plain: $E.message, ...)"
+          - pattern: "render(json: { error: $E.message }, ...)"
+          - pattern: "render(json: { error: $E.message })"
+          - pattern: "render(plain: $E.backtrace.join(...), ...)"

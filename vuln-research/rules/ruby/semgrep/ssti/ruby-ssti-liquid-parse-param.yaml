@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-ssti-liquid-parse-param
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A raw request parameter is parsed as a Liquid template. Even under Liquid's
+      sandbox, an attacker controlling the entire template can enumerate exposed
+      drops, trigger expensive loops for denial of service, and reach any custom
+      tags or filters the app has registered. Treat user-submitted templates as
+      untrusted: store and select them by an allowlisted identifier and supply only
+      whitelisted assigns at render time.
+    metadata:
+      vr-id: RB-SG-0911
+      category: ssti
+      cwe: ["CWE-1336", "CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Liquid user-template injection class; CWE-1336"
+      license: derived-original
+      references:
+        - "https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Liquid::Template.parse(params[...])
+          - pattern: Liquid::Template.parse(params[...], ...)

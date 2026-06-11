@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-mail-header-injection-mail-custom-header-hash
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A custom header passed in the mail(...) options hash uses a hash-rocket string
+      key with a request-controlled value. The mail gem writes it verbatim, so CR/LF
+      in the value injects additional headers or a body. Sanitize the value (strip
+      newlines) and restrict which custom headers may be set.
+    metadata:
+      vr-id: RB-SG-1620
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog custom mail header from tainted value; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'mail(..., "...#{...}..." => ..., ...)'
+          - pattern: 'mail(..., "..." => params[...], ...)'
+          - pattern: 'mail(..., "..." => "...#{...}...", ...)'

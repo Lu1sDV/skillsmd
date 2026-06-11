@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-http-parsing-tenant-from-header
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Multi-tenant context is resolved from a raw request header or the
+      client-supplied Host. Because the header is attacker-controlled, a user can
+      switch tenants and reach another customer's data (authorization bypass via
+      header parsing). Resolve the tenant from the authenticated session/subject,
+      not from a request header.
+    metadata:
+      vr-id: RB-SG-2016
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md request headers in tenant resolution; CWE-444"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/444.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "Tenant.find_by(subdomain: request.host)"
+          - pattern: Tenant.find_by(..., request.headers[...], ...)
+          - pattern: "Tenant.find_by($K: request.headers[...])"
+          - pattern: "Current.tenant = Tenant.find_by($K: request.headers[...])"
+          - pattern: "Current.tenant = Tenant.find_by(subdomain: request.host)"

@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-sidekiq-job-class-send
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A worker class is selected by sending a request-controlled method name to a
+      registry object and the result is enqueued with perform_async. Method
+      dispatch from params lets an attacker reach any worker the registry exposes,
+      including ones with privileged side effects. Map a fixed set of accepted
+      tokens to worker classes instead of using send/public_send on user input.
+    metadata:
+      vr-id: RB-SG-1718
+      category: job-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md dynamic Sidekiq class dispatch via method send; CWE-94"
+      license: derived-original
+      references:
+        - "https://github.com/sidekiq/sidekiq/wiki/The-Basics"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $REG.public_send(params[...]).perform_async(...)
+          - pattern: $REG.send(params[...]).perform_async(...)
+          - pattern: Object.const_get(params[...]).perform_async(...)

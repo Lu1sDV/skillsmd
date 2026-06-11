@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-xxe-saml-signature-disabled
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A SAML settings object is built with idp_cert validation effectively
+      turned off — soft validation enabled and/or want_assertions_signed set to
+      false. With signature checking relaxed, an attacker can forge or tamper
+      with the SAML assertion XML (and abuse the XML parser surface), bypassing
+      authentication. Require signed assertions and disable soft validation in
+      production SAML configurations.
+    metadata:
+      vr-id: RB-SG-1518
+      category: xxe
+      cwe: ["CWE-611", "CWE-347"]
+      owasp: "A07:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby.md 'SAML/SOAP parsing with disabled signature ...' sink; ruby-saml advisories"
+      license: derived-original
+      references:
+        - "https://github.com/SAML-Toolkits/ruby-saml"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $S.soft = true
+          - pattern: $S.want_assertions_signed = false
+          - pattern: "$S.security[:want_assertions_signed] = false"

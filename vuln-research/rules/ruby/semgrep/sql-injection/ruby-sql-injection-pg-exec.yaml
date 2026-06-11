@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-sql-injection-pg-exec
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The PostgreSQL driver method exec/async_exec is called with an interpolated
+      SQL string. These methods do not bind parameters, so external input spliced
+      into the statement is injectable, and stacked statements are allowed. Use
+      exec_params with $1 placeholders and a values array instead.
+    metadata:
+      vr-id: RB-SG-0325
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by pg gem exec vs exec_params guidance; CWE-89"
+      license: derived-original
+      references:
+        - "https://www.rubydoc.info/gems/pg/PG/Connection#exec_params-instance_method"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $C.exec("...#{...}...")
+          - pattern: $C.async_exec("...#{...}...")

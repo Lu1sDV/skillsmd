@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-path-traversal-fileutils-mkdir
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      FileUtils.mkdir or mkdir_p creates a directory tree from a path built out of external
+      input. Traversal sequences let an attacker create directories outside the intended
+      root. Validate the name against an allow list and resolve it under a trusted base
+      with File.expand_path before creating it.
+    metadata:
+      vr-id: RB-SG-0619
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/FileUtils.html#method-c-mkdir_p"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: FileUtils.mkdir_p(params[...])
+          - pattern: FileUtils.mkdir_p("...#{params[...]}...")
+          - pattern: FileUtils.mkdir(params[...])
+          - pattern: FileUtils.mkdir("...#{params[...]}...")

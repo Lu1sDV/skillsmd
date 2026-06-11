@@ -1,0 +1,38 @@
+rules:
+  - id: ruby-job-injection-activejob-deserialize-marshal
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A custom ActiveJob serializer rebuilds its argument with Marshal.load on
+      stored data. ActiveJob reconstructs serialized arguments when a worker runs
+      the job, so a Marshal payload that an attacker can place in the queue
+      backend executes a gadget chain on dispatch. Serialize job arguments as
+      plain JSON-compatible data, never with Marshal.
+    metadata:
+      vr-id: RB-SG-1723
+      category: job-injection
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md ActiveJob serializer Marshal deserialization; CWE-502"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/active_job_basics.html#serializers"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - patterns:
+          - pattern: |
+              def deserialize(...)
+                ...
+                Marshal.load(...)
+                ...
+              end
+          - pattern-not: |
+              def deserialize(...)
+                ...
+                Marshal.load(Marshal.dump(...))
+                ...
+              end

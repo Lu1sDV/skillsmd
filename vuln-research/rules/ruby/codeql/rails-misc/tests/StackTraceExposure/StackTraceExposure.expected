@@ -1,0 +1,6 @@
+edges
+nodes
+| stack_trace.rb:7:18:7:28 | call to backtrace | semmle.label | call to backtrace |
+subpaths
+#select
+| stack_trace.rb:7:18:7:28 | call to backtrace | stack_trace.rb:7:18:7:28 | call to backtrace | stack_trace.rb:7:18:7:28 | call to backtrace | $@ can be exposed to an external user. | stack_trace.rb:7:18:7:28 | call to backtrace | Error information |

@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-http-parsing-response-header-from-request
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A response header is set from a raw request header value. Reflecting an
+      unsanitized client header into the response enables header injection /
+      response splitting when the value carries CR/LF, and lets a client steer
+      caching or CORS decisions. Emit only validated, server-chosen header values.
+    metadata:
+      vr-id: RB-SG-2023
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md reflecting request headers into responses; CWE-444"
+      license: derived-original
+      references:
+        - "https://owasp.org/www-community/attacks/HTTP_Response_Splitting"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: response.headers[$K] = request.headers[$H]
+          - pattern: response.headers[$K] = request.headers["Origin"]
+          - pattern: response.set_header($K, request.headers[$H])
+          - pattern: headers[$K] = request.headers[$H]

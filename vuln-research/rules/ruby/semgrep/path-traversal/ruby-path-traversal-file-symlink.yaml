@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-path-traversal-file-symlink
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      File.symlink creates a symbolic link whose target or link path comes from external
+      input. An attacker can point the link at a sensitive file so that a later read or
+      write follows it outside the intended directory, enabling arbitrary file access.
+      Reject path separators and "../" in the input, and resolve both arguments under a
+      trusted base before creating the link.
+    metadata:
+      vr-id: RB-SG-0609
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; symlink-following weakness; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/File.html#method-c-symlink"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: File.symlink(params[...], ...)
+          - pattern: File.symlink(..., params[...])
+          - pattern: File.symlink("...#{params[...]}...", ...)
+          - pattern: File.symlink(..., "...#{params[...]}...")

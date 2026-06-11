@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-command-injection-backticks
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A backtick command literal contains string interpolation. Backticks hand the
+      whole string to /bin/sh, so any interpolated request parameter, header, or
+      filename lets an attacker append shell metacharacters (`; rm -rf /`) and run
+      arbitrary commands. Avoid backticks for dynamic input; use an argument-vector
+      API such as `IO.popen(["cmd", arg])` or escape with Shellwords.escape.
+    metadata:
+      vr-id: RB-SG-0101
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/command-injection (CommandInjectionQuery backtick sink); CWE-78"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Kernel.html#method-i-60"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: "`...#{...}...`"

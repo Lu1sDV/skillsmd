@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-deserialization-psych-load
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Psych.load is the underlying YAML engine entry point and, on older Psych
+      releases, deserializes arbitrary tagged Ruby objects. Calling it on
+      attacker-controlled YAML enables gadget-chain code execution. Switch to
+      Psych.safe_load with an explicit permitted_classes allowlist for any data
+      you do not fully control.
+    metadata:
+      vr-id: RB-SG-0408
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Psych.load; CWE-502"
+      license: derived-original
+      references:
+        - "https://ruby-doc.org/stdlib/libdoc/psych/rdoc/Psych.html#method-c-load"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Psych.load($X)
+          - pattern: Psych.load($X, ...)
+      - pattern-not: "Psych.load($X, permitted_classes: [...])"
+      - pattern-not: Psych.load("...")

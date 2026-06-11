@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-secure-config-cookies-serializer-marshal
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The cookie session store is configured to use the :marshal serializer,
+      which deserializes attacker-supplied cookie payloads with Marshal.load and
+      can lead to remote code execution if the secret_key_base ever leaks. Use
+      the :json serializer so session cookies cannot carry arbitrary Ruby objects.
+    metadata:
+      vr-id: RB-SG-2402
+      category: secure-config
+      cwe: ["CWE-1004", "CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog cookies_serializer=:marshal; CWE-502"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/502.html"
+        - "https://guides.rubyonrails.org/configuring.html"
+    patterns:
+      - pattern-either:
+          - pattern: $CFG.action_dispatch.cookies_serializer = :marshal
+          - pattern: $CFG.action_dispatch.cookies_serializer = :hybrid

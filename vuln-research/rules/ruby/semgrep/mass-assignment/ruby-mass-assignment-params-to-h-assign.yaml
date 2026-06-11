@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-mass-assignment-params-to-h-assign
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A model write consumes params[:key].to_h, converting an unfiltered params
+      slice straight to a plain Hash. On a permitted ActionController::Parameters
+      to_h is safe, but on an un-permitted slice it raises or (in older versions)
+      yields the full hash, re-enabling mass assignment. Permit the keys first, then
+      call to_h.
+    metadata:
+      vr-id: RB-SG-1126
+      category: mass-assignment
+      cwe: ["CWE-915"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md params[:model].to_h; CWE-915"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Parameters.html#method-i-to_h"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $M.new(params[$K].to_h)
+          - pattern: $M.create(params[$K].to_h)
+          - pattern: $M.create!(params[$K].to_h)
+          - pattern: $O.update(params[$K].to_h)
+          - pattern: $O.assign_attributes(params[$K].to_h)

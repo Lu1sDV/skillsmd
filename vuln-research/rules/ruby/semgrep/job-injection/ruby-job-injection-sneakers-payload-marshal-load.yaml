@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-job-injection-sneakers-payload-marshal-load
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Sneakers AMQP worker reconstructs its message payload with Marshal.load.
+      RabbitMQ message bodies are attacker-influenced whenever an untrusted
+      publisher can reach the exchange, so unmarshalling the raw delivery body
+      lets a gadget chain run on the worker. Transport payloads as JSON and parse
+      them with a non-code-executing parser.
+    metadata:
+      vr-id: RB-SG-1713
+      category: job-injection
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Sneakers message handlers flowing to deserialization; CWE-502"
+      license: derived-original
+      references:
+        - "https://github.com/jondot/sneakers"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Marshal.load($BODY)
+          - pattern: Marshal.restore($BODY)
+      - pattern-not: Marshal.load(Marshal.dump(...))

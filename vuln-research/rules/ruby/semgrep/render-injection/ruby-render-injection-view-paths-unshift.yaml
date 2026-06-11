@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-render-injection-view-paths-unshift
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A request-controlled directory is unshifted onto view_paths, placing an
+      attacker-influenced location at the front of the template resolution order.
+      Later renders can resolve templates from that directory, enabling template
+      hijacking or file disclosure. Only register fixed, application-owned view
+      paths.
+    metadata:
+      vr-id: RB-SG-1927
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md user-influenced template lookup path; view_paths variant; CWE-98"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/ViewPaths.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: view_paths.unshift(params[...])
+          - pattern: view_paths.push(params[...])
+          - pattern: $X.view_paths.unshift(params[...])
+          - pattern: self.view_paths += [params[...]]

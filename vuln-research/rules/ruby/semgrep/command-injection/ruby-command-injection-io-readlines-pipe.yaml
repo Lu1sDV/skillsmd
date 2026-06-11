@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-command-injection-io-readlines-pipe
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      IO.readlines is called with an interpolated path string. A path beginning with a
+      pipe character is run as a shell command rather than read as a file, so
+      attacker-controlled input can execute arbitrary commands. Use File.readlines for
+      file access and reject a leading "|" in the argument.
+    metadata:
+      vr-id: RB-SG-0119
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql frameworks/core/IO.qll (IO.readlines pipe path); CWE-78"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/IO.html#method-c-readlines"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: IO.readlines("...#{...}...")

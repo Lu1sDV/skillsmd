@@ -1,0 +1,36 @@
+edges
+| tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:5:3:8 | expr | tests/CodeInjectionFlow/CodeInjectionFlow.rb:5:10:5:13 | expr | provenance |  |
+| tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:5:3:8 | expr | tests/CodeInjectionFlow/CodeInjectionFlow.rb:5:10:5:13 | expr | provenance |  |
+| tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:12:3:17 | call to params | tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:12:3:24 | ...[...] | provenance |  |
+| tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:12:3:17 | call to params | tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:12:3:24 | ...[...] | provenance |  |
+| tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:12:3:24 | ...[...] | tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:5:3:8 | expr | provenance |  |
+| tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:12:3:24 | ...[...] | tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:5:3:8 | expr | provenance |  |
+| tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:5:3:11 | snippet | tests/EvalArbitraryCode/EvalArbitraryCode.rb:5:30:5:36 | snippet | provenance |  |
+| tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:5:3:11 | snippet | tests/EvalArbitraryCode/EvalArbitraryCode.rb:5:30:5:36 | snippet | provenance |  |
+| tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:15:3:20 | call to params | tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:15:3:30 | ...[...] | provenance |  |
+| tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:15:3:20 | call to params | tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:15:3:30 | ...[...] | provenance |  |
+| tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:15:3:30 | ...[...] | tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:5:3:11 | snippet | provenance |  |
+| tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:15:3:30 | ...[...] | tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:5:3:11 | snippet | provenance |  |
+nodes
+| tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:5:3:8 | expr | semmle.label | expr |
+| tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:5:3:8 | expr | semmle.label | expr |
+| tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:12:3:17 | call to params | semmle.label | call to params |
+| tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:12:3:17 | call to params | semmle.label | call to params |
+| tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:12:3:24 | ...[...] | semmle.label | ...[...] |
+| tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:12:3:24 | ...[...] | semmle.label | ...[...] |
+| tests/CodeInjectionFlow/CodeInjectionFlow.rb:5:10:5:13 | expr | semmle.label | expr |
+| tests/CodeInjectionFlow/CodeInjectionFlow.rb:5:10:5:13 | expr | semmle.label | expr |
+| tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:5:3:11 | snippet | semmle.label | snippet |
+| tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:5:3:11 | snippet | semmle.label | snippet |
+| tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:15:3:20 | call to params | semmle.label | call to params |
+| tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:15:3:20 | call to params | semmle.label | call to params |
+| tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:15:3:30 | ...[...] | semmle.label | ...[...] |
+| tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:15:3:30 | ...[...] | semmle.label | ...[...] |
+| tests/EvalArbitraryCode/EvalArbitraryCode.rb:5:30:5:36 | snippet | semmle.label | snippet |
+| tests/EvalArbitraryCode/EvalArbitraryCode.rb:5:30:5:36 | snippet | semmle.label | snippet |
+subpaths
+#select
+| tests/CodeInjectionFlow/CodeInjectionFlow.rb:5:10:5:13 | expr | tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:12:3:17 | call to params | tests/CodeInjectionFlow/CodeInjectionFlow.rb:5:10:5:13 | expr | Ruby code execution depends on a $@. | tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:12:3:17 | call to params | user-provided value |
+| tests/CodeInjectionFlow/CodeInjectionFlow.rb:5:10:5:13 | expr | tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:12:3:17 | call to params | tests/CodeInjectionFlow/CodeInjectionFlow.rb:5:10:5:13 | expr | Ruby code execution depends on a $@. | tests/CodeInjectionFlow/CodeInjectionFlow.rb:3:12:3:17 | call to params | user-provided value |
+| tests/EvalArbitraryCode/EvalArbitraryCode.rb:5:30:5:36 | snippet | tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:15:3:20 | call to params | tests/EvalArbitraryCode/EvalArbitraryCode.rb:5:30:5:36 | snippet | Ruby code execution depends on a $@. | tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:15:3:20 | call to params | user-provided value |
+| tests/EvalArbitraryCode/EvalArbitraryCode.rb:5:30:5:36 | snippet | tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:15:3:20 | call to params | tests/EvalArbitraryCode/EvalArbitraryCode.rb:5:30:5:36 | snippet | Ruby code execution depends on a $@. | tests/EvalArbitraryCode/EvalArbitraryCode.rb:3:15:3:20 | call to params | user-provided value |

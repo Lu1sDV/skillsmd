@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-http-parsing-header-in-cache-key
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A request header value is folded into a cache key. Unkeyed or attacker-keyed
+      headers let a client store a poisoned response that is later served to other
+      users (web cache poisoning, CWE-444 style request/response desync). Build
+      cache keys only from validated, server-controlled inputs.
+    metadata:
+      vr-id: RB-SG-2014
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md request headers in cache keys; CWE-444"
+      license: derived-original
+      references:
+        - "https://portswigger.net/web-security/web-cache-poisoning"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Rails.cache.fetch("...#{request.headers[...]}...", ...)
+          - pattern: Rails.cache.write("...#{request.headers[...]}...", ...)
+          - pattern: Rails.cache.read("...#{request.headers[...]}...")
+          - pattern: Rails.cache.fetch("...#{request.host}...", ...)

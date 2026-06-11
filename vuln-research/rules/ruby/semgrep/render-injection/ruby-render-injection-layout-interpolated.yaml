@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-render-injection-layout-interpolated
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The layout name is built by interpolating a request parameter into a string
+      passed to render layout:. A ../ segment or unexpected value selects an
+      arbitrary layout file, enabling traversal-based disclosure. Choose the layout
+      from a fixed allow-list keyed on validated input.
+    metadata:
+      vr-id: RB-SG-1921
+      category: render-injection
+      cwe: ["CWE-22", "CWE-98"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md 'render layout:' dynamic selection; CWE-22"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/layouts_and_rendering.html#finding-layouts"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'render(layout: "...#{params[...]}...")'
+          - pattern: 'render layout: "...#{params[...]}..."'
+          - pattern: 'render(..., layout: "...#{params[...]}...")'

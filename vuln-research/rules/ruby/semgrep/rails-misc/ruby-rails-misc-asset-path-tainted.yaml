@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-rails-misc-asset-path-tainted
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      asset_path is built from request params. A user-controlled asset name lets an
+      attacker reference unexpected files or, combined with a permissive host, point
+      the asset URL at attacker infrastructure. Resolve asset names from a fixed
+      manifest or allow-list rather than request input.
+    metadata:
+      vr-id: RB-SG-2507
+      category: rails-misc
+      cwe: ["CWE-200"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by asset_path/asset_url tainted asset construction sink; CWE-200"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/AssetUrlHelper.html#method-i-asset_path"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: asset_path(params[...], ...)
+          - pattern: asset_url(params[...], ...)
+          - pattern: image_url(params[...], ...)

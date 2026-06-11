@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-ssrf-net-ftp-new
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Net::FTP.new connects to an FTP host built from interpolated external
+      input. An attacker who controls the host can make the server open FTP
+      connections to internal infrastructure, a recognised SSRF vector beyond
+      plain HTTP (CWE-918). Validate the host against an allowlist and confirm the
+      resolved address is public before connecting.
+    metadata:
+      vr-id: RB-SG-0524
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "re-expressed from Net::FTP.new sink in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Net/FTP.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Net::FTP.new("...#{...}...")
+          - pattern: Net::FTP.new("...#{...}...", ...)
+          - pattern: $FTP.connect("...#{...}...", ...)

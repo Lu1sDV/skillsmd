@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-command-injection-process-exec
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Process.exec runs an interpolated command string and replaces the current process.
+      The single-string form is parsed by the shell, so external input interpolated into
+      it allows shell metacharacter injection and arbitrary command execution. Provide the
+      executable and arguments separately — `Process.exec("cmd", arg)` — to avoid the shell.
+    metadata:
+      vr-id: RB-SG-0117
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql CommandInjectionQuery (Process.exec sink); CWE-78"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Process.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: Process.exec("...#{...}...")
+      - pattern-not: Process.exec("...", ...)

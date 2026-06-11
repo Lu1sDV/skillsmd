@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-xss-simple-format-nosanitize
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      `simple_format` is called with `sanitize: false`, which disables the built-in
+      tag scrubbing and emits the text as HTML-safe markup. With request-controlled
+      text this passes script straight to the page, causing cross-site scripting.
+      Remove the `sanitize: false` option (the default sanitizes) or pass an explicit
+      allow-list of tags and attributes.
+    metadata:
+      vr-id: RB-SG-0809
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Rails simple_format sanitize:false bypass; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/TextHelper.html#method-i-simple_format"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: 'simple_format(..., sanitize: false, ...)'

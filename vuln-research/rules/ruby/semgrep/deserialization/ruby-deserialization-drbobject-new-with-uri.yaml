@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-deserialization-drbobject-new-with-uri
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      DRbObject.new_with_uri connects to a remote distributed-Ruby endpoint whose
+      responses are deserialized with Marshal. If the URI is attacker-controlled
+      or points at an untrusted server, the returned Marshal payload can trigger
+      a gadget chain and code execution in this process. Only connect to DRb
+      endpoints you fully control over an authenticated, integrity-protected
+      channel.
+    metadata:
+      vr-id: RB-SG-0428
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md DRbObject.new_with_uri; CWE-502"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/DRb/DRbObject.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: DRbObject.new_with_uri($URI)
+      - pattern-not: DRbObject.new_with_uri("...")

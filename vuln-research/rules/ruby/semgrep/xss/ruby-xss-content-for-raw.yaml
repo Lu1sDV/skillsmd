@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-xss-content-for-raw
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      `content_for` is storing a `raw`/`html_safe` fragment that the layout later
+      yields without escaping. If that fragment is built from request data, the
+      attacker controls markup injected into a shared region such as the page head,
+      causing cross-site scripting. Capture escaped content, or sanitize untrusted
+      fragments before storing them for later yield.
+    metadata:
+      vr-id: RB-SG-0826
+      category: xss
+      cwe: ["CWE-79"]
+      owasp: "A03:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by Rails content_for storing raw fragment; CWE-79"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-content_for"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: content_for($NAME, raw(...))
+          - pattern: 'content_for($NAME, "...#{...}...".html_safe)'
+          - pattern: content_for($NAME, params[...].html_safe)

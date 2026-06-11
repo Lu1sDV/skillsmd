@@ -1,0 +1,8 @@
+edges
+| cleartext_log.rb:10:50:10:57 | password | cleartext_log.rb:10:18:10:59 | "authenticating with password=..." | provenance | AdditionalTaintStep |
+nodes
+| cleartext_log.rb:10:18:10:59 | "authenticating with password=..." | semmle.label | "authenticating with password=..." |
+| cleartext_log.rb:10:50:10:57 | password | semmle.label | password |
+subpaths
+#select
+| cleartext_log.rb:10:18:10:59 | "authenticating with password=..." | cleartext_log.rb:10:50:10:57 | password | cleartext_log.rb:10:18:10:59 | "authenticating with password=..." | This logs sensitive data returned by $@ as clear text. | cleartext_log.rb:10:50:10:57 | password | a parameter password |

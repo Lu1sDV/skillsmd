@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-http-parsing-send-data-header-from-request
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      send_data / send_file derives its filename, disposition, or content type from
+      a raw request header or the request host. Unsanitized values flow into the
+      Content-Disposition / Content-Type response headers, enabling header
+      injection and active-content downloads. Use a server-side allowlist for the
+      filename and MIME type.
+    metadata:
+      vr-id: RB-SG-2024
+      category: http-parsing
+      cwe: ["CWE-444"]
+      owasp: "A06:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md send_data tainted header parameters; CWE-444"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/DataStreaming.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "send_data $D, filename: request.headers[$H], ..."
+          - pattern: "send_data $D, type: request.headers[$H], ..."
+          - pattern: "send_file $F, filename: request.headers[$H], ..."
+          - pattern: "send_data $D, disposition: request.headers[$H], ..."

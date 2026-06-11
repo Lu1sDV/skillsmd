@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-sql-injection-find-by-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Model.find_by is called with an interpolated string condition, which
+      ActiveRecord runs as raw SQL. External input concatenated into the condition
+      is injectable, letting an attacker bypass the intended lookup or extract
+      data. Use the Hash or placeholder form — find_by(col: value) — to bind the
+      value.
+    metadata:
+      vr-id: RB-SG-0332
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by brakeman SQL injection find_by string-condition check; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/FinderMethods.html#method-i-find_by"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $M.find_by("...#{...}...")

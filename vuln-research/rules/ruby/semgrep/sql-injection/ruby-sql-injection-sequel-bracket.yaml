@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-sql-injection-sequel-bracket
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Sequel database is indexed with an interpolated SQL string (DB["SELECT
+      ...#{x}..."]). The string form of the bracket accessor creates a dataset
+      from raw SQL, so interpolated external input is injectable. Pass the SQL with
+      a placeholder argument — DB["SELECT ... WHERE id = ?", id] — to bind values.
+    metadata:
+      vr-id: RB-SG-0324
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Sequel DB[] raw SQL dataset advisory; CWE-89"
+      license: derived-original
+      references:
+        - "https://sequel.jeremyevans.net/rdoc/classes/Sequel/Database.html#method-i-5B-5D"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $DB["...#{...}..."]

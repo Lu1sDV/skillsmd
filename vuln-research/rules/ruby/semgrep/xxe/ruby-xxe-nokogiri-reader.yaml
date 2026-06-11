@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-xxe-nokogiri-reader
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Nokogiri::XML::Reader is created from attacker-controlled XML with the
+      NOENT parse option, enabling entity substitution while streaming. A
+      crafted external or recursive entity is then resolved as nodes are pulled,
+      leading to file disclosure, SSRF, or entity-expansion denial of service.
+      Stream untrusted XML without NOENT and with NONET set.
+    metadata:
+      vr-id: RB-SG-1520
+      category: xxe
+      cwe: ["CWE-611"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Nokogiri::XML::Reader NOENT usage; CWE-611"
+      license: derived-original
+      references:
+        - "https://nokogiri.org/rdoc/Nokogiri/XML/Reader.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Nokogiri::XML::Reader($SRC, ..., Nokogiri::XML::ParseOptions::NOENT)
+          - pattern: Nokogiri::XML::Reader.from_memory($SRC, ..., Nokogiri::XML::ParseOptions::NOENT)

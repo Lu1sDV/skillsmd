@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-cache-poisoning-cache-delete-tainted-key
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A cache entry is deleted under a key taken from request parameters
+      (Rails.cache.delete, Redis DEL or Dalli delete). An attacker can evict
+      arbitrary cached entries belonging to other users, forcing recomputation
+      (denial of service) or defeating security caches. Derive the invalidation
+      key from trusted server-side identifiers and authorize the delete.
+    metadata:
+      vr-id: RB-SG-1820
+      category: cache-poisoning
+      cwe: ["CWE-349"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Rails.cache.delete(key) / Redis#del user-controlled invalidation; CWE-349"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveSupport/Cache/Store.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Rails.cache.delete(params[...], ...)
+          - pattern: Rails.cache.delete("...#{params[...]}...", ...)
+          - pattern: $REDIS.del(params[...])
+          - pattern: $DC.delete(params[...])

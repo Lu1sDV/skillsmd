@@ -1,0 +1,12 @@
+edges
+| CommandInjection.rb:3:5:3:8 | name | CommandInjection.rb:5:12:5:25 | "echo #{...}" | provenance | AdditionalTaintStep |
+| CommandInjection.rb:3:12:3:17 | call to params | CommandInjection.rb:3:12:3:24 | ...[...] | provenance |  |
+| CommandInjection.rb:3:12:3:24 | ...[...] | CommandInjection.rb:3:5:3:8 | name | provenance |  |
+nodes
+| CommandInjection.rb:3:5:3:8 | name | semmle.label | name |
+| CommandInjection.rb:3:12:3:17 | call to params | semmle.label | call to params |
+| CommandInjection.rb:3:12:3:24 | ...[...] | semmle.label | ...[...] |
+| CommandInjection.rb:5:12:5:25 | "echo #{...}" | semmle.label | "echo #{...}" |
+subpaths
+#select
+| CommandInjection.rb:5:12:5:25 | "echo #{...}" | CommandInjection.rb:3:12:3:17 | call to params | CommandInjection.rb:5:12:5:25 | "echo #{...}" | This OS command depends on a $@. | CommandInjection.rb:3:12:3:17 | call to params | user-provided value |

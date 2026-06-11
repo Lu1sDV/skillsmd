@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-public-caching-user-content
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The response is cached with public: true, allowing shared caches and CDNs
+      to store and serve it to other users. When the action returns user-specific
+      or authenticated content this causes cross-user data leakage; use
+      private caching for per-user responses.
+    metadata:
+      vr-id: RB-SG-2428
+      category: secure-config
+      cwe: ["CWE-16", "CWE-525"]
+      owasp: "A05:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by sink catalog expires_in public:true; CWE-525"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/525.html"
+        - "https://guides.rubyonrails.org/caching_with_rails.html"
+    patterns:
+      - pattern: "expires_in $T, public: true"

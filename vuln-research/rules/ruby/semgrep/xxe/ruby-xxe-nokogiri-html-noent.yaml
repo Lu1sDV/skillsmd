@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-xxe-nokogiri-html-noent
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Nokogiri::HTML is invoked with the NOENT parse option on
+      attacker-controlled markup. Although HTML parsing is more permissive,
+      enabling entity substitution on untrusted input keeps the entity-expansion
+      and DTD-processing surface open. Parse untrusted HTML with the default
+      options (no NOENT) and sanitize the resulting fragment before use.
+    metadata:
+      vr-id: RB-SG-1523
+      category: xxe
+      cwe: ["CWE-611"]
+      owasp: "A05:2021"
+      confidence: LOW
+      tier: B
+      source-citation: "inspired-by ruby.md 'Nokogiri::HTML(html)' sink; CWE-611"
+      license: derived-original
+      references:
+        - "https://nokogiri.org/rdoc/Nokogiri/HTML4.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Nokogiri::HTML($SRC, ..., Nokogiri::XML::ParseOptions::NOENT)
+          - pattern: Nokogiri::HTML.parse($SRC, ..., Nokogiri::XML::ParseOptions::NOENT)

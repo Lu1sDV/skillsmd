@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-code-injection-haml-engine
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Haml template source is constructed from external input and rendered. Haml
+      compiles embedded Ruby, so attacker-controlled template text becomes
+      server-side template injection and arbitrary code execution. Render only
+      static .haml templates and supply user values as escaped locals rather
+      than splicing them into the template body.
+    metadata:
+      vr-id: RB-SG-0218
+      category: code-injection
+      cwe: ["CWE-94", "CWE-1336"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md Haml::Engine.new(template).render; CWE-94"
+      license: derived-original
+      references:
+        - "https://haml.info/docs/yardoc/file.REFERENCE.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Haml::Engine.new(params[...], ...).render(...)
+          - pattern: Haml::Engine.new("...#{...}...", ...).render(...)
+          - pattern: Haml::Template.new { params[...] }.render(...)
+      - pattern-not: Haml::Engine.new("...").render(...)

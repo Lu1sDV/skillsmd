@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-auth-session-skip-authenticate-user
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      skip_before_action :authenticate_user! removes the authentication gate for
+      this controller's actions, exposing them to unauthenticated requests. If
+      any skipped action returns sensitive data or changes state, it becomes a
+      broken-access-control hole. Restrict the skip to genuinely public actions
+      with only:/except:, and confirm those actions leak nothing privileged.
+    metadata:
+      vr-id: RB-SG-1312
+      category: auth-session
+      cwe: ["CWE-862"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Devise authenticate_user! before_action skip; CWE-862"
+      license: derived-original
+      references:
+        - "https://owasp.org/Top10/A01_2021-Broken_Access_Control/"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "skip_before_action :authenticate_user!"
+          - pattern: "skip_before_action :authenticate_user!, ..."
+          - pattern: "skip_before_filter :authenticate_user!"

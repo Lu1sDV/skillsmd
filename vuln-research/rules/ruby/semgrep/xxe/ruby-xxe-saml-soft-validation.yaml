@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-xxe-saml-soft-validation
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A ruby-saml Response is constructed with settings: ... and the :soft
+      validation flag, which downgrades validation errors to silent failures
+      instead of raising. Soft validation lets malformed or unsigned assertion
+      XML slip through, defeating the SAML auth and integrity checks. Parse
+      responses with hard validation so invalid assertions are rejected.
+    metadata:
+      vr-id: RB-SG-1519
+      category: xxe
+      cwe: ["CWE-347"]
+      owasp: "A07:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby.md 'SAML parsing with disabled validation' sink; ruby-saml"
+      license: derived-original
+      references:
+        - "https://github.com/SAML-Toolkits/ruby-saml"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "OneLogin::RubySaml::Response.new($RAW, settings: $S, allowed_clock_drift: $D)"
+          - pattern: "OneLogin::RubySaml::Response.new($RAW, settings: $S, skip_subject_confirmation: true)"
+          - pattern: "OneLogin::RubySaml::Response.new($RAW, skip_recipient_check: true, ...)"

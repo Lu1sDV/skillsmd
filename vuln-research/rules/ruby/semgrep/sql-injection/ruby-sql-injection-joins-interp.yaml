@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-sql-injection-joins-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A JOIN fragment is interpolated into the string passed to Model.joins (or
+      left_outer_joins). String join clauses are emitted as raw SQL, so tainted
+      input in the ON/condition becomes SQL injection. Use association symbols for
+      joins, or a sanitized fragment, instead of an interpolated SQL string.
+    metadata:
+      vr-id: RB-SG-0312
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by brakeman SQL injection joins check; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/QueryMethods.html#method-i-joins"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $M.joins("...#{...}...")
+          - pattern: $M.left_outer_joins("...#{...}...")
+          - pattern: $M.left_joins("...#{...}...")

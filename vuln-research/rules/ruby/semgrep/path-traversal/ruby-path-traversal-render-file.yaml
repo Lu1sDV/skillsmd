@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-path-traversal-render-file
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Rails render call selects a template file from a path built out of request input.
+      With "render file:" the value is treated as a filesystem path, so "../" lets an
+      attacker render and disclose arbitrary files; with a dynamic "render template:" or
+      partial path an attacker can reach unintended templates. Restrict the parameter to
+      an allow list of known view names and never pass raw input as a file or template path.
+    metadata:
+      vr-id: RB-SG-0623
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; Rails render-file disclosure pattern; CWE-22"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/Renderer.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "render(file: params[...])"
+          - pattern: 'render(file: "...#{params[...]}...")'
+          - pattern: "render(template: params[...])"
+          - pattern: 'render(template: "...#{params[...]}...")'

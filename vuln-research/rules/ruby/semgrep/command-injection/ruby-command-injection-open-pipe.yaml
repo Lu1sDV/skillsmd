@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-command-injection-open-pipe
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Kernel#open is called with an interpolated string. If the resolved string begins
+      with a pipe character, Ruby treats the remainder as a shell command rather than a
+      file path, so attacker-controlled input can both pick the command and inject shell
+      operators. Use File.open for files, or validate the argument and reject any leading
+      "|".
+    metadata:
+      vr-id: RB-SG-0107
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by codeql rb/kernel-open (NonConstantKernelOpen); CWE-78"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Kernel.html#method-i-open"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: open("...#{...}...", ...)
+      - pattern-not: File.open(...)

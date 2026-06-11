@@ -1,0 +1,31 @@
+rules:
+  - id: ruby-xxe-rexml-stream-parser
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Tainted XML is fed to a REXML streaming or tree parser
+      (REXML::Parsers::*). These low-level parsers process DOCTYPE declarations
+      and entity definitions, exposing entity-expansion denial of service and
+      external-entity handling on untrusted documents. Bound the entity
+      expansion limit and reject documents that declare a DOCTYPE when the input
+      is attacker-controlled.
+    metadata:
+      vr-id: RB-SG-1507
+      category: xxe
+      cwe: ["CWE-611", "CWE-776"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby.md 'REXML::Parsers::*' sink; CWE-776"
+      license: derived-original
+      references:
+        - "https://github.com/ruby/rexml"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: REXML::Parsers::StreamParser.new($SRC, ...)
+          - pattern: REXML::Parsers::SAX2Parser.new($SRC)
+          - pattern: REXML::Parsers::PullParser.new($SRC)
+          - pattern: REXML::Parsers::TreeParser.new($SRC, ...)

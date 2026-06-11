@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-ldap-injection-activedirectory-filter-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An activedirectory-style user/group lookup is given a :filter built from
+      an interpolated string with request data. The underlying directory search
+      treats the string as a raw LDAP filter, so injected metacharacters rewrite
+      the query. Build the filter from typed, escaped assertions instead.
+    metadata:
+      vr-id: RB-SG-2313
+      category: ldap-injection
+      cwe: ["CWE-90"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by activedirectory gem User.find filter sink; net-ldap LDAP injection; CWE-90"
+      license: derived-original
+      references:
+        - "https://owasp.org/www-community/attacks/LDAP_Injection"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'ActiveDirectory::User.find(..., filter: "...#{...}...", ...)'
+          - pattern: 'ActiveDirectory::Group.find(..., filter: "...#{...}...", ...)'

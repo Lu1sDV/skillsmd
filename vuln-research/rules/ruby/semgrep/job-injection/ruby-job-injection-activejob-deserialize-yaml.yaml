@@ -1,0 +1,38 @@
+rules:
+  - id: ruby-job-injection-activejob-deserialize-yaml
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A custom ActiveJob argument serializer deserializes stored job data with an
+      unsafe YAML loader. ActiveJob persists serialized arguments in the queue
+      backend and reconstructs them when the job runs, so YAML.load here lets an
+      attacker with write access to the queue smuggle a gadget that executes on
+      dispatch. Use YAML.safe_load with permitted classes or a JSON-only coder.
+    metadata:
+      vr-id: RB-SG-1714
+      category: job-injection
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md ActiveJob serializer deserialization sink; CWE-502"
+      license: derived-original
+      references:
+        - "https://guides.rubyonrails.org/active_job_basics.html#serializers"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: |
+              def deserialize(...)
+                ...
+                YAML.load(...)
+                ...
+              end
+          - pattern: |
+              def deserialize(...)
+                ...
+                YAML.unsafe_load(...)
+                ...
+              end

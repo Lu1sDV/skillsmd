@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-sql-injection-calculate-arel
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An aggregate calculation (sum/average/minimum/maximum) is given an Arel.sql
+      fragment built by interpolation. Arel.sql marks the expression as trusted
+      raw SQL, so a tainted column or expression spliced in is injectable through
+      the aggregate. Aggregate over a fixed column symbol, never an interpolated
+      Arel.sql string.
+    metadata:
+      vr-id: RB-SG-0331
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by Rails calculations Arel.sql unsafe-raw-sql guidance; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/Calculations.html#method-i-calculate"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $M.sum(Arel.sql("...#{...}..."))
+          - pattern: $M.average(Arel.sql("...#{...}..."))
+          - pattern: $M.minimum(Arel.sql("...#{...}..."))
+          - pattern: $M.maximum(Arel.sql("...#{...}..."))

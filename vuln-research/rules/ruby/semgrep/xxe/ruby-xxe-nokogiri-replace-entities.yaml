@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-xxe-nokogiri-replace-entities
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Nokogiri document is configured with replace_entities = true (an alias
+      for NOENT), forcing entity substitution on subsequent operations. If the
+      document was built from attacker-controlled XML containing an external
+      entity, the value is resolved when accessed — leaking files or triggering
+      SSRF. Do not set replace_entities on documents parsed from untrusted
+      sources.
+    metadata:
+      vr-id: RB-SG-1517
+      category: xxe
+      cwe: ["CWE-611"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Nokogiri Document#replace_entities= (NOENT alias); CWE-611"
+      license: derived-original
+      references:
+        - "https://nokogiri.org/rdoc/Nokogiri/XML/Document.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $DOC.replace_entities = true

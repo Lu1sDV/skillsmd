@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-zip-slip-tar-extract-entry
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The "tar" gem's Tar::Reader entry is extracted with a destination built from
+      entry.full_name without bounds-checking. TAR member names can include parent
+      "../" segments, so a hostile archive writes outside the extraction directory
+      (Tar Slip). Canonicalize with File.expand_path against the destination and
+      verify the result remains under that root before writing each entry.
+    metadata:
+      vr-id: RB-SG-0715
+      category: zip-slip
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by tar gem extraction hardening; CWE-22; ruby.md Gem::Package::TarReader extraction sink"
+      license: derived-original
+      references:
+        - "https://github.com/halostatue/minitar"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: IO.copy_stream($ENTRY, File.join($DEST, $ENTRY.full_name))
+          - pattern: File.open(File.join($DEST, $ENTRY.full_name), ...) { |$F| ... }
+          - pattern: File.write(File.join($DEST, $ENTRY.full_name), $ENTRY.read)

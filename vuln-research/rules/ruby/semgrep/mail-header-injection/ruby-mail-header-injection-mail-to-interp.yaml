@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-mail-header-injection-mail-to-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The recipient header of an ActionMailer mail(...) call is built by
+      interpolating a value directly into a string. A CR/LF sequence smuggled into
+      the To: address lets an attacker append arbitrary headers (Bcc, Content-Type)
+      and turn the message into a spam relay. Pass the address as a plain mailbox
+      value or validate it against a strict pattern before assigning the header.
+    metadata:
+      vr-id: RB-SG-1601
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog 'mail(to:...)' CR/LF header smuggling; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: 'mail(to: "...#{...}...", ...)'

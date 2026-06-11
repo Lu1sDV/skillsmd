@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-open-redirect-x-forwarded-host
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A URL is built from the X-Forwarded-Host header. This header is attacker-supplied
+      unless a trusted proxy overwrites it, so links and redirects derived from it point
+      at an attacker host — the classic host-header-poisoning path for malicious password
+      reset links. Build absolute URLs from a configured host constant, not from forwarded
+      headers.
+    metadata:
+      vr-id: RB-SG-1017
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by ruby sink catalog host header poisoning via X-Forwarded-Host; CWE-601"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/601.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: 'request.headers["X-Forwarded-Host"]'
+          - pattern: "request.headers['X-Forwarded-Host']"
+          - pattern: 'request.headers["HTTP_X_FORWARDED_HOST"]'
+          - pattern: 'request.env["HTTP_X_FORWARDED_HOST"]'

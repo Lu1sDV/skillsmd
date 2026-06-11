@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-auth-session-cookie-overwrite-csrf-token
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The CSRF token cookie (X-CSRF-Token / csrf_token) is being assigned a value
+      taken from request input. Letting the client set the token defeats the
+      double-submit defense: an attacker can plant a known token in both the
+      cookie and the form field. Let Rails manage the authenticity token; never
+      derive it from params or headers.
+    metadata:
+      vr-id: RB-SG-1319
+      category: auth-session
+      cwe: ["CWE-352"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by double-submit CSRF cookie tampering; CWE-352"
+      license: derived-original
+      references:
+        - "https://owasp.org/www-community/attacks/csrf"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "cookies[:csrf_token] = params[...]"
+          - pattern: "cookies[:'X-CSRF-Token'] = params[...]"
+          - pattern: "cookies[:csrf_token] = request.headers[...]"

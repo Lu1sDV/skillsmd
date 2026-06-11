@@ -1,0 +1,12 @@
+edges
+| PathInjection.rb:3:5:3:8 | name | PathInjection.rb:5:15:5:33 | "/var/data/#{...}" | provenance | AdditionalTaintStep |
+| PathInjection.rb:3:12:3:17 | call to params | PathInjection.rb:3:12:3:24 | ...[...] | provenance |  |
+| PathInjection.rb:3:12:3:24 | ...[...] | PathInjection.rb:3:5:3:8 | name | provenance |  |
+nodes
+| PathInjection.rb:3:5:3:8 | name | semmle.label | name |
+| PathInjection.rb:3:12:3:17 | call to params | semmle.label | call to params |
+| PathInjection.rb:3:12:3:24 | ...[...] | semmle.label | ...[...] |
+| PathInjection.rb:5:15:5:33 | "/var/data/#{...}" | semmle.label | "/var/data/#{...}" |
+subpaths
+#select
+| PathInjection.rb:5:15:5:33 | "/var/data/#{...}" | PathInjection.rb:3:12:3:17 | call to params | PathInjection.rb:5:15:5:33 | "/var/data/#{...}" | This filesystem path depends on a $@ and may allow directory traversal. | PathInjection.rb:3:12:3:17 | call to params | user-provided value |

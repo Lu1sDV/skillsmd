@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-path-traversal-fileutils-lns
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      FileUtils.ln_s creates a symbolic link whose target or link path comes from external
+      input. An attacker can point the link at a sensitive file so that a later operation
+      follows it outside the intended directory, enabling arbitrary file read or overwrite.
+      Reject path separators and "../" in the input and resolve both arguments under a
+      trusted base before linking.
+    metadata:
+      vr-id: RB-SG-0620
+      category: path-traversal
+      cwe: ["CWE-22"]
+      owasp: "A01:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/path-injection; symlink-following weakness; CWE-22"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/FileUtils.html#method-c-ln_s"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: FileUtils.ln_s(params[...], ...)
+          - pattern: FileUtils.ln_s(..., params[...])
+          - pattern: FileUtils.ln_s("...#{params[...]}...", ...)
+          - pattern: FileUtils.ln_s(..., "...#{params[...]}...")

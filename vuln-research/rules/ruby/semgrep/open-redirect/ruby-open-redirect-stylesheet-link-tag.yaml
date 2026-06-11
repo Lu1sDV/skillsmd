@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-open-redirect-stylesheet-link-tag
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      stylesheet_link_tag references a stylesheet at a request-controlled URL. An
+      attacker host can serve CSS that exfiltrates data or defaces the page, and the
+      tainted href is a host-injection vector. Load stylesheets only by fixed asset
+      name, never from a user-supplied URL.
+    metadata:
+      vr-id: RB-SG-1019
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby sink catalog 'stylesheet_link_tag(url)'; CWE-601"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionView/Helpers/AssetTagHelper.html#method-i-stylesheet_link_tag"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: stylesheet_link_tag(params[...])
+          - pattern: stylesheet_link_tag(params[...], ...)
+          - pattern: stylesheet_link_tag("...#{...}...")
+      - pattern-not: stylesheet_link_tag("/...#{...}...")

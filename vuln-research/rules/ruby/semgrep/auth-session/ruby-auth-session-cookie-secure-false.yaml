@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-auth-session-cookie-secure-false
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A cookie is written with secure: false, so it is transmitted over plain
+      HTTP as well as HTTPS. A network attacker on the same path can capture the
+      cookie value — including session or remember-me tokens — and replay it. Set
+      secure: true on authentication-bearing cookies so they are only sent over
+      TLS.
+    metadata:
+      vr-id: RB-SG-1316
+      category: auth-session
+      cwe: ["CWE-614", "CWE-311"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by Rails cookie secure attribute; CWE-614"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionDispatch/Cookies.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "cookies[$K] = { ..., secure: false, ... }"
+          - pattern: "cookies.signed[$K] = { ..., secure: false, ... }"
+          - pattern: "cookies.permanent[$K] = { ..., secure: false, ... }"

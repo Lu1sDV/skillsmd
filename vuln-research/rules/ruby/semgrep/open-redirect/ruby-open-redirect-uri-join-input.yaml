@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-open-redirect-uri-join-input
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      URI.join combines a base with a request-controlled path. An absolute or
+      scheme-relative value in the second argument overrides the base entirely, so the
+      resulting URI points at an attacker host and any redirect built from it leaves
+      the application origin. Validate that the user segment is a bare relative path
+      before joining, or reject values containing a scheme or leading slashes.
+    metadata:
+      vr-id: RB-SG-1023
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by URI.join base-override open-redirect pattern; CWE-601"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/URI.html#method-c-join"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: URI.join(..., params[...])
+          - pattern: URI.join(..., params[...], ...)
+          - pattern: URI.join(..., "...#{...}...")

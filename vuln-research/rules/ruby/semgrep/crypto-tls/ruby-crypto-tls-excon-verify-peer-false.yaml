@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-crypto-tls-excon-verify-peer-false
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An Excon connection sets ssl_verify_peer to false, disabling TLS peer
+      certificate verification. Without it, a network attacker can substitute
+      their own certificate and decrypt or tamper with the request and response.
+      Remove ssl_verify_peer: false (verification is the default) or pin trust
+      with ssl_ca_file / ssl_ca_path.
+    metadata:
+      vr-id: RB-SG-1405
+      category: crypto-tls
+      cwe: ["CWE-295"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog Excon.new(ssl_verify_peer:false); CWE-295"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/295.html"
+        - "https://github.com/excon/excon"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "Excon.new(..., ssl_verify_peer: false, ...)"
+          - pattern: "Excon.get(..., ssl_verify_peer: false, ...)"
+          - pattern: "Excon::Connection.new(..., ssl_verify_peer: false, ...)"

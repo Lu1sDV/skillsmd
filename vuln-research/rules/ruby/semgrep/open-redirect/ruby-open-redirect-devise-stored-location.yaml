@@ -1,0 +1,36 @@
+rules:
+  - id: ruby-open-redirect-devise-stored-location
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A Devise after_sign_in_path_for / after_sign_out_path_for override returns a
+      request-controlled location (params or stored_location_for backed by user input).
+      Because Devise redirects to this path after authentication, a tainted value
+      becomes a post-login open redirect. Return a fixed in-app path or validate the
+      stored location is same-origin before returning it.
+    metadata:
+      vr-id: RB-SG-1016
+      category: open-redirect
+      cwe: ["CWE-601"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby sink catalog Devise 'stored_location_for'/'after_sign_in_path_for'; CWE-601"
+      license: derived-original
+      references:
+        - "https://www.rubydoc.info/github/heartcombo/devise/Devise/Controllers/Helpers"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: |
+              def after_sign_in_path_for(...)
+                ...
+                params[...]
+              end
+          - pattern: |
+              def after_sign_out_path_for(...)
+                ...
+                params[...]
+              end

@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-deserialization-psych-safe-load-broad
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Psych.safe_load with permitted_classes including powerful types such as
+      Class, Module, or Object effectively defeats the allowlist: those classes
+      give an attacker the building blocks for a deserialization gadget. Keep the
+      allowlist to inert value types (Symbol, Date, Time) that your data actually
+      requires and never permit Class/Module/Object.
+    metadata:
+      vr-id: RB-SG-0411
+      category: deserialization
+      cwe: ["CWE-502"]
+      owasp: "A08:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "catalog-derived from references/sinks/ruby.md Psych.safe_load broad permitted_classes; CWE-502"
+      license: derived-original
+      references:
+        - "https://ruby-doc.org/stdlib/libdoc/psych/rdoc/Psych.html#method-c-safe_load"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "Psych.safe_load($X, permitted_classes: [..., Class, ...])"
+          - pattern: "Psych.safe_load($X, permitted_classes: [..., Module, ...])"
+          - pattern: "Psych.safe_load($X, permitted_classes: [..., Object, ...])"

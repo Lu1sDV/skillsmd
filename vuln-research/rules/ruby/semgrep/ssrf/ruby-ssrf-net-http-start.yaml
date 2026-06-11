@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-ssrf-net-http-start
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Net::HTTP.start opens a connection to a host whose value comes from
+      interpolated external input. A caller who controls the host can redirect
+      the connection toward internal infrastructure or the cloud metadata
+      service (CWE-918). Resolve the host and reject private, loopback, and
+      link-local ranges before connecting, and accept only hosts on an explicit
+      allowlist rather than the raw user-supplied value.
+    metadata:
+      vr-id: RB-SG-0503
+      category: ssrf
+      cwe: ["CWE-918"]
+      owasp: "A10:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "re-expressed from Net::HTTP.start sink listed in vuln-research sinks/ruby.md; CWE-918"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Net/HTTP.html#method-c-start"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Net::HTTP.start("...#{...}...", ...)
+          - pattern: Net::HTTP.start("...#{...}...")

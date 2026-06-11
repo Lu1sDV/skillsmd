@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-command-injection-percent-x
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A %x[] command literal is built with interpolation. Like backticks, %x runs the
+      string through a shell, so interpolating attacker-controlled data permits shell
+      metacharacter injection and arbitrary command execution. Replace with an
+      argument-vector call (`Open3.capture2("cmd", arg)`) so no shell parses the input.
+    metadata:
+      vr-id: RB-SG-0102
+      category: command-injection
+      cwe: ["CWE-78"]
+      owasp: "A03:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by codeql rb/command-injection (%x literal sink); CWE-78"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/syntax/literals_rdoc.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: "%x(...#{...}...)"

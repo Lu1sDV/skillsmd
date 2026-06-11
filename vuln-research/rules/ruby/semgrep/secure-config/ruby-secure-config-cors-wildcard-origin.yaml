@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-cors-wildcard-origin
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      Rack::Cors is configured with a wildcard origin '*', so any website can
+      issue cross-origin requests to this API and read responses. Combined with
+      credentialed requests this exposes user data; list the exact trusted
+      origins instead of using '*'.
+    metadata:
+      vr-id: RB-SG-2405
+      category: secure-config
+      cwe: ["CWE-16", "CWE-942"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog Rack::Cors origins '*'; CWE-942"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/942.html"
+        - "https://github.com/cyu/rack-cors"
+    patterns:
+      - pattern: origins "*"

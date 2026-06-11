@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-session-cookie-not-secure
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The session store is configured with secure: false, so the session cookie
+      is transmitted over plaintext HTTP and can be captured by a network
+      attacker or stripped during an SSL-downgrade. Set secure: true so the
+      browser only sends the cookie over HTTPS.
+    metadata:
+      vr-id: RB-SG-2409
+      category: secure-config
+      cwe: ["CWE-1004", "CWE-614"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog session_store secure:false; CWE-614"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/614.html"
+        - "https://guides.rubyonrails.org/action_controller_overview.html"
+    patterns:
+      - pattern: "$APP.session_store $STORE, ..., secure: false, ..."

@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-rails-misc-inspect-in-response
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      An object's inspect (or to_json of internal state) is rendered into the HTTP
+      response. inspect dumps every instance variable, exposing internal model fields,
+      credentials held in memory, and structure that aids attackers (information
+      exposure). Render an explicit, allow-listed set of fields instead.
+    metadata:
+      vr-id: RB-SG-2516
+      category: rails-misc
+      cwe: ["CWE-200"]
+      owasp: "A04:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by object#inspect leaked into HTTP response sink; CWE-200"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/200.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: "render(plain: $X.inspect, ...)"
+          - pattern: "render(plain: $X.inspect)"
+          - pattern: "render(html: $X.inspect, ...)"

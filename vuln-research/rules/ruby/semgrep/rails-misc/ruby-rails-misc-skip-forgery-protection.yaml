@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-rails-misc-skip-forgery-protection
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      skip_forgery_protection (or skip_before_action :verify_authenticity_token)
+      disables Rails CSRF defense for the controller. State-changing actions then
+      accept forged cross-site requests on behalf of an authenticated victim. Keep CSRF
+      protection on, or restrict the skip to genuinely token-authenticated API actions.
+    metadata:
+      vr-id: RB-SG-2521
+      category: rails-misc
+      cwe: ["CWE-352"]
+      owasp: "A01:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by skip_forgery_protection CSRF-disable sink; CWE-352"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: skip_forgery_protection
+          - pattern: skip_forgery_protection(...)
+          - pattern: "skip_before_action :verify_authenticity_token"
+          - pattern: "skip_before_action :verify_authenticity_token, ..."

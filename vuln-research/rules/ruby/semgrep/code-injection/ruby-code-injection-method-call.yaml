@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-code-injection-method-call
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A method object is looked up by a request-supplied name and then invoked
+      with call. This is dynamic dispatch equivalent to send: an attacker can
+      obtain and execute any method on the receiver, including private ones.
+      Resolve the method only from an allowlist of permitted names before
+      calling it.
+    metadata:
+      vr-id: RB-SG-0221
+      category: code-injection
+      cwe: ["CWE-94"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sinks/ruby.md method(name).call; CWE-94"
+      license: derived-original
+      references:
+        - "https://docs.ruby-lang.org/en/master/Object.html#method-i-method"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: method(params[...]).call
+          - pattern: method(params[...]).call(...)
+          - pattern: $X.method(params[...]).call
+          - pattern: $X.method(params[...]).call(...)

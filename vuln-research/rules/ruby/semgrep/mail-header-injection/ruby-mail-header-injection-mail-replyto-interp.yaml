@@ -1,0 +1,25 @@
+rules:
+  - id: ruby-mail-header-injection-mail-replyto-interp
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      The Reply-To header of a mail(...) call interpolates untrusted input. A CR/LF
+      injected here lets an attacker append headers and redirect replies to an
+      address they control, enabling phishing follow-ups. Validate the address shape
+      and reject control characters before assigning the header.
+    metadata:
+      vr-id: RB-SG-1606
+      category: mail-header-injection
+      cwe: ["CWE-93"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog 'mail(reply_to:...)' CR/LF header field; CWE-93"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/93.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: 'mail(..., reply_to: "...#{...}...", ...)'

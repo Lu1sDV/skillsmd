@@ -1,0 +1,26 @@
+rules:
+  - id: ruby-crypto-tls-hardcoded-cipher-key
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      An OpenSSL cipher key is set from a hardcoded string literal. A key
+      embedded in source (or version control) is readable by anyone with the
+      code and cannot be rotated without a redeploy, so the encryption provides
+      little real protection. Load the key from a secrets manager or environment
+      variable and derive it with a KDF when it originates from a passphrase.
+    metadata:
+      vr-id: RB-SG-1416
+      category: crypto-tls
+      cwe: ["CWE-321", "CWE-798"]
+      owasp: "A02:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog tainted/hardcoded cipher keys; CWE-321"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/321.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern: $C.key = "..."

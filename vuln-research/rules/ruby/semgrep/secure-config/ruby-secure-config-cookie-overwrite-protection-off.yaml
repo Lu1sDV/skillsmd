@@ -1,0 +1,23 @@
+rules:
+  - id: ruby-secure-config-cookie-overwrite-protection-off
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      ActionDispatch cookie signing is configured with use_authenticated_cookie_encryption
+      set to false, falling back to the legacy unauthenticated cookie cipher that
+      is more susceptible to tampering and padding attacks. Leave authenticated
+      (AEAD) cookie encryption enabled so cookie integrity is verified on read.
+    metadata:
+      vr-id: RB-SG-2424
+      category: secure-config
+      cwe: ["CWE-16", "CWE-327"]
+      owasp: "A02:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog use_authenticated_cookie_encryption=false; CWE-327"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/327.html"
+        - "https://guides.rubyonrails.org/configuring.html"
+    patterns:
+      - pattern: $CFG.action_dispatch.use_authenticated_cookie_encryption = false

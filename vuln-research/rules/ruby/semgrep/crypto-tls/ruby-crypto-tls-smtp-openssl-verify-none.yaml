@@ -1,0 +1,29 @@
+rules:
+  - id: ruby-crypto-tls-smtp-openssl-verify-none
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      A Net::SMTP session sets openssl_verify_mode to OpenSSL::SSL::VERIFY_NONE
+      (or the string "none"), so the mail server's STARTTLS/SMTPS certificate is
+      never validated. An attacker who can intercept the SMTP connection can read
+      outgoing mail and harvest credentials. Set openssl_verify_mode to
+      OpenSSL::SSL::VERIFY_PEER and supply a trusted CA store.
+    metadata:
+      vr-id: RB-SG-1425
+      category: crypto-tls
+      cwe: ["CWE-295"]
+      owasp: "A07:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "inspired-by sink catalog Net::SMTP openssl_verify_mode none; CWE-295"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/295.html"
+        - "https://ruby-doc.org/stdlib/libdoc/net/smtp/rdoc/Net/SMTP.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $S.openssl_verify_mode = OpenSSL::SSL::VERIFY_NONE
+          - pattern: $S.openssl_verify_mode = "none"

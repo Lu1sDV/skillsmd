@@ -1,0 +1,32 @@
+rules:
+  - id: ruby-crypto-tls-securerandom-truncated
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      A secret generated with SecureRandom is truncated to only a few bytes,
+      collapsing its entropy to a range an attacker can enumerate. A token with
+      4 or fewer random bytes (32 bits) is brute-forceable. Generate and keep at
+      least 16 bytes (SecureRandom.hex(16) or urlsafe_base64(32)) for tokens that
+      must resist guessing.
+    metadata:
+      vr-id: RB-SG-1427
+      category: crypto-tls
+      cwe: ["CWE-331", "CWE-326"]
+      owasp: "A02:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by sink catalog SecureRandom output truncated; CWE-331"
+      license: derived-original
+      references:
+        - "https://cwe.mitre.org/data/definitions/331.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: SecureRandom.hex($N)
+          - pattern: SecureRandom.random_bytes($N)
+          - pattern: SecureRandom.urlsafe_base64($N)
+      - metavariable-comparison:
+          metavariable: $N
+          comparison: $N <= 4

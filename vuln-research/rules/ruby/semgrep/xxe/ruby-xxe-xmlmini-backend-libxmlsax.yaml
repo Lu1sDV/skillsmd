@@ -1,0 +1,30 @@
+rules:
+  - id: ruby-xxe-xmlmini-backend-libxmlsax
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      The application switches ActiveSupport's XML backend to a SAX backend
+      (LibXMLSAX or NokogiriSAX) via XmlMini.backend=. These streaming backends
+      have historically processed external entities during Hash.from_xml /
+      params parsing, turning request-body XML into an XXE surface. Keep the
+      default REXML backend for request parsing, or ensure the chosen backend
+      disables DTD and external-entity resolution.
+    metadata:
+      vr-id: RB-SG-1512
+      category: xxe
+      cwe: ["CWE-611"]
+      owasp: "A05:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by ruby.md XmlMini backend configuration sink; CWE-611"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveSupport/XmlMini.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: ActiveSupport::XmlMini.backend = "LibXMLSAX"
+          - pattern: ActiveSupport::XmlMini.backend = "NokogiriSAX"
+          - pattern: ActiveSupport::XmlMini.backend = "LibXML"

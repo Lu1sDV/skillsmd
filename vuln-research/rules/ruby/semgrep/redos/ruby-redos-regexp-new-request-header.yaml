@@ -1,0 +1,27 @@
+rules:
+  - id: ruby-redos-regexp-new-request-header
+    languages: [ruby]
+    severity: ERROR
+    message: >
+      Regexp.new compiles a value pulled from request.headers, so an attacker can place an
+      arbitrary regular expression in a request header and have the server compile it. A
+      pattern with catastrophic backtracking then freezes the request thread (ReDoS).
+      Never derive a regex from header data; match against a fixed, server-defined pattern.
+    metadata:
+      vr-id: RB-SG-1222
+      category: redos
+      cwe: ["CWE-1333", "CWE-400"]
+      owasp: "A05:2021"
+      confidence: HIGH
+      tier: B
+      source-citation: "ruby.md Regex/ReDoS sink Regexp.new(pattern) with header-sourced input; CWE-1333"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActionDispatch/Request.html"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: Regexp.new(request.headers[...])
+          - pattern: Regexp.new(request.headers[...], ...)

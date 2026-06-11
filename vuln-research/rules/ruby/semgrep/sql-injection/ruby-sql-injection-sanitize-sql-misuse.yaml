@@ -1,0 +1,28 @@
+rules:
+  - id: ruby-sql-injection-sanitize-sql-misuse
+    languages: [ruby]
+    severity: WARNING
+    message: >
+      sanitize_sql_for_conditions (and the sanitize_sql alias) is called on a
+      single interpolated string. With one string argument it only quotes nothing
+      and returns the fragment as-is — it does not bind values — so interpolating
+      external input before calling it gives a false sense of safety while leaving
+      the query injectable. Pass an array with placeholders so the values are bound.
+    metadata:
+      vr-id: RB-SG-0320
+      category: sql-injection
+      cwe: ["CWE-89"]
+      owasp: "A03:2021"
+      confidence: MEDIUM
+      tier: B
+      source-citation: "inspired-by brakeman misuse of sanitize_sql helper; CWE-89"
+      license: derived-original
+      references:
+        - "https://api.rubyonrails.org/classes/ActiveRecord/Sanitization/ClassMethods.html#method-i-sanitize_sql_for_conditions"
+      validated:
+        parses: true
+        tested: true
+    patterns:
+      - pattern-either:
+          - pattern: $M.sanitize_sql("...#{...}...")
+          - pattern: $M.sanitize_sql_for_conditions("...#{...}...")
