@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skill Smell Checker"
+  short_description: "Detect all 26 SKILL.md smells with evidence"
+  default_prompt: "Use $skill-smell-checker to audit this SKILL.md and separate deterministic findings from semantic review."
