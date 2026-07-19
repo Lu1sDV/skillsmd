@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bug Bounty Reporting"
+  short_description: "Write evidence-first bug bounty reports"
+  default_prompt: "Use $bug-bounty-reporting to turn this verified finding and PoC into a submission-ready bug bounty report package."
