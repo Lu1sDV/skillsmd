@@ -1,6 +1,6 @@
-# Ruby / Rails Security Sink Corpus
+# Ruby / Rails Security-Sensitive API Corpus
 
-Minimal descriptions of high-risk Ruby and Ruby on Rails APIs that should be treated as sinks in taint analysis, fuzzing, SAST rule writing, and bypass research.
+Minimal descriptions of high-risk Ruby and Ruby on Rails APIs, including terminal sinks and the sources, propagators, sanitizers, guards, and configuration patterns needed to model them in taint analysis, fuzzing, SAST rule writing, and bypass research.
 
 Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framework configuration patterns. Treat examples that mention `params`, request headers, cookies, session data, uploaded files, queue payloads, cache values, or database-controlled strings as tainted-data patterns.
 
@@ -15,9 +15,9 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - `instance_eval` – Evaluate code in the context of an object.
 - `class_eval` – Evaluate code in the context of a class.
 - `module_eval` – Evaluate code in the context of a module.
-- `instance_exec` – Execute a block in the context of an object.
-- `class_exec` – Execute a block in the context of a class.
-- `module_exec` – Execute a block in the context of a module.
+- `instance_exec` – Execute an existing block in the context of an object; it does not evaluate a source string.
+- `class_exec` – Execute an existing block in the context of a class; it does not evaluate a source string.
+- `module_exec` – Execute an existing block in the context of a module; it does not evaluate a source string.
 - `RubyVM::InstructionSequence.compile(code).eval` – Compile and execute Ruby code.
 - `RubyVM::InstructionSequence.load_from_binary(data).eval` – Execute serialized Ruby bytecode where available.
 - `ERB.new(template).result(binding)` – Evaluate Ruby embedded in a template string.
@@ -25,7 +25,7 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - `Haml::Engine.new(template).render` – Render tainted Haml template source.
 - `Slim::Template.new { template }.render` – Render tainted Slim template source.
 - `Tilt.new(path_or_template).render` – Dispatch to template engines from tainted path/source.
-- `Liquid::Template.parse(template)` – Safer sandboxed template engine, but still a template-evaluation sink when unsafe filters/drops/registers are available.
+- `Liquid::Template.parse(template).render(...)` – Evaluate a template with Liquid filters, drops, and registered tags; risk depends on the exposed environment.
 - `define_method` – Define a method dynamically, often from interpolated names or code-producing blocks.
 - `define_singleton_method` – Define per-object methods dynamically.
 - `send` – Dynamic dispatch to a method name from data.
@@ -94,7 +94,6 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - `IO.readlines("|cmd")` – Read all lines from command via pipe path.
 - `IO.foreach("|cmd")` – Iterate over command output via pipe path.
 - `URI.open("|cmd")` – OpenURI variant executing command for pipe paths in vulnerable call chains.
-- `OpenURI.open_uri("|cmd")` – Same behavior via OpenURI.
 - `Logger.new("|cmd")` – Logger path starting with pipe may run a command on vulnerable Ruby versions/configurations.
 - `Logger#reopen("|cmd")` – Reopen logger to a command pipe.
 - `Gem::Source::Git#rev_parse` – Gadget that runs `git` via `IO.popen`.
@@ -103,9 +102,8 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - `Mixlib::ShellOut.new(cmd).run_command` – Chef ecosystem command wrapper.
 - `Terrapin::CommandLine.new(...).run` – Command wrapper used by older processing stacks.
 - `Cocaine::CommandLine.new(...).run` – Command wrapper used by older Paperclip/ImageMagick stacks.
-- `MiniMagick::Tool::*` / `MiniMagick::Image.open(path)` – External ImageMagick invocation with tainted path/options.
+- `MiniMagick::Tool::*` and MiniMagick processing methods – Invoke external ImageMagick tools with tainted paths/options.
 - `ImageProcessing::MiniMagick.source(file).call` – ImageMagick-backed processing of tainted files/options.
-- `ruby-vips` / `ImageProcessing::Vips` processors – Native image processing of tainted files/options.
 - Paperclip processors and validations invoking ImageMagick – File name/options may reach shell or delegate commands.
 - `system("convert #{file}")` – Typical image-processing RCE pattern.
 - `system("ffmpeg -i #{file}")` – Typical media-processing RCE pattern.
@@ -133,10 +131,8 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - `JSON.parse(json, create_additions: true)` – Instantiate objects via JSON additions.
 - `Oj.load(json, mode: :object)` – Oj object mode creates arbitrary classes.
 - `Oj.load(json)` – Oj generic load with unsafe global/default config.
-- `Oj.marshal_load(data)` – Oj variant of Marshal load.
 - `Oj.object_load(data)` – Direct object load.
 - `Oj.compat_load(json)` – Compatibility mode may instantiate objects depending on options.
-- `Oj.safe_load(json, options)` – Misconfigured safe load allowing objects.
 - `Ox.parse_obj(xml)` – Ox object deserialization from XML.
 - `Ox.load(xml, mode: :object)` – Ox load in object mode.
 - `Plist.parse_xml(xml, marshal: true)` – Plist parsing that uses Marshal internally.
@@ -164,13 +160,15 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - Custom `json_create` – JSON additions object hook.
 - `ActiveStorage` signed blob decode that feeds `Marshal.load` – Insecure deserialization pattern in custom/legacy integrations.
 - `Rails.cache.read` with Marshal backend – Reading deserialized entries from untrusted or attacker-writable cache.
-- `Rails.session` when configured with `:cookie_store` + Marshal – Session cookie deserialization.
+- Controller `session` / `request.session` with a Marshal-capable cookie serializer – Reading the session can materialize attacker-controlled objects when integrity or secret boundaries fail.
 - `Delayed::Job` YAML handler deserialization – Job payload storage deserializes YAML-encoded handlers.
 - Sidekiq/ActiveJob argument deserialization of GlobalID records – Queue-controlled object lookup and authorization boundary sink.
 
 ---
 
 ## Sink type: File system, path traversal, file uploads
+
+Path constructors and uploaded-file metadata below are sources or propagators; filesystem methods that read, write, move, or delete are terminal sinks.
 
 - `File.read(path)` – Read file contents based on tainted path.
 - `File.binread(path)` – Binary file read.
@@ -189,9 +187,9 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - `File.lstat(path)` – Stat potentially sensitive path.
 - `File.stat(path)` – Follow symlinks and stat path.
 - `File.truncate(path, length)` – Truncate a file based on path.
-- `File.join(base, params[:path])` – Path concatenation that does not by itself prevent `..` traversal.
-- `Rails.root.join(params[:path])` – Path construction requiring canonicalization and prefix checks before use.
-- `Pathname.new(path)` – Path abstraction used for file operations.
+- `File.join(base, params[:path])` – Path propagator that does not by itself prevent `..` traversal; no filesystem access occurs here.
+- `Rails.root.join(params[:path])` – Path propagator requiring canonicalization and prefix checks before a filesystem operation.
+- `Pathname.new(path)` – Path wrapper and propagator; access occurs only when an I/O method is called.
 - `Pathname#read` – Read path contents.
 - `Pathname#binread` – Binary read.
 - `Pathname#open` – Open path contents.
@@ -225,9 +223,9 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - `Tempfile#write(data)` – Write user content to temp file.
 - `Tempfile#puts(data)` – Put data into temp file.
 - `Tempfile#<< data` – Append data to temp file.
-- `Tempfile#close` – Close file, ready for external processing.
-- `Tempfile#unlink` – Delete temp file.
-- `ActionDispatch::Http::UploadedFile#original_filename` – User-supplied filename often misused in paths and headers.
+- `Tempfile#close` – Lifecycle boundary before external processing; not a path sink by itself.
+- `Tempfile#unlink` – Cleanup operation targeting the tempfile, not an arbitrary attacker-selected path.
+- `ActionDispatch::Http::UploadedFile#original_filename` – Taint source often misused in paths and headers.
 - `params[:file].path` / `UploadedFile#path` – Temporary uploaded file path passed to parsers/processors.
 - `send_file(path)` – Rails helper to send files from path.
 - `send_data(data, filename:)` – Rails helper sending data as download; filename/content type are additional header/browser sinks.
@@ -245,7 +243,7 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - `Zip::Entry#extract(dest)` – Extract ZIP entries; Zip Slip if `entry.name` is not canonicalized.
 - `Zip::InputStream.open(path)` – Stream ZIP entries with attacker-controlled names/content.
 - `Gem::Package::TarReader.new(io)` – Iterate TAR entries with attacker-controlled paths.
-- `entry.full_name` from `Gem::Package::TarReader` – TAR path used for extraction.
+- `entry.full_name` from `Gem::Package::TarReader` – Taint source for a TAR path later used during extraction.
 - `Archive::Tar::Minitar.unpack(src, dest)` / `Minitar.unpack` – TAR extraction helper.
 - `Zlib::GzipReader.open(path)` / `Zlib::GzipReader#read` – Decompression bomb sink.
 - `Zlib::Inflate.inflate(data)` – Decompression bomb sink.
@@ -258,31 +256,33 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 
 ## Sink type: HTTP clients, SSRF & URL-based sinks
 
+Client constructors and URI parsers below are propagators; outbound sinks are calls that connect, perform, or send a request.
+
 - `Net::HTTP.start(host, port)` – Open HTTP connection to host.
 - `Net::HTTP.get(uri_or_host, path)` – Simple HTTP GET.
 - `Net::HTTP.get_response(uri)` – Get full HTTP response.
-- `Net::HTTP.new(host, port)` – Construct client object.
+- `Net::HTTP.new(host, port)` – Construct a client object; no connection is made until a start/request operation.
 - `Net::HTTP#request(req)` – Send arbitrary request.
-- `Net::HTTP::Get.new(path)` – Request object for GET.
-- `Net::HTTP::Post.new(path)` – Request object for POST.
-- `URI.open(url)` – Open HTTP/FTP/file and other URLs via OpenURI.
+- `Net::HTTP::Get.new(path)` – Construct a GET request object; sending occurs at `Net::HTTP#request`.
+- `Net::HTTP::Post.new(path)` – Construct a POST request object; sending occurs at `Net::HTTP#request`.
+- `URI.open(url)` – Open HTTP/HTTPS/FTP URLs or local paths; non-URI strings fall back to `Kernel.open`.
 - `OpenURI.open_uri(url)` – Equivalent OpenURI call.
 - `open(url)` – Kernel/open-uri style URL/file open in legacy code.
 - `RestClient.get(url, headers)` – HTTP client library call.
 - `RestClient.post(url, payload, headers)` – HTTP POST.
 - `RestClient::Request.execute(opts)` – Low-level RestClient request.
-- `Faraday.new(url)` – Create Faraday connection.
+- `Faraday.new(url)` – Construct a Faraday connection; request methods such as `#get` perform the network operation.
 - `Faraday::Connection#get(path)` – Issue GET.
 - `Faraday::Connection#post(path)` – Issue POST.
 - `HTTP.get(url)` – HTTP.rb GET.
 - `HTTP.post(url, body: ...)` – HTTP.rb POST.
 - `HTTParty.get(url)` / `HTTParty.post(url)` – Common HTTP client helpers.
-- `Excon.new(url)` – Excon HTTP client.
+- `Excon.new(url)` – Construct an Excon connection; `Excon::Connection#request` performs the network operation.
 - `Excon::Connection#request(opts)` – Excon request.
-- `Typhoeus::Request.new(url, options)` – Typhoeus HTTP request.
+- `Typhoeus::Request.new(url, options).run` – Construct and perform a Typhoeus HTTP request.
 - `Typhoeus.get(url, options)` – Typhoeus GET helper.
 - `Patron::Session#base_url=` / `#get` – Patron HTTP client.
-- `Curb::Easy.new(url)` / `Curl.get(url)` – libcurl-backed requests.
+- `Curl::Easy.new(url).perform` / `Curl.get(url)` – Perform libcurl-backed requests.
 - `Mechanize#get(url)` – Browser-like HTTP client.
 - `Down.open(url)` / `Down.download(url)` – Remote download helper.
 - `Addressable::URI.parse(url)` – URL parsing/canonicalization that may differ from fetcher behavior.
@@ -352,7 +352,6 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - `Model.update_all("... #{user} ...")` – Raw update with interpolated SQL.
 - `Model.delete_all("... #{user} ...")` – Raw delete with interpolated SQL.
 - `Model.joins("... #{user} ...")` – Raw JOIN with interpolated SQL.
-- `Model.left_joins("... #{user} ...")` – Raw left join fragments in some usage patterns.
 - `Model.select("... #{user} ...")` – Raw SELECT expressions.
 - `Model.reselect("... #{user} ...")` – Raw SELECT replacement.
 - `Model.lock("... #{user} ...")` – Raw locking clause.
@@ -377,16 +376,18 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 
 ## Sink type: Views, templating and XSS
 
+Rails output helpers escape ordinary strings by default unless noted; values already marked HTML-safe can bypass that protection.
+
 - `<%= %>` in ERB – Escaped output; context-dependent sink in JavaScript/CSS/URL/HTML-attribute contexts.
 - `<%== %>` in ERB – Explicit unescaped output.
 - `raw(string)` – Rails helper to mark string as HTML safe.
 - `html_safe` – Mark string as safe and skip escaping.
-- `safe_join(array)` – Join array of strings marked safe.
+- `safe_join(array)` – HTML-escape non-safe elements before joining; a sanitizer unless elements were already marked HTML-safe.
 - `safe_concat(string)` – Append safe/raw content to output buffer.
 - `concat(string)` – Append content to output buffer; context and SafeBuffer state matter.
 - `ActiveSupport::SafeBuffer#<<` – Append potentially tainted HTML-safe content.
-- `content_tag(:tag, body)` – Generate HTML tag with body content.
-- `tag(:tag, options)` – Generate HTML tags from options hash.
+- `content_tag(:tag, body)` – Escapes ordinary body content by default; dangerous with pre-marked `SafeBuffer` values or disabled escaping.
+- `tag(:tag, options)` – Escapes ordinary attribute values by default; URL schemes and pre-marked safe values remain context-sensitive.
 - `link_to(body, url)` – Renders anchor with content and href.
 - `button_to(body, url)` – Renders form + button to URL.
 - `image_tag(url)` – Renders image tag with URL.
@@ -401,7 +402,7 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - `render template: name` – Render template from dynamic name.
 - `render layout: params[:layout]` – Dynamic layout selection.
 - `render params[:template]` – Dynamic template name resolution pattern.
-- `render json: object` – JSON render; potential injection inside `<script>` blocks or JSONP/callback contexts.
+- `render json: object` – Serialize a JSON response; not an HTML/XSS sink unless the output is embedded into executable HTML/JavaScript or exposed through JSONP.
 - `render json: object, callback: params[:callback]` – JSONP callback injection.
 - `render xml: object` – XML render, potential injection.
 - `render js: code` – JavaScript response rendering.
@@ -415,7 +416,7 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - `j(object)` / `escape_javascript(object)` – Escape for JavaScript; misuse or wrong context leads to XSS.
 - `to_json` on user-supplied data in `<script>` context – Context-sensitive XSS sink.
 - `I18n.t(key)` for `_html` keys – Rails marks some translation keys as HTML-safe.
-- `I18n.t(key, interpolation: tainted)` – HTML-safe translations with tainted interpolation values.
+- `I18n.t("key_html", name: tainted)` – Rails escapes ordinary interpolation values; risk requires attacker-controlled translation content or a value already marked HTML-safe.
 - Markdown/CommonMark renderers returning HTML – `Redcarpet`, `Kramdown`, `CommonMarker`, `RDiscount` without sanitization.
 - `ActionText::Content.new(html)` / rich-text rendering – Stored HTML/rich-text sanitizer boundary.
 - Client-side template helpers fed by Rails views – `data-*`, JSON script tags, Turbo Stream actions, and Stimulus values with untrusted content.
@@ -440,7 +441,6 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - `params.permit!` – Strong parameters call permitting all keys.
 - `params.require(:user).permit(:admin, :role, ...)` – Permitting sensitive flags.
 - `params.to_unsafe_h` / `params.to_unsafe_hash` – Bypass strong parameters to full hash.
-- `params[:model].to_h` – Converting params key to hash without proper whitelist.
 - `Model#attributes = params[:model]` – Direct assignment of attributes from hash.
 - `accepts_nested_attributes_for` with broad nested params – Nested mass assignment into associated records.
 - `update_columns(params_hash)` / `update_column(name, value)` – Bypass validations/callbacks/attr protections.
@@ -480,7 +480,6 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - `session[:user_id] = id` – Session assignment based on input.
 - `session[:admin] = params[:admin]` – Privilege state from request data.
 - Missing `reset_session` on login/logout/password change – Session fixation risk.
-- `reset_session` – Session reset; misuse can allow fixation or state loss in auth flows.
 - Controllers with `skip_before_action :verify_authenticity_token` – CSRF disabled surfaces.
 - `skip_forgery_protection` – CSRF disabled surfaces.
 - `protect_from_forgery with: :null_session` – CSRF config that may be too permissive for cookie-authenticated browser endpoints.
@@ -491,7 +490,7 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - `skip_authorization` / `skip_policy_scope` – Pundit authorization bypass surface.
 - `load_and_authorize_resource` skipped or overridden – CanCanCan authorization bypass surface.
 - Devise `bypass_sign_in(user)` – Session establishment bypasses normal callbacks/checks.
-- `sign_in(params[:user])` / `sign_in(user_from_params)` – Unsafe sign-in from tainted identity.
+- `sign_in(User.find(params[:user_id]))` – Establish a session for an identity selected from input without an authorization or credential check.
 - `JWT.decode(token, nil, false)` – JWT signature verification disabled.
 - `JWT.decode(token, key, true, algorithm: params[:alg])` – Algorithm confusion/attacker-controlled verification settings.
 - CORS with credentials plus broad origins – Cross-site authenticated data access.
@@ -525,7 +524,7 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 
 - `Nokogiri::XML(xml)` – XML parsing of tainted input; dangerous with unsafe parse options.
 - `Nokogiri::XML::Document.parse(xml, ..., options)` – XML parse with options such as `NOENT`, `DTDLOAD`, `HUGE`, or missing `NONET`.
-- Nokogiri config blocks `cfg.noent`, `cfg.dtdload`, `cfg.huge`, or omitted `cfg.nonet` – Entity expansion/network-loading risk.
+- Nokogiri config blocks using `cfg.noent`, `cfg.dtdload`, `cfg.huge`, `cfg.nononet`, or custom options without `NONET` – Entity expansion/network-loading risk.
 - `Nokogiri::HTML(html)` – HTML parser sink for sanitizer/bypass research.
 - `REXML::Document.new(xml)` – XML parser historically exposed to entity expansion/resource attacks.
 - `REXML::Parsers::*` – Streaming/tree parsing of tainted XML.
@@ -534,7 +533,7 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - `ActiveSupport::XmlMini.parse(xml)` – Rails XML parsing backend.
 - XML request parameter parsing re-enabled in Rails – Automatic materialization of XML request bodies.
 - `Crack::XML.parse(xml)` – XML parser used by some API clients/stacks.
-- `Nori.parse(xml)` – SOAP/XML parsing.
+- `Nori.new.parse(xml)` – SOAP/XML parsing.
 - `Ox.load(xml)` with unsafe entity/object settings – XML load sink.
 - SAML/SOAP parsing with disabled signature, certificate, audience, destination, or clock validation – Auth assertion bypass and XXE-adjacent surface.
 
@@ -556,16 +555,15 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 
 ## Sink type: Background jobs, queues and async dispatch
 
-- `ActiveJob.perform_later(params)` – Raw params passed into privileged jobs.
+- `SomeJob.perform_later(params)` – Raw params passed into a privileged Active Job subclass.
 - `params[:job_class].constantize.perform_later(*args)` – Dynamic job class dispatch.
 - `SomeJob.set(queue: params[:queue]).perform_later(args)` – Queue/routing controlled by input.
-- `Sidekiq::Worker.perform_async(params)` – Tainted args stored and later executed by worker.
+- `SomeWorker.perform_async(params)` – Tainted args stored and later executed by a Sidekiq worker class.
 - `Sidekiq::Client.push(class: params[:class], queue: params[:queue], args: params[:args])` – Dynamic Sidekiq class/queue/args.
 - `Sidekiq::Client.push_bulk(...)` – Bulk dynamic enqueueing.
 - `Resque.enqueue(klass, *args)` – Dynamic queue/class/args.
 - `Delayed::Job.enqueue(job)` – Object/YAML-backed job payload materialization.
 - `Que.enqueue(job_class, *args)` – Dynamic queue dispatch.
-- `GoodJob.perform_later` / Solid Queue job enqueue APIs – Raw params into async work.
 - `Sneakers` / `Shoryuken` message handlers – Queue payloads flowing to deserialization, SQL, file, network, or command sinks.
 - Dynamic mailer actions: `Mailer.public_send(params[:action], *args).deliver_later` – Method dispatch and async side effects from data.
 
@@ -596,7 +594,7 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - `render file: params[:file]` – Render file using filesystem path from data.
 - `render template: params[:template]` – Render template using user input.
 - `render layout: params[:layout]` – Dynamic layout selection.
-- `render params[:controller] / params[:action]` – Dynamic controller/action resolution.
+- `render template: "#{params[:controller]}/#{params[:action]}"` – Dynamic controller/action-derived template resolution.
 - Legacy route `match ':controller(/:action(/:id(.:format)))'` – Expose arbitrary controller methods as actions.
 - `redirect_to controller: params[:c], action: params[:a]` – Dynamic redirects based on controller/action params.
 - `prepend_view_path(params[:path])` / `append_view_path(params[:path])` – User-influenced template lookup path.
@@ -605,6 +603,8 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 ---
 
 ## Sink type: Rack, headers, proxies and WEBrick parsing
+
+Request accessors below are taint sources or trust-boundary inputs, not terminal sinks; the sink is their later use in redirects, links, cache keys, tenant selection, or security decisions.
 
 - `WEBrick::HTTPRequest#parse` – HTTP parser for raw request; vulnerable to smuggling when misused or deployed behind mismatched proxies.
 - `WEBrick::HTTPRequest#body` – Raw request body as parsed; used in downstream sinks.
@@ -690,4 +690,4 @@ Rules are grounded in real fixes, not just synthetic patterns. Distilled corpora
 - `cve-commits.json` — CVE/GHSA → `{repo, vuln_sha, fix_sha, category}` pairs for HIT@vuln / MISS@fix oracle checks.
 - `gitlab-fix-corpus.json` — 1,166 high-signal `gitlab-org/gitlab` security-fix commits (3-year window) from canonical signals (`Changelog: security`, `security-*` branch merges, CVE/CWE refs).
 - `security-fix-corpus.json` — 1,018 of those fixes after Ruby-diff analysis: root cause, fix summary, tainted input → sink, and a concrete rule idea per commit. Dominant classes: auth-session/IDOR (CWE-639/287), XSS, ReDoS, path-traversal, SSRF.
-- `message-triage-summary.json` — title+message triage over 189k commits → 18,202 security-relevant (2,647 high-confidence with a concrete rule idea) — the backlog feed for new Tier-A rules.
+- `message-triage-summary.json` — title+message triage over 189,153 commits → 18,202 security-relevant and 14,725 needing diff analysis — the backlog feed for new Tier-A rules.
