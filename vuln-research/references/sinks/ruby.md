@@ -33,6 +33,7 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - `public_send` – Dynamic dispatch to public methods; still dangerous with tainted names.
 - `method(name).call` – Indirect call using a looked-up method object.
 - `respond_to_missing?` paired with `method_missing` – Makes custom dynamic dispatch look legitimate to callers.
+- `def_delegators(:@target, *tainted_names)` / `delegate(*tainted_names, to: :target)` – Runtime delegation from attacker-controlled method names can overwrite security-sensitive methods.
 - `Object.const_get` – Resolve a constant by name from data.
 - `Module.const_get` – Resolve constants within a module.
 - `Kernel.const_get(params[:klass])` – Alternative constant lookups from params.
@@ -69,7 +70,7 @@ Scope: Ruby 2.x/3.x, Rails 3.x-7.x/8.x era applications, common gems, and framew
 - `%x[cmd]` – Backtick equivalent using `%x` literal.
 - `Kernel.system("cmd")` / `system("cmd")` – Execute shell command in subshell.
 - `Kernel.system("cmd #{user}")` – Interpolated command string.
-- `Kernel.system(cmd, arg1, arg2)` – Argument-vector form; still executes commands, and command/arguments may be attacker-controlled.
+- `Kernel.system(cmd, arg1, arg2)` – Argument-vector form avoids shell parsing but still permits attacker-chosen executables, arguments, and option injection; keep the executable fixed and use `--` where supported.
 - `Kernel.exec("cmd")` / `exec("cmd")` – Replace current process with command.
 - `Kernel.spawn("cmd")` / `spawn("cmd")` – Spawn subprocess with shell command.
 - `Process.exec("cmd")` – Process-level exec, same effect.
@@ -190,6 +191,7 @@ Path constructors and uploaded-file metadata below are sources or propagators; f
 - `File.join(base, params[:path])` – Path propagator that does not by itself prevent `..` traversal; no filesystem access occurs here.
 - `Rails.root.join(params[:path])` – Path propagator requiring canonicalization and prefix checks before a filesystem operation.
 - `Pathname.new(path)` – Path wrapper and propagator; access occurs only when an I/O method is called.
+- `Pathname#join(user_path)` / `Pathname#+` – An absolute component discards the preceding base path; canonical containment checks remain required.
 - `Pathname#read` – Read path contents.
 - `Pathname#binread` – Binary read.
 - `Pathname#open` – Open path contents.
@@ -244,6 +246,7 @@ Path constructors and uploaded-file metadata below are sources or propagators; f
 - `Zip::InputStream.open(path)` – Stream ZIP entries with attacker-controlled names/content.
 - `Gem::Package::TarReader.new(io)` – Iterate TAR entries with attacker-controlled paths.
 - `entry.full_name` from `Gem::Package::TarReader` – Taint source for a TAR path later used during extraction.
+- `Gem::Package::TarReader::Entry#file?` / `#symlink?` – Entry-type guards; skipping only directories still permits symbolic-link entries.
 - `Archive::Tar::Minitar.unpack(src, dest)` / `Minitar.unpack` – TAR extraction helper.
 - `Zlib::GzipReader.open(path)` / `Zlib::GzipReader#read` – Decompression bomb sink.
 - `Zlib::Inflate.inflate(data)` – Decompression bomb sink.
@@ -304,6 +307,8 @@ Client constructors and URI parsers below are propagators; outbound sinks are ca
 - `Wasabi.document(url)` – WSDL/XML fetch from tainted URL.
 - Webhook integrations fetching user-supplied callback URLs – SSRF and internal metadata access.
 - URL parser bypass inputs feeding fetches – decimal/octal/hex IPs, IPv6, userinfo, DNS rebinding, redirects, protocol smuggling, and mixed parser/fetcher normalization.
+- `url.start_with?(trusted_url)` / `URI.parse(url).host.end_with?(trusted_host)` – Insufficient URL allowlists vulnerable to userinfo and sibling-domain confusion.
+- Validating a URL but fetching the original unresolved value, or following redirects without revalidation – DNS-rebinding and time-of-check/time-of-use SSRF.
 
 ---
 
@@ -441,6 +446,7 @@ Rails output helpers escape ordinary strings by default unless noted; values alr
 - `params.permit!` – Strong parameters call permitting all keys.
 - `params.require(:user).permit(:admin, :role, ...)` – Permitting sensitive flags.
 - `params.to_unsafe_h` / `params.to_unsafe_hash` – Bypass strong parameters to full hash.
+- `params[:key]` consumed as a scalar without type enforcement – Rails query syntax can supply arrays or hashes; `permit(:key)` rejects non-scalar shapes.
 - `Model#attributes = params[:model]` – Direct assignment of attributes from hash.
 - `accepts_nested_attributes_for` with broad nested params – Nested mass assignment into associated records.
 - `update_columns(params_hash)` / `update_column(name, value)` – Bypass validations/callbacks/attr protections.
@@ -467,6 +473,7 @@ Rails output helpers escape ordinary strings by default unless noted; values alr
 - Custom validators that use `Regexp.new(params[:pattern])` – Validation from user patterns.
 - Search filters building regex from user input – e.g. PostgreSQL `where("name ~ ?", pattern)`.
 - Mongoid/NoSQL `$regex` queries from params – ReDoS and query abuse.
+- `Regexp.new(pattern, timeout: seconds)` / `Regexp.timeout = seconds` on Ruby 3.2+ – ReDoS guards; `nil` means no timeout, so advanced or untrusted patterns still need an explicit limit.
 
 ---
 
@@ -542,6 +549,7 @@ Rails output helpers escape ordinary strings by default unless noted; values alr
 ## Sink type: Mail, SMTP and header injection
 
 - `mail(to:, cc:, bcc:, from:, reply_to:, subject:)` – Header fields with CRLF-controllable values.
+- `mail(to: params[:email])` – Arrays or comma-separated addresses can produce multiple recipients; sensitive mail requires exactly one validated recipient.
 - `headers[...] = params` – Direct mail header assignment.
 - `headers(params_hash)` – Bulk mail header assignment.
 - `Mail.new(params[:raw])` – Parse/build raw message from tainted content.
@@ -639,6 +647,7 @@ Request accessors below are taint sources or trust-boundary inputs, not terminal
 - `ActiveStorage::Blob.find_signed(params[:signed_id])` – Signed blob materialization/access sink.
 - `ActiveStorage::Current.url_options` from request host – Host poisoning in generated blob URLs.
 - `I18n.backend.store_translations(locale, data)` from user/admin data – Translation poisoning and `_html` XSS.
+- `render json: record` / `record.as_json` / `record.serializable_hash` – May expose sensitive attributes unless serialization uses an explicit field allowlist.
 - Multi-tenant `Current.account = Account.find(params[:account_id])` patterns – Tenant context from request data.
 
 ---
