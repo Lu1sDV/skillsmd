@@ -48,7 +48,9 @@ and the exact demonstrated consequence.]
 
 ## Root cause
 [Version-pinned file and line link, vulnerable mechanism, and the missing
-security condition. State incomplete-fix lineage only when the cited prior
+security condition. If the finding came from source-code analysis, include the
+relevant source lines with concise annotations identifying the vulnerable flow
+and missing check. State incomplete-fix lineage only when the cited prior
 change touched the relevant class or sink.]
 
 ## Impact and severity
