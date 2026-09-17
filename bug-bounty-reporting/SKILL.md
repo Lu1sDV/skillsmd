@@ -1,10 +1,8 @@
 ---
 name: bug-bounty-reporting
 description: >
-  Use when an agent drafts, revises, freezes, or independently verifies a bug
-  bounty vulnerability report, executable PoC, evidence bundle, CVSS rationale,
-  or cleanup proof for HackerOne, Bugcrowd, Intigriti, or a vendor-managed
-  program. The skill maps material claims to exact final-run artifacts.
+  A skill for creating a report in a bug bounty vulnerability assessment.Use when an agent drafts, revises, freezes, or independently verifies a bug
+  bounty vulnerability report for source code, application or live assesment, executable PoC, CVSS or cleanup proof for HackerOne, Bugcrowd, Intigriti, or a vendor-managed program.
 ---
 
 # Bug Bounty Reporting
@@ -14,7 +12,7 @@ description: >
 Verbatim; keep internal:
 
 > 1. **Concise** - Triagers need simple language, no mince words. Straight to the point reports. Every word create cognitive burden
-> 2. **Triagers are dumb and lazy** - They need ELI5 steps and easy to understand reports; reproduction must be done for the fastest and easiest to understand triaging possible.
+> 2. **Triagers are lazy** - They need ELI5 steps and easy to understand reports; reproduction must be done for the fastest and easiest to understand triaging possible.
 > 3. **Do not talk like a Robot** - LLM written report patterns discourages triagers. Write reprots like a human would do.
 
 ## Status Rules
@@ -27,24 +25,17 @@ Verbatim; keep internal:
 
 ## Workflow
 
-0. Verify current terms: scope, eligibility, safe harbor, prohibited methods,
-   limits, disclosure. Record source/date; unconfirmed = `blocked`, failed =
-   `ineligible`.
-1. Read [references/report-standard.md](references/report-standard.md).
-2. Inventory version/config, roles, PoC, evidence, control, cleanup. Track
-   report, PoC, manifest, review as `pending`, `complete`, or `blocked`; never
-   invent.
-3. Map claims to evidence; remove, narrow, or qualify unsupported claims.
-4. Draft one linear repro with decisive outputs, pinned root cause, combined
-   impact-and-severity, and concrete fix.
-5. Require central config, preflight, collision refusal, assertions, evidence
-   capture, secret-safe logs, and exact cleanup; reuse existing PoC tooling.
-6. Freeze report, PoC, manifest with hashes/config; edits invalidate
-   review/evidence.
-7. One independent reviewer checks caveats/precedent, combined impact/severity
-   evidence, and clean execution; the writer cannot self-certify.
-8. Grant `submission-ready` only to frozen, full-live, independently approved
-   snapshots; otherwise report blockers.
+Give the triager the easiest, most seamless triage experience possible. They already have the report open and a VM to run things in, so don't make them transfer files and reconstruct state by hand.
+
+Give the team an easy triage and remediation-retest experience. They have to hand the bug to devs (who often work without a proxy) and later confirm their fix works. A re-runnable POC lets them do both. Yes, this can eat into retest payouts, but Justin's take is that overall throughput is worth more than grabbing at a $50 retest right now.
+
+Give yourself an easy way to visualize and validate what your hackbot reports. If you're running a bot, your life is triage: you open the queue, read the finding, drop the POC script into your terminal, watch the output, and click report. A weak POC is also the single best motivator to improve: nothing sharpens your skill like being annoyed at your own unreadable output. 
+
+Codify the Report, Then Unit-Test It
+
+The mental model behind the whole skill is a combination of two ideas.
+
+First, codify the report. The POC should be a holistic, self-narrating experience. It sets the scene (this app does XYZ, here's who we are) and walks through the logic: the attacker (low-privilege user) can't reach the data via this route, then can reach it via that route. Use attacker and victim as your labels, not user1/user2. It removes all ambiguity about session ownership, and you show it with the actual HTTP requests. Done right, you barely need the written report; the POC itself explains why the finding is a vulnerability. 
 
 ## Guardrails
 
@@ -69,3 +60,4 @@ Do not finish silently with skipped gates. Confirm:
 - Hashes, version/config, report, PoC, and manifest agree.
 - The independent frozen-snapshot review is complete, or the report remains
   explicitly `draft` or `blocked`.
+
