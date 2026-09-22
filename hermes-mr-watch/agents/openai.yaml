@@ -1,0 +1,5 @@
+---
+interface:
+  display_name: "Hermes MR Watch"
+  short_description: "Safely configure remote Hermes MR watchers"
+  default_prompt: "Use $hermes-mr-watch to add confirmed GitLab MRs to the remote Hermes watcher and verify lifecycle delivery."
