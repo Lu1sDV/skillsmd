@@ -53,7 +53,7 @@ frozen-snapshot review.
 | File | Purpose |
 |---|---|
 | `SKILL.md` | Authoring workflow, guardrails, freeze protocol, and completion gate |
-| `references/report-standard.md` | Report template, evidence matrix, PoC contract, cleanup, and review standard |
+| `references/report-standard.md` | Report template, portable PoC contract, claim-to-evidence matrix, cleanup, and review standard |
 | `agents/openai.yaml` | Codex skill interface metadata |
 
 ## Validation

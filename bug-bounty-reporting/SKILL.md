@@ -35,6 +35,8 @@ Codify the Report, Then Unit-Test It
 
 The mental model behind the whole skill is a combination of two ideas.
 
+Artifact contract — report template, PoC contract, claim matrix, cleanup, and review: [references/report-standard.md](references/report-standard.md).
+
 First, codify the report. The POC should be a holistic, self-narrating experience. It sets the scene (this app does XYZ, here's who we are) and walks through the logic: the attacker (low-privilege user) can't reach the data via this route, then can reach it via that route. Use attacker and victim as your labels, not user1/user2. It removes all ambiguity about session ownership, and you show it with the actual HTTP requests. Done right, you barely need the written report; the POC itself explains why the finding is a vulnerability. 
 
 ## Guardrails
