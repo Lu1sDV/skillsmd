@@ -1,0 +1,1 @@
+| fixture.rb:15:13:15:52 | call to ensure_hash | Method 'ensure_hash' calls itself recursively without a depth counter or MAX_RECURSION_DEPTH guard; an attacker can pass deeply-nested data to cause stack overflow or memory exhaustion. |

@@ -1,0 +1,2 @@
+| fixture.rb:12:25:12:41 | call to full_path | CI/OIDC claim built from `project.full_path` without a fork-origin guard (`source_project` / `merge_request_from_forked_project?`); forked-MR pipelines may carry target-project identity instead of source-project identity. |
+| fixture.rb:22:25:22:34 | call to id | CI/OIDC claim built from `project.id` without a fork-origin guard (`source_project` / `merge_request_from_forked_project?`); forked-MR pipelines may carry target-project identity instead of source-project identity. |

@@ -1,0 +1,48 @@
+# Variant-hunt suite — 44 sweep-grade AST detectors (precise, HEAD-safe).
+# Auto-built from oracle/validation/query-grade-ledger.json (predicted_grade==sweep AND @kind problem).
+# Excludes 32 sweep @kind path-problem taint queries (pre-existing, heavy, already hunted) and 32 diff-grade absence detectors.
+# Excludes tests/ copies. Run: analyze.sh dbs/HEAD codeql/variant-hunt-sweep-ast.qls ...
+- query: auth-session/ApiEndpointUnauthenticatedWrite.ql
+- query: auth-session/AuthenticationSkipped.ql
+- query: auth-session/BlockedUserNotChecked.ql
+- query: auth-session/CiJobTokenGrantsAdminCondition.ql
+- query: auth-session/CsrfProtectionDisabled.ql
+- query: auth-session/DeclarativePolicyRuleMissing.ql
+- query: auth-session/GraphqlFieldMissingAuthorize.ql
+- query: auth-session/GraphqlSkipAuthorizationServiceFlag.ql
+- query: auth-session/GraphqlSkipTypeAuthorization.ql
+- query: auth-session/IdentityLinkSensitiveDataInParams.ql
+- query: auth-session/ImportProtectedAccessLevelUserSwap.ql
+- query: auth-session/MissingInputDepthValidation.ql
+- query: auth-session/OauthPkceMissingCodeChallenge.ql
+- query: auth-session/OverlyBroadAuthzSkip.ql
+- query: auth-session/PasskeyAuthenticationPolicyBypass.ql
+- query: auth-session/PasskeyWebauthnVerifyReturnUnchecked.ql
+- query: auth-session/PatDisabledPolicyNotEnforcedInFinder.ql
+- query: auth-session/SamlExternUidAccountTakeover.ql
+- query: auth-session/TimingUnsafeTokenCompare.ql
+- query: auth-session/TwofaSessionBypass.ql
+- query: rails-misc/CsvFormulaInjectionNewlines.ql
+- query: rails-misc/JobTokenAdminPrivilegeEscalation.ql
+- query: rails-misc/RM001.ql
+- query: rails-misc/RM003.ql
+- query: rails-misc/RM005.ql
+- query: rails-misc/RM007.ql
+- query: rails-misc/RM008.ql
+- query: rails-misc/RM010.ql
+- query: rails-misc/RM011.ql
+- query: rails-misc/SensitiveDataInLogs.ql
+- query: rails-misc/TokenAsPasswordAuthBypass.ql
+- query: rails-misc/UnboundedPagination.ql
+- query: rails-misc/UnsafeHtmlStringInterpolation.ql
+- query: rails-misc/UnsafeJsonParse.ql
+- query: ssti/HtmlEscapeUnqualified.ql
+- query: ssti/HtmlEscapeWrongMethod.ql
+- query: ssti/PlaceholderSanitizationBypass.ql
+- query: ssti/PromptInjectionLlm.ql
+- query: xss/BanzaiSanitizeFragmentAsNodeContent.ql
+- query: xss/DataHtmlTooltipSink.ql
+- query: xss/HamlHtmlSafeInterpolationPercent.ql
+- query: xss/SprintfHtmlSafeInterp.ql
+- query: xss/StringInterpolationInHtmlHref.ql
+- query: xss/XhtmlInlineContentSniff.ql

@@ -8,10 +8,15 @@ Load the file matching the target codebase language. **Do not load all language 
 | **Python** | `sinks/python.md` | exec, pickle, SSTI, subprocess, SSRF |
 | **Node.js / JavaScript** | `sinks/javascript.md` | child_process, prototype pollution, deser, NoSQL injection, ReDoS |
 | **Java** | `sinks/java.md` | Runtime exec, JNDI, deser (ysoserial + format-specific), SpEL/OGNL/EL |
+| **Scala** | **`sinks/scala.md`** | **ToolBox.eval, runtimeMirror, LazyList/TrieMap deser, Akka JavaSerializer, Play Twirl SSTI, Slick/Doobie/Quill SQLi, Scala.js eval/import, Spark UI RCE, effect system escapes, build system supply chain** |
 | **Ruby** | `sinks/ruby.md` | system/eval, Marshal/YAML deser, ActiveRecord SQLi, Kernel.open |
 | **.NET / C#** | `sinks/dotnet.md` | Process.Start, BinaryFormatter, Json.NET TypeNameHandling, ysoserial.net |
-| **Go, Rust, C/C++, Elixir/Erlang** | `sinks/systems.md` | os/exec, Command, memory corruption, format strings, ETF deser, atom exhaustion |
+| **Go, Rust, Elixir/Erlang** | `sinks/systems.md` | os/exec, Command, memory corruption, format strings, ETF deser, atom exhaustion |
+| **C/C++** (source-level) | **`sinks/c-cpp.md`** | **buffer-write sinks, object lifecycle (UAF/NULL/uninit/leak), integer overflow & type confusion, syscall/errno/EINTR, concurrency & TOCTOU, privilege-drop/env/path, C++ semantics, Windows userspace (DLL planting, token/service/named-pipe)** — pair with `references/v2/fuzzing-lane.md` + `references/methodology/fuzz-harness-craft.md` for dynamic confirmation. For compiled binaries/firmware/kernel use `references/binary/binary-stack-triggers.md` instead. |
 | **Kotlin/Android, Swift/iOS** | `sinks/mobile.md` | WebView, intents, URL schemes, data storage, certificate pinning |
+| **Jinja2 / SSTI** (Python template engines: Jinja2, Mako, Chameleon, Tornado) | `sinks/jinja2.md` | SSTI sink enumeration, filter bypass, sandbox escape |
+
+> **Necessary, not sufficient.** Name-based sink matching is one seed, not the whole hunt — **custom wrappers** around a dangerous function (e.g. `safe_copy()` calling `memcpy`) defeat these name filters. Prefer graph-discovered execution paths (`reachableByFlows`) as the primary criterion, with this catalog as one seed among several. See the **anti-brittleness doctrine** in `references/methodology/joern-forward-slicing.md` § 9 and the LLMxCPG integration (`arXiv:2507.16585`) in `references/methodology/llmxcpg.md`.
 
 ---
 
@@ -26,11 +31,12 @@ Load the file matching the target codebase language. **Do not load all language 
 | Node.js | `p/javascript`, `p/typescript` | `javascript.lang.security.audit.vm-injection`, `javascript.express.security.injection`, `javascript.lang.security.eval-with-expression` |
 | Java | `p/java` | `java.lang.security.audit.command-injection`, `java.lang.security.deserialization`, `java.spring.security.injection`, `java.lang.security.audit.jndi-injection` |
 | Ruby | `p/ruby` | `ruby.lang.security.eval-use`, `ruby.rails.security.injection`, `ruby.lang.security.command-injection` |
+| Scala | `p/java` (partial) + custom rules | No official Semgrep Scala pack. Java pack catches JVM sinks (`Runtime.exec`, `ProcessBuilder`). Scala-specific sinks need custom rules (see `sinks/scala.md` § Detection Signatures) |
 | Go | `p/golang` | `go.lang.security.audit.command-injection`, `go.lang.security.audit.sql-injection`, `go.lang.security.audit.path-traversal` |
 | Rust | `p/rust` | `rust.lang.security.command-injection`, `rust.lang.security.sql-injection` |
 | C/C++ | `p/c` | `c.lang.security.buffer-overflow`, `c.lang.security.format-string`, `c.lang.security.use-after-free` |
 
-**Custom taint rules:** `pattern-sources` -> `pattern-sinks` -> `pattern-sanitizers` in Semgrep YAML.
+**Custom taint rules:** `pattern-sources` -> `pattern-sinks` -> `pattern-sanitizers` in Semgrep YAML. When a project wrapper hides a sink from the packs, **author** a precise rule test-first — see `references/methodology/semgrep-rule-authoring.md` (taint-over-pattern, AST dump, 100%-pass TDD loop). The rule is tool config; its hits ingest as `candidate` rows via `references/methodology/tool-ingest-recipes.md`. The CodeQL analogue is **data-extension models** for custom wrappers (`tool-ingest-recipes.md` § 1.1).
 
 ### Third-Party Semgrep Rule Packs
 
@@ -72,6 +78,7 @@ Semgrep OSS performs single-file analysis only. **Semgrep Pro** (formerly Semgre
 | JavaScript | `codeql/javascript-queries` | `Security/CWE-089`, `Security/CWE-078`, `Security/CWE-079`, `Security/CWE-1321` (proto pollution) |
 | Java | `codeql/java-queries` | `Security/CWE-089`, `Security/CWE-078`, `Security/CWE-502`, `Security/CWE-611` (XXE), `Security/CWE-074` (JNDI) |
 | Ruby | `codeql/ruby-queries` | `Security/CWE-089`, `Security/CWE-078`, `Security/CWE-079`, `Security/CWE-502` |
+| Scala | `codeql/java-queries` + manual `*.scala` | Java queries capture JVM-level sinks (Runtime.exec, JNDI, SQLi); Scala-specific sinks (ToolBox, Akka, Play, Slick) require custom QL or Semgrep rules |
 | Go | `codeql/go-queries` | `Security/CWE-089`, `Security/CWE-078`, `Security/CWE-022` (path traversal), `Security/CWE-918` (SSRF) |
 | C/C++ | `codeql/cpp-queries` | `Security/CWE-120` (buffer overflow), `Security/CWE-134` (format string), `Security/CWE-416` (use-after-free) |
 

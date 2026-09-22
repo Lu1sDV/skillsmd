@@ -1,0 +1,1 @@
+| fixture.rb:7:3:7:33 | call to validates | Field `:name` is validated for presence but has no length: { maximum: N } constraint in this model; add `validates :name, length: { maximum: N }, if: :name_changed?` to prevent unbounded input. |

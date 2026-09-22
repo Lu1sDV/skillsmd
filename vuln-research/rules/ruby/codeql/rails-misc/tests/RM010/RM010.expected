@@ -1,0 +1,2 @@
+| fixture.rb:11:22:11:67 | call to pluck | `.pluck(:parent_id)` collects parent IDs without a `.where.not(...)` exclusion of descendant IDs; a `perform_async` in this method will cause infinite re-enqueuing on a cyclic hierarchy (DoS). |
+| fixture.rb:35:20:35:93 | call to pluck | `.pluck(:work_item_parent_id)` collects parent IDs without a `.where.not(...)` exclusion of descendant IDs; a `perform_async` in this method will cause infinite re-enqueuing on a cyclic hierarchy (DoS). |

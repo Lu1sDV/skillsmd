@@ -1,0 +1,186 @@
+# vuln-research scoring config seed
+#
+# The single shared weight surface for every read-time score: critical-function
+# ranking (#4), external-knowledge acceptance (#5), and recurrence neighbor
+# propagation (#2). These are EXTERNALIZED OPERATIONAL KNOBS, not semantic
+# constants — every score is a VIEW (v_critical_fn_ranked / v_chunk_acceptance)
+# that joins these rows, so editing a weight reorders results with zero code
+# change (the determinism-by-construction rule).
+#
+# These rows MUST exist in the scoring_config table. They are inserted
+# idempotently on schema initialization via INSERT ... ON CONFLICT (scope,
+# config_key) DO NOTHING in both db/schema.sql and
+# db/migrations/0005-knowledge-architecture.sql. This file is the source-of-truth
+# mirror (like strategies.yml) — keep it in lockstep with those two SQL seeds.
+#
+# ID-anchoring note (C04-B-F7): scoring_config rows are matched by the UNIQUE
+# constraint (scope, config_key) — there is no integer id column in this table,
+# so diffing is by (scope, config_key) pair, not by id. This is intentional and
+# consistent with the schema; it differs from strategies.yml which has an integer
+# PK. Do not add synthetic id fields here.
+#
+# Tuning: weights are tunable both inter-workflow (edit here + re-seed a fresh
+# DB) and intra-workflow (UPDATE scoring_config on a live audit DB; the next
+# view read picks it up). Each scope's positive-signal weights are documented to
+# sum to 1.00 as a convention, not a constraint — the views normalize per signal.
+
+scoring_config:
+  # ----------------------------------------------------------------
+  # #4 rank_score — the six critical_functions ranking factors.
+  # recurrence (#2) is the new 6th factor. Sum = 1.00.
+  # ----------------------------------------------------------------
+  - scope: rank_score
+    config_key: w_reachability
+    weight: 0.25
+    description: critical_functions.factor_reachability
+  - scope: rank_score
+    config_key: w_blast_radius
+    weight: 0.22
+    description: critical_functions.factor_blast_radius
+  - scope: rank_score
+    config_key: w_privilege_delta
+    weight: 0.18
+    description: critical_functions.factor_privilege_delta
+  - scope: rank_score
+    config_key: w_attention_deficit
+    weight: 0.13
+    description: critical_functions.factor_attention_deficit
+  - scope: rank_score
+    config_key: w_bypass_prior
+    weight: 0.10
+    description: critical_functions.factor_bypass_prior
+  - scope: rank_score
+    config_key: w_recurrence_prior
+    weight: 0.12
+    description: critical_functions.factor_recurrence_prior (#2)
+
+  # ----------------------------------------------------------------
+  # #5 acceptance — knowledge-chunk sort key (NEVER a gate). Positive
+  # signals add, negative signals subtract (signs applied in the
+  # v_chunk_acceptance view, not here). Sum = 1.00.
+  # ----------------------------------------------------------------
+  - scope: acceptance
+    config_key: w_ref_count
+    weight: 0.40
+    description: knowledge_acceptance.ref_count (+)
+  - scope: acceptance
+    config_key: w_growth_rate
+    weight: 0.20
+    description: knowledge_acceptance.growth_rate (+)
+  - scope: acceptance
+    config_key: w_staleness_days
+    weight: 0.25
+    description: knowledge_acceptance.staleness_days (-)
+  - scope: acceptance
+    config_key: w_repeat_suppressions
+    weight: 0.15
+    description: knowledge_acceptance.repeat_suppressions (-)
+
+  # ----------------------------------------------------------------
+  # #2 recurrence — weight applied to a confirmed finding's 1-hop
+  # call-graph neighbors when propagating the recurrence prior.
+  # ----------------------------------------------------------------
+  - scope: recurrence
+    config_key: w_nbr
+    weight: 0.50
+    description: one-hop call-neighbor propagation weight
+
+  # ----------------------------------------------------------------
+  # hit-score weights (migration 0020, v_fact_hitscore) — recurrence-family
+  # ranking so fetch-budget truncation keeps objectively-most-useful rows.
+  # Reuse scope='recurrence' (no CHECK widen needed — spec §3.1 / §8).
+  # Signal weights sum to 1.00 as convention (not a constraint).
+  # w_rec is dominant: corroboration count is the most objective signal.
+  # ----------------------------------------------------------------
+  - scope: recurrence
+    config_key: w_rec
+    weight: 0.50
+    description: >
+      v_fact_hitscore: recurrence_norm weight (dominant).
+      Within-target PERCENT_RANK of (corroboration_count + recurrence_counter)
+      — how many independent agent_steps reached the same symbol_path.
+
+  - scope: recurrence
+    config_key: w_outcome
+    weight: 0.25
+    description: >
+      v_fact_hitscore: led_to_outcome weight.
+      1.0 if the fact's symbol_path lies on the lineage of a confirmed gr_findings
+      or a reproduced defense_bypasses in this target; 0.0 otherwise.
+
+  - scope: recurrence
+    config_key: w_reuse
+    weight: 0.15
+    description: >
+      v_fact_hitscore: reuse_effectiveness weight.
+      Objective "prevented re-work": a dead_end seeded into a round whose
+      symbol_path was NOT re-walked that round (absence of new dead_end /
+      partial_trace rows on that path in the same round). Measured as ABSENCE
+      of re-walk rows, not asserted by an agent.
+
+  - scope: recurrence
+    config_key: w_conf
+    weight: 0.10
+    description: >
+      v_fact_hitscore: confidence_decayed weight.
+      agent_observations.confidence * (0.5)^rounds_since_last_corroboration.
+      Lowest weight: partially subjective (agent-assigned confidence).
+
+  # approx_recall_floor — minimum similarity threshold for v_fact_similar
+  # inclusion. 0.40 = require 40% combined Jaccard+fingerprint score before
+  # surfacing a near-twin as an approximate lead. Tune per target via UPDATE.
+  - scope: recurrence
+    config_key: approx_recall_floor
+    weight: 0.40
+    description: >
+      v_fact_similar: minimum combined similarity floor
+      (0.7*path_jaccard + 0.3*fp_match) for approximate-recall inclusion.
+      0.0 = off (include all pairs), 1.0 = exact-only. Default 0.40 balances
+      recall vs. noise for typical multi-segment symbol paths.
+
+# ----------------------------------------------------------------
+# perpetual — Perpetual Loop mode operational knobs (C04-B-F9, C12-B-F8).
+# These are DB-native overridable knobs, not prose constants. The orchestrator
+# reads them via SELECT value FROM scoring_config WHERE scope='perpetual' AND
+# config_key=<key>; UPDATE to override on a live audit DB without code change.
+# ----------------------------------------------------------------
+  - scope: perpetual
+    config_key: target_high_crit_n
+    weight: 20
+    description: >
+      Perpetual Loop stop condition: number of HIGH or CRIT confirmed findings
+      that satisfies the loop's N target and allows graceful exit. Default 20
+      (matches the prose in perpetual_ledger_learn). Override via UPDATE on a
+      live DB or edit here + re-seed. The loop also exits on user interrupt;
+      dry rounds are reported, not halting.
+
+  - scope: perpetual
+    config_key: salience_top_k
+    weight: 5
+    description: >
+      Perpetual Loop Salience gate: number of candidates promoted from
+      v_promise_ranked per round (top-K by promise score). Default 5 — enough
+      to give the Executive lane a non-trivial batch without flooding Confirm.
+      Override via UPDATE on a live DB or raise with effort_tier if the promise
+      distribution is wide. The zero-variance guard in v_promise_ranked applies
+      before K-truncation (candidates with identical promise across the round
+      partition get 0.5 rather than a spurious rank).
+
+# ----------------------------------------------------------------
+# eval — the γ-style decision threshold for the vreval harness.
+#
+# gamma_threshold is the minimum per-finding severity score (critical=4, high=3,
+# medium=2, low=1, unknown=0) a finding must clear to be counted when scoring an
+# eval manifest (db/harness/eval). It is an EXTERNALIZED KNOB, not a magic
+# constant: `vreval calibrate` fits it on a small labeled validation split to
+# maximize F1 and writes the value back here, and `vreval score -scoring` reads
+# it via eval.LoadGamma. This mirrors LLMxCPG (arXiv:2507.16585), which calibrates
+# its decision threshold γ on a ~20-sample labeled set instead of hardcoding it
+# and recommends per-dataset calibration. 0.0 = accept every finding (the
+# forgiving default, identical to the pre-calibration behavior); raise it (via
+# calibration) to suppress low-confidence findings.
+#
+# Unlike scoring_config above, this key is NOT seeded into a DB table — it is read
+# directly from this file by the Go eval harness.
+eval:
+  gamma_threshold: 0.0

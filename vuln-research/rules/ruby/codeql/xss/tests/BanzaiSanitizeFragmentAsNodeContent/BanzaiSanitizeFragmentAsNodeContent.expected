@@ -1,0 +1,1 @@
+| fixture.rb:11:22:11:50 | call to presence | Sanitize.fragment().presence is used to produce link text from an HTML attribute value; Sanitize.fragment can pass through HTML markup. Use node.content = value (plain-text assignment) instead. |

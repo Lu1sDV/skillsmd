@@ -1,0 +1,3 @@
+| HamlHtmlSafeInterpolationPercent_test.rb:6:18:6:61 | ... % ... | The string is marked .html_safe before % interpolation; HTML in the substituted values is inserted raw, enabling XSS. Use safe_format(...) with tag_pair(...) instead. |
+| HamlHtmlSafeInterpolationPercent_test.rb:12:5:12:98 | ... % ... | The string is marked .html_safe before % interpolation; HTML in the substituted values is inserted raw, enabling XSS. Use safe_format(...) with tag_pair(...) instead. |
+| HamlHtmlSafeInterpolationPercent_test.rb:17:5:17:79 | ... % ... | The string is marked .html_safe before % interpolation; HTML in the substituted values is inserted raw, enabling XSS. Use safe_format(...) with tag_pair(...) instead. |

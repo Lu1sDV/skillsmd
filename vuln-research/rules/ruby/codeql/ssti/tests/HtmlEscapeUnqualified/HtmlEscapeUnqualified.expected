@@ -1,0 +1,2 @@
+| html_escape_xss.rb:11:5:11:58 | ... % ... | Unqualified `html_escape` followed by `%` formatting can re-introduce unescaped HTML from the substitution values; use `ERB::Util.html_escape` (XSS, CWE-79). |
+| html_escape_xss.rb:16:5:16:107 | ... % ... | Unqualified `html_escape` followed by `%` formatting can re-introduce unescaped HTML from the substitution values; use `ERB::Util.html_escape` (XSS, CWE-79). |

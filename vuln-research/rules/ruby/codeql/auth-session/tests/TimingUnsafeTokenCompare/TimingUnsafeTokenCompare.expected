@@ -1,0 +1,3 @@
+| token_compare_fixtures.rb:10:7:10:21 | ... == ... | Credential comparison using `==` is vulnerable to timing attacks; use ActiveSupport::SecurityUtils.secure_compare or Rack::Utils.secure_compare instead. |
+| token_compare_fixtures.rb:19:5:19:34 | ... == ... | Credential comparison using `==` is vulnerable to timing attacks; use ActiveSupport::SecurityUtils.secure_compare or Rack::Utils.secure_compare instead. |
+| token_compare_fixtures.rb:26:5:26:25 | ... != ... | Credential comparison using `!=` is vulnerable to timing attacks; use ActiveSupport::SecurityUtils.secure_compare or Rack::Utils.secure_compare instead. |

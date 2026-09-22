@@ -1,0 +1,279 @@
+# vuln-research fetch budgets seed (component #4 — intelligent fetching)
+#
+# Per-phase caps for how much prior context the orchestrator folds into a round.
+# Fetch SELECTION is a DETERMINISTIC PRIORITY ORDER (a SQL rank, see priority_order
+# below), truncated at a per-phase budget — so the same DB state always yields the
+# same fetched set, and the only tuning surface is these knobs (no code change).
+#
+# Unlike scoring.yml, these rows are NOT seeded into a DB table — there is no
+# fetch-budget schema object. They are operational config the orchestrator reads
+# at round entry / phase entry to bound its parameterized fetch queries (the
+# ten-query ancestry walk in references/v2/round-feedforward.md § 2 and the
+# per-phase context loads). Tunable both inter-workflow (edit here) and
+# intra-workflow (the orchestrator may scale caps by effort_tier mid-run).
+#
+# token_budget is a soft ceiling: once a phase's accumulated fetched-row token
+# estimate crosses it, lower-priority rows are dropped even if their row_cap was
+# not reached. row_caps are hard per-source limits applied before the token cut.
+
+# ----------------------------------------------------------------
+# Global deterministic fetch priority (highest value first). The orchestrator
+# fills a phase's budget by walking this order; ties broken by the ORDER BY in
+# each source's fetch query (recurrence/rank_score DESC, then id ASC for
+# stability). This is the "deterministic priority ORDER" the spec mandates.
+# ----------------------------------------------------------------
+priority_order:
+  - reusable_observations       # dead_end / invariant / blind_spot — suppress cleared paths, target holes
+  - reproduced_bypasses         # reproduced defense breaks — re-seed critical functions and bypass lanes
+  - refutations                 # prior refuted candidates + needs_attention sightings — don't re-hunt; cheaper than any positive candidate
+  - fuzz_resume_artifacts       # retained corpus/checkpoints/frontiers — resume dynamic testing, don't cold-start
+  - prior_slice_coverage        # already-walked / deferred slices — skip repeats, target open edges
+  - tier1_critical_functions
+  - kept_sp_raw_factors         # §2a(7): suspicious-point raw factor rows kept from prior rounds — re-rank without re-running
+  - findings_above_recurrence_bar
+  - methodology_blindspots      # §2a(9): open methodology_blind_spots from prior rounds (v_methodology_blindspots_ranked) — feed Phase 1.6 lanes
+  - promising_lanes             # §2a(10): open promising_lanes from prior rounds (v_promising_lanes_ranked) — static-analysis leads as candidate lanes; below blind-spots, above chunks
+  - top_chunks_by_acceptance
+
+# Findings are fetched only when their recurrence prior clears this bar, so a
+# round is not flooded with one-off candidates. Expressed against the normalized
+# factor_recurrence_prior (0..1); 0.0 = fetch all, raise to suppress noise.
+recurrence_bar: 0.0
+
+# ----------------------------------------------------------------
+# Per-phase budgets. Phase keys match the orchestration phases in
+# commands/vuln-swarm.md. A phase absent here inherits `default`.
+# row_caps key off the priority_order source names above.
+# ----------------------------------------------------------------
+phases:
+  default:
+    token_budget: 8000
+    row_caps:
+      reusable_observations: 40
+      reproduced_bypasses: 20
+      refutations: 30          # known negatives are cheap certainty
+      fuzz_resume_artifacts: 20
+      prior_slice_coverage: 30
+      tier1_critical_functions: 25
+      kept_sp_raw_factors: 20
+      findings_above_recurrence_bar: 30
+      methodology_blindspots: 15
+      promising_lanes: 15
+      top_chunks_by_acceptance: 15
+
+  # Round-entry ancestry fetch (round-feedforward § 2) — the richest load; seeds
+  # planning with the prior round's whole frontier.
+  round_entry:
+    token_budget: 16000
+    row_caps:
+      reusable_observations: 80
+      reproduced_bypasses: 60
+      refutations: 80          # full ancestry of refuted candidates + needs_attention
+      fuzz_resume_artifacts: 60
+      prior_slice_coverage: 80
+      tier1_critical_functions: 50
+      kept_sp_raw_factors: 50
+      findings_above_recurrence_bar: 60
+      methodology_blindspots: 40
+      promising_lanes: 40
+      top_chunks_by_acceptance: 25
+
+  # Phase 0 decompose/plan — needs CFs + blind spots, fewer findings/chunks.
+  phase0_plan:
+    token_budget: 10000
+    row_caps:
+      reusable_observations: 60
+      reproduced_bypasses: 40
+      refutations: 40          # cheap de-dup before planning
+      fuzz_resume_artifacts: 30
+      prior_slice_coverage: 50
+      tier1_critical_functions: 40
+      kept_sp_raw_factors: 30
+      findings_above_recurrence_bar: 20
+      methodology_blindspots: 20
+      promising_lanes: 20
+      top_chunks_by_acceptance: 20
+
+  # Phase 0.75 bypass hunt — leans on the bypass catalogue chunks + prior bypass observations.
+  phase0_75_bypass:
+    token_budget: 12000
+    row_caps:
+      reusable_observations: 50
+      reproduced_bypasses: 80
+      refutations: 30          # suppress refuted bypass candidates
+      fuzz_resume_artifacts: 20
+      prior_slice_coverage: 20
+      tier1_critical_functions: 30
+      kept_sp_raw_factors: 15
+      findings_above_recurrence_bar: 15
+      methodology_blindspots: 10
+      promising_lanes: 10
+      top_chunks_by_acceptance: 40
+
+  # Critical-function hunt — recurrence prior + call edges dominate; chunks minimal.
+  critical_function_hunt:
+    token_budget: 10000
+    row_caps:
+      reusable_observations: 40
+      reproduced_bypasses: 50
+      refutations: 30          # suppress re-hunting refuted CF candidates
+      fuzz_resume_artifacts: 20
+      prior_slice_coverage: 40
+      tier1_critical_functions: 50
+      kept_sp_raw_factors: 25
+      findings_above_recurrence_bar: 40
+      methodology_blindspots: 10
+      promising_lanes: 10
+      top_chunks_by_acceptance: 10
+
+  # Forward/backward data-flow lanes — slice coverage + CFs; light on chunks.
+  dataflow_lanes:
+    token_budget: 9000
+    row_caps:
+      reusable_observations: 50
+      reproduced_bypasses: 30
+      refutations: 25          # suppress re-tracing refuted taint paths
+      fuzz_resume_artifacts: 20
+      prior_slice_coverage: 80
+      tier1_critical_functions: 40
+      kept_sp_raw_factors: 20
+      findings_above_recurrence_bar: 25
+      methodology_blindspots: 10
+      promising_lanes: 10
+      top_chunks_by_acceptance: 10
+
+  # Phase 1.5 fuzzing — resume retained corpus/frontier/checkpoints first.
+  phase1_5_fuzz:
+    token_budget: 12000
+    row_caps:
+      reusable_observations: 30
+      reproduced_bypasses: 20
+      refutations: 20          # avoid re-fuzzing already-refuted entry points
+      fuzz_resume_artifacts: 80
+      prior_slice_coverage: 30
+      tier1_critical_functions: 25
+      kept_sp_raw_factors: 15
+      findings_above_recurrence_bar: 15
+      methodology_blindspots: 10
+      promising_lanes: 10
+      top_chunks_by_acceptance: 10
+
+  # Phase 1.6 methodology sweep — meta-pass lanes need the run's coverage residue.
+  # Sized to give blindspot lanes enough signal without re-flooding with findings.
+  phase1_6_blindspot:
+    token_budget: 10000
+    row_caps:
+      reusable_observations: 60
+      reproduced_bypasses: 20
+      refutations: 20          # suppress already-closed paths
+      fuzz_resume_artifacts: 30  # frontier residue — what fuzzing didn't finish
+      prior_slice_coverage: 60   # open blind-spot methods from cpg_coverage
+      tier1_critical_functions: 20
+      kept_sp_raw_factors: 40    # sp factors drive the gap critique
+      findings_above_recurrence_bar: 10
+      methodology_blindspots: 60 # prior-round open directions — the whole point
+      promising_lanes: 30        # prior-round static-analysis leads — secondary to blind-spots in the meta pass
+      top_chunks_by_acceptance: 10
+
+  # Phase L-1 Prior-Art Intake (C1, migration 0026) — runs BEFORE Phase 0; leans on
+  # external prior art (CVEs + writeups), thin on prior-round residue. promising_lanes here
+  # is the DISTILLATION target ceiling (rows the lane EMITS this phase), reusing the same knob.
+  phase_l1_prior_art:
+    token_budget: 8000
+    row_caps:
+      reusable_observations: 20
+      reproduced_bypasses: 10
+      refutations: 20
+      fuzz_resume_artifacts: 0
+      prior_slice_coverage: 0
+      tier1_critical_functions: 10
+      kept_sp_raw_factors: 0
+      findings_above_recurrence_bar: 10
+      methodology_blindspots: 10
+      promising_lanes: 20        # prior-art distillation target ceiling (rows emitted this phase)
+      top_chunks_by_acceptance: 15
+
+  # Phase 1.7 Overlooked-Lane Self-Audit (C2, migration 0028) — runs after the blind-spot
+  # sweep; needs the full coverage residue + the unpromoted promising_lanes set. The
+  # promising_lanes row_cap here is ALSO the in-run spawn cap (× tier multiplier) — NO
+  # separate constant (see references/methodology/overlooked-lane-audit-lane.md).
+  phase1_7_self_audit:
+    token_budget: 10000
+    row_caps:
+      reusable_observations: 40
+      reproduced_bypasses: 20
+      refutations: 20
+      fuzz_resume_artifacts: 20
+      prior_slice_coverage: 40
+      tier1_critical_functions: 20
+      kept_sp_raw_factors: 30
+      findings_above_recurrence_bar: 20
+      methodology_blindspots: 40 # read the Phase 1.6 output as the 4th triple-reference signal
+      promising_lanes: 30        # fetch the unpromoted set AND the in-run spawn cap (× tier)
+      top_chunks_by_acceptance: 10
+
+# ----------------------------------------------------------------
+# Effort-tier multipliers applied to every row_cap and token_budget above, so
+# LOW/MEDIUM/DEEP scale the same budgets rather than duplicating them (matches
+# the round-feedforward tier-gating table). DEEP = full budgets.
+# ----------------------------------------------------------------
+tier_multipliers:
+  low: 0.4
+  medium: 0.7
+  deep: 1.0
+
+# ----------------------------------------------------------------
+# Lane weight tiers — RAM-aware concurrency, NOT a token budget.
+# Swarm fan-out is bounded by HOST MEMORY, not the model's context. Each lane is
+# classified by the process weight it spawns; the orchestrator caps the number of
+# concurrent lanes per tier accordingly. A DEEP run was OOM-killed when 10
+# concurrent Opus agents launched under one parallel() barrier (the Joern JVM is
+# the heaviest tenant); the fix was sequential batches of 2 HEAVY lanes. Default
+# HEAVY to sequential small batches; widen MEDIUM/LIGHT only after HEAVY drains.
+# Mirrors the SKILL.md "RAM-aware concurrency" doctrine table.
+# ----------------------------------------------------------------
+lane_weights:
+  # HEAVY: each lane spawns its own JVM / large process. Cap concurrency to 2;
+  # prefer sequential small batches.
+  # NOTE: any new lane that spawns a JVM or equivalent large native process
+  # MUST be added here before it can be scheduled.
+  heavy:
+    max_concurrent: 2
+    lanes:
+      - forward_slice_lane            # Joern / CPG (own JVM)
+      - backward_sink_lane            # Joern / CPG (own JVM)
+      - critical_function_dataflow_lane  # Joern / CPG (own JVM)
+      - cpg_coverage                  # Joern / CPG (own JVM) — NON-MANDATORY but still HEAVY
+      - boundary_fuzz_lane            # Jazzer / AFL++ / libFuzzer
+      - isolation_fuzz_lane           # isolation fuzzing
+      - concolic_bypass_lane          # KLEE / SymCC concolic
+  # MEDIUM: large-fetch LLM lanes (big context loads, full module fan-out).
+  medium:
+    max_concurrent: 6
+    lanes:
+      - defense_base_lane
+      - defense_context_verification_lane
+      - html_sanitizer_bypass_lane
+      - llm_seed_corpus_lane_a
+      - llm_seed_corpus_lane_b
+      - methodology_blindspot_lane_a  # large context load: full run coverage residue
+      - methodology_blindspot_lane_b  # large context load: full run coverage residue
+      - logic_guard_bypass_lane       # large-context analytic: enumerates all authz paths
+  # LIGHT: thin LLM lanes / short queries — higher fan-out is fine.
+  light:
+    max_concurrent: 12
+    lanes:
+      - preliminary_enumeration_lane
+      - prior_art_intake_lane         # Phase L-1: thin LLM coordinator over CVE/writeup intake (network I/O, not a heavy process)
+      - overlooked_lane_audit_lane    # Phase 1.7: thin meta-lane over the DB triple reference
+      - autoload_seed_lane
+      - autoload_expand_lane
+      - report_critic
+      # Perpetual Loop lanes reuse existing Hunt/Confirm agents; classify at the
+      # weight of the agents they spawn (HEAVY for executive when it drives Confirm,
+      # but the wrapper lanes themselves are LIGHT coordinators). Schedule the
+      # sub-agents they spawn under their own tier caps.
+      - perpetual_dmn_generate
+      - perpetual_salience_promote
+      - perpetual_executive_pursue
+      - perpetual_ledger_learn

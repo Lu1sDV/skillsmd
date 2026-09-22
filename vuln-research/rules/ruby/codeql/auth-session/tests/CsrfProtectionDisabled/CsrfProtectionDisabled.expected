@@ -1,0 +1,4 @@
+| csrf_controllers.rb:5:3:5:47 | call to skip_before_action | CSRF protection is disabled by skipping verify_authenticity_token; remove the skip on state-changing controllers. |
+| csrf_controllers.rb:11:3:11:47 | call to skip_before_filter | CSRF protection is disabled by skipping verify_authenticity_token; remove the skip on state-changing controllers. |
+| csrf_controllers.rb:17:3:17:42 | call to protect_from_forgery | CSRF protection is weakened by protect_from_forgery with: :null_session; use with: :exception to reject forged requests. |
+| csrf_controllers.rb:23:3:23:25 | call to skip_forgery_protection | CSRF protection is disabled by skip_forgery_protection; remove it or scope it tightly to safe actions. |

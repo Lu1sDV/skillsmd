@@ -1,5 +1,7 @@
 # Python Sinks
 
+> **Depth**: comprehensive — 95+ niche sinks, full citation blocks, CPython internals coverage, CTF/sandbox-escape lane. Last reviewed: 2026-04-29.
+
 > **Scope**: This catalog covers well-known Python sinks **and** niche, non-obvious sinks that are frequently ignored in security audits. The latter are annotated with `[NICHE]` and include real CTF references, CVEs, and exploitation caveats.
 >
 > **Version focus**: Python 3.x unless otherwise noted.
@@ -104,13 +106,6 @@ help.__globals__["__builtins__"]["__import__"]("os").system("sh")
 ```
 
 ---
-
-## Deserialization — Well-Known
-
-`pickle.loads()`, `pickle.load()`, `shelve.open()`, `yaml.load()` (without `Loader=SafeLoader`), `yaml.unsafe_load()`, `jsonpickle.decode()`, `dill.loads()`, `cloudpickle.loads()`, `marshal.loads()`
-
-## Deserialization — Niche / Hidden
-
 
 ## Deserialization — Well-Known
 
@@ -253,52 +248,6 @@ copy.deepcopy(root)
 
 ## SSTI — Niche / Hidden
 
-
-### Pickle `BUILD` Opcode UAF (gh-143638, 2026)
-**Risk**: Re-entrant `__setitem__` during unpickling clears the stack, dropping the instance under construction.
-
-```json
-{
-  "sink_id": "DESER-003",
-  "category": "DESER",
-  "title": "Pickle BUILD opcode UAF via re-entrant __setitem__ during object construction",
-  "severity": "critical",
-  "affected_versions": [
-    "3.14-dev"
-  ],
-  "sources": [
-    {
-      "type": "github_issue",
-      "url": "https://github.com/python/cpython/issues/143638",
-      "title": "Pickle BUILD Opcode UAF",
-      "author": "python/cpython",
-      "date": "2026-01-01",
-      "gh_issue": "python/cpython#143638",
-      "verified": false,
-      "tags": [
-        "pickle",
-        "deserialization",
-        "uaf",
-        "re-entrancy"
-      ],
-      "archived_path": "sources/DESER-003/github.com_python_cpython_issues_143638.md"
-    }
-  ],
-  "related_issues": [
-    "python/cpython#143638"
-  ],
-  "mitigation": "Do not allow container mutation callbacks to run while pickle BUILD operates on in-construction instances.",
-  "confidence": "likely"
-}
-```
-
-
-## SSTI — Well-Known
-
-`jinja2.Template(user_input).render()`, `mako.template.Template(user_input).render()`, `tornado.template.Template(user_input).generate()`, `django.template.Template(user_input)`
-
-## SSTI — Niche / Hidden
-
 ### Jinja2 `|safe` Filter on Tainted Data
 **Risk**: Marking user input as "safe" bypasses auto-escaping. Also applies to Django `mark_safe()`, `markupsafe.Markup()`.
 
@@ -354,13 +303,6 @@ Markup(user_input)  # XSS if rendered in template
 ```
 
 ---
-
-## File Operations — Well-Known
-
-`open()`, `os.path.*`, `shutil.*`, `tempfile.*`, `zipfile.extractall()` (zip slip), `tarfile.extractall()` (tar slip), `os.symlink()`, `pathlib.Path`
-
-## File Operations — Niche / Hidden
-
 
 ## File Operations — Well-Known
 
@@ -551,104 +493,6 @@ data = pkgutil.get_data('package', '../../../etc/passwd')
 
 ## SSRF — Niche / Hidden
 
-
-### `tempfile.TemporaryDirectory` Symlink Dereference (CVE-2023-6597)
-**Risk**: Cleanup dereferences symlinks, potentially chmodding files outside the temp directory.
-
-```json
-{
-  "sink_id": "FILE-005",
-  "category": "FILE",
-  "title": "`TemporaryDirectory` Cleanup Symlink Dereference",
-  "severity": "medium",
-  "affected_versions": [
-    "3.8",
-    "3.9",
-    "3.10",
-    "3.11",
-    "3.12"
-  ],
-  "sources": [
-    {
-      "type": "cve",
-      "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-6597",
-      "title": "CVE-2023-6597: tempfile.TemporaryDirectory symlink dereference during cleanup",
-      "author": "NVD",
-      "date": "2024-01-18",
-      "cve_id": "CVE-2023-6597",
-      "verified": false,
-      "tags": [
-        "tempfile",
-        "symlink",
-        "cleanup",
-        "filesystem"
-      ],
-      "archived_path": "sources/FILE-005/nvd.nist.gov_vuln_detail_CVE-2023-6597.md"
-    }
-  ],
-  "related_cves": [
-    "CVE-2023-6597"
-  ],
-  "related_issues": [],
-  "mitigation": "Upgrade to a patched CPython release and avoid cleanup on attacker-controlled directory trees.",
-  "confidence": "confirmed"
-}
-```
-
----
-
-## Async / Generator Sinks
-
-
-### `os.path.commonprefix` — Deprecated Due to Security
-**Risk**: Returns common prefix character-by-character, not path-aware. Used insecurely in tarfile filters.
-
-```python
-os.path.commonprefix(['/home/user/file', '/home/user/subdir'])
-# Returns '/home/user/s' — not a valid path!
-```
-**Ref**: Seth Larson deprecation proposal.
-
-```json
-{
-  "sink_id": "FILE-006",
-  "category": "FILE",
-  "title": "`os.path.commonprefix` Path Validation Footgun",
-  "severity": "medium",
-  "affected_versions": [
-    "3.x"
-  ],
-  "sources": [
-    {
-      "type": "blog_post",
-      "url": "https://sethmlarson.dev/security/deprecating-os-path-commonprefix-python-3-13",
-      "title": "Deprecating os.path.commonprefix in Python 3.13 for security reasons",
-      "author": "Seth Michael Larson",
-      "date": "2024-06-01",
-      "verified": false,
-      "tags": [
-        "commonprefix",
-        "path-traversal",
-        "tarfile",
-        "deprecation"
-      ],
-      "archived_path": "sources/FILE-006/sethmlarson.dev_security_deprecating-os-path-commonprefix-python-3.md"
-    }
-  ],
-  "related_cves": [],
-  "related_issues": [],
-  "mitigation": "Use os.path.commonpath or canonicalized path comparisons instead of commonprefix.",
-  "confidence": "likely"
-}
-```
-
-
-## SSRF — Well-Known
-
-`requests.get/post()`, `urllib.request.urlopen()`, `http.client.HTTPConnection`, `httpx`, `aiohttp.ClientSession`, `urllib3`
-
-## SSRF — Niche / Hidden
-
 ### `urllib.parse` — Multiple CVEs
 **Risk**: URL parsing edge cases bypass SSRF filters, cause CRLF injection, or cache poisoning.
 
@@ -703,11 +547,202 @@ parse_qsl("a=1;b=2&c=3")
 
 ---
 
-## SQLi — Well-Known
+## Async / Generator Sinks
 
-`cursor.execute(f"...")`, `sqlalchemy.text()`, Django `raw()`, `extra()`, `RawSQL()`
+### Asyncio `Condition.notify()` vs `Task.cancel()` (gh-112202)
+**Risk**: Lost wakeups causing deadlock/starvation.
 
-## SQLi — Niche / Hidden
+```json
+{
+  "sink_id": "ASYNC-001",
+  "category": "ASYNC",
+  "title": "Asyncio `Condition.notify()` vs `Task.cancel()` Lost Wakeup",
+  "severity": "medium",
+  "affected_versions": [
+    "3.11+",
+    "3.12+"
+  ],
+  "sources": [
+    {
+      "type": "github_issue",
+      "url": "https://github.com/python/cpython/issues/112202",
+      "title": "asyncio Condition notify race with Task.cancel causes lost wakeups",
+      "author": "python/cpython",
+      "date": "2023-11-01",
+      "gh_issue": "python/cpython#112202",
+      "verified": false,
+      "tags": [
+        "asyncio",
+        "condition",
+        "cancel",
+        "deadlock"
+      ],
+      "archived_path": "sources/ASYNC-001/github.com_python_cpython_issues_112202.md"
+    }
+  ],
+  "related_cves": [],
+  "related_issues": [
+    "python/cpython#112202"
+  ],
+  "mitigation": "Treat cancellation around condition waits as unsafe and add higher-level retry or acknowledgement logic.",
+  "confidence": "likely"
+}
+```
+
+
+### asyncio.Task UAF via `__getattribute__` (gh-126080, gh-126138)
+**Risk**: Missing incref on `task->task_context` before `call_soon` allows corruption.
+
+```python
+class Break:
+    def __str__(self):
+        raise RuntimeError("break")
+
+async def target(): pass
+async def main():
+    task = asyncio.create_task(target())
+    to_uaf = Break()
+    task.__init__(target(), loop=asyncio.get_event_loop(), name=Break())
+    del to_uaf
+    await task  # segfault
+```
+
+```json
+{
+  "sink_id": "ASYNC-002",
+  "category": "ASYNC",
+  "title": "asyncio.Task Use-After-Free via Re-entrant Attribute Access",
+  "severity": "high",
+  "affected_versions": [
+    "3.13+"
+  ],
+  "sources": [
+    {
+      "type": "github_issue",
+      "url": "https://github.com/python/cpython/issues/126080",
+      "title": "asyncio.Task missing incref can cause UAF during call_soon path",
+      "author": "python/cpython",
+      "date": "2024-10-01",
+      "gh_issue": "python/cpython#126080",
+      "verified": false,
+      "tags": [
+        "asyncio",
+        "task",
+        "uaf",
+        "segfault"
+      ],
+      "archived_path": "sources/ASYNC-002/github.com_python_cpython_issues_126080.md"
+    },
+    {
+      "type": "github_issue",
+      "url": "https://github.com/python/cpython/issues/126138",
+      "title": "Follow-up fix for asyncio.Task task_context lifetime bug",
+      "author": "python/cpython",
+      "date": "2024-10-01",
+      "gh_issue": "python/cpython#126138",
+      "verified": false,
+      "tags": [
+        "asyncio",
+        "task",
+        "lifetime",
+        "call_soon"
+      ],
+      "archived_path": "sources/ASYNC-002/github.com_python_cpython_issues_126138.md"
+    }
+  ],
+  "related_cves": [],
+  "related_issues": [
+    "python/cpython#126080",
+    "python/cpython#126138"
+  ],
+  "mitigation": "Avoid reinitializing live Task objects and upgrade to versions with corrected reference management.",
+  "confidence": "likely"
+}
+```
+
+
+### Async Generator Concurrent Access Race (gh-117881)
+**Risk**: `async_gen_athrow_throw` doesn't check `ag_running_async`, allowing concurrent access.
+
+```json
+{
+  "sink_id": "ASYNC-003",
+  "category": "ASYNC",
+  "title": "Async Generator Concurrent Access Race",
+  "severity": "medium",
+  "affected_versions": [
+    "3.11+",
+    "3.12+",
+    "3.13+"
+  ],
+  "sources": [
+    {
+      "type": "github_issue",
+      "url": "https://github.com/python/cpython/issues/117881",
+      "title": "async_gen_athrow_throw missing ag_running_async check",
+      "author": "python/cpython",
+      "date": "2024-04-01",
+      "gh_issue": "python/cpython#117881",
+      "verified": false,
+      "tags": [
+        "async-generator",
+        "race-condition",
+        "athrow",
+        "asyncio"
+      ],
+      "archived_path": "sources/ASYNC-003/github.com_python_cpython_issues_117881.md"
+    }
+  ],
+  "related_cves": [],
+  "related_issues": [
+    "python/cpython#117881"
+  ],
+  "mitigation": "Do not access a single async generator concurrently from multiple tasks until patched.",
+  "confidence": "likely"
+}
+```
+
+
+### asyncio.Timeout(0) Swallows Prior Cancellation (gh-134471)
+**Risk**: `asyncio.timeout(0)` catches and processes a prior unrelated cancellation.
+
+```json
+{
+  "sink_id": "ASYNC-004",
+  "category": "ASYNC",
+  "title": "`asyncio.timeout(0)` Swallows Prior Cancellation",
+  "severity": "medium",
+  "affected_versions": [
+    "3.11+",
+    "3.12+",
+    "3.13+"
+  ],
+  "sources": [
+    {
+      "type": "github_issue",
+      "url": "https://github.com/python/cpython/issues/134471",
+      "title": "asyncio.timeout(0) can process an unrelated prior cancellation",
+      "author": "python/cpython",
+      "date": "2025-06-01",
+      "gh_issue": "python/cpython#134471",
+      "verified": false,
+      "tags": [
+        "asyncio",
+        "timeout",
+        "cancellation",
+        "logic-bug"
+      ],
+      "archived_path": "sources/ASYNC-004/github.com_python_cpython_issues_134471.md"
+    }
+  ],
+  "related_cves": [],
+  "related_issues": [
+    "python/cpython#134471"
+  ],
+  "mitigation": "Avoid zero-duration timeouts as cancellation boundaries in security-sensitive async control flow.",
+  "confidence": "likely"
+}
+```
 
 
 ## SQLi — Well-Known
@@ -762,9 +797,6 @@ query = f"SELECT * FROM [{malicious_name}]"
 ```
 
 ---
-
-## Class Confusion / Type System Sinks
-
 
 ## Class Confusion / Type System Sinks
 
@@ -1207,50 +1239,6 @@ isinstance(BadClass(), Incomplete)  # True!
 
 ## Prototype / Property Injection Sinks
 
-
-### RestrictedPython Bypass via `try/except*` (CVE-2025-22153, 2025)
-**Risk**: Type confusion in CPython's exception group handling bypasses sandbox restrictions.
-
-```json
-{
-  "sink_id": "CLASS-010",
-  "category": "CLASS",
-  "title": "RestrictedPython sandbox bypass via try/except* exception-group type confusion",
-  "severity": "high",
-  "affected_versions": [
-    "3.11+",
-    "3.12+",
-    "3.13+"
-  ],
-  "sources": [
-    {
-      "type": "cve",
-      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-22153",
-      "title": "CVE-2025-22153",
-      "author": "NVD",
-      "date": "2025-01-01",
-      "cve_id": "CVE-2025-22153",
-      "verified": false,
-      "tags": [
-        "restrictedpython",
-        "sandbox-bypass",
-        "exception-groups",
-        "type-confusion"
-      ],
-      "archived_path": "sources/CLASS-010/nvd.nist.gov_vuln_detail_CVE-2025-22153.md"
-    }
-  ],
-  "related_cves": [
-    "CVE-2025-22153"
-  ],
-  "mitigation": "Treat exception-group control flow as a separate audit surface and avoid assuming AST-level filters cover except* semantics.",
-  "confidence": "likely"
-}
-```
-
-
-## Prototype / Property Injection Sinks
-
 ### `object.__setattr__` Bypass
 **Risk**: Custom `__setattr__` implementations can be bypassed by calling `object.__setattr__` directly.
 
@@ -1421,9 +1409,6 @@ vars(controlled_object)['__class__'] = MaliciousClass
 
 ## Race Condition Sinks
 
-
-## Race Condition Sinks
-
 ### `filelock` Symlink TOCTOU (CVE-2025-68146)
 **Risk**: `SoftFileLock._acquire()` checks permissions then opens the file — attacker can drop a symlink in between.
 
@@ -1553,252 +1538,6 @@ os.symlink(victim_file, lock_path)
 }
 ```
 
-
-## Async / Generator Sinks
-
-### Asyncio `Condition.notify()` vs `Task.cancel()` (gh-112202)
-**Risk**: Lost wakeups causing deadlock/starvation.
-
-```json
-{
-  "sink_id": "ASYNC-001",
-  "category": "ASYNC",
-  "title": "Asyncio `Condition.notify()` vs `Task.cancel()` Lost Wakeup",
-  "severity": "medium",
-  "affected_versions": [
-    "3.11+",
-    "3.12+"
-  ],
-  "sources": [
-    {
-      "type": "github_issue",
-      "url": "https://github.com/python/cpython/issues/112202",
-      "title": "asyncio Condition notify race with Task.cancel causes lost wakeups",
-      "author": "python/cpython",
-      "date": "2023-11-01",
-      "gh_issue": "python/cpython#112202",
-      "verified": false,
-      "tags": [
-        "asyncio",
-        "condition",
-        "cancel",
-        "deadlock"
-      ],
-      "archived_path": "sources/ASYNC-001/github.com_python_cpython_issues_112202.md"
-    }
-  ],
-  "related_cves": [],
-  "related_issues": [
-    "python/cpython#112202"
-  ],
-  "mitigation": "Treat cancellation around condition waits as unsafe and add higher-level retry or acknowledgement logic.",
-  "confidence": "likely"
-}
-```
-
-
-### asyncio.Task UAF via `__getattribute__` (gh-126080, gh-126138)
-**Risk**: Missing incref on `task->task_context` before `call_soon` allows corruption.
-
-```python
-class Break:
-    def __str__(self):
-        raise RuntimeError("break")
-
-async def target(): pass
-async def main():
-    task = asyncio.create_task(target())
-    to_uaf = Break()
-    task.__init__(target(), loop=asyncio.get_event_loop(), name=Break())
-    del to_uaf
-    await task  # segfault
-```
-
-```json
-{
-  "sink_id": "ASYNC-002",
-  "category": "ASYNC",
-  "title": "asyncio.Task Use-After-Free via Re-entrant Attribute Access",
-  "severity": "high",
-  "affected_versions": [
-    "3.13+"
-  ],
-  "sources": [
-    {
-      "type": "github_issue",
-      "url": "https://github.com/python/cpython/issues/126080",
-      "title": "asyncio.Task missing incref can cause UAF during call_soon path",
-      "author": "python/cpython",
-      "date": "2024-10-01",
-      "gh_issue": "python/cpython#126080",
-      "verified": false,
-      "tags": [
-        "asyncio",
-        "task",
-        "uaf",
-        "segfault"
-      ],
-      "archived_path": "sources/ASYNC-002/github.com_python_cpython_issues_126080.md"
-    },
-    {
-      "type": "github_issue",
-      "url": "https://github.com/python/cpython/issues/126138",
-      "title": "Follow-up fix for asyncio.Task task_context lifetime bug",
-      "author": "python/cpython",
-      "date": "2024-10-01",
-      "gh_issue": "python/cpython#126138",
-      "verified": false,
-      "tags": [
-        "asyncio",
-        "task",
-        "lifetime",
-        "call_soon"
-      ],
-      "archived_path": "sources/ASYNC-002/github.com_python_cpython_issues_126138.md"
-    }
-  ],
-  "related_cves": [],
-  "related_issues": [
-    "python/cpython#126080",
-    "python/cpython#126138"
-  ],
-  "mitigation": "Avoid reinitializing live Task objects and upgrade to versions with corrected reference management.",
-  "confidence": "likely"
-}
-```
-
-
-### Async Generator Concurrent Access Race (gh-117881)
-**Risk**: `async_gen_athrow_throw` doesn't check `ag_running_async`, allowing concurrent access.
-
-```json
-{
-  "sink_id": "ASYNC-003",
-  "category": "ASYNC",
-  "title": "Async Generator Concurrent Access Race",
-  "severity": "medium",
-  "affected_versions": [
-    "3.11+",
-    "3.12+",
-    "3.13+"
-  ],
-  "sources": [
-    {
-      "type": "github_issue",
-      "url": "https://github.com/python/cpython/issues/117881",
-      "title": "async_gen_athrow_throw missing ag_running_async check",
-      "author": "python/cpython",
-      "date": "2024-04-01",
-      "gh_issue": "python/cpython#117881",
-      "verified": false,
-      "tags": [
-        "async-generator",
-        "race-condition",
-        "athrow",
-        "asyncio"
-      ],
-      "archived_path": "sources/ASYNC-003/github.com_python_cpython_issues_117881.md"
-    }
-  ],
-  "related_cves": [],
-  "related_issues": [
-    "python/cpython#117881"
-  ],
-  "mitigation": "Do not access a single async generator concurrently from multiple tasks until patched.",
-  "confidence": "likely"
-}
-```
-
-
-### asyncio.Timeout(0) Swallows Prior Cancellation (gh-134471)
-**Risk**: `asyncio.timeout(0)` catches and processes a prior unrelated cancellation.
-
-```json
-{
-  "sink_id": "ASYNC-004",
-  "category": "ASYNC",
-  "title": "`asyncio.timeout(0)` Swallows Prior Cancellation",
-  "severity": "medium",
-  "affected_versions": [
-    "3.11+",
-    "3.12+",
-    "3.13+"
-  ],
-  "sources": [
-    {
-      "type": "github_issue",
-      "url": "https://github.com/python/cpython/issues/134471",
-      "title": "asyncio.timeout(0) can process an unrelated prior cancellation",
-      "author": "python/cpython",
-      "date": "2025-06-01",
-      "gh_issue": "python/cpython#134471",
-      "verified": false,
-      "tags": [
-        "asyncio",
-        "timeout",
-        "cancellation",
-        "logic-bug"
-      ],
-      "archived_path": "sources/ASYNC-004/github.com_python_cpython_issues_134471.md"
-    }
-  ],
-  "related_cves": [],
-  "related_issues": [
-    "python/cpython#134471"
-  ],
-  "mitigation": "Avoid zero-duration timeouts as cancellation boundaries in security-sensitive async control flow.",
-  "confidence": "likely"
-}
-```
-
-
-## CTF / Sandbox Escape Sinks
-
-### Generator Frame `gi_frame` / Coroutine Frame `cr_frame` Bypass
-**Risk**: Generator/coroutine frames expose `f_globals`/`f_builtins` for sandbox escape.
-
-```python
-foo.bar().gi_frame.f_globals['__builtins__'].exec('raise RuntimeError("hacked")')
-```
-**Ref**: simpleeval Issue #138.
-
-```json
-{
-  "sink_id": "CTF-001",
-  "category": "CTF",
-  "title": "Generator and Coroutine Frame Globals Bypass",
-  "severity": "high",
-  "affected_versions": [
-    "3.x"
-  ],
-  "sources": [
-    {
-      "type": "github_issue",
-      "url": "https://github.com/danthedeckie/simpleeval/issues/138",
-      "title": "Sandbox bypass via gi_frame/cr_frame access in simpleeval",
-      "author": "danthedeckie/simpleeval",
-      "date": "2024-01-01",
-      "gh_issue": "danthedeckie/simpleeval#138",
-      "verified": false,
-      "tags": [
-        "sandbox-escape",
-        "frame-object",
-        "gi_frame",
-        "cr_frame"
-      ],
-      "archived_path": "sources/CTF-001/github.com_danthedeckie_simpleeval_issues_138.md"
-    }
-  ],
-  "related_cves": [],
-  "related_issues": [
-    "danthedeckie/simpleeval#138"
-  ],
-  "mitigation": "For sandboxes, block frame-object access entirely rather than only removing builtins.",
-  "confidence": "likely"
-}
-```
-
----
 
 ## CTF / Sandbox Escape Sinks
 
@@ -2315,166 +2054,6 @@ codeobj = types.CodeType(0, 0, 0, 0, 0, 0, code, (), (), (), '', '', '', 0, b'',
 
 ---
 
-## Stdlib Hidden Sinks
-
-
-### Re-entrant UAF in `_PyEval_LoadName` (gh-143236, 2025)
-**Risk**: `frame.clear()` inside `__eq__` frees locals dict during name resolution.
-
-```json
-{
-  "sink_id": "CPYTHON-003",
-  "category": "CPYTHON",
-  "title": "Re-entrant UAF in _PyEval_LoadName via frame.clear() during __eq__",
-  "severity": "critical",
-  "affected_versions": [
-    "3.14-dev"
-  ],
-  "sources": [
-    {
-      "type": "github_issue",
-      "url": "https://github.com/python/cpython/issues/143236",
-      "title": "Re-entrant UAF in _PyEval_LoadName",
-      "author": "python/cpython",
-      "date": "2025-01-01",
-      "gh_issue": "python/cpython#143236",
-      "verified": false,
-      "tags": [
-        "cpython",
-        "uaf",
-        "re-entrancy",
-        "name-resolution"
-      ],
-      "archived_path": "sources/CPYTHON-003/github.com_python_cpython_issues_143236.md"
-    }
-  ],
-  "related_issues": [
-    "python/cpython#143236"
-  ],
-  "mitigation": "Avoid invoking attacker-controlled equality or frame mutation during borrowed-pointer name resolution.",
-  "confidence": "likely"
-}
-```
-
-
-### Global Buffer Overflow in `bytearray_extend` (gh-143003, 2025)
-**Risk**: `__length_hint__` returning 0 causes reuse of shared static buffer.
-
-```json
-{
-  "sink_id": "CPYTHON-004",
-  "category": "CPYTHON",
-  "title": "Global buffer overflow in bytearray_extend via crafted __length_hint__",
-  "severity": "critical",
-  "affected_versions": [
-    "3.14-dev"
-  ],
-  "sources": [
-    {
-      "type": "github_issue",
-      "url": "https://github.com/python/cpython/issues/143003",
-      "title": "Global Buffer Overflow in bytearray_extend",
-      "author": "python/cpython",
-      "date": "2025-01-01",
-      "gh_issue": "python/cpython#143003",
-      "verified": false,
-      "tags": [
-        "cpython",
-        "buffer-overflow",
-        "bytearray",
-        "length-hint"
-      ],
-      "archived_path": "sources/CPYTHON-004/github.com_python_cpython_issues_143003.md"
-    }
-  ],
-  "related_issues": [
-    "python/cpython#143003"
-  ],
-  "mitigation": "Treat length hints as untrusted and avoid shared-buffer reuse without strict bounds validation.",
-  "confidence": "likely"
-}
-```
-
-
-### `gc.get_objects` Corrupts GC in Free-Threaded Python (gh-125859, 2024)
-**Risk**: New class of bugs unique to Python 3.13t (`--disable-gil`).
-
-```json
-{
-  "sink_id": "CPYTHON-005",
-  "category": "CPYTHON",
-  "title": "gc.get_objects corruption in free-threaded Python GC state",
-  "severity": "high",
-  "affected_versions": [
-    "3.13t"
-  ],
-  "sources": [
-    {
-      "type": "github_issue",
-      "url": "https://github.com/python/cpython/issues/125859",
-      "title": "gc.get_objects Corrupts GC in Free-Threaded Python",
-      "author": "python/cpython",
-      "date": "2024-01-01",
-      "gh_issue": "python/cpython#125859",
-      "verified": false,
-      "tags": [
-        "cpython",
-        "gc",
-        "free-threaded",
-        "disable-gil"
-      ],
-      "archived_path": "sources/CPYTHON-005/github.com_python_cpython_issues_125859.md"
-    }
-  ],
-  "related_issues": [
-    "python/cpython#125859"
-  ],
-  "mitigation": "Avoid exposing or iterating mutable GC internals without thread-safe synchronization in free-threaded builds.",
-  "confidence": "likely"
-}
-```
-
-
-### `STORE_ATTR_WITH_HINT` UAF via `__del__` (gh-123083, 2024)
-**Risk**: `Py_XDECREF` triggers `__del__` which mutates the dict being modified.
-
-```json
-{
-  "sink_id": "CPYTHON-006",
-  "category": "CPYTHON",
-  "title": "STORE_ATTR_WITH_HINT UAF via re-entrant __del__ during DECREF",
-  "severity": "critical",
-  "affected_versions": [
-    "3.13-dev"
-  ],
-  "sources": [
-    {
-      "type": "github_issue",
-      "url": "https://github.com/python/cpython/issues/123083",
-      "title": "STORE_ATTR_WITH_HINT UAF via __del__",
-      "author": "python/cpython",
-      "date": "2024-01-01",
-      "gh_issue": "python/cpython#123083",
-      "verified": false,
-      "tags": [
-        "cpython",
-        "uaf",
-        "__del__",
-        "dict-mutation"
-      ],
-      "archived_path": "sources/CPYTHON-006/github.com_python_cpython_issues_123083.md"
-    }
-  ],
-  "related_issues": [
-    "python/cpython#123083"
-  ],
-  "mitigation": "Do not keep stale dictionary pointers across decref paths that can invoke user destructors.",
-  "confidence": "likely"
-}
-```
-
----
-
 ## Cross-Cutting Patterns
 
 1. **Re-entrancy dominates**: Every major recent CPython bug involves `__del__`/`__eq__`/`__getattribute__` callbacks running while C code holds stale pointers.
@@ -2483,13 +2062,6 @@ codeobj = types.CodeType(0, 0, 0, 0, 0, 0, code, (), (), (), '', '', '', 0, b'',
 4. **Type confusion at the file format level**: ZIP polyglots show that Python's file type detection (magic bytes) can be exploited.
 
 ---
-
-## Extended Niche Sinks — Round 2 Research (2026-04-29)
-
-The following sinks were discovered by navigating entire blog posts, CTF writeups, and security research papers in depth. Each includes full code examples and exact source citations.
-
----
-
 
 ## Extended Niche Sinks — Round 2 Research (2026-04-29)
 
@@ -4697,15 +4269,6 @@ Well done flag : flag-THE_REAL_FLAG
 }
 ```
 
-
-## Cross-Cutting Patterns
-
-1. **Re-entrancy dominates**: Every major recent CPython bug involves `__del__`/`__eq__`/`__getattribute__` callbacks running while C code holds stale pointers.
-2. **AST gaps**: Decorators, subscripts (`[]`), and augmented assignments (`+=`) compile to different AST nodes than direct calls. Sandboxes inspecting only `ast.Call` miss these paths.
-3. **Free-threaded Python (3.13t)** introduces concurrency bugs unknown to mainstream Python.
-4. **Type confusion at the file format level**: ZIP polyglots show that Python's file type detection (magic bytes) can be exploited.
-
----
 
 ## Niche Research Lanes
 

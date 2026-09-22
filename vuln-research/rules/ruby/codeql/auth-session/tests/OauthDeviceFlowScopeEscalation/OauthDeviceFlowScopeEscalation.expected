@@ -1,0 +1,1 @@
+| fixture.rb:6:3:12:5 | call to class_eval | Doorkeeper::DeviceAuthorizationGrant::OAuth::DeviceAuthorizationRequest is patched via class_eval but no scope-validation `validate` call is present; device authorization can issue tokens for unapproved scopes. Add `validate :scopes_match_configured` (or equivalent) to enforce scope checks. |

@@ -1,0 +1,2 @@
+| blocked_user.rb:7:12:7:72 | call to with_reset_password_token | User looked up for authentication via with_reset_password_token without a `blocked?` check in this method; blocked users may authenticate or reset credentials. |
+| blocked_user.rb:16:12:16:45 | call to find_by_login | User looked up for authentication via find_by_login without a `blocked?` check in this method; blocked users may authenticate or reset credentials. |

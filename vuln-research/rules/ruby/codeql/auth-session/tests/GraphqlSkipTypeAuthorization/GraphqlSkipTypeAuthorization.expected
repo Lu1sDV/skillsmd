@@ -1,0 +1,2 @@
+| fixture.rb:10:5:12:46 | call to field | GraphQL field declaration uses skip_type_authorization: with a non-empty scope list, bypassing type-level authorization; remove skip_type_authorization: to restore the permission check. |
+| fixture.rb:15:5:17:48 | call to field | GraphQL field declaration uses skip_type_authorization: with a non-empty scope list, bypassing type-level authorization; remove skip_type_authorization: to restore the permission check. |

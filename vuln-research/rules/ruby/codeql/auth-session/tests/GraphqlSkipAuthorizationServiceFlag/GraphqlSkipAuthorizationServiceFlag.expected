@@ -1,0 +1,1 @@
+| graphql_skip_authorization.rb:10:27:13:11 | call to merge | Hash merge passes `skip_authorization: true` to a service call, disabling the service's `can?` authorization guard. Remove `skip_authorization: true` from the params. |

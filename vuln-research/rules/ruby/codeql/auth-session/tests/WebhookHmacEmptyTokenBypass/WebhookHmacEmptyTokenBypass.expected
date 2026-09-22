@@ -1,0 +1,2 @@
+| WebhookHmacEmptyTokenBypass.rb:14:32:14:104 | call to hexdigest | HMAC digest computed without a prior blank/empty check on the secret token; an empty token makes the signature trivially forgeable. Add `return false if token.blank?` before this call. |
+| WebhookHmacEmptyTokenBypass.rb:20:16:20:66 | call to digest | HMAC digest computed without a prior blank/empty check on the secret token; an empty token makes the signature trivially forgeable. Add `return false if token.blank?` before this call. |

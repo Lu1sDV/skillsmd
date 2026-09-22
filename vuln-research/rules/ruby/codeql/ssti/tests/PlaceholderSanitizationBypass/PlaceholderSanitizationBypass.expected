@@ -1,0 +1,1 @@
+| fixture.rb:11:9:11:50 | call to escapeHTML | CGI.escapeHTML applied to the result of .call() without prior HTML tag sanitization; the replacement value may contain HTML tags that survive entity encoding. Strip tags with a sanitization filter before calling CGI.escapeHTML. |

@@ -1,0 +1,1 @@
+| fixture.rb:5:3:16:5 | HttpResponseParser | HTTParty::Parser subclass 'HttpResponseParser' overrides `json` (with size/depth limits) but does not override `parse`. A server returning JSON with a non-JSON Content-Type bypasses this check, enabling unbounded memory allocation. Override `parse` to route JSON-like bodies through `json` regardless of Content-Type. |

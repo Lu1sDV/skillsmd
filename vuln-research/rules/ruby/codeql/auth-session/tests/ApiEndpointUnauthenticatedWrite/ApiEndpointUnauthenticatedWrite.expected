@@ -1,0 +1,3 @@
+| grape_api.rb:19:5:21:7 | call to post | Grape API endpoint `post` in class `MarkdownUploads` has no `before { authenticate_non_get! }` hook; unauthenticated callers can reach this write endpoint (CWE-306). |
+| grape_api.rb:24:5:26:7 | call to post | Grape API endpoint `post` in class `MarkdownUploads` has no `before { authenticate_non_get! }` hook; unauthenticated callers can reach this write endpoint (CWE-306). |
+| grape_api.rb:29:5:31:7 | call to delete | Grape API endpoint `delete` in class `MarkdownUploads` has no `before { authenticate_non_get! }` hook; unauthenticated callers can reach this write endpoint (CWE-306). |

@@ -1,0 +1,1 @@
+| upload_controllers.rb:9:21:9:46 | call to tempfile | Uploaded file accessed via .tempfile in this controller without a size-limiting before_action; add a before_action that checks params[:file].tempfile.size against a maximum. |

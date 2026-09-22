@@ -1,0 +1,2 @@
+| SamlRelaystateOpenRedirect.rb:11:7:11:46 | call to safe_redirect_path | SAML RelayState passed to redirect sink without origin validation; call valid_gitlab_initiated_saml_request? before following params['RelayState'] to prevent open redirect. |
+| SamlRelaystateOpenRedirect.rb:16:7:16:45 | call to safe_redirect_path | SAML RelayState passed to redirect sink without origin validation; call valid_gitlab_initiated_saml_request? before following params['RelayState'] to prevent open redirect. |

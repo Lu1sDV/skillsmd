@@ -17,3 +17,22 @@ oracle/gitlab-msg-corpus.json
 oracle/gitlab-sec-candidates.json
 oracle/message-security-commits.jsonl
 oracle/analysis/
+oracle/regate-input.json
+oracle/nonruby-analysis-input.json
+tools/__pycache__/
+
+# Per-commit fix diffs (81MB, regenerable via tools/fetch_diffs.py once the
+# GitLab clone has blobs; content is already embedded in security-commits.parquet).
+oracle/commit-diffs.jsonl
+
+# SZZ introducer attribution — contains real author names/emails (PII).
+# Kept local for skill-gap analysis; NOT published. Regenerate via tools/szz.py.
+oracle/szz-attribution.jsonl
+oracle/szz-introducers.json
+# Per-row blame attribution over the cvss parquet (PII). Regenerate via tools/szz_parquet.py.
+oracle/szz-parquet-attribution.jsonl
+# cvss parquet carries SZZ author names/emails in szz_* columns (PII) -> local-only.
+oracle/security-commits-cvss.parquet
+
+# CodeQL before/after validation harness outputs (derived from PII parquet) — local-only.
+oracle/validation/

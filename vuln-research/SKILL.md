@@ -1,68 +1,70 @@
 ---
 name: vuln-research
-version: 0.5.0
+version: 0.41.0
 description: >
-  Use when performing vulnerability research, security auditing, code analysis,
-  bug bounty hunting, CTF challenges, penetration testing, or exploit development.
-  Covers source audit across 30+ attack domains, sink analysis for 12 languages,
-  SAST/DAST integration, vulnerability chaining, and proof-of-concept development.
-  Triggers: vuln assessment, pentest, bug bounty, security audit, find vulns,
-  exploit, ctf, code audit, hunt bugs, 0-day, SAST, DAST, taint analysis,
-  CI/CD pipeline security, GitHub Actions, Terraform, Traefik,
-  n8n workflow, OpenTelemetry, supply chain attack, agent sweep,
-  find me zero days, sweep everything, automated vuln discovery,
-  binary analysis, reverse engineering, firmware audit, kernel driver,
-  memory corruption, ROP, fuzzing harness, patch diffing.
+  Use when performing security-focused vulnerability research, bug bounty hunting,
+  penetration testing, or exploit development on a specific target codebase or binary.
+  Covers taint analysis across 30+ attack domains, sink analysis for 10+ languages,
+  SAST/DAST integration, agent sweep, DuckDB-persisted phase pipeline, fuzzing harness,
+  stateful fuzzing, directed symbolic execution, history-driven fuzzing, FuzzGPT,
+  generate edge-case test programs, differential / metamorphic oracle,
+  continuous / perpetual / self-firing
+  vuln discovery, keep hunting until N high/critical confirmed, patch diffing,
+  supply chain attack surface, find me zero days, sweep everything,
+  memory corruption, ROP, firmware audit, kernel driver.
+  SKIP for: generic code reading, writing new features, refactoring,
+  single-diff review without a security goal, or infra config not being audited
+  for vulnerabilities — use code-review or a general coding skill instead.
 ---
 
 # Vulnerability Research
 
-## v2 Phase Architecture (DuckDB-Persisted Pipeline)
+## v2 Pipeline — Summary
 
-The skill now runs an explicit, DuckDB-persisted phase pipeline. Every artifact (sources, sinks, defenses, slices, agent steps, findings, refutations, audit outcomes, critic notes, knowledge chunks, defense bypasses) lives in a single DuckDB database keyed by stable hashes. Schema: [`db/schema.sql`](db/schema.sql). Forward-only migrations: [`db/migrations/`](db/migrations/). Oversize payload sidecars: [`db/sidecars/`](db/sidecars/) (any payload > 16 KB stored on disk, referenced by `payload_sidecar_path`).
+The skill runs a DuckDB-persisted phase pipeline (Phases L-1 → 0 → 0.5 → 0.75 → 1.3 → 1.4 → 1 → 1.5 → 1.6 → 1.7 → 2 → 3 → 4 → 5). Every artifact — sources, sinks, defenses, critical functions, slices, findings, refutations, observations, bypasses, fuzz runs, suspicious points, round ledger — lives in a single DuckDB database keyed by stable hashes; the orchestrator is the **sole writer** (single-writer rule); swarm agents emit row-shaped JSON to an in-memory queue flushed per-lane (not per-phase) so a crash loses at most one in-flight lane. DuckDB is the sole source of truth — subagents MUST NOT write files. Schema: [`db/schema.sql`](db/schema.sql); migrations: [`db/migrations/`](db/migrations/). Run `vrdb selftest` before Phase 0. Load [`references/v2/pipeline-architecture.md`](references/v2/pipeline-architecture.md) for the full v2 pipeline spec, schema gates, row-shape invariants, workspace convention, harness put/fetch contract, environment preflight, bypass doctrine, and per-phase doctrine paragraphs.
 
-| Phase | Name | Writers | What it produces |
-|---|---|---|---|
-| **0** | Decompose | orchestrator | `sources`, `sinks`, `defenses`, `phase0_priorities`, `intended_feature_classification` (Semgrep + LLM batch) |
-| **0.5** | Plan | orchestrator | `input_slices`, scheduled `agent_steps` |
-| **1** | Hunt | swarm → queue → orchestrator flush | `gr_findings` (status=candidate) |
-| **2** | Confirm | swarm → queue → orchestrator flush | `gr_findings` status updates + `refutations` |
-| **3** | Bypass-Hunt | swarm → queue → orchestrator flush | `defense_bypasses` + cascade triggers |
-| **4** | Proof | swarm → queue → orchestrator flush | `gr_findings.payload`, `audit_outcomes` |
-| **5** | Report | critic agent → orchestrator | `critic_findings`; final report |
+### Mandatory DEEP Lane Roster (18 lanes)
 
-**Single-writer rule (load-bearing).** The orchestrator is the only DuckDB writer. Swarm agents emit row-shaped JSON events to an in-memory queue; the orchestrator flushes per phase under one transaction. This preserves idempotency (every NK has a UNIQUE constraint, every payload row has a stable hash) and lets re-runs over the same `commit_sha` update rather than duplicate.
+| Phase | Lane name (exact `strategies.name`) | Doc |
+|---|---|---|
+| Phase L-1 Prior-Art Intake | `prior_art_intake_lane` | `references/methodology/prior-art-intake-lane.md` |
+| Phase 0 Decompose | `preliminary_enumeration_lane` | `references/methodology/preliminary-enumeration-lane.md` |
+| Phase 1 Hunt | `forward_slice_lane` | |
+| Phase 1 Hunt | `backward_sink_lane` | |
+| Phase 1 Hunt | `critical_function_dataflow_lane` | |
+| Phase 0.75 Defense Pre-Break | `defense_base_lane` | |
+| Phase 0.75 Defense Pre-Break | `defense_context_verification_lane` | |
+| Phase 0.75 Defense Pre-Break | `isolation_fuzz_lane` | |
+| Phase 0.75 Defense Pre-Break | `html_sanitizer_bypass_lane` | `references/methodology/html-sanitizer-bypass-lane.md` |
+| Phase 0.75 Defense Pre-Break | `concolic_bypass_lane` (C/C++/Java) | `references/methodology/cpp-java-concolic-bypass-lane.md` |
+| Phase 1.4 Seed-Corpus Gen | `llm_seed_corpus_lane_a` | `references/v2/seed-corpus-generation-lane.md` |
+| Phase 1.4 Seed-Corpus Gen | `llm_seed_corpus_lane_b` | `references/v2/seed-corpus-generation-lane.md` |
+| Phase 1.4 History-Driven Fuzzing | `fuzzgpt_history_lane` | `references/v2/fuzzgpt-history-lane.md` + `references/methodology/fuzzgpt-history-driven-lane.md` |
+| Phase 1.5 Fuzzing | `boundary_fuzz_lane` | |
+| Phase 1.6 Methodology Blind-Spot | `methodology_blindspot_lane_a` | `references/v2/methodology-blindspot-sweep.md` |
+| Phase 1.6 Methodology Blind-Spot | `methodology_blindspot_lane_b` | `references/v2/methodology-blindspot-sweep.md` |
+| Phase 1.7 Overlooked-Lane Self-Audit | `overlooked_lane_audit_lane` | `references/methodology/overlooked-lane-audit-lane.md` |
+| Phase 5 Report | `report_critic` | |
 
-**Doctrine for S2 bypass-hunting: "there always is a bypass."** A bypass lane reporting `exhausted` MUST have evidence it iterated every applicable corpus family on the target defense_type. The LLM in Stage 2 acts as a corpus-anchored oversight agent — it may not detach from the known-bypass corpus to invent novel categories. Categories, payload patterns, and `parsed_logic_json` triggers live in a **global DuckDB catalogue** (`bypasses` table), separate from per-target audit DBs. Source data: [`db/catalogue/bypasses.json`](db/catalogue/bypasses.json); schema + loader: [`db/catalogue/schema.sql`](db/catalogue/schema.sql) + [`db/catalogue/load.sql`](db/catalogue/load.sql); tiered fetch protocol that keeps payloads out of agent context until attempt time: [`references/bypass-catalogue.md`](references/bypass-catalogue.md).
+Every lane must execute at least one `agent_steps` row OR record a documented skip (`status='skipped'` + non-empty `termination_reason`). A lane with zero steps and no skip is a BLOCKING `gate_status='MISSING'`. Phase 0.5 materializes the roster by inserting one `scheduled` row per lane. DEEP completion requires `vrdb gate --db PATH --tier deep` (exits non-zero on any hard-red signal across the completion gate views — process: `v_phase_status`, `v_coverage`, `v_lane_coverage`, `v_observation_coverage`; plus the outcome-justification gates: `v_promotion_coverage`, `v_justification_coverage`, `v_sp_oracle_coverage`, `v_invariant_promotion_coverage`). All gate queries must be scoped to the active `round_id` — a lane that ran in round 1 does not satisfy the gate for round 2.
 
-**REPORT critic.** Every confirmed finding goes through three checks (comprehension / eligibility / attack-scenario). WARNING is stored structurally; CRITICAL blocks the report. Rubric with worked examples: [`references/critic-rubric.md`](references/critic-rubric.md).
+**Phase 1.7 — Overlooked-Lane Self-Audit (DEEP).** Runs after Phase 1.6 (Methodology Blind-Spot). A DEEP-only mandatory meta-lane that self-questions for overlooked or erroneously-ignored high-yield lanes via a DB-grounded triple reference (active strategies, prior round_ledger, `methodology_blind_spots`). Always emits at least one `promising_lanes` row. Cap-gated-spawns the top-N overlooked lanes this run; overflow feeds forward to the next round via `v_promising_lanes_ranked`. See `references/methodology/overlooked-lane-audit-lane.md`.
 
-**Canonical name:** the findings table is `gr_findings`; `confirmed_vulns` is a view selecting `confirmation_status = 'confirmed'`.
+**Phase 1.4 — Seed generation (DEEP).** Three mandatory lanes feed the Phase 1.5 `boundary_fuzz_lane` corpus and coexist: the dual `llm_seed_corpus_lane_a/b` (synthesize seeds from input-format families — `references/v2/seed-corpus-generation-lane.md`) and `fuzzgpt_history_lane` (**history-driven LLM fuzzing**, FuzzGPT / Deng et al., arXiv:2304.02014 — mine the target's own bug history into edge-case `seed_initial` programs; plus a target-agnostic differential-oracle sub-mode whose divergences are quarantined as `differential_divergence`/`unconfirmed` findings kept out of the severity rankings until triage shows a security path). See `references/v2/fuzzgpt-history-lane.md` + `references/methodology/fuzzgpt-history-driven-lane.md` + the preserved paper set `references/fuzzgpt/`; the RT example selector is `engines/fuzzgpt-retrieval/`.
 
-> Full spec lives in `.omc/specs/deep-interview-vr-v2-consolidated.md`. Do not inline the schema here — link to `db/schema.sql`.
+> Load [`references/v2/pipeline-architecture.md`](references/v2/pipeline-architecture.md) for the full v2 pipeline spec, schema, gates, and row-shape invariants.
 
 ---
-
-> **Think Beyond This Document**
->
-> This skill is a structured starting point, not a ceiling. Real-world vulnerabilities
-> and CTF challenges routinely defy checklists. The best exploit chains come from
-> creative, unconstrained thinking — connecting behaviors the developer never imagined
-> interacting. **Do not limit your research to what is cataloged here.** Treat every
-> assumption as testable, every "impossible" path as merely untested, and every
-> protection as a puzzle to be solved. The most dangerous bugs live in the gaps
-> between documented categories. Read the code. Understand the runtime. Invent your
-> own attack classes.
 
 ## Philosophy
 
 Find the bug. Prove the bug. Chain the bug. Every claim needs a working exploit or it's noise.
 
-**The Bitter Lesson, applied:** Vulnerability research has historically been 20% computer science and 80% solving giant, domain-specific jigsaw puzzles — learning font internals, memory allocator behavior, protocol edge cases. LLMs are universal jigsaw solvers. They encode the complete library of documented bug classes and vast correlations across source code. The structured methodology below channels this capability; the Agent Sweep mode unleashes it. Use both.
+**The Bitter Lesson, applied:** Vulnerability research has historically been 20% computer science and 80% solving giant, domain-specific jigsaw puzzles — learning font internals, memory allocator behavior, protocol edge cases. LLMs are universal jigsaw solvers. They encode documented bug classes and correlations across source code. The structured methodology below channels this capability; the Agent Sweep mode unleashes it. Use both.
 
-**Attention was load-bearing:** Much of the Internet's security has rested not on sound engineering alone, but on the scarcity of elite attention. Most code has never been seriously audited. Agent sweep economics change this — you can aim at everything, not just high-status targets.
+**Attention was load-bearing:** Security rested on scarce elite attention, not sound engineering alone. Most code has never been seriously audited. Agent sweep economics change this — you can aim at everything, not just high-status targets.
 
-The phases below are a **recommended workflow, not a rigid sequence** — skip, reorder, or loop as the target demands. The sink catalogs are **representative, not exhaustive** — new frameworks ship new dangerous functions daily. If you find a sink not listed here, it's still a sink. The checklists exist to prevent forgetting the obvious, not to replace thinking.
+The phases below are a **recommended workflow, not a rigid sequence** — skip, reorder, or loop as the target demands. **DEEP-tier exception:** that latitude governs ordering/looping and the LOW/MEDIUM tiers — it does NOT license silently dropping a DEEP lane. For a DEEP audit the lane roster is mandatory: each required lane must either run or record a documented skip (see *Mandatory DEEP Lane Roster* below). The sink catalogs are **representative, not exhaustive** — new frameworks ship new dangerous functions daily. If you find a sink not listed here, it's still a sink. The checklists exist to prevent forgetting the obvious, not to replace thinking.
 
 ---
 
@@ -72,19 +74,33 @@ Choose a mode based on scope and intent before starting work:
 
 | Mode | When to Use | Flow |
 |------|-------------|------|
-| **Targeted Audit** | Scoped engagement, specific components, compliance-driven | Phase 0 → Phases 1–7 below (existing workflow) |
-| **Agent Sweep** | Full source tree available, maximize coverage, "find me everything" | Phase 0 → Phases S1–S4 → feeds into Phase 6 (Chaining) + Phase 7 (Gate) |
-| **Hybrid** | Best of both — sweep for discovery, structured for exploitation | Phase 0 → Agent Sweep for discovery → Crown Jewel Mapping on findings → Phases 5–7 |
-| **Swarm Pipeline** | Multi-agent SAST with effort tiers; invoked via `/vuln-swarm <path> [--effort=low\|medium\|deep] [--freeform=detached\|grounded]` | See `references/swarm-pipeline.md` § Effort Tiers. LOW = Phase 0 + freeform + Phase 3-lite; MEDIUM = full module fan-out + 2-check; DEEP = static-first lane + slice-type fan-out + 3-check + cross-slice reconciliation. |
+| **Targeted Audit** | Scoped engagement, specific components, compliance-driven | L0 → L1–L7 below (existing workflow) |
+| **Agent Sweep** | Full source tree available, maximize coverage, "find me everything" | L0 → S1–S4 → feeds into L6 (Chaining) + L7 (Gate) |
+| **Hybrid** | Best of both — sweep for discovery, structured for exploitation | L0 → Agent Sweep for discovery → Crown Jewel Mapping (L2) on findings → L5–L7 |
+| **Swarm Pipeline** | Multi-agent SAST with effort tiers; invoked via `/vuln-swarm <path> [--effort=low\|medium\|deep] [--freeform=detached\|grounded]` | See `references/methodology/swarm-pipeline.md` § Effort Tiers. LOW = L0 + freeform + L3-lite; MEDIUM = full module fan-out + 2-check; DEEP = static-first lane + slice-type fan-out + 3-check + cross-slice reconciliation. |
+| **Perpetual Loop** | Continuous self-firing discovery — "keep hunting until N high/critical confirmed", unbounded, target-agnostic | divergent generate (Agent Sweep S2 / Phase 1 Hunt in DMN register) → Salience promote (top-K by `promise`) → Executive pursue (Phase 2 Confirm + L5 PoC) → Confirm → Learn (`round_ledger` feed-forward) → self-fire (ScheduleWakeup). See *Perpetual Loop Mode* below. |
 
-**Phase 0 (Latest Commits Security Review)** runs first in every mode whenever the target has git history — a brownfield-only recency pass executed by a single focused subagent before the broader audit begins. See Phase 0 below.
+### Mode → Tier → v2 Pipeline Binding
 
-**Weakness Registry** under v2 is DuckDB-native — `gr_findings` rows with `confirmation_status = 'confirmed'` ARE the registry. Cross-audit priors are recovered by querying the per-target DuckDB on `target_id` (or `targets.repo_url`) before Phase 1; `variant-of` / `enables` / `co-occurs-with` edges are derived at read time from `(finding_kind, sink_id, source_id)` overlap rather than persisted as a second store. The legacy on-disk JSONL+Markdown registry at `<target>/.vuln-registry/` is read-only fallback: load `references/weakness-registry.md` only when working with a pre-v2 target that still has that directory.
+Each mode maps to an effort tier and determines whether the v2 DuckDB phase pipeline and DEEP completion gate apply:
+
+| Mode | Effort Tier | v2 DuckDB Pipeline | Phases Run | DEEP Gate + Mandatory Roster |
+|------|-------------|-------------------|------------|------------------------------|
+| **Targeted Audit** | LOW | No — L-lane workflow only; DuckDB optional for persistence | L0–L7 | No |
+| **Agent Sweep** | MEDIUM | Partial — S1–S4 discovery; DuckDB for dedup/feed-forward | S1–S4 + L6–L7 | No |
+| **Hybrid** | MEDIUM | Partial — sweep discovery feeds structured L-lane phases | S1–S4 + L2 + L5–L7 | No |
+| **Swarm Pipeline (LOW/MEDIUM)** | LOW / MEDIUM | Yes — v2 phases 0–5 with LOW/MEDIUM lane subset | Phase 0–5 (tier-gated phases skipped at LOW) | No (MEDIUM: v_phase_status advisory; LOW: not applied) |
+| **Swarm Pipeline (DEEP)** | DEEP | Yes — full v2 phase pipeline, all 18 mandatory lanes | Phase 0–5 including L-1, 0.75, 1.4, 1.5, 1.6, 1.7 | **Yes** — `vrdb gate` must pass before declaring done |
+| **Perpetual Loop** | DEEP (per round) | Yes — each round runs the v2 pipeline; `round_ledger` tracks rounds | Phase 0–5 per round (0.75/1.4/1.5/1.6 included per round) | Yes per round — gate applied at each round's completion |
 
 **Default routing:**
 - "audit this codebase" / "find vulns" (unscoped) → **Hybrid**
 - "check the auth module" / specific component → **Targeted Audit**
 - "find me zero days" / "sweep everything" → **Agent Sweep**
+
+**Phase L0 (Latest Commits Security Review)** runs first in every mode whenever the target has git history — a brownfield recency pass before the broader audit. See Phase L0 below.
+
+**Weakness Registry** under v2 is DuckDB-native and DuckDB-only — `gr_findings` rows with `confirmation_status = 'confirmed'` ARE the registry. Cross-audit priors are recovered by querying the per-target DuckDB on `target_id` (or `targets.repo_url`) before Phase L1; `variant-of` / `enables` / `co-occurs-with` edges are derived at read time from `(finding_kind, sink_id, source_id)` overlap rather than persisted as a second store.
 
 ---
 
@@ -98,212 +114,142 @@ Use Grep/Glob for discovery (finding files, searching patterns). Use LSP for und
 
 Avoid raw whole-repo dumps; do not avoid local file context that affects exploitability.
 
+**Heavy-native tool launch cap (standing).** Every heavy-native tool launch — CPG builder (Joern), symbolizer, fuzzer, sanitizer/instrumented build — runs under a memory cap (`systemd-run MemoryMax`-style cgroup) with concurrency=1 and a `flock`. This is a standing skill rule, not a per-target lesson: the cap belongs in the tool-launch path so it is enforced rather than re-learned each campaign. The enforcing mechanism is the `vrdb run-tool` wrapper — route every heavy-native launch through it. An uncapped concurrent launch is the modal cause of OOM-kills that corrupt the DuckDB mid-run.
+
+---
+
+## Agent Model Routing
+
+One global routing rule, prepended to every lane prompt header:
+
+- **Analysis / triage / confirm / critic** lanes → the **strongest reasoning model** available. Severity judgment, refutation, DAG closure, consumer-harm reasoning, and the report critic are all analysis.
+- **Executor / recon / search** lanes → the **standard tier**. Shell execution, file enumeration, grep/glob discovery, and mechanical retrieval do not need the strongest model.
+- **Never the cheapest tier for security judgment** — a model that under-reasons a refutation or a reachability cap silently inflates the finding count.
+
+---
+
+## Standing Lane Contract
+
+Every lane prompt is **prepended with this 5-line contract** — it is boilerplate the agent actually reads, not advice buried in a reference. It replaces 18 per-lane copies with one source:
+
+1. **REFUTE-FIRST** — state the single fact that would kill each finding; a clean refutation is a result, not a failure. Hunt for the kill before defending the claim.
+2. **CONSUMER-OR-DEMOTE** — name the default-config component that reads / dispatches / trusts the tainted value and the harm it suffers; if no default-config consumer can be named, the finding auto-demotes to Observation. A sink reached is not a consumer harmed.
+3. **SEVERITY IS COMPUTED, NOT TYPED** — emit reachability, let Confirm rate; the bug class is only a ceiling, capped by reachability and build hardening. A server/process-crash claim is verified on the **real deployed surface** with process-liveness (the process the deployment exposes survives or dies), **never a bundled CLI client's exit code**.
+4. **MODEL** — run analysis / triage / confirm on the strongest reasoning model (see §Agent Model Routing).
+5. **FLUSH** — emit ≥1 observation this phase; route every dropped candidate to a row (dead_end / blind_spot / refuted), never silently delete it.
+
 ---
 
 ## Agent Sweep Mode (Phases S1–S4)
 
-> Load `references/agent-sweep.md` for full prompt templates, scoring rubrics, and integration details.
+> **Non-strict by design:** Agent Sweep is the unguarded discovery lane. Agents are file-anchored, not domain-anchored; they consider all bug classes; the catalog is a starting frame, not a fence. The guardrails are downstream — Phase 2 Confirm grounds in skill taxonomy, the five-gate doctrine + DAG closure + critic rubric apply before any finding promotes to `confirmed`. Open at the top, closed at the bottom.
 
-When the goal is maximum coverage across a full source tree, use file-iteration with independent verification instead of domain-partitioned analysis. This is the Carlini methodology adapted for Claude Code.
+When the goal is maximum coverage across a full source tree, use **file-iteration with independent verification** instead of domain-partitioned analysis (the Carlini methodology adapted for Claude Code). The phases are:
 
-### Phase S1: Source Tree Segmentation
+- **S1 Segmentation** — enumerate every source file (excluding vendored/generated), partition by directory, prioritize by Attention Deficit Score (Phase L2), include test files.
+- **S2 Discovery Loop** — spawn one parallel agent per file (or cluster) with a file-anchored, *not* domain-anchored prompt. Each agent considers all bug classes, follows imports, prefers LSP for symbol resolution, and emits `gr_findings` / `agent_observations` row events rather than writing files. Stochastic and parallelizable.
+- **S3 Verification Loop** — feed each queued candidate payload back through a **fresh, separate-context agent** that re-traces from scratch. Expected filtration ~40–60% surviving. For higher-confidence audits, upgrade to the **2-check variant** (RE-TRACE + JUDGE as two separate agent calls — separation is load-bearing) and optionally the **Structured JUDGE / DAG variant** (forces the closer to construct a closed source→sink DAG; if it can't close, it's a False Positive — no hedging). For high-value or ambiguous targets, optionally borrow the VulnLLM-R function-context strategy: distinguish **target functions** from **context functions**, retrieve callers/callees/call paths via CodeQL/CPG/LSP before judging, require a context-sufficiency check, and narrow final judgment to 2–5 plausible CWE candidates or benign.
+- **S4 Dedup, Cluster, Feed Forward** — dedup same-root-cause findings, cluster by bug class and component, feed surviving findings into Phase L6 (Chaining) and Phase L7 (Exploitability Gate). The sweep finds raw bugs; the L lanes score, chain, and prove them.
 
-1. **Enumerate** all source files — exclude vendored/generated code (`node_modules/`, `vendor/`, `dist/`, generated protobuf)
-2. **Partition** into work units by directory/module (not by attack domain — that's Targeted mode)
-3. **Prioritize** by Attention Deficit Score (see Phase 2 addition below) — least-examined, highest-exposure code first
-4. **Include test files** — they reveal expected invariants that may not be enforced
+> **Load `references/methodology/agent-sweep.md`** for: full S1 file-enumeration shell snippet + Attention Deficit scoring weights + batch-size strategy by codebase size; verbatim S2 discovery prompt template and execution strategy notes; full S3 verification prompt + per-bug-class filtration-rate priors + the 2-check and Structured JUDGE/DAG variant prompts; S4 dedup/cluster rules and DuckDB-native feed-forward semantics; binary/decompiled-code adaptation; Targeted-vs-Sweep tradeoff table and Hybrid workflow; tuning, re-sweep cadence, multi-pass strategy.
 
-### Phase S2: Discovery Loop
+---
 
-For each source file (or small cluster), spawn a parallel agent:
+## Perpetual Loop Mode
 
-> "You are performing a security audit. Find exploitable vulnerabilities starting from `${FILE}`. Consider all bug classes — memory corruption, injection, logic flaws, auth bypass, deserialization, race conditions, type confusion, integer mishandling. Trace inputs from this file's entry points through the program. Write findings to `${FILE}.vuln.md` with: vuln type, affected function, source→sink trace, exploitability assessment, suggested payload.
->
-> **Tooling:** Prefer LSP (`goToDefinition`, `findReferences`, `hover`) when available for symbol definitions, callers, and type info — exact resolution reduces same-name false positives from Grep text matches. Use Grep/Glob for discovery (locating files, searching patterns), then read the local file context needed for decorators, route registration, middleware, guards, module config, and dynamic dispatch."
+A self-firing, target-agnostic discovery loop (triple-network model: DMN → Salience →
+Executive) layered THIN over the existing engine — zero new tables, maximal reuse. One round:
+**divergent generate → Salience promote (top-K by `promise`) → Executive pursue → Confirm →
+Learn → self-fire**.
 
-**Design properties:**
-- **File-anchored, not domain-anchored** — each agent starts from a file, not "look for SQLi." The LLM's latent bug-class knowledge drives discovery, not a checklist
-- **Stochastic by construction** — different starting files produce different inference paths; running the same file twice may surface different bugs due to sampling
-- **Follow imports** — agents aren't limited to their starting file; the file is the *anchor* that seeds exploration direction
-- **Parallelizable** — agents are independent; scale linearly with compute
+- **DMN / Core (divergent register, the only psychedelic step):** runs the existing **Agent
+  Sweep S2 / Phase 1 Hunt** agents in an explicit divergent register — mandatory divergence,
+  cross-domain analogy, surfaced hunches, **and free re-litigation of refuted leads** when a
+  new angle/analogy/ledger signal justifies another look. *A round emitting only safe,
+  already-known candidates has malfunctioned.* Strategy `perpetual_dmn_generate`.
+- **Salience (sober):** ranks candidates by `promise = novelty × est_severity ×
+  reachability_prior × ledger_history_factor` and promotes top-K — read-time view
+  `v_promise_ranked` over existing columns, no stored score (the `v_*_ranked` precedent).
+  Strategy `perpetual_salience_promote`.
+- **Executive (sober):** **REUSES** the existing **Phase 2 five-gate Confirm** (refute-by-
+  default) + **L5 PoC constraints** (vanilla real PoC). No new confirm path.
+  Strategy `perpetual_executive_pursue`.
+- **Learn:** **IS** `round_ledger` + round feed-forward + `recurrence_counter` — per-class/
+  region hit-miss biases the next Core round (down-weight exhausted families, surface
+  under-explored regions). No new ledger construct. Strategy `perpetual_ledger_learn`.
 
-### Phase S3: Verification Loop
+The loop **self-fires across turns via `ScheduleWakeup`** and is **unbounded**: it runs until
+**N HIGH/CRIT confirmed** (default **N = 20**, overridable) or the user interrupts. No budget
+cap, no dry-exit auto-stop — dry rounds are reported as honest progress, not halts; ledger
+down-weighting is the only damper. Precision is held downstream by the unchanged Salience +
+five-gate Confirm — open at the top, closed at the bottom. Divergence is **Core-only**;
+Salience and Executive stay strictly convergent. The four `perpetual_*` strategies are
+**non-mandatory** (deliberately absent from `v_required_deep_lanes`, the `cpg_coverage`
+precedent), so normal DEEP audits never block on them. Full doctrine + promise factor
+estimation: **`references/methodology/perpetual-loop-mode.md`**.
 
-Feed each `.vuln.md` back through a **fresh agent** (not the discoverer — avoids confirmation bias):
-
-> "You received an inbound vulnerability report in `${FILE}.vuln.md`. Verify this is actually exploitable. Trace the source→sink path yourself. Confirm controllability. Identify defense layers that might block it. Classify: **Confirmed** / **Plausible-Needs-Dynamic** / **False Positive**.
->
-> **Tooling:** Prefer LSP (`goToDefinition`, `findReferences`, `hover`) when available to verify symbol definitions and callers. Use Grep/Glob for discovery, then read enough surrounding file context to confirm guards, framework wiring, and dynamic behavior."
-
-Expected filtration: ~40–60% of discovery findings survive verification.
-
-#### 2-check variant (higher-confidence audits)
-
-For audits that warrant stronger verification, upgrade the single-agent check to **two distinct checks executed as separate agent calls with separate prompts**. The two agents must not share a context window, and must not be told of each other's verdicts.
-
-1. **RE-TRACE** — an independent source→sink walk. The agent receives the finding's location and is asked: *does the path exist as claimed? Can the source be controlled? Does the taint survive the transforms?* The agent produces its own trace from scratch without trusting the report's.
-
-2. **JUDGE** — a semantic-correctness review. The agent receives the finding and its claimed root cause and is asked: *is the diagnosis correct? Is the bug class label accurate? Is the alleged data flow actually reachable in practice? Is the impact as stated, or over/under-claimed?*
-
-Combine the two verdicts:
-- **pass BOTH** → `Confirmed`
-- **pass ONE** → `Candidate` (flag the disagreement in the report)
-- **fail BOTH** → `False Positive`
-
-Keeping the checks as **separate agent calls with separate prompts** is load-bearing. A single agent asked both questions collapses them into one mental pass and loses the independence that gives 2-check its precision. The full richer treatment — including how this plugs into weighted scoring — is in `references/swarm-pipeline.md` § Weighted Scoring.
-
-**Structured JUDGE variant.** Instead of asking JUDGE "is this finding correct?" in free text, instruct it to build a DAG from scratch against the cited code: extract source nodes, build intermediate nodes with parent IDs and primitives, run the 12-pattern check, converge on a sink. A JUDGE pass that cannot close the graph from an untrusted source to a `verified_sink` is a **False Positive** verdict — no hedging. See `references/dag-reasoning.md` § "Phase S3 — Agent-Sweep Verification" for the exact prompt.
-
-### Phase S4: Dedup, Cluster, Feed Forward
-
-1. **Deduplicate** findings pointing to the same root cause from different starting files
-2. **Cluster** by bug class and affected component
-3. **Feed verified findings** into Phase 6 (Chaining) and Phase 7 (Exploitability Gate)
-4. The sweep finds the raw bugs; the existing methodology scores, chains, and proves them
+**Promising-lane feed-forward (side-output).** Any DuckDB-backed static-analysis lane (Phase 1 Hunt, Agent Sweep S2, Phase 0.75 code-reading, Phase L3/L4) MAY opportunistically emit a **promising lane** — a positive lead naming a concrete next-round investigation direction (e.g. *"custom template engine → SSTI-fuzz lane @ `render()`"*), distinct from a methodology blind-spot (gap) and a suspicious point (`vuln_class@region`). It is **feed-forward only** and **non-mandatory** (not in `v_required_deep_lanes`, no gate): the orchestrator flushes a `promising_lanes` row event, and the **next round picks open leads up first** via fetch (10) / `v_promising_lanes_ranked`. Doctrine: [`references/v2/pipeline-architecture.md`](references/v2/pipeline-architecture.md) (Promising-Lane Feed-Forward); schema: [`db/migrations/0025-promising-lanes.sql`](db/migrations/0025-promising-lanes.sql).
 
 ---
 
 ## Domain Reference Map
 
-Load references on-demand based on the active testing domain. **Do not load all files at once.**
-
-| Domain | Reference File | Load When |
-|--------|---------------|-----------|
-| SQLi, NoSQL, SSTI, CRLF, LDAP, XPath, LaTeX Injection, CSV Injection, XSLT Injection | `references/injection-attacks.md` | Testing injection vectors |
-| XSS, Prototype Pollution, CORS, CSTI, postMessage, DOM Clobbering, CSS Injection, Cookie Tossing | `references/client-side-attacks.md` | Testing client-side attacks |
-| XS-Leaks, Clickjacking, CSP Bypass, Browser Desync, HTML Smuggling, Reverse Tabnabbing | `references/browser-attacks.md` | Testing browser security model attacks |
-| RCE, SSRF, XXE, File Ops, Deserialization | `references/server-side-attacks.md` | Testing server-side attacks |
-| Auth, Access Control, OAuth, Logic, Race, Crypto | `references/auth-access-logic.md` | Testing auth & business logic |
-| Smuggling, Cache, WebSocket, GraphQL, DNS, Cloud, Encoding, ReDoS, HTML Smuggling, Prompt Injection | `references/protocol-infra-attacks.md` | Testing protocols & infrastructure |
-| CI/CD Pipelines, GitHub Actions, Supply Chain, Runner Security, Workflow Poisoning | `references/cicd-supply-chain.md` | Testing CI/CD and supply chain attacks |
-| n8n, Zapier, Make.com, Power Automate, iPaaS, Webhooks, Workflow RCE, Credential Theft | `references/automation-platform-attacks.md` | Testing automation/iPaaS platforms |
-| Traefik, Nginx, HAProxy, Reverse Proxy Bypass, Terraform State, Docker Socket, Container Escape | `references/infra-misconfig-attacks.md` | Testing infrastructure misconfigurations (proxy, IaC, containers) |
-| OpenTelemetry, Prometheus, Grafana, Log Pipelines, Telemetry Poisoning, Collector SSRF, Cardinality Bombs | `references/observability-telemetry-attacks.md` | Testing observability/monitoring infrastructure |
-| Sinks router + SAST/DAST rules | `references/sinks-catalog.md` | Code audit entry point — routes to per-language sink files |
-| PHP sinks | `references/sinks/php.md` | PHP code audit (exec, callbacks, type juggling, phar deser) |
-| Python sinks | `references/sinks/python.md` | Python code audit (exec, pickle, SSTI, subprocess) |
-| Node.js sinks | `references/sinks/javascript.md` | JS/Node code audit (child_process, prototype pollution) |
-| Java sinks | `references/sinks/java.md` | Java code audit (Runtime, JNDI, ysoserial, format-specific deser) |
-| **Scala sinks** | **`references/sinks/scala.md`** | **Scala code audit (ToolBox.eval, LazyList/TrieMap deser, Akka, Play, Slick/Doobie/Quill SQLi, Spark, effect systems, build system)** |
-| Ruby sinks | `references/sinks/ruby.md` | Ruby code audit (system/eval, Marshal, ActiveRecord) |
-| .NET sinks | `references/sinks/dotnet.md` | .NET code audit (Process.Start, BinaryFormatter, Json.NET) |
-| Systems sinks (Go/Rust/C/Elixir) | `references/sinks/systems.md` | Systems code audit (memory corruption, os/exec, ETF deser) |
-| Mobile sinks (Android/iOS) | `references/sinks/mobile.md` | Mobile code audit (WebView, intents, URL schemes) |
-| Scala sinks | `references/sinks/scala.md` | Scala code audit (ToolBox.eval, LazyList/TrieMap deser, Akka, Play, Slick/Doobie/Quill SQLi, Spark, effect systems, build system) |
-| Binary / RE / firmware / kernel: triage, static RE, fuzzing, memory-corruption classes, binary-level races, patch diffing, exploit primitives, mitigations | `references/binary-code-analysis.md` (thin index → `binary-triage-and-re.md`, `binary-bug-classes.md`, `binary-exploit-and-specialties.md`) | Target is a compiled binary, firmware image, kernel/driver, closed-source blob, or native source whose ABI/compiler/ordering behavior matters. Load only the lifecycle file the active trigger cites (see Phase 3.5). |
-| Vulnerability chaining, scanning tools, blind spots | `references/chaining-advanced-techniques.md` | Building exploit chains, tool augmentation |
-| Formal audit, PoC development, report writing | `references/audit-poc-report.md` | **On-demand only** — when asked for audit/PoC/report |
-| Agent sweep methodology, file iteration, verification loops | `references/agent-sweep.md` | Running Agent Sweep or Hybrid mode |
-| Swarm pipeline: module decomposition, orthogonal strategies, three-stage pass, analog cascade, weighted scoring, Phase 4 continuous-learning | `references/swarm-pipeline.md` | Running the Swarm Pipeline command / hypothesis-driven multi-agent audit |
-| DAG-structured vulnerability reasoning (DAGVul): source/intermediate/sink nodes, 12 failure-pattern taxonomy, logical closure | `references/dag-reasoning.md` | Writing a finding's source→sink trace, running the Swarm JUDGE check, or mechanically answering Phase 7 Exploitability Gate Q1–Q3 |
-| Weakness Registry: per-target persistent graph of Confirmed weaknesses (JSONL nodes + edges), prior-injection for future audits, dedup-by-deterministic-id, edge types (`variant-of`, `co-occurs-with`, `enables`, `bypasses`) | `references/weakness-registry.md` | Starting an audit on a target with `.vuln-registry/`, OR after Phase 7 marks any finding Confirmed (Phase 8 promotion writes to the registry) |
-| **DuckDB schema** (16 tables + `confirmed_vulns` view) — persistence layer for the v2 phase pipeline | `db/schema.sql` (DDL) + `db/migrations/0001-initial.sql` (forward-only) + `db/sidecars/` (>16 KB payload BLOBs) | v2 pipeline runs — load when wiring orchestrator writes, debugging FK/CHECK failures, or migrating the database |
-| **Critic rubric** for Phase 5 REPORT critic — comprehension / eligibility / attack_scenario checks, WARNING vs CRITICAL, 17 worked examples | `references/critic-rubric.md` | Phase 5 critic runs, or hand-classifying a finding's critic verdicts |
-| **Bypass catalogue** for Phase 3 (S2) — global DuckDB `bypasses` table (sanitizer / blacklist / allowlist / generic families) with tag-indexed parsed-logic triggers + tiered fetch protocol | `db/catalogue/bypasses.json` (data) + `db/catalogue/schema.sql` (DDL) + `db/catalogue/load.sql` (idempotent loader) + `references/bypass-catalogue.md` (3-stage fetch protocol) | Bypass-hunting lanes (`defense_base_lane`, `defense_context_verification_lane`, `isolation_fuzz_lane`) — Stage A enumerate labels, Stage B record skip-with-reason, Stage C lazy-fetch one family's payloads at attempt time |
-| **Confirmation Rigor Doctrine (C1)** — the four gates (taint reach / defense gap / intended-feature filter / reproduction artifact w/ `config_state`) for promoting `gr_findings.confirmation_status` from `candidate` → `confirmed`, plus refutation row shape | `references/confirmation-rigor-doctrine.md` | Phase 2 confirm runs, gate-by-gate refutation triage, or `gr_findings.config_state` column wiring |
-| **Forward-Slicing Lanes (C2)** — slice tuple + `slice_kind` discriminator (`forward_taint` / `backward_sink` / `defense_callsite`), lane lifecycle, `coverage_json` shape, cascade-on-bypass + cascade-on-reach semantics | `references/forward-slicing-lanes.md` | Spawning lanes, debugging `success_without_artifact` / `incomplete_coverage` rewrites, or reasoning about cascade scheduling |
-| **Autoloading Knowledge Layer (C3)** — seed (top-K=10) vs expand (cap 50, version-pinned), tri-signal acceptance (`ref_count`, `repeat_suppressions`, `growth_rate`, `staleness_days`), bootstrap rule R8 for first-audit single-signal admit, decay sweep | `references/autoloading-knowledge-layer.md` | Wiring `autoload_seed_lane` / `autoload_expand_lane`, or debugging why a chunk did/didn't graduate to core |
-| **REPORT Critic Phase (C4)** — three checks (comprehension / eligibility / attack-scenario), `config_state` eligibility table (`vanilla` Pass / `non_vanilla` WARNING / `unknown` CRITICAL), severity storage contract that demotes CRITICAL findings to `refuted` at orchestrator flush | `references/report-phase.md` | Phase 5 critic runs, debugging blocked-report flushes, or deciding WARNING-vs-CRITICAL on a borderline `critic_findings` row |
+Routing table: **`references/domain-reference-map.md`**. Load it once on first reference lookup, or `grep` it for a specific trigger keyword (e.g., `grep -i 'ssrf\|xxe' references/domain-reference-map.md`). It covers routing rows across attack-domain references, per-language sink files, binary/RE lifecycle files, the v2 DuckDB schema + migrations + sidecars, the bypass catalogue, the critic rubric, and the C1–C4 doctrine files. **Do not load all reference files at once** — pull only the row(s) that match the active testing domain or v2 phase.
 
 ---
 
-## Phase 0: Latest Commits Security Review
+## Audit Methodology Lanes (Phase L0–L8)
 
-Before the broad audit begins, **spawn one focused subagent** to perform a narrow-scope security review of the repository's most recent commits. Recent diffs are the highest-signal starting surface in a brownfield target: they concentrate attacker-reachable new code, often touch security-adjacent paths (auth, routing, input parsing, config), and receive less scrutiny than older, stable modules. Reviewing them first primes the rest of the audit with concrete findings and calibrates the attack surface before Phase 1 (Recon) runs.
+The phases below are the **audit methodology lanes** — what a researcher walks through. They are orthogonal to the v2 pipeline phases at the top of this document, which describe how the orchestrator + swarm move rows through DuckDB. `L` prefix avoids collision with v2 phase numbers; both layers coexist in one audit.
 
-This is intentionally **single-agent and narrow-scope** — whole-tree coverage belongs in Agent Sweep (Phases S1–S4). Phase 0 exploits the recency signal without drifting into full-sweep territory. A swarm would dilute focus across the small commit surface and produce duplicated, low-signal findings.
+---
 
-### Subagent Prompt
+## Phase L-1: Prior-Art Intake
 
-Spawn exactly one agent with this prompt:
+**Bug-bounty-mode mandatory** when a scope target is provided. Mines prior art — NVD/GHSA/OSV/exploit-db CVEs and public web writeups — for the in-scope target, inserting results into the `cves` and `writeups` DuckDB tables. Distils high-yield leads into `promising_lanes` rows (provenance columns `derived_from_cve_id` / `derived_from_writeup_id`), which round 1 picks up first via fetch (10) / `v_promising_lanes_ranked`. **Documented-skip fallback** (same pattern as Phase L0): when no scope is provided or network is unavailable, record `status='skipped'` + `termination_reason` and proceed. See `references/methodology/prior-art-intake-lane.md`.
 
-> You are performing a **focused, narrow-scope** security review of this repository's most recent commits. Inspect repo signals first — tag recency, branch divergence from `main`/`master`, commit cadence, CHANGELOG or release notes — then choose the most informative commit range yourself (e.g., last N commits, since last tag, or branch diff against main). **State the chosen range and justification before reviewing.**
->
-> For every file touched by the selected commits, analyze **only the changed hunks and their immediate call graph**. Do not audit code the commits did not touch — that is Phase 3's and Agent Sweep's job, not yours. Consider all bug classes — injection, memory corruption, auth bypass, deserialization, race conditions, type confusion, logic flaws, missing authorization, unsafe defaults, exposed secrets, regressions that reintroduce previously-fixed CVEs, and weakened security controls (removed validators, loosened regex, new `@ts-ignore`/`# type: ignore` on security-adjacent code).
->
-> For each finding write: vuln type, affected function/file, source→sink trace, controllability, exploitability assessment (High/Medium/Low), and a suggested payload or PoC direction. Flag commits that touch security-adjacent paths (auth, crypto, input parsing, session handling, access control, deser, SSRF-prone callers) even when no bug is found — the auditor needs to know where recent changes raise risk.
->
-> **Fix-bypass analysis (n-day vector):** when a commit *fixes* a security bug, do not trust the fix. Enumerate inputs, encodings, types, code paths, and state-machine transitions the patch does **not** cover (e.g., alternate decoder, sibling endpoint, case/normalization differential, race window, deeper nesting, non-string type, second-order sink) and attempt to reach the original sink despite the patch. Incomplete patches are one of the highest-yield n-day sources — treat every security fix as a hypothesis "this specific path is now blocked," then try to falsify it.
->
-> Stay **very accurate and very focused**: no speculation, no "theoretical" findings without a controllability trace, no drift into untouched code. If the chosen range surfaces no real vulnerabilities, say so explicitly and list which security-adjacent files were examined so the rest of the audit can trust the recency pass.
->
-> **Tooling:** Prefer LSP (`goToDefinition`, `findReferences`, `hover`) when available for resolving the call graph of changed hunks — recency review is high-signal precisely because it stays anchored to actually-touched call sites. Use Grep/Glob for discovery (locating files, finding string patterns), then read enough surrounding context to validate framework wiring, guards, and dynamic dispatch.
+---
 
-### Optional Deliverable: PATCH SEEDS
+## Phase L0: Latest Commits Security Review
 
-When a downstream phase will fan out parallel agents (Agent Sweep, Swarm Pipeline, or any multi-agent audit that benefits from hypothesis templates), Phase 0 can emit a second artifact alongside the findings: a **PATCH SEEDS** list extracted from the same commit range. Each seed is a recently-fixed bug or tightened control that downstream agents use as a hypothesis template — "is an unfixed variant of this pattern present elsewhere in the tree?"
+Before the broad audit begins, **spawn one focused subagent** to perform a narrow-scope security review of the repository's most recent commits. Recent diffs are the highest-signal starting surface in a brownfield target: they concentrate attacker-reachable new code, often touch security-adjacent paths (auth, routing, input parsing, config), and receive less scrutiny than older, stable modules. Reviewing them first primes Phase L1 with findings and calibrates the attack surface.
 
-Each PATCH SEED record:
+**Single-agent, narrow-scope** — whole-tree coverage belongs in Agent Sweep (Phases S1–S4). A swarm would dilute focus across the small commit surface and produce duplicated, low-signal findings.
 
-| Field | Content |
-|-------|---------|
-| `affected_file` | Path touched by the fix commit |
-| `affected_hunk` | Hunk range or line numbers of the actual fix |
-| `fix_summary` | One sentence describing what the patch changed and why |
-| `bug_class` | Canonical class label (e.g., `sql-injection`, `missing-authz`, `path-traversal`) |
-| `variant_query` | A grep-friendly or structural-search-friendly string downstream agents can use to locate analogous sites |
-
-Emit seeds only for commits that actually fix a bug or tighten a control — not refactors, not style changes, not dependency bumps unless the bump closes a CVE. A seed without a clear `variant_query` is low-value; drop it rather than weaken the set.
+> **Load `references/phases/phase-L0-recency.md`** for the verbatim subagent prompt and the optional PATCH SEEDS schema.
 
 ### Fallbacks
 
 | Condition | Behavior |
 |-----------|----------|
-| No `.git` directory / no git history | Skip Phase 0, proceed to Phase 1 |
-| Fewer than 3 commits in history | Skip Phase 0, proceed to Phase 1 |
-| Recent commits are docs-only or generated files only | Record `NO_CODE_CHANGES` with touched paths, proceed to Phase 1 |
-| Subagent fails or times out | Log the failure, proceed to Phase 1 — do not retry inline |
+| No `.git` directory / no git history | Skip Phase L0, proceed to Phase L1 |
+| Fewer than 3 commits in history | Skip Phase L0, proceed to Phase L1 |
+| Recent commits are docs-only or generated files only | Record `NO_CODE_CHANGES` with touched paths, proceed to Phase L1 |
+| Subagent fails or times out | Log the failure, proceed to Phase L1 — do not retry inline |
 
 ### Feed-Forward
 
-Phase 0 findings plug into the same downstream pipeline as Agent Sweep output:
+Phase L0 findings plug into the same downstream pipeline as Agent Sweep output:
 
-1. **Dedup** against later Phase 3 (Source Audit) and any Agent Sweep results
-2. **Feed** surviving findings into **Phase 6: Vulnerability Chaining**
-3. **Gate** each finding through **Phase 7: Exploitability Gate** before reporting
+1. **Dedup** against later Phase L3 (Source Audit) and any Agent Sweep results
+2. **Feed** surviving findings into **Phase L6: Vulnerability Chaining**
+3. **Gate** each finding through **Phase L7: Exploitability Gate** before reporting
 
-Do not promote a Phase 0 finding to a reported vulnerability without passing Phase 7 — the exploitability gate applies equally to commit-sourced findings.
-
----
-
-## Phase 1: Recon
-
-Identify the full technology stack before touching anything:
-- Language, runtime version, framework, template engine
-- ORM / database layer and database engine
-- Web server and its configuration (Apache, Nginx, Caddy, IIS, LiteSpeed)
-- Reverse proxy / load balancer (HAProxy, Traefik, AWS ALB — each parses HTTP differently)
-- Auth mechanism (session, JWT, OAuth, SAML, WebAuthn, custom)
-- File upload support, allowed types, size limits
-- API style (REST, GraphQL, SOAP, JSON-RPC, gRPC-Web, WebSocket)
-- Debug mode status, verbose error pages, stack traces
-- PHP version (5.x / 7.x / 8.x) — gates which sinks are exploitable: `assert()` evals strings only in < 8.0, `preg_replace /e` only in < 7.0, loose type juggling `0 == "string"` only in < 8.0, `libxml_disable_entity_loader()` removed in 8.0 (XXE defaults safe), hex numeric strings `"0x1A" == 26` only in < 7.0. **Always qualify PHP findings with the version gate.**
-- PHP config: `allow_url_include`, `allow_url_fopen`, `disable_functions`, `open_basedir`, `display_errors`, `file_uploads`, `session.upload_progress.enabled`
-- Node.js: `--inspect` port, `NODE_ENV`, prototype pollution surface
-- Python: debug mode (Werkzeug debugger PIN), pickle usage, SSTI surface
-- Java: JNDI enabled, deserialization libraries, Expression Language version
-- Container context: privileged mode, mounted volumes, exposed docker socket, inter-container network, environment secrets, Kubernetes service account tokens
-- CDN / WAF fingerprint (Cloudflare, Akamai, ModSecurity rules — know what you're bypassing)
-- Client-side: JS frameworks (React, Angular, Vue), bundler (webpack, vite), source maps available
-- Dependency manifest: `package.json`, `composer.json`, `requirements.txt`, `Gemfile`, `pom.xml`, `go.mod`, `Cargo.toml`, `mix.exs`
-- `patch-package` / `pnpm patch` / `yarn patch` overlays (`patches/*.patch`, `patches_*/*.patch`): read every patch in the tree and treat each removed/added hunk as security-relevant by default. Overlays silently mutate vendored SDK invariants (scoring rules, crypto surface, consent UX) and do not show up in dependency scanners. A patch that `export`s a previously-private crypto method, adjusts an auth scoreFlow, or deletes a `Confirm*` modal is a finding-generator by itself.
-- Known CVEs in detected versions (check NVD, Snyk DB, GitHub Advisories)
-
-Map every user input vector:
-- URL parameters, path segments, fragments
-- Request body (form-encoded, JSON, XML, multipart)
-- HTTP headers (Host, X-Forwarded-For, Referer, User-Agent, Accept-Language, custom headers)
-- Cookies
-- File upload content and metadata (filename, content-type, EXIF)
-- WebSocket messages
-- DNS records (for DNS rebinding)
-- API field names (for mass assignment)
-
-Map every endpoint. Build a table of routes, methods, auth requirements, and parameters before testing.
+Do not promote a Phase L0 finding to a reported vulnerability without passing Phase L7 — the exploitability gate applies equally to commit-sourced findings.
 
 ---
 
-## Phase 2: Crown Jewel Mapping
+## Phase L1: Recon
+
+Fingerprint the stack, enumerate every input vector, and map every endpoint before touching anything. Recent diffs (Phase L0) tell you *where* the surface is moving; Phase L1 tells you *what* it is — runtime versions and config flags gate which sinks downstream are exploitable. For stateful systems, also collect sample traces (PCAPs, logs, API specs, client workflows), message types, response classes, and candidate protocol-state transitions before fuzzing or taint tracing.
+
+> **Load `references/phases/recon-checklist.md`** for the full stack-enumeration list, the **Runtime Version Gates**, the Input Vector Map, and the Endpoint Map.
+
+**Always qualify findings with the relevant version gate.** A PHP < 8.0 `preg_replace /e` finding is real; the same sink on PHP 8.1 is dead code.
+
+---
+
+## Phase L2: Crown Jewel Mapping
 
 Before testing, identify maximum-damage targets:
 
@@ -328,31 +274,46 @@ After identifying crown jewels, identify the **least-examined** code — where b
 
 **Prioritize: high exposure + low attention.** These are the targets that have never seen a fuzzer. The crown jewels approach finds the highest-*impact* targets; attention deficit mapping finds the highest-*probability* targets. Use both.
 
-Quick heuristics:
+**Exhaustive defense enumeration (finding-agnostic mandate).** Before the hunt, enumerate **ALL** defenses across every layer (input validation, authn/authz guards, output encoders, sandboxes, allocators/hardening, rate limits, parsers' own checks) **finding-agnostically** — not anchored to the findings you expect to write. The inventory is built from the surface, not from a hypothesis. A small `defenses` count relative to surface size is an explicit **red flag** the completion gate cannot detect on its own: under-enumeration produces a clean-looking but hollow defense map, and every later "defense gap" claim rests on it.
+
+Quick heuristics — run these against candidate modules when you need a fast Attention Deficit Score before deciding agent fan-out; skip when the target is small enough to audit exhaustively or when you already know the hot paths:
+
 - `git log --format='%s' -- <path> | grep -ic 'secur\|vuln\|cve\|xss\|sqli\|inject'` — zero hits = never audited
 - Check for adjacent `*_test.*`, `*_spec.*`, `fuzz_*` files — absence = untested
 - `git log --diff-filter=M --since="2 years ago" -- <path>` — no recent changes = stale, possibly forgotten
 
 ---
 
-## Phase 3: Source Audit
+## Phase 1.3: Reachability & Consumer Mapping
 
-Run parallel agents, each focused on one attack domain. Every agent traces **source to sink** — user input reaching a dangerous function.
+Before the Hunt, build two whole-tree inventories so every later lane reasons against a prior instead of re-deriving reachability per finding:
 
-| Attack Category | Key Targets | Reference |
-|----------------|-------------|-----------|
-| **Injection** (SQLi, NoSQL, SSTI, CRLF, LDAP, XPath) | Query builders, template renders, header construction | `injection-attacks.md` |
-| **Client-Side** (XSS, Proto Pollution, CORS, CSTI, DOM Clobbering, CSS Injection) | Output contexts, deep merge, origin validation | `client-side-attacks.md` |
-| **Browser** (XS-Leaks, Clickjacking, CSP Bypass, Browser Desync, HTML Smuggling) | Cross-origin side channels, UI redressing, CSP evasion | `browser-attacks.md` |
-| **Server-Side** (RCE, SSRF, XXE, File Ops, Deser) | Command exec, URL fetching, XML parsing, file I/O, object deser | `server-side-attacks.md` |
-| **Auth & Logic** (Auth, ACL, OAuth, Race, Crypto) | Session mgmt, role checks, token flows, concurrent ops, key mgmt | `auth-access-logic.md` |
-| **Protocol & Infra** (Smuggling, Cache, WS, GraphQL, DNS, Cloud) | HTTP parsing, cache keys, WS handlers, query depth, metadata | `protocol-infra-attacks.md` |
+1. **`reachable_surface`** — per source, the critical functions / sinks **provably reachable under default config**, each tiered `proven` / `conditional` / `unreachable`.
+2. **`consumer_graph`** — per sink, the downstream consumers that read / trust / dispatch its output (the basis for the CONSUMER-OR-DEMOTE contract).
 
-Every module agent MUST conclude its report with a **Blind Spots** block: files it did not read, components absent from the repo but referenced elsewhere (other-repo Rust halves, dynamically-fetched configs, production-only artifacts), runtime states it could not observe (OIDC discovery docs, feature-flag evaluation), and dependencies whose behavior gates its findings' severity. Blind spots are first-class output, not footnotes. Phase 6 chain synthesis consumes this list to flag findings whose severity depends on external evidence.
+The Hunt receives this as a prior: a candidate whose sink is `unreachable` needs an explicit reopen rationale, not a silent promotion. Confirm Gate 1 (taint reach) reads this inventory rather than re-deriving it per finding. On a large target this is itself a heavy lane — cap and schedule it like any other.
+
+> **Load `references/phases/reachability-consumer-mapping.md`** for the inventory schema, the proven/conditional/unreachable tiering rules, and the consumer-graph construction recipe.
 
 ---
 
-## Phase 3.5: Technology Stack Discovery (Sink Loading)
+## Phase L3: Source Audit
+
+> **Non-strict:** The categories below are routing hints, not a closed taxonomy. New attack classes appear faster than this table updates. If you find a vulnerability that doesn't fit any row, it's still a vulnerability — record it freeform and let Phase L7 do the gating.
+
+Run parallel agents, each focused on one attack domain. Every agent traces **source to sink** — user input reaching a dangerous function.
+
+See `references/domain-reference-map.md` for the per-domain reference routing table.
+
+Every module agent MUST conclude its report with a **Blind Spots** block: files it did not read, components absent from the repo but referenced elsewhere (other-repo Rust halves, dynamically-fetched configs, production-only artifacts), runtime states it could not observe (OIDC discovery docs, feature-flag evaluation), and dependencies whose behavior gates its findings' severity. Blind spots are first-class output, not footnotes. Phase L6 chain synthesis consumes this list to flag findings whose severity depends on external evidence.
+
+When this Source Audit (or Phase L4 Taint Analysis) runs **DuckDB-backed** and an agent spots a **promising lane** — a concrete new investigation direction worth a dedicated lane next round (e.g. a custom template engine → SSTI-fuzz, a hand-rolled ORM → SQLi) — it emits a `promising_lanes` row event (feed-forward only, non-mandatory; the next round picks it up via `v_promising_lanes_ranked`). A promising lane is the positive twin of a blind spot: a lead, not a gap. See `references/v2/pipeline-architecture.md` (Promising-Lane Feed-Forward).
+
+---
+
+## Phase L3.5: Technology Stack Discovery (Sink Loading)
+
+> **Non-strict:** Sink catalogs are representative, not exhaustive. The per-language files exist to prevent forgetting the obvious; they do not bound discovery. A "sink" is any function that does something dangerous with attacker-controlled data — listed or not.
 
 Before taint analysis, identify **every language and framework in the stack** — most targets are polyglot:
 
@@ -360,114 +321,68 @@ Before taint analysis, identify **every language and framework in the stack** �
 2. **Identify the stack layers**: e.g., PHP backend + Node.js build tooling + Python microservice + Java auth service
 3. **Load matching sink files**: for each language present, load the corresponding `references/sinks/<lang>.md` — load multiple if the target is polyglot
 4. **Load the SAST/DAST router**: `references/sinks-catalog.md` for cross-language Semgrep/CodeQL/SonarQube rules
+5. **Ruby/Rails targets**: load `references/sinks/ruby.md` (security-sensitive API corpus) and, when authoring or extending detections, the validated **Ruby Rule MegaDB** at `rules/ruby/` (`semgrep/<category>/ruby-<slug>.yaml` + CodeQL `.ql`, each with a co-located test; manifest + taxonomy + validation tooling in the same tree). Authoring feed and commit-mining pipeline: `references/security-fix-oracle.md`
 
 **Example**: a Laravel app with React SSR and a Python ML microservice → load `sinks/php.md` + `sinks/javascript.md` + `sinks/python.md`
 
 Do not skip minor languages in the stack — the weakest link is often the least-reviewed service.
 
-**Binary / native artifacts in the stack — tiered loading across three lifecycle files.** Source-level sinks stop at the compiler; ABI, memory ordering, calling conventions, packers, and machine-level race windows require binary audit. The binary reference is split into three lifecycle files — **orient**, **find bugs**, **prove and report** — plus a thin routing index at `references/binary-code-analysis.md`. Load only what the trigger cites; never the whole triad by default.
+**PHP targets — custom Semgrep pack.** When PHP is in the stack, layer `semgrep-rules/php/php-sinks.yaml` (439 rules) on top of the curated public combo (`p/ci` + `p/phpcs-security-audit` + `r/php.lang.security`, plus Federico Dotta's PHP/Yii pack and `p/trailofbits` for deeper audits). The pack mirrors the full `references/sinks/php.md` taxonomy (RCE, LFI/RFI + stream wrappers, unserialize/Phar, SQLi, XSS, SSRF, XXE, traversal, type juggling, CVE-2024-2961 iconv, variable overwrite, `mail()` abuse, and more); every rule carries a `vuln-research-domain` tag so swarm output routes to the right verifier.
 
-| Trigger (any match → load) | File(s) and section(s) to read first |
-|---|---|
-| Target artifact is ELF / PE / Mach-O / WASM / dex / firmware blob / kernel module / bootloader / TEE payload | `references/binary-triage-and-re.md` § 1 → § 2 → § 2b |
-| Source audit hit a `.so` / `.dll` / `.dylib` / static `.a` with no matching source | `references/binary-triage-and-re.md` § 2–4, then `references/binary-bug-classes.md` § 10 |
-| Source is present but contains C / C++ / Rust `unsafe` / Go `cgo` / Zig / Objective-C / inline `asm!` where ABI or ordering changes semantics | `references/binary-bug-classes.md` § 6 + § 7 + § 15 |
-| Hypothesis involves memory layout, stack alignment, calling convention, endianness, signal delivery mid-instruction, syscall atomicity, double-fetch, weak memory model | `references/binary-bug-classes.md` § 7 + § 8 + § 15 |
-| N-day work: public advisory + patched vs. unpatched binary, no source diff | `references/binary-exploit-and-specialties.md` § 11 |
-| Crash found but no source explanation — the bug may live in compiler output / linker glue / TLS callback / `.init_array` | `references/binary-triage-and-re.md` § 4 + `references/binary-bug-classes.md` § 15 |
-| Packed, VM-protected, anti-debug, or otherwise obfuscated sample | `references/binary-exploit-and-specialties.md` § 13b |
-| Building or claiming an exploit primitive (ROP/SROP/ret2dlresolve/JOP/heap grooming) | `references/binary-exploit-and-specialties.md` § 13 + § 14 |
-| Firmware image / IoT / router / printer / camera / automotive ECU | `references/binary-exploit-and-specialties.md` § 12.1 |
-| Kernel / driver / hypervisor / TEE target | `references/binary-exploit-and-specialties.md` § 12.2–12.5 + § 14 |
-| Writing a fuzz harness or running dynamic analysis | `references/binary-bug-classes.md` § 5 |
-| Building a binary-level taint DAG | `references/binary-bug-classes.md` § 10 |
-| Writing a binary finding report | `references/binary-exploit-and-specialties.md` § 16 (DAG block required — ties back to Phase 7 Gate) |
+**C/C++ targets — custom Semgrep pack.** Layer `semgrep-rules/c-cpp/c-cpp-sinks.yaml` (555 rules) over `p/c` + `r/c.lang.security`; it mirrors `references/sinks/c-cpp.md` (buffer-write, object lifecycle, integer/type, syscall/`errno`, concurrency/TOCTOU, ambient-state, C++ semantics, Windows-userspace).
 
-**Do not load the whole triad by default.** On targets with no native component, none of the above triggers fire and these files stay off the token budget. On triggered targets, load only the subfile(s) the matched trigger cites. When no single trigger dominates, start with `references/binary-code-analysis.md` (thin index, ~60 lines) and fan out from there.
+Canonical command set for both packs + the mirror rule (pack ↔ sink doc edited together): `semgrep-rules/README.md`. Expect ~86% precision (Fraunhofer 2024) — feed hits through Phase L4.5 SAST triage before promoting anything.
 
-**Binary findings integrate with the source pipeline unchanged:** they feed **Phase 6 Chaining** as primitives (info-leak / arb-read / arb-write / control-flow) and pass **Phase 7 Exploitability Gate** via the same DAG form as source findings — with `primitive ∈ {taint, cfg, alias, constraint, abi}` and `abi` nodes citing the calling convention / register / struct layout being relied on. See `references/binary-bug-classes.md` § 10 (Binary-Level Taint Framework) and `references/binary-exploit-and-specialties.md` § 16 (Output Format) for the binary-specific DAG vocabulary.
+**Authoring custom detections** — when a project wrapper hides a sink from the curated packs (any language), author a precise rule **test-first** rather than grepping: `references/methodology/semgrep-rule-authoring.md` (taint-over-pattern, AST dump, 100%-pass TDD loop). The CodeQL analogue is **data-extension models** for custom source/sink wrappers — without them CodeQL false-cleans at the wrapper — see `references/methodology/tool-ingest-recipes.md` § 1.1. In both cases the rule/model is tool *config*; its hits enter as `candidate` rows through the ingest contract and earn promotion only via the five-gate Confirm.
+
+**Binary / native artifacts in the stack** — when the target ships compiled binaries, firmware, kernels, drivers, packed/obfuscated samples, or source depending on ABI/memory-ordering semantics, load **`references/binary/binary-stack-triggers.md`** for the 13-row trigger map onto the `references/binary/binary-{triage-and-re,bug-classes,exploit-and-specialties}.md` files. Binary findings feed Phase L6 Chaining and pass the Phase L7 gate via the same DAG form as source findings.
+
+**C/C++ *source* in the stack** — load **`references/sinks/c-cpp.md`** for the source-level memory-safety bug-class catalog (buffer-write sinks, object lifecycle, integer/type, syscall/`errno`/`EINTR`, concurrency/TOCTOU, ambient-state, C++ semantics, and the **Windows-userspace** classes `systems.md` omits) plus the threat-model gate. This is distinct from the binary track above: source-level review here, compiled-artifact RE there. Dynamic confirmation of a memory-safety class is the Phase 1.5 `boundary_fuzz_lane` (`references/v2/fuzzing-lane.md` + the harness how-to `references/methodology/fuzz-harness-craft.md`); the crash lands as a `gr_findings(finding_kind='fuzz_crash')` row, never a file.
+
+**C3 — Mandatory regex inventory.** Every regex in the in-scope tree MUST be mapped into the `regexes` table (the 5th `preliminary_enumeration_lane` category — inventory only; bypass analysis and fuzzing happen in later lanes). This is enforced by the `v_coverage.regexes_unmapped` HARD-RED gate: any unmapped regex blocks DEEP completion. See `references/v2/bypass-catalogue.md` (regex bypass classes) and `references/methodology/preliminary-enumeration-lane.md` (enumeration contract).
 
 ### Tool-Integration Matrix (CPG / SAST / AST tooling)
 
-For DEEP-tier Swarm Pipeline runs and any audit where a mechanical pre-pass is available, select in priority order:
+For DEEP-tier Swarm Pipeline runs and any audit where a mechanical pre-pass is available, the priority order is: Joern (Code Property Graph — full inter-procedural taint, PDG cuts, call-chain slicing) → CodeQL (relational AST + dataflow, SARIF output, optional call-path/context retrieval) → Semgrep + ast-grep (semantic patterns + structural AST matching) → fallback plain-text grep against `sinks/<lang>.md`. Outputs from the first three layers are packaged as SecuritySlice input packets for LLM consumption; agents treat tool hits as hypotheses to verify, not findings to rubber-stamp. When the optional function-context strategy is selected, function selectors pick target functions, CPG/CodeQL/LSP retrieves callers/callees/call paths and security helpers, and the agent must say `context_insufficient` instead of guessing.
 
-| Priority | Tool | Representation | When to use |
-|----------|------|----------------|-------------|
-| 1 | **Joern** | Code Property Graph (AST + CFG + DFG + call graph) | Full inter-procedural taint, PDG cuts, call-chain slicing. Best when a queryable graph justifies indexing cost (large C/C++/Java/JS/Python targets). |
-| 2 | **CodeQL** | Relational AST + dataflow library | Path queries from stdlib sources to sinks. SARIF output. Use when a pre-built query pack matches the stack. |
-| 3 | **Semgrep + ast-grep** | Semantic patterns (Semgrep) + structural AST matching (ast-grep) | Cheapest rule-writing path. Semgrep for dataflow-aware rules; ast-grep for language-agnostic structural hunts. |
-| 4 | **Fallback: `sinks/<lang>.md` grep** | Plain text | No CPG/SAST tooling available — the per-language sink files are ripgrep-ready. |
-
-Outputs from layers 1–3 are packaged as SecuritySlice input packets (see `references/dag-reasoning.md` § SecuritySlice Input Packet) for LLM consumption. LLM agents treat tool hits as **hypotheses to verify**, never as findings to rubber-stamp.
-
-**Why CPG over AST-first:** Raw AST lacks the security-relevant edges — data dependencies, control dependencies, call targets, aliasing. A CPG merges all four, which means one query answers "does untrusted input reach this sink under these guards?" without re-implementing dataflow per rule. See `references/swarm-pipeline.md` § Slice Types for the 11 slice cuts the tooling can emit.
+> **Load `references/phases/tool-integration-matrix.md`** for the full priority table with per-tool "when to use" guidance, the CPG-over-AST rationale, and the 11 slice cuts the tooling can emit (from `references/methodology/swarm-pipeline.md` § Slice Types).
+>
+> **Load `references/methodology/tool-ingest-recipes.md`** to turn a tool's *native output* into DuckDB rows — the exact CodeQL / Semgrep / ast-grep run commands, the SARIF/JSON → `gr_findings` / `sinks` / `input_slices` candidate mapping, cross-tool dedup by `finding_hash`, and the coverage-computed-from-tool-output contract. Every tool hit enters as a `candidate` hypothesis and earns promotion only through the five-gate Confirm.
 
 ---
 
-## Phase 4: Taint Analysis
+## Phase L4: Taint Analysis
 
-Three strategies — choose based on codebase size:
+Three strategies (source-forward for small codebases, sink-backward for large ones, hybrid for medium, circulatory tracing as a complement to any). Controllability is classified High / Medium / Low / Needs-verification. Output filter internals must be traced to confirm the escaping context matches the output context — a filter named `is_safe` does not mean the output is safe. For high-stakes findings, restate the trace as a closed DAG (ground-truth source nodes → intermediate inference nodes → verified_sink); if the graph does not close, the finding drops to Observations. Load `references/sinks-catalog.md` for the language router and SAST/DAST integration rules.
 
-| Strategy | When | Method |
-|----------|------|--------|
-| **Source-forward** | Small codebase, few entry points | Trace from user input → through transforms → to sinks |
-| **Sink-backward** | Large codebase, known dangerous functions | Start at sinks (see `sinks-catalog.md`) → trace backward to find controllable inputs |
-| **Hybrid** | Medium codebase, complex data flow | Combine both: forward from sources AND backward from sinks, meet in the middle |
-| **Circulatory tracing** | Any codebase, complement to other strategies | Map the full journey of every input through *all* program domains — not just to known sinks, but through every transformation and domain crossing |
-
-**Controllability classification** for each sink parameter:
-- **High**: Direct user input reaches sink with no sanitization
-- **Medium**: Input reaches sink through partial transforms (encoding, type casting)
-- **Low**: Input is significantly constrained but still partially controllable
-- **Needs verification**: Theoretical path exists, requires dynamic confirmation
-
-**Output filter internals:** When a template engine or framework marks output as "safe" or "escaped", verify HOW it escapes. Django's `|safe`, Twig's `|raw`, Rails' `html_safe`, React's `dangerouslySetInnerHTML`, and Jinja2's `|safe` all disable auto-escaping — but even auto-escaped output can be vulnerable in non-HTML contexts (JavaScript strings, CSS `url()`, HTML attributes without quotes). A filter labeled `is_safe` in Django means "this filter's output doesn't need further escaping" — it does NOT mean the output IS safe. Trace through the filter chain to confirm the escaping matches the output context.
-
-**Circulatory tracing insight:** Vulnerabilities hide not in the obvious "security" parts of programs but where inputs cross into unexpected domains. Trace inputs through *every* domain boundary — not just to known sinks:
-- HTTP parameter → YAML parser → object instantiation → method dispatch (Rails YAML RCE)
-- Uploaded image → image library → font rendering subsystem → memory allocator (browser RCE)
-- User string → template engine → compilation → code execution (SSTI)
-- Config value → DNS resolver → network request → internal service (SSRF via config)
-
-The domain knowledge needed is "arbitrary" — font internals, serialization formats, protocol edge cases. The LLM already encodes this. **Ask about every code path the input touches**, not just paths that look security-relevant.
-
-Load `references/sinks-catalog.md` for the language router and SAST/DAST integration rules. It routes to per-language sink files — load only the language(s) matching the target codebase.
-
-**DAG-structured trace (for high-stakes findings).** Free-prose source→sink narration is the single highest source of hallucinated findings — the DAGVul paper measured 36.4% of correct LLM vulnerability verdicts as supported by *incorrect* reasoning. When a finding will be reported (not just observed), restate its trace as a DAG: ground-truth source nodes with line refs → intermediate inference nodes that cite parent IDs and name the program-analysis primitive (taint, def-use, CFG, constraint, API contract) → a `verified_sink` or `sanitized_sink`. If the graph does not close from an untrusted source to a verified sink, the finding is not exploitable — move it to Observations rather than hedging. Load `references/dag-reasoning.md` for the framework, the 12 failure patterns to screen each intermediate node against, and worked examples.
+> **Load `references/phases/taint-analysis.md`** for: the full strategy table with method detail, the four-tier controllability classification, output-filter internals (Django `|safe`, Twig `|raw`, Rails `html_safe`, React `dangerouslySetInnerHTML`, Jinja2 `|safe`), circulatory tracing domain-crossing examples, and the DAG-structured trace framework with 12 failure patterns. Also load `references/methodology/dag-reasoning.md` for worked DAG examples.
 
 ---
 
-## Phase 4.5: Static Analysis False Positive Calibration
+## Phase L4.5: Static Analysis False Positive Calibration
 
-SAST tools generate noise. Calibrate expectations before triaging:
-
-| Severity | Typical False Positive Rate | Action |
-|----------|---------------------------|--------|
-| **P0/P1** (Critical/High) | 30–50% | Triage every finding manually — high FP rate but high impact when real |
-| **P2** (Medium) | 50–70% | Batch triage, prioritize sinks with direct user input |
-| **P3** (Low) | 70–90% | Skim for patterns, don't chase individual findings |
-
-**Common false positive patterns:**
-- **Dead code sinks**: Function exists but is never called from a reachable route
-- **Framework-sanitized paths**: SAST flags `innerHTML` but React's JSX auto-escapes; flags `query()` but ORM parameterizes
-- **Test file hits**: SAST scanning test fixtures, mock data, or example payloads
-- **Vendor/third-party code**: Flagging sinks in `node_modules/`, `vendor/`, or vendored dependencies
-- **Constant inputs**: Sink reached only with hardcoded/constant values, not user input
-
-**Calibration workflow:**
-1. Run SAST, sort by severity descending
-2. For P0/P1: manually verify each — trace source to sink, confirm controllability
-3. For P2/P3: sample 10 findings, measure FP rate, extrapolate to decide effort allocation
-4. Suppress confirmed false positives with inline comments or tool-specific ignore rules
-5. Track FP rate per rule — disable rules consistently above 90% FP in your stack
+SAST tools generate noise. Before triaging any tool output, load **`references/phases/sast-triage.md`** for: per-severity FP-rate priors (treat as field estimates, not measurements — replace with your own per-rule rate after ≥10 samples), the common-FP-pattern checklist (dead-code sinks, framework-sanitized paths, test fixtures, vendor code, constant inputs), and the 5-step calibration workflow that ends in disabling rules above 90% FP in your stack.
 
 ---
 
-## Phase 5: Exploitation
+## Phase L5: Exploitation
 
-**Priority tiers** — don't waste time on Medium findings if Critical ones exist:
+**Severity is computed, not typed.** The class tier below is only the **input** `base(class)` — a ceiling, never the verdict. The recorded severity is the composite:
 
-| Tier | Severity | Examples |
+```
+final = base(class) × reachability_cap × mechanism_cap × poc_evidence_gate
+```
+
+- **`base(class)`** — the class ceiling from the priority table below (an input, not a verdict).
+- **`reachability_cap`** — unauth-remote ×1.0 / authed-low caps one band down / admin caps two bands / harness-only → Observation.
+- **`mechanism_cap`** — a **hardened-allocator / bounds-checked-container / sanitizer-abort build caps memory-unsafety at DoS**; only a raw-pointer / `memcpy` / forward-linear write retains leak / write-what-where; only a *proven* write-what-where, or a read primitive plus an ASLR defeat, lifts toward RCE. (Example: an `operator[]` OOB in a build with a hardened libc++ aborts → DoS, while the same offset reached through raw-pointer arithmetic can leak.)
+- **`poc_evidence_gate`** — vanilla end-to-end PoC ×1.0 / no PoC → cap at LOW / theoretical.
+
+> **Load `references/phases/exploitability-gate.md` §rubric** for the full factor definitions, the per-band cap arithmetic, and the evidence each factor requires before it may exceed its default cap.
+
+**Priority tiers** — `base(class)` ceilings; also the work order (don't burn effort on Medium ceilings while Critical ceilings are open):
+
+| Tier | base(class) ceiling | Examples |
 |------|----------|----------|
 | **P0** | Critical | RCE (webshell, deser, SSTI, command injection, eval, JNDI) |
 | **P1** | High | SQLi, SSRF, auth bypass, arbitrary file read, IDOR w/ sensitive data, XXE |
@@ -478,80 +393,33 @@ For each finding: identify source → trace transforms → confirm sink reach �
 
 ### PoC Constraints (Mandatory)
 
-The PoC must be a **realistic, end-to-end victim↔attacker interaction** against the **unmodified target running in a production-equivalent environment**.
+The PoC must be a realistic, end-to-end victim↔attacker interaction against the unmodified target in a production-equivalent environment. Zero mocking — no stub servers, no patched binaries, no debug flags, no modified `docker-compose.yml` target services. Every confirmed finding ships two forms: a step-by-step walkthrough (reviewer understands the bug without running anything) and a full bundled `docker compose up && ./poc.sh` directory (third party clones, runs, sees exploit work). Missing either form → finding stays Candidate.
 
-> **⛔ ZERO MOCKING IN THE TESTING ENVIRONMENT — NO EXCEPTIONS**
->
-> No mocked APIs. No simulated responses. No stub servers. No in-memory fakes. No patched binaries. No injected headers. No synthetic database states. No `DEBUG=true`. No test-only flags. No flipped feature toggles. No modified `docker-compose.yml` target services. **If the precondition does not exist in an unmodified production deployment, it is not a valid reproduction environment — and the finding cannot be confirmed.**
-
-- If the target app ships with a `docker-compose.yml`: use it as-is. You may add a separate attacker/victim container on the **same network** (e.g. `docker run --network=<project>_default ...`), but never modify the target's own container definition, environment, config, or behavior.
-- If the target app has **no** container setup: create two networks — one for the **victim** (running the unmodified app), one for the **attacker** (exploit tooling). The app runs identically to how it would in production.
-- **No altered configs, no debug flags, no feature toggles.** The app must run as close to production as possible. If exploitation requires a non-default setting, that must be documented as a prerequisite, not baked into the environment.
-- **Responsible disclosure principle:** nothing in the PoC environment changes the normal behavior of the application. If your exploit only works against a modified version of the app, it is not a confirmed vulnerability — it is a misconfiguration finding.
-
-**Every confirmed finding ships two PoC forms.** Missing either → Candidate.
-
-| Form | Audience | Description |
-|------|----------|-------------|
-| **Step-by-step (explanatory)** | Reviewer / triager / vendor | Narrative walkthrough: bug cause → source→sink trace → each exploit step with only necessary commands shown and explained. Reviewer understands the bug without running anything. |
-| **Full bundled PoC** | Reproducer / CI / verification | Self-contained `docker compose up && ./poc.sh` directory: compose file, scripts, payloads, README with one command to reproduce. Third party clones, runs, sees exploit work. |
+> **Load `references/phases/poc-constraints.md`** for: the full ZERO MOCKING rule text, docker-compose and no-container environment setup, the two-form table with audience and description, and the responsible disclosure principle.
 
 ---
 
-## Phase 6: Vulnerability Chaining
+## Phase L6: Vulnerability Chaining
 
 Single bugs are starting points. Real impact comes from chains.
 
-**Chain patterns** (full catalog in `references/chaining-advanced-techniques.md`):
-- **Reader + Writer = RCE**: path traversal → read creds → auth → admin RCE
-- **Client → Server**: stored XSS → steal admin session → authenticated RCE
-- **Escalation**: IDOR + missing ACL → mass breach; SSRF → cloud metadata → AWS keys
-- **Race conditions**: double-spend, TOCTOU file ops, concurrent privilege escalation
-- **Deserialization**: file upload → phar:// trigger → deser → RCE
+See `references/phases/chaining-advanced-techniques.md` for the full chain-pattern catalog.
 
 **Impact amplifiers**: Re-score severity in chain context. A Low open redirect becomes High when it enables OAuth token theft → account takeover.
 
 ---
 
-## Phase 7: Exploitability Gate
+## Phase L7: Exploitability Gate
 
-Before reporting ANY finding, answer these four questions:
+Four questions gate every finding before reporting: can you control the input? Does it reach the sink through all transforms and sanitizers? Can you prove impact with a working payload? Where is the defense layer — and is it actually active, not just assumed? If any of Q1–Q3 is No, the finding moves to Observations. Questions 1–3 map onto a closed DAG; if the DAG does not close, Q2 is No. When a defense layer blocks exploitation, treat it as a new attack surface and apply the methodology recursively.
 
-1. **Can I control the input?** — Is user input actually controllable, or is it server-generated/hardcoded?
-2. **Does it reach the sink?** — Does the tainted data survive all transforms, sanitizers, and WAF rules?
-3. **Can I prove impact?** — Do I have a working payload that demonstrates real-world consequences?
-4. **Where is the defense layer?** — Is the mitigation in the vulnerable code itself, in a framework layer (e.g. Django auto-escaping, Rails CSRF tokens), in runtime config (e.g. `disable_functions`, WAF rules), or in the deployment environment (e.g. network segmentation, read-only filesystem)? Framework and runtime defenses can be bypassed or misconfigured — verify the defense is actually active, not just assumed.
-
-If any answer to questions 1-3 is **No** → move to Observations section (not confirmed vulnerabilities). For question 4, if a defense exists but you can bypass it, document the bypass as part of the finding.
-
-**Mechanical gate via DAG.** Questions 1–3 map one-to-one onto a closed DAG: Q1 is "at least one source node typed as untrusted input", Q2 is "a complete path of intermediate nodes from source to sink", Q3 is "a `verified_sink` with a stated triggering condition". When a finding keeps shifting its controllability story, build the DAG — if it does not close, Q2 is **No** and the finding drops to Observations. Reference: `references/dag-reasoning.md`.
-
-### Defense Layer Iteration
-
-When a defense layer blocks exploitation, don't stop — treat it as **a new iteration of the same problem**:
-
-1. **Identify the defense boundary** — sandbox, hardened allocator, kernel separation, WAF, hypervisor
-2. **Treat the defense itself as a new attack surface** — it's software too, with its own bugs
-3. **Apply the same methodology recursively** — sweep or audit the defense layer's code for bypasses
-4. **Chain across boundaries** — vuln in app + sandbox escape + kernel bug = full-chain exploit
-
-Layered defenses (hardened allocators, sandboxes, user/kernel barriers, virtualization) are iterated versions of the same problem. Agents can generate full-chain exploits by solving each layer independently and composing the results.
+> **Load `references/phases/exploitability-gate.md`** for: the full four-question text, the "If any answer to Q1–Q3 is No" rule, the mechanical DAG gate (Q1/Q2/Q3 node types), and the defense-layer recursion pointer to `references/phases/defense-layer-iteration.md`.
 
 ---
 
-## Phase 8: Registry Promotion (DuckDB-Native)
+## Phase L8: Registry Promotion (DuckDB-Native)
 
-Under v2 there is **no separate JSONL/Markdown registry write step**. A finding becoming `confirmation_status = 'confirmed'` in `gr_findings` *is* the promotion — the per-target DuckDB IS the registry. Phase 8 is a conceptual checkpoint over the same row, not an additional persistence write.
-
-What the orchestrator does at phase flush (single-writer rule, B3a):
-
-1. The promotion itself happened at Phase 2 confirm: `gr_findings.confirmation_status` flipped from `candidate` to `confirmed` under the four-gate doctrine (`references/confirmation-rigor-doctrine.md`).
-2. Dedup is enforced by the `gr_findings.finding_hash` UNIQUE constraint over `(target_id, finding_kind, sink_id, source_id)`-derived hash — re-runs over the same `commit_sha` update rather than duplicate.
-3. Edge types (`variant-of`, `co-occurs-with`, `enables`) are **derived at read time by query**, not persisted as a separate table. Example: variants of a sink within a target are `SELECT … FROM gr_findings WHERE target_id = ? AND finding_kind = ? AND confirmation_status = 'confirmed'`.
-4. Cross-audit priors injected into future audits come from `gr_findings WHERE target_id = ? AND confirmation_status = 'confirmed'` filtered by recency and module — no `.vuln-registry/` directory is read or written.
-5. The legacy on-disk `<target>/.vuln-registry/` writer is retained only for backwards compatibility with pre-v2 targets that still carry that directory; new audits do not create it.
-
-> **Pre-v2 fallback only.** Load `references/weakness-registry.md` if you are auditing a target whose history already contains a `.vuln-registry/` directory and you need to read the legacy JSONL+Markdown corpus. New audits should not load it.
+Under v2 there is no separate persistence step — `gr_findings.confirmation_status = 'confirmed'` IS the registry. Dedup is enforced by the `finding_hash` UNIQUE constraint over `(target_id, finding_kind, sink_id, source_id)`-derived hash; re-runs over the same `commit_sha` update rather than duplicate. Edge types (`variant-of`, `co-occurs-with`, `enables`) are derived at read time from `gr_findings` overlap queries, not persisted as a separate table. Cross-audit priors come from querying `gr_findings WHERE target_id = ? AND confirmation_status = 'confirmed'` — no `.vuln-registry/` directory is read or written. Promotion to `confirmed` is governed by the five-gate doctrine in `references/v2/confirmation-rigor-doctrine.md`.
 
 ---
 
@@ -567,11 +435,13 @@ Every confirmed finding requires:
 
 Low-confidence findings (score <= 3) → **Observations** section. Intended features → also Observations.
 
-> **Load `references/audit-poc-report.md`** for: full proof checklist (confidence score, exploitability likelihood, auth level, intent gate), Submission N/A Criteria, Always-Rejected Findings, Docker lab setup, Playwright templates, and report template.
+> **Load `references/phases/audit-poc-report.md`** for: full proof checklist (confidence score, exploitability likelihood, auth level, intent gate), Submission N/A Criteria, Always-Rejected Findings, Docker lab setup, and Playwright templates.
+>
+> **Load `references/phases/bug-bounty-triage.md`** for the pre-submission triage funnel (real / proven-unmodified / in-scope / not-N/A / not-duplicate / severity-honest), the canonical bug-bounty submission template, the duplicate/known-issue check, and the gold-standard worked example.
 
 ---
 
-## Blind Spots Checklist (Top 10)
+## Blind Spots Checklist (Top 8)
 
 Before declaring "done", verify you tested:
 
@@ -580,30 +450,26 @@ Before declaring "done", verify you tested:
 - [ ] Second-order injection (stored safely, used unsafely later)
 - [ ] Rate limiting (brute force login, OTP, password reset)
 - [ ] Content-type switching (JSON → XML for XXE, form-encoded for CSRF)
-- [ ] WebSocket endpoints (often completely unauthenticated)
-- [ ] Prototype pollution in Node.js JSON inputs
-- [ ] Cloud metadata during SSRF testing
-- [ ] ORM raw query methods (ORM != no SQLi)
 - [ ] Race conditions on ALL state-changing operations
-- [ ] RSS/Atom/XML feed parsers (CDATA blocks bypass HTML sanitizers — `<![CDATA[<script>alert(1)</script>]]>` renders as HTML when feed content is displayed)
-- [ ] Archive extraction endpoints (Zip Slip via `../` in filenames — `ZipArchive`, `PclZip`, `tar`, `unzip` without path validation)
-- [ ] Runtime/language version gates (PHP < 8.0 type juggling, PHP < 7.0 `/e` modifier, Python 2 `input()` = `eval()`, Node.js `--inspect` open debugger)
-- [ ] Template output filter internals (`|safe`, `|raw`, `html_safe`, `is_safe` — verify escaping matches the output context, not just that a filter is applied)
+- [ ] Stateful traces (message reorder/drop/repeat/splice, authenticated↔unauthenticated transitions, deep protocol states)
+- [ ] Deep uncovered functions (reachable call-graph frontier nodes where fuzzing/static passes never reached)
 
-Full blind spots list in `references/chaining-advanced-techniques.md`.
+Full blind spots list (RSS/Atom CDATA, archive extraction, runtime version gates, template filter internals, and 15+ more) in `references/phases/chaining-advanced-techniques.md`.
 
 ---
 
 ## On-Demand: Audit / PoC / Report
 
-> **Trigger**: Load `references/audit-poc-report.md` when the user requests:
+> **Trigger**: Load `references/phases/audit-poc-report.md` when the user requests:
 > - Formal security audit (OWASP/STRIDE/PASTA framework)
 > - Proof-of-concept development methodology
-> - Vulnerability report generation
+> - Multi-finding audit / pentest report generation
 > - Red team simulation with attacker personas
 > - CVSS scoring and risk assessment
+>
+> **Trigger**: Load `references/phases/bug-bounty-triage.md` when preparing a **bug-bounty / coordinated-disclosure submission** — deciding whether a confirmed finding will survive a program triager and assembling it in the canonical single-finding submission format.
 
-This section is intentionally not auto-loaded to save tokens during standard research.
+This section is not auto-loaded to save tokens during standard research.
 
 ---
 

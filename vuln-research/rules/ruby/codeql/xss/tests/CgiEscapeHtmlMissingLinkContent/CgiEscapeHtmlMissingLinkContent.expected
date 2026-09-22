@@ -1,0 +1,2 @@
+| fixture.rb:10:9:16:11 | object_link_text | Method `object_link_text` returns plain text that is inserted into an HTML context without CGI.escapeHTML; rename to `object_link_content_html` and wrap every returned value with CGI.escapeHTML(...) to prevent XSS. |
+| fixture.rb:27:9:30:11 | object_link_text | Method `object_link_text` returns plain text that is inserted into an HTML context without CGI.escapeHTML; rename to `object_link_content_html` and wrap every returned value with CGI.escapeHTML(...) to prevent XSS. |

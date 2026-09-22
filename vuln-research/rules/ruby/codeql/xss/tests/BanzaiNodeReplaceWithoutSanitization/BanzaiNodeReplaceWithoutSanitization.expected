@@ -1,0 +1,1 @@
+| lib/banzai/filter/fixture.rb:16:11:16:28 | call to replace | Banzai filter calls node.replace() with potentially user-controlled HTML without prior SanitizationFilter sanitization; pass the replacement HTML through Banzai::Filter::SanitizationFilter.new(html).call before replacing the node. |

@@ -1,0 +1,2 @@
+| types.rb:9:5:10:53 | call to field | GraphQL field 'ci_variables' in a sensitive type is missing an `authorize:` keyword; add `authorize: :read_<resource>` to enforce per-field access control. |
+| types.rb:26:5:27:51 | call to field | GraphQL field 'access_token' in a sensitive type is missing an `authorize:` keyword; add `authorize: :read_<resource>` to enforce per-field access control. |

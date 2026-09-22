@@ -1,0 +1,2 @@
+| fixture.rb:8:15:8:62 | call to find_by_fingerprint_sha256 | Credential looked up via `find_by_fingerprint_sha256` without an `expired?` check in this method; expired credentials may authenticate successfully. |
+| fixture.rb:15:24:15:55 | call to find_by_token | Credential looked up via `find_by_token` without an `expired?` check in this method; expired credentials may authenticate successfully. |

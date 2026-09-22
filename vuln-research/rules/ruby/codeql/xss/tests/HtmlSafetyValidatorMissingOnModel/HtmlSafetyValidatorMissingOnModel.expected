@@ -1,0 +1,2 @@
+| fixture.rb:6:5:9:43 | call to validates | validates :name is missing `html_safety: true`; user-supplied HTML stored in this attribute may be rendered unescaped in emails or views, causing stored XSS. |
+| fixture.rb:12:5:12:53 | call to validates | validates :description is missing `html_safety: true`; user-supplied HTML stored in this attribute may be rendered unescaped in emails or views, causing stored XSS. |

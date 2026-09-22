@@ -1,0 +1,3 @@
+| service_missing_can.rb:8:5:8:17 | call to save! | The `execute` method of UpdateProjectService calls `save!` but has no `can?(current_user, ...)` or `Ability.allowed?(current_user, ...)` authorization check; add an authz guard before mutating. |
+| service_missing_can.rb:26:5:26:18 | call to destroy! | The `execute` method of RotateTokenService calls `destroy!` but has no `can?(current_user, ...)` or `Ability.allowed?(current_user, ...)` authorization check; add an authz guard before mutating. |
+| service_missing_can.rb:27:5:27:37 | call to create! | The `execute` method of RotateTokenService calls `create!` but has no `can?(current_user, ...)` or `Ability.allowed?(current_user, ...)` authorization check; add an authz guard before mutating. |

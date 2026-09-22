@@ -1,0 +1,3 @@
+| fixture.rb:3:3:3:37 | call to validates | ActiveRecord model 'AbuseReport' validates presence/format on a field but has no `length: { maximum: N }` constraint anywhere in this class; add a length cap to prevent oversized-payload DoS. |
+| fixture.rb:4:3:4:36 | call to validates | ActiveRecord model 'AbuseReport' validates presence/format on a field but has no `length: { maximum: N }` constraint anywhere in this class; add a length cap to prevent oversized-payload DoS. |
+| fixture.rb:5:3:5:37 | call to validates | ActiveRecord model 'AbuseReport' validates presence/format on a field but has no `length: { maximum: N }` constraint anywhere in this class; add a length cap to prevent oversized-payload DoS. |

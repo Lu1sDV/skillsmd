@@ -1,0 +1,1 @@
+| lib/fixture.rb:11:7:11:30 | call to expose | Grape entity exposes `:description_html` without a MarkupHelper.markdown_field block; cached raw HTML is returned without user-context sanitization, risking XSS. |

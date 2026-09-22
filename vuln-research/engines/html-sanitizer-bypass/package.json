@@ -1,0 +1,9 @@
+{
+  "name": "html-sanitizer-bypass-engine",
+  "version": "1.0.0",
+  "description": "Target-agnostic HTML sanitizer bypass harness engine (build_corpus + sanitizer_runner + oracle) for the vuln-research SAST swarm",
+  "private": true,
+  "dependencies": {
+    "jsdom": "^29.1.1"
+  }
+}

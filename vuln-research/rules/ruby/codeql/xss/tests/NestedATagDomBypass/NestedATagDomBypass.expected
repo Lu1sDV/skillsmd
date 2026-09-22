@@ -1,0 +1,1 @@
+| fixture.rb:18:9:18:69 | call to push | This sanitization allowlist pushes a transformer but never registers `method(:unwrap_nested_a)`; nested `<a>` tags produced by the HTML5 parser will survive and can leak redacted reference text via `data-original`. |

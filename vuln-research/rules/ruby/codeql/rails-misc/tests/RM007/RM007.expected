@@ -1,0 +1,2 @@
+| fixture.rb:27:13:27:28 | call to fullpath | request.fullpath passed to a logger leaks query-string tokens (e.g. ?private_token=, ?access_token=) in plaintext. Replace with request.filtered_path. |
+| fixture.rb:35:13:35:28 | call to fullpath | request.fullpath passed to a logger leaks query-string tokens (e.g. ?private_token=, ?access_token=) in plaintext. Replace with request.filtered_path. |

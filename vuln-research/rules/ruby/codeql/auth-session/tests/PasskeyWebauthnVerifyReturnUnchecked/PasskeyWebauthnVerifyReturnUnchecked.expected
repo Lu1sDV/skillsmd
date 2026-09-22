@@ -1,0 +1,2 @@
+| passkey_verify.rb:12:9:12:91 | call to verify_passkey | Return value of `verify_passkey` is not checked; if the WebAuthn library returns false on failure rather than raising, authentication continues. Use `raise WebAuthn::Error unless verify_passkey(...)`. |
+| passkey_verify.rb:26:9:26:93 | call to verify_webauthn | Return value of `verify_webauthn` is not checked; if the WebAuthn library returns false on failure rather than raising, authentication continues. Use `raise WebAuthn::Error unless verify_webauthn(...)`. |

@@ -1,0 +1,11 @@
+# Variant-hunt suite — precise AST queries safe to run HEAD-wide.
+# Excludes ControllerMissingAuthzGuard (RB-QL-1307): valid as a diff-level check
+# but floods HEAD (cannot see inherited ApplicationController auth guards).
+# Excludes tests/ copies. Run: analyze.sh dbs/HEAD codeql/variant-hunt-authsession.qls ...
+- query: auth-session/CsrfProtectionDisabled.ql
+- query: auth-session/AuthenticationSkipped.ql
+- query: auth-session/OverlyBroadAuthzSkip.ql
+- query: auth-session/IdorUnscopedFind.ql
+- query: auth-session/BlockedUserNotChecked.ql
+- query: auth-session/DeclarativePolicyUnusedCondition.ql
+- query: ssti/HtmlEscapeUnqualified.ql

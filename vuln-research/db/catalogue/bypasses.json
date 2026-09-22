@@ -1,0 +1,290 @@
+[
+  {
+    "id": "sanitizer.encoding",
+    "defense_type": "sanitizer_function",
+    "family": "encoding",
+    "description": "Encode dangerous bytes (hex/url/unicode) so the sanitizer's regex/string compare misses them; downstream decoder restores them.",
+    "applies_when": "parsed_logic_json indicates literal-string substring checks, regex over decoded text, or transformations that run before decoding by the consumer.",
+    "applies_when_tags": ["literal_substring_check", "regex_pre_decode", "transform_before_decode"],
+    "examples": ["%3Cscript%3E", "\\x3cscript\\x3e", "&lt;script&gt;"]
+  },
+  {
+    "id": "sanitizer.double_encoding",
+    "defense_type": "sanitizer_function",
+    "family": "double_encoding",
+    "description": "Encode twice so a single decode pass leaves an encoded form the sanitizer's filter misses on its post-decode view.",
+    "applies_when": "parsed_logic_json shows one urldecode/htmlspecialchars_decode step but the sink decodes again; or sanitizer normalizes once and the consumer normalizes again.",
+    "applies_when_tags": ["single_decode_pass", "sink_decodes_again", "double_normalize"],
+    "examples": ["%253Cscript%253E", "%2527 OR 1=1--", "&amp;lt;script&amp;gt;"]
+  },
+  {
+    "id": "sanitizer.null_byte_truncation",
+    "defense_type": "sanitizer_function",
+    "family": "null_byte_truncation",
+    "description": "Embed \\x00 to truncate the sanitized string in C-string consumers without affecting downstream byte-buffer consumers.",
+    "applies_when": "parsed_logic_json flags suffix/extension checks or any check using strlen/strcmp/C-string boundary, while the sink is a byte-buffer consumer (filesystem, raw socket).",
+    "applies_when_tags": ["suffix_check", "extension_check", "cstring_boundary", "sink_byte_buffer"],
+    "examples": ["safe\\x00.php", "user@host\\x00.attacker.com", "image.jpg\\x00.php"]
+  },
+  {
+    "id": "sanitizer.unicode_normalization",
+    "defense_type": "sanitizer_function",
+    "family": "unicode_normalization",
+    "description": "Use codepoints the sanitizer sees as benign but the downstream consumer normalizes (NFKC/NFKD) into a dangerous form.",
+    "applies_when": "parsed_logic_json lacks an explicit NFC/NFKC step before the check OR uses bytewise compare against a unicode-normalizing sink (database collation, JS DOM, ICU consumer).",
+    "applies_when_tags": ["no_nfc_step", "bytewise_compare", "sink_normalizes"],
+    "examples": ["ﬁle", "＜script＞", "combining-mark separators"]
+  },
+  {
+    "id": "sanitizer.mixed_case",
+    "defense_type": "sanitizer_function",
+    "family": "mixed_case",
+    "description": "Case-insensitive sink, case-sensitive sanitizer.",
+    "applies_when": "parsed_logic_json shows case-sensitive substring/regex without an 'i' flag and the sink is case-insensitive.",
+    "applies_when_tags": ["case_sensitive_check", "sink_case_insensitive"],
+    "examples": ["<ScRiPt>", "SeLeCT * FROM", "JaVaScRiPt:"]
+  },
+  {
+    "id": "sanitizer.length_truncation",
+    "defense_type": "sanitizer_function",
+    "family": "length_truncation",
+    "description": "Sanitizer reads/checks a different prefix length than the sink stores or executes.",
+    "applies_when": "parsed_logic_json mentions a length cap, prefix slice, or buffer-bounded check while the sink is unbounded.",
+    "applies_when_tags": ["length_cap", "prefix_slice", "sink_unbounded"],
+    "examples": ["256-char benign prefix + payload", "substr(input,0,100) then full-string store", "MySQL VARCHAR(N) silent truncation"]
+  },
+  {
+    "id": "sanitizer.charset_confusion",
+    "defense_type": "sanitizer_function",
+    "family": "charset_confusion",
+    "description": "Sanitizer assumes one charset; sink decodes another.",
+    "applies_when": "parsed_logic_json is silent on charset OR Content-Type is sniffable/unspecified at the consumer.",
+    "applies_when_tags": ["charset_silent", "content_type_sniffable"],
+    "examples": ["+ADw-script+AD4-", "UTF-16 BOM reinterpretation", "CP1252 round-trip diff"]
+  },
+  {
+    "id": "sanitizer.locale_dependent",
+    "defense_type": "sanitizer_function",
+    "family": "locale_dependent",
+    "description": "toLowerCase/strtolower behave differently in some locales (notably Turkish I/İ/ı/i).",
+    "applies_when": "parsed_logic_json mentions toLowerCase/toUpperCase/strtolower/strtoupper without an explicit locale.",
+    "applies_when_tags": ["lowercase_uppercase", "no_explicit_locale"],
+    "examples": ["JAVASCRIPT: -> javascrıpt: (Turkish)", "ß.toUpperCase() == SS"]
+  },
+  {
+    "id": "sanitizer.idempotency",
+    "defense_type": "sanitizer_function",
+    "family": "idempotency",
+    "description": "Sanitizer applied twice produces a different (sometimes dangerous) result than applied once.",
+    "applies_when": "parsed_logic_json shows multi-pass pipelines or sanitizers invoked at write-time and again at render-time.",
+    "applies_when_tags": ["multipass_pipeline", "write_and_render_sanitize"],
+    "examples": ["htmlentities(htmlentities('\"')) -> &amp;quot;", "addslashes(addslashes('\\\\'))"]
+  },
+  {
+    "id": "sanitizer.order_of_operations",
+    "defense_type": "sanitizer_function",
+    "family": "order_of_operations",
+    "description": "Sanitizer fixes one form; sink composes pieces post-sanitization that reintroduce danger.",
+    "applies_when": "parsed_logic_json shows the defense applied to one variable while siblings on the same sink line are untouched.",
+    "applies_when_tags": ["sibling_unsanitized", "post_sanitize_concat"],
+    "examples": ["addslashes($a) . $b (b raw)", "escapeHtml(user) + '<' + raw", "sanitize-then-decode-then-sanitize"]
+  },
+  {
+    "id": "blacklist.case_variation",
+    "defense_type": "blacklist",
+    "family": "case_variation",
+    "description": "Blacklist matches one case; sink/parser is case-insensitive.",
+    "applies_when": "parsed_logic_json shows literal-case 'in BLOCKLIST' / strstr without 'i' flag.",
+    "applies_when_tags": ["case_sensitive_check", "sink_case_insensitive"],
+    "examples": ["SeLeCt", "<ScRiPt>", "JaVa\\x09ScRiPt:"]
+  },
+  {
+    "id": "blacklist.whitespace_insertion",
+    "defense_type": "blacklist",
+    "family": "whitespace_insertion",
+    "description": "Insert characters the blacklist's tokenizer sees but the sink/parser treats as whitespace or ignores.",
+    "applies_when": "parsed_logic_json tokenizes or does naive substring without normalizing whitespace.",
+    "applies_when_tags": ["tokenization", "naive_substring"],
+    "examples": ["SELECT/**/password", "<scr\\nipt>", "un\\nion select"]
+  },
+  {
+    "id": "blacklist.encoding_hops",
+    "defense_type": "blacklist",
+    "family": "encoding_hops",
+    "description": "Encode the dangerous token so the blacklist's literal match fails; downstream decoder restores it.",
+    "applies_when": "blacklist runs before the decoder, or on a different encoded view than the sink.",
+    "applies_when_tags": ["blacklist_before_decode", "encoded_view_differs"],
+    "examples": ["&lt;script&gt;", "%3cscript%3e", "\\x73elect"]
+  },
+  {
+    "id": "blacklist.comment_injection",
+    "defense_type": "blacklist",
+    "family": "comment_injection",
+    "description": "Insert language-specific comment tokens to break up the blacklisted pattern.",
+    "applies_when": "parser strips comments before execution but the blacklist does not.",
+    "applies_when_tags": ["parser_strips_comments"],
+    "examples": ["UN/**/ION SE/**/LECT", "<scr<!---->ipt>", "SEL/*x*/ECT"]
+  },
+  {
+    "id": "blacklist.polyglot",
+    "defense_type": "blacklist",
+    "family": "polyglot",
+    "description": "Single payload valid in multiple grammars; blacklist tuned for one grammar misses the others.",
+    "applies_when": "input is consumed by multiple parsers (logged then displayed; stored then templated).",
+    "applies_when_tags": ["multi_parser_consumption"],
+    "examples": ["jaVasCript:/*-/*`/*\\`/*'/*\"/**/(/* */oNcliCk=alert())//", "SQL/JSON/JS triple-valid strings"]
+  },
+  {
+    "id": "blacklist.alternative_api",
+    "defense_type": "blacklist",
+    "family": "alternative_api",
+    "description": "Blacklisted function/route has unblacklisted siblings with the same effect.",
+    "applies_when": "parsed_logic_json enumerates a literal set; the language/framework offers a synonym not in the set.",
+    "applies_when_tags": ["literal_set_enumeration"],
+    "examples": ["system() blocked but exec()/passthru()/proc_open()", "/admin/delete blocked but /Admin/delete/", "xp_cmdshell blocked but sp_OAMethod allowed"]
+  },
+  {
+    "id": "blacklist.synonym_substitution",
+    "defense_type": "blacklist",
+    "family": "synonym_substitution",
+    "description": "Different keyword/identifier with equivalent meaning.",
+    "applies_when": "parsed_logic_json enumerates a small fixed keyword set.",
+    "applies_when_tags": ["small_fixed_keyword_set"],
+    "examples": ["INNER JOIN blocked, ','-join works", "eval blocked, Function('return ...')() works", "setTimeout('str') blocked, setTimeout(fn) works"]
+  },
+  {
+    "id": "allowlist.regex_anchor_evasion",
+    "defense_type": "allowlist",
+    "family": "regex_anchor_evasion",
+    "description": "Allowlist regex missing ^ / $ anchors matches any substring.",
+    "applies_when": "parsed_logic_json shows a regex pattern without both anchors.",
+    "applies_when_tags": ["regex_pattern", "missing_anchors"],
+    "examples": ["/example\\.com/ matches evil.com/example.com/foo", "missing $ allows https://allowed.com.attacker.com"]
+  },
+  {
+    "id": "allowlist.inclusion_exploits",
+    "defense_type": "allowlist",
+    "family": "inclusion_exploits",
+    "description": "Allowlist permits an entry that itself exposes danger.",
+    "applies_when": "allowlist enumerates external services or extensions known to embed scripting/redirect capability.",
+    "applies_when_tags": ["external_services", "extensions_with_scripting"],
+    "examples": ["accounts.google.com (open-redirect chain)", ".svg (inline JS)", "tar with --use-compress-program= (RCE)"]
+  },
+  {
+    "id": "allowlist.suffix_injection",
+    "defense_type": "allowlist",
+    "family": "suffix_injection",
+    "description": "Allowlist suffix-matches without anchoring at a delimiter boundary.",
+    "applies_when": "parsed_logic_json shows endsWith/suffix regex without delimiter-aware boundary, OR startsWith without :// boundary.",
+    "applies_when_tags": ["endswith_check", "suffix_regex_no_boundary"],
+    "examples": ["allowed foo.com -> foo.com.attacker.com", "allowed .png -> payload.php.png.evil"]
+  },
+  {
+    "id": "allowlist.prefix_injection",
+    "defense_type": "allowlist",
+    "family": "prefix_injection",
+    "description": "URL parsers split on #, ?, @ differently than the allowlist.",
+    "applies_when": "parsed_logic_json parses URLs by regex/split rather than a spec-compliant URL parser; or uses one parser for the check and another for the fetch.",
+    "applies_when_tags": ["url_regex_split", "url_parser_mismatch"],
+    "examples": ["https://attacker.com#foo.com", "https://user@allowed.com@attacker.com", "https://allowed.com.attacker.com/..."]
+  },
+  {
+    "id": "allowlist.null_byte_truncation",
+    "defense_type": "allowlist",
+    "family": "null_byte_truncation",
+    "description": "\\x00 in input truncates the string for one consumer but not another, sneaking a non-allowlisted tail past the check.",
+    "applies_when": "parsed_logic_json checks an extension or suffix with C-string-aware code (legacy PHP, native bindings).",
+    "applies_when_tags": ["extension_check", "cstring_aware"],
+    "examples": ["allowed.com\\x00.attacker.com", "image.png\\x00.php"]
+  },
+  {
+    "id": "allowlist.idn_homograph",
+    "defense_type": "allowlist",
+    "family": "idn_homograph",
+    "description": "Punycode/homoglyph hosts visually equal allowlisted hostnames but resolve elsewhere.",
+    "applies_when": "parsed_logic_json allowlist contains hostnames and check uses Unicode-naive comparison.",
+    "applies_when_tags": ["hostname_allowlist", "unicode_naive"],
+    "examples": ["аpple.com (Cyrillic a)", "xn--80ak6aa92e.com", "paypaI.com (capital I)"]
+  },
+  {
+    "id": "allowlist.case_insensitive_holes",
+    "defense_type": "allowlist",
+    "family": "case_insensitive_holes",
+    "description": "Allowlist case-sensitive against case-insensitive consumer (or reverse).",
+    "applies_when": "case handling in parsed_logic_json differs from the consumer.",
+    "applies_when_tags": ["case_handling_mismatch"],
+    "examples": ["allowlist [png,jpg] rejects JPG but OS treats image.JPG same", "Admin slips past admin-only role"]
+  },
+  {
+    "id": "allowlist.scheme_confusion",
+    "defense_type": "allowlist",
+    "family": "scheme_confusion",
+    "description": "Allowlist checks domain but not scheme, or vice versa.",
+    "applies_when": "parsed_logic_json extracts host without restricting scheme to a safe set.",
+    "applies_when_tags": ["host_extract_no_scheme"],
+    "examples": ["javascript://allowed.com/%0Aalert(1)", "data:text/html,<script>...</script>", "file:///etc/passwd"]
+  },
+  {
+    "id": "generic.type_juggling",
+    "defense_type": "generic",
+    "family": "type_juggling",
+    "description": "Loose equality / coercion creates surprising equalities.",
+    "applies_when": "parsed_logic_json uses ==/!= (PHP/JS) on attacker-controlled values, or feeds attacker arrays/objects into scalar comparisons.",
+    "applies_when_tags": ["loose_equality", "attacker_array_object"],
+    "examples": ["PHP 0 == 'string' (true <8.0)", "JS [] == false (true)", "strcmp('123', []) returns null"]
+  },
+  {
+    "id": "generic.length_manipulation",
+    "defense_type": "generic",
+    "family": "length_manipulation",
+    "description": "Sink/check operates on different length semantics (bytes vs codepoints vs grapheme clusters).",
+    "applies_when": "length caps appear in parsed_logic_json and the sink is multibyte-aware.",
+    "applies_when_tags": ["length_cap", "multibyte_sink"],
+    "examples": ["UTF-8 multibyte where bytes != chars", "surrogate pairs (1 codepoint, 2 UTF-16 units)", "combining marks expanding on normalize"]
+  },
+  {
+    "id": "generic.charset_confusion",
+    "defense_type": "generic",
+    "family": "charset_confusion",
+    "description": "Document encoded as one charset; sniffed or processed as another.",
+    "applies_when": "Content-Type is sniffable, absent, or the consumer auto-detects (older browsers, MS-Office, RSS).",
+    "applies_when_tags": ["content_type_sniffable"],
+    "examples": ["UTF-7 +ADw-script+AD4-", "UTF-16 BOM \\xFF\\xFE flip", "lone surrogate codepoints"]
+  },
+  {
+    "id": "logic_guard.cross_user_object_ref",
+    "defense_type": "logic_guard",
+    "family": "cross_user_object_ref",
+    "description": "An access guard proves the object exists or the caller is authenticated, but never that the object belongs to the caller — supplying another principal's identifier (IDOR / BOLA) crosses the user boundary and reaches their data.",
+    "applies_when": "parsed_logic_json shows a lookup or auth/existence check keyed on an attacker-supplied object id with NO ownership/tenant predicate binding the object to the current principal (authentication present, authorization absent).",
+    "applies_when_tags": ["object_id_from_input", "no_ownership_predicate", "authn_not_authz", "tenant_scope_absent"],
+    "examples": ["GET /api/orders/1002 returns another user's order (id not scoped to session user)", "SELECT * FROM doc WHERE id = :id  -- missing AND owner_id = :current_user", "PATCH /users/{id}/email with a foreign {id}"]
+  },
+  {
+    "id": "logic_guard.missing_function_authz",
+    "defense_type": "logic_guard",
+    "family": "missing_function_authz",
+    "description": "A privileged function/route is gated on the WRONG predicate (authenticated vs. authorized) or on nothing server-side — any logged-in, or even anonymous, caller invokes the privileged operation (BFLA / missing function-level access control).",
+    "applies_when": "parsed_logic_json gates a state-changing or admin operation on isLoggedIn / session-present rather than an explicit role/permission, OR the privileged route is reachable by force-browsing and absent from the server authz map (client-side / hidden-UI gating only).",
+    "applies_when_tags": ["privileged_function", "authn_only_check", "role_check_absent", "wrong_predicate", "client_side_gate"],
+    "examples": ["if (user != null) deleteUser(target)  -- needs isAdmin(user)", "/admin/* protected only by hiding the link, no server role check", "force-browse POST /api/promote with a normal-user token"]
+  },
+  {
+    "id": "logic_guard.broken_state_machine",
+    "defense_type": "logic_guard",
+    "family": "broken_state_machine",
+    "description": "A workflow/step-order or status-flag invariant is enforced only by the expected client path; reaching a later or privileged state out of order — skipping a step, replaying a one-time token, or flipping a status flag — escalates.",
+    "applies_when": "parsed_logic_json transitions on a status/step field WITHOUT verifying the required prior state, trusts a client-supplied step/status value, or consumes a one-time token that is not invalidated on use.",
+    "applies_when_tags": ["status_flag_transition", "no_prior_state_check", "client_supplied_step", "one_time_token_reuse"],
+    "examples": ["POST /checkout/confirm before /checkout/pay — order ships unpaid", "reuse a password-reset token after it was already consumed", "set is_verified=true via an out-of-order /account/verify call"]
+  },
+  {
+    "id": "logic_guard.confused_deputy_param_tamper",
+    "defense_type": "logic_guard",
+    "family": "confused_deputy_param_tamper",
+    "description": "A privilege-relevant field (role, tenant, owner, user_id, price, is_admin) is read from attacker-controlled input and trusted, or the authority is re-checked after it can change (TOCTOU) — the caller grants themselves authority (mass assignment / parameter tampering / confused deputy).",
+    "applies_when": "parsed_logic_json binds a role/tenant/owner field from request body/query into a privileged decision or persisted record without server-side derivation, OR checks an auth predicate then uses it with a mutation window in between.",
+    "applies_when_tags": ["role_field_from_input", "mass_assignment", "tenant_from_input", "toctou_auth"],
+    "examples": ["{\"role\":\"admin\"} accepted on PATCH /me and persisted", "tenant_id taken from request body instead of the session", "isOwner(obj) passes, then act on an object reassigned in the gap (TOCTOU)"]
+  }
+]

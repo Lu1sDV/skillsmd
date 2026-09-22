@@ -1,0 +1,41 @@
+-- vuln-research migration 0019 — logic_guard defense_type (authorization / complex-logic escalation)
+--
+-- Forward-only, idempotent. Safe to re-apply.
+--
+-- SCOPE: widens the defense model so the Phase-0.75 (Defense Pre-Break) corpus covers
+-- not just input-filter defenses (sanitizer_function / blacklist / allowlist) but also
+-- COMPLEX LOGICAL CHECKS whose DEFEAT yields escalation rather than injection. The new
+-- per-target defense_type is 'logic_guard'. Its bypass families live in the global
+-- catalogue (db/catalogue/bypasses.json, catalogue_version 2):
+--   logic_guard.cross_user_object_ref        — IDOR / BOLA, cross-user object access
+--   logic_guard.missing_function_authz       — BFLA, privileged function reachable w/o role
+--   logic_guard.broken_state_machine         — out-of-order / status-flag / token-replay escalation
+--   logic_guard.confused_deputy_param_tamper — mass assignment / param tampering / TOCTOU authz
+-- A logic_guard defense is a real per-target row (the guard exists in code, e.g.
+-- `if (obj.owner_id == current_user)`), unlike the catalogue-only 'generic' class.
+--
+-- CHECK-DIVERGENCE NOTE (mirrors the 0009 / 0007 precedent — read that block first):
+-- this change WIDENS an EXISTING column CHECK (defenses.defense_type, 3-way -> 4-way).
+-- DuckDB cannot ALTER / ADD / DROP a CHECK after the fact, and `defenses` is FK-referenced
+-- by gr_findings, agent_steps, critical_functions, defense_bypasses and sanitizer_bypass_runs
+-- (cannot be dropped + rebuilt safely). So there is NO DDL the upgrade path can run to widen
+-- the constraint. The canonical fresh-DB path in db/schema.sql carries the widened
+-- 4-way CHECK directly (CREATE TABLE IF NOT EXISTS), and the Go harness applies that
+-- canonical schema idempotently on Open — every real audit DB is created fresh from
+-- db/schema.sql, so it gets the widened CHECK. On a pre-0019 DB that is upgraded in place
+-- (rather than recreated), the old 3-way CHECK persists and would reject logic_guard rows;
+-- the logic_guard type is therefore enforced/admitted app-side on that upgrade path, exactly
+-- as 0009 documents for the fine-grained sanitizer categoricals. New runs recreate the DB,
+-- so this divergence affects only legacy in-place upgrades.
+--
+-- CATALOGUE (separate DB): the global catalogue (db/catalogue/schema.sql) is regenerable
+-- from bypasses.json and is NOT part of this audit-DB migration chain; its CHECK is widened
+-- there via DROP+CREATE (catalogue_version 2). See references/v2/bypass-catalogue.md §4.
+--
+-- This migration is intentionally a documentation + schema_version record: there is no
+-- syntactically valid, FK-safe DuckDB statement that widens the constraint on the upgrade
+-- path. It records version 19 so the ordered chain and schema_version stay in lockstep.
+
+INSERT INTO schema_version (version, description)
+VALUES (19, 'logic_guard defense_type (authz/complex-logic escalation: cross_user_object_ref, missing_function_authz, broken_state_machine, confused_deputy_param_tamper) — canonical db/schema.sql carries the widened 4-way defenses.defense_type CHECK; DuckDB cannot widen the FK-referenced CHECK on the upgrade path (enforced app-side, per the 0009 precedent); catalogue widened separately at catalogue_version 2')
+ON CONFLICT DO NOTHING;

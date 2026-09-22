@@ -1,5 +1,7 @@
 # Java Security Sinks — Comprehensive Reference
 
+> **Depth**: comprehensive — structured citation blocks, sidecar JSONL, PoC snippets, JVM-internals and deserialization gadget coverage. Last reviewed: 2026-05-09.
+
 > **Sidecar files** (lossless split): `java.citations.jsonl` (one structured citation per line, keyed by `sink_id`) and `java.snippets/<sink_id>.<ext>` (PoC code blocks). In-doc tokens `[citation:ID]` and `[snippet:ID]` link to them.
 
 > **Generated**: 2026-05-09 via 11-agent parallel research swarm. JSON defaults: `verified:true`, `confidence:"confirmed"` unless noted. URLs for CVE/JEP/JDK/CERT/GHSA IDs are deterministic and omitted from migrated extras.

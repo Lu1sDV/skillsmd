@@ -1,0 +1,368 @@
+# vuln-research strategies seed
+#
+# These rows MUST exist in the strategies table for agent_steps FK constraints
+# to succeed on a fresh audit DB. They are inserted idempotently on schema
+# initialization. As of v0.28 (migration 0021) the strategies seed in db/schema.sql
+# uses a GUARDED UPSERT — ON CONFLICT (name) DO UPDATE SET description/version,
+# updated_at=CURRENT_TIMESTAMP WHERE the row actually changed — which preserves
+# created_at and only moves updated_at on a real description/version change.
+# (db/migrations/0001-initial.sql keeps its historical ON CONFLICT DO NOTHING form.)
+#
+# Versioning: bump a strategy's `version` when its prompt template or coverage
+# contract changes; agents serialize the version they ran against into
+# agent_steps.coverage_json for replay safety.
+
+strategies:
+  - name: forward_slice_lane
+    description: >
+      Trace taint forward from a source through its callee set toward declared
+      sinks. Anchored by an input_slices row with slice_kind = 'forward_taint'.
+    version: 1
+
+  - name: backward_sink_lane
+    description: >
+      Trace controllability backward from a sink to find which sources reach
+      it. Anchored by an input_slices row with slice_kind = 'backward_sink'.
+    version: 1
+
+  - name: defense_base_lane
+    description: >
+      Run the three-stage bypass-hunting protocol against a ranked defense.
+      Consumes the global DuckDB bypass catalogue via the tiered fetch
+      protocol described in references/bypass-catalogue.md.
+    version: 1
+
+  - name: defense_context_verification_lane
+    description: >
+      Spawned on demand when cascade-on-bypass flags a forward-slice as
+      bypass-reachable. Confirms whether the bypass actually flows from a real
+      source to a real sink through this slice.
+    version: 1
+
+  - name: isolation_fuzz_lane
+    description: >
+      Stage 3 of bypass-hunting: cost-gated isolation harness fuzzing. Wraps
+      the defense as a callable; runs corpus + LLM payloads + short
+      property-based fuzz seeded by parsed_logic_json.
+    version: 1
+
+  - name: autoload_seed_lane
+    description: >
+      Phase-entry seed of top-K=10 knowledge chunks into the agent's prompt
+      context. Writes knowledge_seed_log rows with load_mode = 'seed'.
+    version: 1
+
+  - name: autoload_expand_lane
+    description: >
+      Lazy on-demand expand of additional knowledge chunks (cap 50 per
+      agent_step). Writes knowledge_seed_log rows with load_mode = 'expand'.
+    version: 1
+
+  - name: report_critic
+    description: >
+      Phase 5 critic. Runs comprehension / eligibility / attack-scenario
+      checks over each confirmed finding. Emits critic_findings rows; CRITICAL
+      rows block report emission, WARNING rows are stored structurally.
+    version: 1
+
+  - name: critical_function_dataflow_lane
+    description: >
+      Forward data-flow lane. Traces taint FORWARD from all attacker-controllable
+      sources toward ranked critical functions (recording critical_fn_reach
+      rows), AND forward FROM each ranked critical function to its downstream
+      effects/sinks (critical_fn_forward slices). Anchored by critical_functions
+      rows produced by the critical-function hunt. See
+      references/v2/critical-function-hunt.md and
+      references/methodology/forward-slicing-lanes.md.
+    version: 1
+
+  - name: boundary_fuzz_lane
+    description: >
+      Phase 1.5 (DEEP-only) mandatory boundary-fuzzing lane. Harnesses selected
+      parser / FFI / decoder / protocol boundaries and fuzzes them for
+      memory-corruption crashes, deterministic C/C++ leaks, property/differential divergences, and state-model
+      deviations, recording one fuzz_runs row per entry point (engine + sanitizer
+      config, coverage, mandatory-attempt accounting) and emitting results as
+      gr_findings rows (finding_kind='fuzz_crash' or 'fuzz_divergence'). Distinct
+      from isolation_fuzz_lane, which fuzzes a single isolated DEFENSE + its
+      bypass corpus (the defense pre-break / bypass-recheck lane, driven
+      primarily in Phase 0.75). See references/v2/fuzzing-lane.md.
+    version: 2
+
+  - name: html_sanitizer_bypass_lane
+    description: >
+      Phase 0.75 (MEDIUM+DEEP) defense pre-break lane targeting HTML / markdown
+      sanitizers. Discovers + characterizes sanitizer defenses (union of reuse /
+      pattern-sweep / AST+taint), then runs the agnostic html-sanitizer-bypass
+      engine (PHP isolate of the REAL target sanitize() + jsdom oracle) over a
+      fixed / versioned corpus. Per-payload sink hits land in defense_bypasses
+      (with sink_reached / capability / injection_context / input_vector labels);
+      the 3-valued per-sanitizer verdict (bypassed / clean / inconclusive) lands
+      in sanitizer_bypass_runs. See engines/html-sanitizer-bypass/ and
+      references/methodology/html-sanitizer-bypass-lane.md.
+    version: 1
+
+  - name: llm_seed_corpus_lane_a
+    description: >
+      Phase 1.4 (DEEP) preliminary LLM seed-corpus generator (instance A of an
+      identical-by-design dual pair with llm_seed_corpus_lane_b). Independently
+      synthesizes initial fuzz seeds from the target's input-format families;
+      emits fuzz_artifacts(artifact_kind='seed_initial'). The content-hash-deduped
+      UNION of lane A + lane B feeds boundary_fuzz_lane (Phase 1.5); diversity
+      arises purely from LLM stochasticity (the two lanes share one
+      prompt/strategy). Per-lane stop condition: input-format-family coverage
+      target OR per-lane seed token budget (run_config), whichever first.
+    version: 1
+
+  - name: llm_seed_corpus_lane_b
+    description: >
+      Phase 1.4 (DEEP) preliminary LLM seed-corpus generator (instance B of an
+      identical-by-design dual pair with llm_seed_corpus_lane_a). Independently
+      synthesizes initial fuzz seeds from the target's input-format families;
+      emits fuzz_artifacts(artifact_kind='seed_initial'). The content-hash-deduped
+      UNION of lane A + lane B feeds boundary_fuzz_lane (Phase 1.5); diversity
+      arises purely from LLM stochasticity (the two lanes share one
+      prompt/strategy). Per-lane stop condition: input-format-family coverage
+      target OR per-lane seed token budget (run_config), whichever first.
+    version: 1
+
+  - name: fuzzgpt_history_lane
+    description: >
+      Phase 1.4 (DEEP) history-driven LLM fuzzing lane (FuzzGPT, Deng et al.,
+      arXiv:2304.02014; coexists with — does NOT replace — the dual
+      llm_seed_corpus_lane_a/b). Distinct technique: instead of synthesizing
+      seeds from input-format families, it mines the TARGET's own historical
+      bug-triggering code (gh issues/PRs/commits), auto-labels each snippet's
+      buggy "fuzz target" (the unit generation is steered toward — API / compiler
+      flag / SQL feature / syscall / opcode / protocol field; NOT a libFuzzer
+      harness), then generates unusual edge-case programs via few-shot CoT /
+      zero-shot / retrieval (RT) generation. Two modes: (1) GENERATOR (default) —
+      emits edge-case programs as fuzz_artifacts(artifact_kind='seed_initial')
+      that feed boundary_fuzz_lane (Phase 1.5) + the existing crash/sanitizer
+      oracles + five-gate Confirm; no schema change on this path. (2) DIFFERENTIAL
+      ORACLE (in-lane sub-mode, target-agnostic — NOT DL-specific) — compares any
+      pair of supposedly-equivalent execution contexts (impl A vs B, version N vs
+      N+1, optimization level, config flag, reference implementation); a divergence
+      is QUARANTINED as gr_findings(finding_kind='differential_divergence',
+      severity=NULL, confirmation_status='unconfirmed') — the N/A classification —
+      and stays OUT of the HIGH/MED/LOW severity rankings until triage shows a
+      security-impact path that promotes it to 'candidate' (reusing the existing
+      exploitability gate / five-gate Confirm). Mandatory-attempt at DEEP:
+      "skipped — no minable bug history" (e.g. a fresh closed-source binary) is a
+      legitimate end state recorded as a documented skip. See
+      references/v2/fuzzgpt-history-lane.md +
+      references/methodology/fuzzgpt-history-driven-lane.md +
+      references/fuzzgpt/ + engines/fuzzgpt-retrieval/.
+    version: 1
+
+  - name: concolic_bypass_lane
+    description: >
+      Phase 0.75 (DEEP) C/C++/Java defense pre-break lane. Enumerates dangerous
+      functions guarded by a regex/sanitizer (reusing defenses + critical_fn_reach
+      + AST/CPG), drives the target's own build + instrumentation (C/C++: LLVM
+      bitcode for KLEE/SymCC; Java: bytecode + driver for a JVM concolic engine),
+      then runs directed symbolic+concolic execution to SOLVE the guard's path
+      constraints and synthesize a guard-passing input that reaches the target fn.
+      The solved concrete input is the bypass: replayed through the instrumented
+      build it passes the guard AND reaches the target fn ->
+      defense_bypasses(reproduced=TRUE) with the solver's path-constraint log in
+      exhaustion_log; reachability -> critical_fn_reach. Skip-with-reason only if
+      the build genuinely can't be produced or no concolic tool exists for the
+      stack. Distinct from isolation_fuzz_lane by technique (constraint-solving,
+      not mutation).
+    version: 1
+
+  - name: preliminary_enumeration_lane
+    description: >
+      Phase 0 (Decompose) exhaustive, finding-agnostic enumeration lane. Whole-tree
+      sweep that populates sources, sinks, defenses, and critical_functions
+      COMPLETELY before any finding is chased — every attacker-controllable input,
+      every dangerous callee, every sanitizer/blacklist/allowlist callsite, every
+      security-critical function — recorded because it exists in scope, never
+      because a smell led to it. Records what it swept in coverage_json
+      (files_swept, patterns_run, semgrep_callsites_seen,
+      sources_found/sinks_found/defenses_found counts) so the v_coverage
+      completeness contradiction signals (guards_on_paths_without_defense_row,
+      validator_cfs_without_defense_link, dangerous_sink_cfs_without_sink_row) have
+      a denominator. Ranking (v_critical_fn_ranked, phase0_priorities) orders this
+      complete set; it never narrows what is enumerated.
+    version: 1
+
+  - name: cpg_coverage
+    description: >
+      Slice-end CODEBASE coverage measurement (NON-MANDATORY — deliberately NOT in
+      v_required_deep_lanes). After the Hunt's slicing lanes flush for a
+      (target, round), measures in Joern — over the UNION of every input_slices node
+      set — how much of the codebase the slices collectively touched: a RAW ratio
+      (first-party methods, cpg.method.isExternal(false)) and a FRONTIER ratio
+      (attacker-reachable ∪ sink-bearing ∪ critical-function methods). Writes one
+      cpg_slice_coverage row (integer counts only; the percentages are computed by
+      v_cpg_slice_coverage, never stored as a constant), and emits each uncovered
+      FRONTIER method as a reusable agent_observations(obs_kind='blind_spot')
+      anchored on symbol_path so the NEXT round slices it first (round feed-forward).
+      Enforcement is the count-free gate v_coverage.slices_without_codebase_coverage
+      (slices exist but no coverage row => RED), never a percentage floor.
+    version: 1
+
+  - name: methodology_blindspot_lane_a
+    description: >
+      Phase 1.6 (DEEP) post-Hunt methodology blind-spot sweep (instance A of an
+      identical-by-design dual pair with methodology_blindspot_lane_b). Runs AFTER
+      all discovery sweeps (Phase 1 Hunt + Phase 1.5 Fuzzing) for a (target, round).
+      Single goal: "find any blind spot in our codebase-analysis methodology" —
+      critiquing BOTH process gaps (HOW we analyzed: bug classes never checked, lanes
+      that should exist but do not, assumptions left untested, source/sink/defense
+      types not enumerated) AND coverage gaps (WHAT this run never reached). Emits
+      methodology_blind_spots rows (gap_class in process|coverage) + one companion
+      reusable agent_observations(obs_kind='blind_spot'). The content-hash-deduped
+      UNION of lane A + lane B is the merge; agreement='both' marks gaps both lanes
+      independently flagged. Diversity arises purely from LLM stochasticity (the two
+      lanes share one prompt/strategy). The merged, ranked directions FEED FORWARD
+      into the next round (v_methodology_blindspots_ranked); they do NOT spawn work
+      this run.
+    version: 1
+
+  - name: methodology_blindspot_lane_b
+    description: >
+      Phase 1.6 (DEEP) post-Hunt methodology blind-spot sweep (instance B of an
+      identical-by-design dual pair with methodology_blindspot_lane_a). Runs AFTER
+      all discovery sweeps (Phase 1 Hunt + Phase 1.5 Fuzzing) for a (target, round).
+      Single goal: "find any blind spot in our codebase-analysis methodology" —
+      critiquing BOTH process gaps (HOW we analyzed: bug classes never checked, lanes
+      that should exist but do not, assumptions left untested, source/sink/defense
+      types not enumerated) AND coverage gaps (WHAT this run never reached). Emits
+      methodology_blind_spots rows (gap_class in process|coverage) + one companion
+      reusable agent_observations(obs_kind='blind_spot'). The content-hash-deduped
+      UNION of lane A + lane B is the merge; agreement='both' marks gaps both lanes
+      independently flagged. Diversity arises purely from LLM stochasticity (the two
+      lanes share one prompt/strategy). The merged, ranked directions FEED FORWARD
+      into the next round (v_methodology_blindspots_ranked); they do NOT spawn work
+      this run.
+    version: 1
+
+  # Perpetual Loop mode (migration 0021, ids 19–22). NON-MANDATORY: deliberately
+  # ABSENT from v_required_deep_lanes (the cpg_coverage precedent) — normal DEEP
+  # audits never block on them. See references/methodology/perpetual-loop-mode.md.
+  - name: perpetual_dmn_generate
+    description: >
+      Perpetual Loop generation register (NON-MANDATORY — deliberately NOT in
+      v_required_deep_lanes). Runs the existing Agent Sweep S2 / Phase 1 Hunt agents
+      in an explicit DIVERGENT register: mandatory divergence, cross-domain analogy,
+      surface unproven hunches, and FREE re-litigation of previously-refuted leads
+      when a new angle/analogy/ledger signal justifies another look. "A round emitting
+      only safe, already-known candidates has malfunctioned." This is the ONLY place
+      the divergent flavor lives; Salience + Executive stay strictly sober. Emits
+      suspicious_points / gr_findings(candidate) candidates for the round.
+    version: 1
+
+  - name: perpetual_salience_promote
+    description: >
+      Perpetual Loop salience gate (NON-MANDATORY, sober). Ranks the round's divergent
+      candidates by promise = novelty × est_severity × reachability_prior ×
+      ledger_history_factor and promotes the top-K. Implemented as the READ-TIME view
+      v_promise_ranked derived from existing suspicious_point_factor / gr_findings
+      columns — NO new tables, mirroring the v_suspicious_points_ranked /
+      v_critical_fn_ranked never-store rule.
+    version: 1
+
+  - name: perpetual_executive_pursue
+    description: >
+      Perpetual Loop executive lane (NON-MANDATORY, sober). Pursues each promoted
+      candidate to a verdict by REUSING the existing Phase 2 five-gate Confirm
+      (refute-by-default, references/v2/confirmation-rigor-doctrine.md) + L5 PoC
+      constraints (zero-mocking, vanilla real PoC). NO new confirm path is built — a
+      HIGH/CRIT confirmation here counts toward the loop's N target.
+    version: 1
+
+  - name: perpetual_ledger_learn
+    description: >
+      Perpetual Loop learning ledger (NON-MANDATORY, sober). IS the existing
+      round_ledger + round feed-forward + recurrence_counter — no new ledger table.
+      Per-attack-class/region hit-miss biases the NEXT Core round (down-weight
+      exhausted families, surface under-explored regions); this ledger down-weighting
+      is the loop's only damper. The loop self-fires across turns via ScheduleWakeup
+      and is unbounded until N HIGH/CRIT confirmed (default 20, overridable) or user
+      interrupt; dry rounds are reported, not halting.
+    version: 1
+
+  # logic_guard breaker lane (id 23). NON-MANDATORY: deliberately ABSENT from
+  # v_required_deep_lanes (the cpg_coverage / perpetual_* precedent) — normal
+  # DEEP audits never block on it. Add to v_required_deep_lanes only when the
+  # mandatory roster explicitly includes access-control hunt lanes.
+  # See C07-A-F1, C07-A-F2 in docs/skill-audit-2026-06-01.md.
+  - name: logic_guard_bypass_lane
+    description: >
+      Phase 0.75 (MEDIUM+DEEP) logic-guard pre-break lane (NON-MANDATORY —
+      deliberately NOT in v_required_deep_lanes). Targets access-control /
+      authorization defenses whose defense_type = 'logic_guard', a family
+      that injection-shaped lanes (html_sanitizer_bypass_lane,
+      concolic_bypass_lane) cannot reach because no payload corpus applies.
+
+      Per logic_guard family tag, the lane performs the concrete analytic check:
+        - cross_user_object_ref: confirm no ownership predicate binds the object
+          id to the current principal on the attacker-reachable code path
+          (IDOR / BOLA — enumerate object-fetch callsites, verify each joins
+          on a principal FK or an explicit owner check before returning data).
+        - missing_function_authz (BFLA): enumerate every exported endpoint/action
+          and verify an authz decorator / middleware call appears in the call
+          graph before any state-mutation sink.
+        - broken_state_machine: map the expected state-transition graph from
+          code/config; find any edge where the guard's pre-condition check can
+          be reached out of order or skipped by a parallel request.
+        - confused_deputy: identify callers that forward a controllable
+          privilege token to a privileged subsystem without re-validating
+          it in the deputy's context.
+
+      A confirmed bypass MUST be reproduced: a concrete HTTP request sequence
+      (or function-call sequence for library targets) that reaches the guarded
+      resource/action without satisfying the authz predicate, recorded as
+      defense_bypasses(reproduced=TRUE, bypass_family='logic_guard.<tag>').
+
+      Escalation cascade (C07-A-F2): when a bypass is reproduced, the lane
+      emits a gr_findings(candidate) directly — finding_kind 'authz_escalation'
+      or 'idor', anchored on the guard's callsite — NOT a bypass_derived_finding
+      (the injection cascade path). This is the only escalation path for
+      sink-less authz classes; there is no forward_slice_lane to spawn.
+
+      Skip-with-reason only when: no logic_guard defenses exist in the
+      defenses table for this target; or the target has no attacker-reachable
+      object-fetch / action-dispatch callsites (record reason in
+      agent_steps.coverage_json.skip_reason).
+    version: 1
+
+  - name: prior_art_intake_lane
+    description: >
+      Phase L-1 (DEEP, bug-bounty-mode MANDATORY when a target scope is
+      provided) prior-art intake lane. Runs BEFORE Phase 0 decompose. Mines
+      public prior art keyed on the scope identifiers (vendor/product/version/
+      CPE): CVEs from NVD/GHSA/OSV/exploit-db + web writeups, persists cves +
+      writeups rows, and DISTILS the high-yield leads into promising_lanes
+      (derived_from_cve_id / derived_from_writeup_id provenance; region_hash
+      '__TARGET_WIDE__' for unanchored leads) consumed by round 1 via the
+      round-entry fetch (10). Distillation-first per-source provenance gate:
+      coverage_json records sources_queried[] + per-source counts (NOT "all
+      CVEs"). Documented-skip end state (agent_steps.status='skipped' +
+      termination_reason) when no scope is provided or a source is unreachable
+      (the Phase L0 fallback precedent), satisfying the roster gate without
+      network. id assigned by the harness/migration (0026). See
+      references/methodology/prior-art-intake-lane.md.
+    version: 1
+
+  - name: overlooked_lane_audit_lane
+    description: >
+      DEEP-only MANDATORY meta-lane, runs LAST after Phase 1.6
+      methodology_blind_spots has flushed. Two self-questions: (a) GENERATIVE —
+      are there MORE high-yield lanes never considered? (b) AUDIT — did we
+      ERRONEOUSLY IGNORE a lane that should have spawned? Detection is a
+      DB-grounded triple reference (roster vs covering agent_steps;
+      emitted-but-unpromoted promising_lanes via v_promising_lanes_ranked;
+      v_coverage / enumeration uncovered signals + optional open
+      methodology_blind_spots). ALWAYS emits a promising_lanes row per confirmed
+      overlooked/ignored lane; then cap-gated SPAWNS the top-N-by-promise IN-RUN
+      up to cap = the promising_lanes row_cap (db/seed/fetch-budgets.yml,
+      phase1_7_self_audit) × tier multiplier — no magic constant; overflow feeds
+      forward; acting stamps promoted_to_round_id. The in-run spawn is the
+      bounded exception to the feed-forward-only promising_lanes doctrine. id
+      assigned by the harness/migration (0028). See
+      references/methodology/overlooked-lane-audit-lane.md.
+    version: 1

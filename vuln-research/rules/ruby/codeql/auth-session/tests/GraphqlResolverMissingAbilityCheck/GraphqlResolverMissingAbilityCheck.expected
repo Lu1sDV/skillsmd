@@ -1,0 +1,3 @@
+| resolver.rb:6:28:8:17 | call to execute | GraphQL resolver/mutation `resolve` method calls `execute` without an `Ability.allowed?`, `authorize!`, or `raise_resource_not_available_error!` guard; add an authorization check before the sensitive operation. |
+| resolver.rb:19:16:19:36 | call to find | GraphQL resolver/mutation `resolve` method calls `find` without an `Ability.allowed?`, `authorize!`, or `raise_resource_not_available_error!` guard; add an authorization check before the sensitive operation. |
+| resolver.rb:20:7:20:39 | call to update! | GraphQL resolver/mutation `resolve` method calls `update!` without an `Ability.allowed?`, `authorize!`, or `raise_resource_not_available_error!` guard; add an authorization check before the sensitive operation. |

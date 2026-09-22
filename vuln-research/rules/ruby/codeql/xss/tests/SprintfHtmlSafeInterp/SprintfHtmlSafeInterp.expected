@@ -1,0 +1,2 @@
+| SprintfHtmlSafeInterp_test.rb:6:5:6:111 | call to html_safe | Calling .html_safe on an i18n-interpolated string where at least one placeholder value is non-constant bypasses auto-escaping; use safe_format(...) instead. |
+| SprintfHtmlSafeInterp_test.rb:11:5:11:107 | call to html_safe | Calling .html_safe on an i18n-interpolated string where at least one placeholder value is non-constant bypasses auto-escaping; use safe_format(...) instead. |

@@ -1,0 +1,1 @@
+| asciidoc_fixture.rb:13:9:13:22 | call to html_safe | html_safe is called in a scope that also calls Asciidoctor.convert() but the receiver is not Banzai.render(); if sanitization times out the raw Asciidoctor HTML is returned as safe - move html_safe to after Banzai.render() and return a safe constant on the error path. |

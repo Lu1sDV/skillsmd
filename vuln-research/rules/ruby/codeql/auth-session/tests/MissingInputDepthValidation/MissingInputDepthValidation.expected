@@ -1,0 +1,2 @@
+| fixture.rb:15:15:15:43 | call to parse | JSON.parse on request body without `max_nesting:` limit; a deeply-nested payload can exhaust memory (DoS). Pass `max_nesting: 100` or use a depth-validating middleware. |
+| fixture.rb:23:12:23:39 | call to parse | JSON.parse on request body without `max_nesting:` limit; a deeply-nested payload can exhaust memory (DoS). Pass `max_nesting: 100` or use a depth-validating middleware. |

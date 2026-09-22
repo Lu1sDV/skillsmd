@@ -1,0 +1,27 @@
+# --- Agent / LLM artifacts — never published ---------------------------------
+.omc/
+docs/
+archive/
+.pytest_cache/
+**/__pycache__/
+**/node_modules/
+package-lock.json
+
+# --- Compiled binaries & per-run state --------------------------------------
+db/harness/vrdb
+*.duckdb
+db/sidecars/*
+!db/sidecars/.gitkeep
+db/harness/temp/*
+!db/harness/temp/README.md
+
+# --- LLM research archive (fetched sources + citation dumps) ----------------
+references/sinks/sources/
+references/sinks/*.citations.jsonl
+
+# --- LLM engines (local only) ----------------------------------------------
+engines/fuzzgpt-retrieval/
+
+# --- Engine run scratch -----------------------------------------------------
+engines/html-sanitizer-bypass/isolate*.php
+engines/html-sanitizer-bypass/out*.json

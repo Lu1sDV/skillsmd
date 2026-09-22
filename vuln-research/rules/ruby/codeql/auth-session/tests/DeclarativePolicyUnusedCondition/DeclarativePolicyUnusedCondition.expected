@@ -1,0 +1,3 @@
+| policy.rb:11:3:11:51 | call to condition | DeclarativePolicy condition `:reporter` is declared but never referenced by any `rule { }` in this class; the access rule enforcing it may be missing. |
+| policy.rb:38:3:38:64 | call to condition | DeclarativePolicy condition `:public_snippet` is declared but never referenced by any `rule { }` in this class; the access rule enforcing it may be missing. |
+| policy.rb:39:3:39:57 | call to condition | DeclarativePolicy condition `:owner_snippet` is declared but never referenced by any `rule { }` in this class; the access rule enforcing it may be missing. |

@@ -1,0 +1,2 @@
+| fixture.rb:4:11:4:34 | call to new | Dynamic expression passed to `Regexp.new` without using `Gitlab::UntrustedRegexp`; Ruby's Oniguruma engine may catastrophically backtrack on attacker-controlled input. |
+| fixture.rb:10:23:10:31 | /#{...}/ | Interpolated regex literal `/.../` with a dynamic `#{...}` component; use `Gitlab::UntrustedRegexp.new(RE2::Regexp.escape(term))` to avoid ReDoS via Oniguruma. |

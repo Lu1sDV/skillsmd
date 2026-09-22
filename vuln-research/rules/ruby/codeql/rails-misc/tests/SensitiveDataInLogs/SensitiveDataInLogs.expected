@@ -1,0 +1,2 @@
+| SensitiveDataInLogs.rb:36:5:36:112 | call to info | AppLogger.info passes a raw user_id: keyword argument; remove user_id from the log call to prevent PII exposure. |
+| SensitiveDataInLogs.rb:52:5:52:62 | call to info | Sidekiq job arguments are logged without filtering through loggable_arguments; confidential issue content or PII may appear in logs. |

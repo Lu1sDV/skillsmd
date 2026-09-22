@@ -1,0 +1,1 @@
+| fixture.rb:9:7:9:46 | call to merge! | dataset.merge! sets `html: true`, enabling the tooltip library to render the title as raw HTML; remove `html: true` and assign the title directly (e.g. `dataset['title'] = title`) to prevent XSS. |

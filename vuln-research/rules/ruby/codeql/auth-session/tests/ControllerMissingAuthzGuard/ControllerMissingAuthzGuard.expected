@@ -1,0 +1,2 @@
+| controllers.rb:7:1:29:3 | OrdersController | Controller defines mutating action(s) but has no authentication/authorization before_action; add an access guard (missing authorization). |
+| controllers.rb:32:1:42:3 | WidgetsController | Controller defines mutating action(s) but has no authentication/authorization before_action; add an access guard (missing authorization). |

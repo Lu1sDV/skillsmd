@@ -1,0 +1,2 @@
+| StringInterpolationInHtmlHref_test.rb:8:7:8:73 | "<a href="#{...}">#{...}</a>" | HTML anchor tag built by string interpolation; injected content in `href` or link text can break out of the attribute. Use a DOM builder (e.g. `create_element('a')`) instead. |
+| StringInterpolationInHtmlHref_test.rb:13:7:13:88 | "<a href=\\"#{...}\\">#{...}</a>" | HTML anchor tag built by string interpolation; injected content in `href` or link text can break out of the attribute. Use a DOM builder (e.g. `create_element('a')`) instead. |

@@ -1,0 +1,1 @@
+| fixture.rb:27:3:28:5 | RotateService | RotateService subclass 'RotateService' inherits a `valid_access_level?` that returns `true` by default but does not override it. Add a `valid_access_level?` override that compares the token owner's role and the caller's role via `max_member_access_for_user` to prevent privilege escalation (CWE-269). |

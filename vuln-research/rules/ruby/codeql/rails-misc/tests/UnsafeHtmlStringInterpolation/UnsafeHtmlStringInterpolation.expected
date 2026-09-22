@@ -1,0 +1,2 @@
+| fixture.rb:7:5:8:35 | ... % ... | String interpolation via `%` after `html_safe` bypasses Rails HTML escaping; replace with `safe_format(...)` to escape interpolated values. |
+| fixture.rb:13:5:13:96 | ... % ... | String interpolation via `%` after `html_safe` bypasses Rails HTML escaping; replace with `safe_format(...)` to escape interpolated values. |

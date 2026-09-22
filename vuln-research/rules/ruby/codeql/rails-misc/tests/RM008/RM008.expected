@@ -1,0 +1,2 @@
+| fixture.rb:8:5:8:17 | call to expose | Bare `expose :value` in CI variable serializer 'BasicVariableEntity' leaks the raw secret in API responses. Wrap in a block and use `Ci::VariableValue.new(variable).evaluate` to mask hidden/masked variables. |
+| fixture.rb:17:3:17:15 | call to expose | Bare `expose :value` in CI variable serializer 'ProjectVariableEntity' leaks the raw secret in API responses. Wrap in a block and use `Ci::VariableValue.new(variable).evaluate` to mask hidden/masked variables. |

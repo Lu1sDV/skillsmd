@@ -1,0 +1,10 @@
+node_modules/
+package-lock.json
+
+# Per-run scratch artifacts (isolate shim + sanitized output live in a tmpdir,
+# but ignore here too in case a run writes locally).
+isolate*.php
+out*.json
+
+# NOTE: corpus.json and corpus.manifest.json are intentionally COMMITTED
+# (pinned/reproducible verdicts — approved decision D4). Do NOT ignore them.

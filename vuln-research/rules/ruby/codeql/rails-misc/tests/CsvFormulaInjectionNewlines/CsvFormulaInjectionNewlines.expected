@@ -1,0 +1,1 @@
+| fixture.rb:7:22:7:71 | call to new | CsvBuilder.new called without `replace_newlines: true`; embedded newlines in cell values can break CSV row boundaries and inject formula characters in adjacent cells. |

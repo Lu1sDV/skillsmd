@@ -1,0 +1,2 @@
+| idor_controllers.rb:8:16:8:40 | call to find | Unscoped find on Project using request parameters; scope the lookup to the current user's records or add an authorization check (IDOR). |
+| idor_controllers.rb:14:14:14:49 | call to find_by | Unscoped find_by on Issue using request parameters; scope the lookup to the current user's records or add an authorization check (IDOR). |

@@ -1,0 +1,2 @@
+| fixture.rb:8:7:8:54 | call to safe_load | Call to `YAML.safe_load` without a `bytesize` size-check in the same method. A large malicious payload can exhaust memory before parsing completes. Add `raise ... if content.bytesize > max_yaml_size_bytes` before this call. |
+| fixture.rb:13:7:13:26 | call to safe_load | Call to `Psych.safe_load` without a `bytesize` size-check in the same method. A large malicious payload can exhaust memory before parsing completes. Add `raise ... if content.bytesize > max_yaml_size_bytes` before this call. |

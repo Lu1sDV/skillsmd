@@ -1,0 +1,1 @@
+| PatDisabledPolicyNotEnforcedInFinder.rb:11:7:15:9 | find_by_token | find_by_token checks only the instance-level personal_access_tokens_disabled? setting but does not verify enterprise_user? / disable_personal_access_tokens? for the token's enterprise group; users in groups with PATs disabled can still authenticate via PAT. |

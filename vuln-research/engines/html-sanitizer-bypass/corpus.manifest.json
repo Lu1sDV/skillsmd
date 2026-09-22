@@ -1,0 +1,30 @@
+{
+  "corpus_version": "cv1-3cecc24036fac3b7",
+  "builder_version": "1.0.0",
+  "families": [
+    "angularjs",
+    "classic",
+    "consuming_tags",
+    "content-types",
+    "dangling_markup",
+    "encodings",
+    "events",
+    "file_uploads",
+    "frameworks",
+    "hoisting",
+    "impossible",
+    "obfuscation",
+    "polyglot",
+    "protocols",
+    "prototype-pollution",
+    "response-content-types",
+    "restricted_characters",
+    "special_tags",
+    "useful_tags",
+    "vuejs",
+    "waf_bypass_global_obj"
+  ],
+  "bases": 3957,
+  "entries": 53872,
+  "generated_at": "2026-05-27T15:38:01.970Z"
+}

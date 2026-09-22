@@ -1,0 +1,1 @@
+| lib/fixture.rb:12:11:12:22 | Pair | The `unsafe: true` option enables raw HTML pass-through in the markdown renderer; use `unsafe: !raw_html_disabled?` and set `context[:disable_raw_html]` for user-supplied content to prevent XSS. |

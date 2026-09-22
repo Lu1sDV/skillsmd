@@ -1,0 +1,1 @@
+| fixture.rb:7:25:7:43 | call to admin? | `.admin?` used as an admin access guard without a paired `can_access_admin_area?` or `admin_mode?` check; replace with `.can_access_admin_area?` to respect admin mode. |

@@ -1,0 +1,5 @@
+| auth_controllers.rb:6:3:6:40 | call to skip_before_action | Authentication is skipped by this call; remove the skip or scope it to explicitly public actions. |
+| auth_controllers.rb:12:3:12:40 | call to skip_before_filter | Authentication is skipped by this call; remove the skip or scope it to explicitly public actions. |
+| auth_controllers.rb:18:3:18:63 | call to skip_before_action | Authentication is skipped by this call; remove the skip or scope it to explicitly public actions. |
+| auth_controllers.rb:25:3:25:35 | call to skip_before_action | Authentication is skipped by this call; remove the skip or scope it to explicitly public actions. |
+| auth_controllers.rb:31:3:31:42 | call to skip_before_action | Authentication is skipped by this call; remove the skip or scope it to explicitly public actions. |

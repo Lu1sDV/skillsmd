@@ -1,0 +1,3 @@
+| fixture.rb:11:35:11:54 | call to execute | ActiveRecord query `.execute` result is used in a response/serializer in this method without a .limit(N) or paginate guard; add .limit(MAX_N) to prevent unbounded memory exhaustion. |
+| fixture.rb:17:16:17:25 | call to all | ActiveRecord query `.all` result is used in a response/serializer in this method without a .limit(N) or paginate guard; add .limit(MAX_N) to prevent unbounded memory exhaustion. |
+| fixture.rb:23:13:23:38 | call to where | ActiveRecord query `.where` result is used in a response/serializer in this method without a .limit(N) or paginate guard; add .limit(MAX_N) to prevent unbounded memory exhaustion. |

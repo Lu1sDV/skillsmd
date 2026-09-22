@@ -1,0 +1,1 @@
+| identity_link_fixture.rb:6:5:10:5 | call to redirect_to | OAuth identity-link `provider` and `extern_uid` are passed as URL query parameters to the confirmation redirect. An attacker can forge these values to hijack the identity-link flow. Store them in `session[:identity_link_provider]` and `session[:identity_link_extern_uid]` instead. |

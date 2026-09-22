@@ -1,0 +1,2 @@
+| rate_limit.rb:6:3:9:5 | create | Method 'create' performs authentication or credential lookup without a `check_rate_limit!` call; add rate limiting to prevent brute-force or enumeration attacks (CWE-307). |
+| rate_limit.rb:14:3:17:5 | reset_password | Method 'reset_password' performs authentication or credential lookup without a `check_rate_limit!` call; add rate limiting to prevent brute-force or enumeration attacks (CWE-307). |
