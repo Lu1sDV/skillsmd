@@ -28,6 +28,7 @@ A collection of Claude Code skills — self-contained markdown files that give C
 | [skill-smell-checker](skill-smell-checker/) | Audit all 26 SKILL.md smells from arXiv:2607.01456 — 5 deterministic harness checks plus 21 evidence-backed semantic checks |
 | [sink-research-orchestrator](sink-research-orchestrator/) | Orchestrate parallel research swarms for unseen sink languages/techniques — lane decomposition, structured JSON citations, quality gates |
 | [skillsmp-search](skillsmp-search/) | Search 11,000+ community skills and install them locally |
+| [rust-fast](rust-fast/) | Write-fast Rust decisions — allocation reserve/reuse, iterator myths vs real abstraction-boundary cost, measured layout tradeoffs, hashing tradeoffs, async blocking/backpressure, clippy::perf gates, plus myth corrections (iterators aren't slower, clone isn't bad, faster hasher ≠ faster) |
 | [rust-performance](rust-performance/) | Evidence-first Rust optimization — priority ladder (algorithm → SIMD), profiling/baseline/regression discipline, allocation, cache, false sharing, lock contention, NUMA triage |
 | [ssrf-testing](ssrf-testing/) | SSRF testing and prevention — detection, cloud metadata exploitation, filter bypass, defense strategies |
 | [tavily-web](tavily-web/) | Web search, extraction, crawling, and AI-powered research via Tavily API (curl only) |
