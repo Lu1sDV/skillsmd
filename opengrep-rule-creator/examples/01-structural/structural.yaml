@@ -1,0 +1,61 @@
+rules:
+  - id: lab-python-weak-password-kdf
+    languages: [python]
+    severity: WARNING
+    message: >-
+      PBKDF2-HMAC-SHA256 password generation in $FUNC uses $ROUNDS iterations,
+      below this application's 600000-iteration policy; insufficient work makes
+      offline password guessing cheaper. Increase the work factor for NEW hashes,
+      store the chosen count with each hash, and migrate old hashes after successful
+      verification; do not change legacy verification parameters in place.
+    metadata:
+      confidence: LOW  # Synthetic fixtures only; no real-codebase FP calibration.
+      technology: [python, hashlib, cryptography]
+      category: security
+      cwe: 'CWE-916: Use of Password Hash With Insufficient Computational Effort'
+
+    # One detection, not two mini-rules: API-specific branches first bind $ROUNDS;
+    # the outer conjunction then shares scope, numeric policy, and reporting.
+    patterns:
+      - pattern-either:
+          - patterns:
+              # All positional roles are explicit. A loose $FUNC(...) would match
+              # unrelated crypto APIs; ellipsis only admits optional trailing args.
+              - pattern: hashlib.pbkdf2_hmac($HASH, $PASSWORD, $SALT, $ROUNDS, ...)
+              - metavariable-regex:
+                  metavariable: $HASH
+                  # String metavariables include quotes. Anchor both ends so
+                  # "sha256-custom" cannot accidentally satisfy the policy.
+                  regex: "^['\"]sha256['\"]$"
+          - patterns:
+              # Keyword order is structural, not textual: reordered kwargs match.
+              - pattern: PBKDF2HMAC(..., algorithm=$HASH, iterations=$ROUNDS, ...)
+              - metavariable-pattern:
+                  metavariable: $HASH
+                  # Here $HASH is a constructor expression, not a quoted string.
+                  # Parse its subtree instead of applying the other branch's regex.
+                  pattern: hashes.SHA256()
+
+      - pattern-inside: |
+          def $FUNC(...):
+            ...
+      - metavariable-regex:
+          metavariable: $FUNC
+          # Deliberate application boundary: generation entrypoints only.
+          # verify_password must reproduce a legacy stored count before migration.
+          regex: '^(?:create|derive|hash)_password(?:_.*)?$'
+
+      - metavariable-comparison:
+          metavariable: $ROUNDS
+          # Numeric, not lexicographic. Constant propagation resolves local aliases.
+          # Zero/negative counts are invalid-argument bugs, not weak derived keys;
+          # unknown runtime counts cannot be certified safe by this rule.
+          comparison: $ROUNDS > 0 and $ROUNDS < 600000
+
+      # Focus runs on surviving matches: report the iteration argument, not the
+      # whole constructor or enclosing function. Multiline fixtures annotate it.
+      - focus-metavariable: $ROUNDS
+
+    # No autofix: replacing only the argument can leave stored iteration metadata
+    # inconsistent with the derived hash (see create_password_record in the fixture).
+    # Remediation is explicit in the message; a migration needs application context.

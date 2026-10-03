@@ -1,0 +1,219 @@
+> **Upstream Semgrep documentation snapshot — NOT an OpenGrep compatibility promise.** Retrieved and locally modified 2026-10-03 (offline links, presentation wrappers, resolved playground examples). Semgrep and upstream contributors; LGPL-2.1, provided without warranty. [License](../LICENSE); [offline index](../INDEX.md). Source: https://docs.semgrep.dev/writing-rules/private-rules.md
+
+> ## Documentation Index
+> Local adaptation: read the [downloaded documentation index](../discovery/llms.txt) rather than fetching https://docs.semgrep.dev/llms.txt.
+> Use this file to discover all available pages before exploring further.
+
+# Private rules
+
+Users with Semgrep Code's [Team or Enterprise tier](https://semgrep.dev/pricing) can publish rules to the [Semgrep Registry](https://semgrep.dev/explore) as private rules that are not visible to those outside their organization. Maintaining the rules' privacy allows you the benefits of using the Semgrep Registry while keeping sensitive code or information internal.
+
+## Creating private rules
+
+You can create private rules the same way you create other custom rules. The subsequent sections can help you create and save your private rules.
+
+### Create private rules through Semgrep AppSec Platform
+
+To create and publish private rules through the Semgrep AppSec Platform:
+
+
+
+  
+
+    Go to [Semgrep Editor](https://semgrep.dev/orgs/-/editor).
+  
+
+
+  
+
+    Click <Icon icon="file-circle-plus" iconType="solid" /> **Create New Rule**.
+  
+
+
+  
+
+    Choose one of the following options to create your rule:
+
+    * Click the <Icon icon="circle-plus" iconType="solid" /> **plus** icon, select **New rule**, provide the YAML file for your rule, and then click <Icon icon="floppy-disk" iconType="solid" /> **Save**.
+    * In the <Icon icon="server" iconType="solid" /> **Library** panel, select a rule from a category in **Semgrep Registry**. Click <Icon icon="code-branch" iconType="solid" /> **Fork**, modify the rule or test code, and then click <Icon icon="floppy-disk" iconType="solid" /> **Save**.
+  
+
+
+  
+
+    Click <Icon icon="earth-africa" iconType="solid" /> **Share**.
+  
+
+
+  
+
+    Click <Icon icon="lock" iconType="solid" /> **Private**.
+  
+
+
+
+
+Your private rule has been created and added to the Registry. It is visible only to logged in users of your organization, and its private status is reflected by the **Share** button displaying a <Icon icon="lock" iconType="solid" /> icon.
+
+Private rules are stored in the folder with the same name as your Semgrep AppSec Platform organization.
+
+### Create private rules through the Semgrep command-line interface
+
+To create private rules through the [Semgrep CLI](https://docs.semgrep.dev/getting-started/quickstart):
+
+
+
+  
+
+    Log in to Semgrep. Running this command launches a browser window, but you can also use the link that's returned in the CLI to proceed:
+
+    ```console
+    semgrep login
+    ```
+  
+
+
+  
+
+    In the **Semgrep CLI login**, click **Activate** to proceed.
+  
+
+
+  
+
+    Create your rule. For more information, see [Contributing rules](https://docs.semgrep.dev/contributing/contributing-to-semgrep-rules-repository).
+  
+
+
+  
+
+    Publish your rule from the command line using `semgrep publish` command followed by the path to your private rules:
+
+    ```console
+    semgrep publish myrules/
+    ```
+  
+
+
+
+
+If the rules are in the directory you publish from, you can use `semgrep publish .` to refer to the current directory. You must provide the directory specification.
+
+If the directory contains test cases for the rules, Semgrep uploads them as well (see [testing Semgrep rules](testing-rules.md)).
+
+You can change the visibility of the rules. For instance, to publish the rules as unlisted (which does not require authentication but results in the rules hidden from users of the public registry):
+
+```console
+semgrep publish --visibility=unlisted myrules/
+```
+
+For more details, run `semgrep publish --help`.
+
+## View and use private rules
+
+View your rules in [Semgrep Editor](https://semgrep.dev/orgs/-/editor) under the folder corresponding to your organization name.
+
+You can also find it in the [Semgrep Registry](https://semgrep.dev/explore) by searching for `[organization-id].[rule-id]`. For example: `r2c.test-rule-id`.
+
+To use the rule with subsequent scans, add the rule in the [Registry](https://semgrep.dev/explore) to an existing policy.
+
+## Automatically publish rules
+
+This section provides examples of how to automatically publish your private rules so they are accessible within your private organization. Publishing your private rules in this manner does not make them public. In the following examples, the private rules are stored in `private_rule_dir`, which is a subdirectory of the repository root. If your rules are in the root of your repository, you can replace the command with `semgrep publish --visibility=org_private .` to refer to the repository root. You must provide the directory specification.
+
+The following sample of the GitHub Actions workflow publishes rules from a private Git repository after a merge to the `main`, `master`, or `develop` branches.
+
+
+
+  
+
+    Ensure that `SEMGREP_APP_TOKEN` is defined in your GitHub project or organization's secrets.
+  
+
+
+  
+
+    Create the following file at `.github/workflows/semgrep-publish.yml`:
+
+    ```yaml expandable
+    name: semgrep-publish
+
+    on:
+      push:
+        branches:
+        - main
+        - master
+        - develop
+
+    jobs:
+      publish:
+        name: publish-private-semgrep-rules
+        runs-on: ubuntu-latest
+        container:
+          image: semgrep/semgrep
+        steps:
+        - uses: actions/checkout@v6
+        - name: publish private semgrep rules
+          run: semgrep publish --visibility=org_private ./private_rule_dir
+          env:
+            SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+    ```
+
+    Alternatively, if you use GitLab, you can use the subsequent sample after ensuring that `SEMGREP_APP_TOKEN` is defined in your GitLab project's CI/CD variables:
+
+    ```yaml
+    semgrep-publish:
+      image: semgrep/semgrep
+      script: semgrep publish --visibility=org_private ./private_rule_dir
+
+    rules:
+      - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+    variables:
+      SEMGREP_APP_TOKEN: $SEMGREP_APP_TOKEN
+    ```
+  
+
+
+
+
+## Delete private rules
+
+To remove a private rule, follow these steps:
+
+
+
+  
+
+    In the [Semgrep Editor](https://semgrep.dev/orgs/-/editor), find the private rule to delete under the <Icon icon="server" iconType="solid" /> **Library** tab. Private rules are usually stored in the folder with the same name as your Semgrep AppSec Platform organization.
+  
+
+
+  
+
+    Do one of the following:
+
+    * Open the rule, click the three vertical dots, then click <Icon icon="trash-can" /> **Delete**.
+    * Right-click the rule file in the navigation, then click <Icon icon="trash-can" /> **Delete**.
+  
+
+
+  
+
+    Review the confirmation modal, which lists the policies that use the rule, then confirm the deletion.
+  
+
+
+
+
+Deleting a rule is permanent. Semgrep removes the rule from policies that still have other conditions. If a policy has no remaining conditions after the rule is removed, Semgrep deletes the policy.
+
+## Appendix
+
+### Visibility of private rules
+
+Private rules are only visible to logged-in members of your organization.
+
+### Publish a rule with the same rule ID
+
+Rules have unique IDs. If you publish a rule with the same ID as an existing rule, the new rule overwrites the previous one.

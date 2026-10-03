@@ -1,0 +1,312 @@
+[
+  {
+    "path": "wiki/Support-for-Visual-Basic.md",
+    "source_url": "https://github.com/opengrep/opengrep/wiki/Support-for-Visual-Basic",
+    "commit": "77adea7dc411aa686c9c4ecd001b6063393319f2",
+    "retrieved": "2026-10-03",
+    "sha256": "3932bfda638e1da86ee9f7c1ccf91e1d0603312ec331b7768b405c56e75225aa",
+    "license": "Wiki contains no LICENSE file or explicit license declaration; do not assume repository LGPL automatically licenses separate wiki content. Attribution preserved; redistribution permission unresolved.",
+    "upstream_sha256": "3932bfda638e1da86ee9f7c1ccf91e1d0603312ec331b7768b405c56e75225aa",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "wiki/Support-for-Php.md",
+    "source_url": "https://github.com/opengrep/opengrep/wiki/Support-for-Php",
+    "commit": "77adea7dc411aa686c9c4ecd001b6063393319f2",
+    "retrieved": "2026-10-03",
+    "sha256": "e636fe42da85bb77f28e319f709516eb505ae1718e80ab8733b5d3bf4a7c93f6",
+    "license": "Wiki contains no LICENSE file or explicit license declaration; do not assume repository LGPL automatically licenses separate wiki content. Attribution preserved; redistribution permission unresolved.",
+    "upstream_sha256": "e636fe42da85bb77f28e319f709516eb505ae1718e80ab8733b5d3bf4a7c93f6",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "wiki/Support-for-C#.md",
+    "source_url": "https://github.com/opengrep/opengrep/wiki/Support-for-C%23",
+    "commit": "77adea7dc411aa686c9c4ecd001b6063393319f2",
+    "retrieved": "2026-10-03",
+    "sha256": "145193b4fdd312c5bb67191b8525f9cfe00e16ae39a25af936ba0bec3c4f326e",
+    "license": "Wiki contains no LICENSE file or explicit license declaration; do not assume repository LGPL automatically licenses separate wiki content. Attribution preserved; redistribution permission unresolved.",
+    "upstream_sha256": "145193b4fdd312c5bb67191b8525f9cfe00e16ae39a25af936ba0bec3c4f326e",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "wiki/Methods-that-taint.md",
+    "source_url": "https://github.com/opengrep/opengrep/wiki/Methods-that-taint",
+    "commit": "77adea7dc411aa686c9c4ecd001b6063393319f2",
+    "retrieved": "2026-10-03",
+    "sha256": "f12860c35be0db5403d90a1266a34317ac87f0da3f2aae1c301d042ece62fd09",
+    "license": "Wiki contains no LICENSE file or explicit license declaration; do not assume repository LGPL automatically licenses separate wiki content. Attribution preserved; redistribution permission unresolved.",
+    "upstream_sha256": "f12860c35be0db5403d90a1266a34317ac87f0da3f2aae1c301d042ece62fd09",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "wiki/Intrafile-tainting-tutorial.md",
+    "source_url": "https://github.com/opengrep/opengrep/wiki/Intrafile-tainting-tutorial",
+    "commit": "77adea7dc411aa686c9c4ecd001b6063393319f2",
+    "retrieved": "2026-10-03",
+    "sha256": "17b87d50764e0ebdfd6dafefb9d264ccd28044d230b08a4a1e8642835e87599b",
+    "license": "Wiki contains no LICENSE file or explicit license declaration; do not assume repository LGPL automatically licenses separate wiki content. Attribution preserved; redistribution permission unresolved.",
+    "upstream_sha256": "94bd5eb1a4a42334de64aba3fea5860174753e06c808cbef496b6e20828639d5",
+    "modifications": "Navigation-only: vendored links localized and unvendored repository links qualified with pinned upstream revision; prose and code preserved."
+  },
+  {
+    "path": "wiki/Home.md",
+    "source_url": "https://github.com/opengrep/opengrep/wiki/Home",
+    "commit": "77adea7dc411aa686c9c4ecd001b6063393319f2",
+    "retrieved": "2026-10-03",
+    "sha256": "0299550108a3846cadb9599fe41de9c23bd81e91d76c5fcd27aab74b9b459337",
+    "license": "Wiki contains no LICENSE file or explicit license declaration; do not assume repository LGPL automatically licenses separate wiki content. Attribution preserved; redistribution permission unresolved.",
+    "upstream_sha256": "e5aaf6483631ca5fa275ff0ed1997c49892e5bd2e5af1c04c24efc700685da6d",
+    "modifications": "Navigation-only: vendored links localized and unvendored repository links qualified with pinned upstream revision; prose and code preserved."
+  },
+  {
+    "path": "wiki/Higher-order-functions-tutorial.md",
+    "source_url": "https://github.com/opengrep/opengrep/wiki/Higher-order-functions-tutorial",
+    "commit": "77adea7dc411aa686c9c4ecd001b6063393319f2",
+    "retrieved": "2026-10-03",
+    "sha256": "e83e181d3c425f00b2ce369a6a05eec3e89d7508267b24050906615678237111",
+    "license": "Wiki contains no LICENSE file or explicit license declaration; do not assume repository LGPL automatically licenses separate wiki content. Attribution preserved; redistribution permission unresolved.",
+    "upstream_sha256": "e83e181d3c425f00b2ce369a6a05eec3e89d7508267b24050906615678237111",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "wiki/Guarded-taint-signatures.md",
+    "source_url": "https://github.com/opengrep/opengrep/wiki/Guarded-taint-signatures",
+    "commit": "77adea7dc411aa686c9c4ecd001b6063393319f2",
+    "retrieved": "2026-10-03",
+    "sha256": "fef33cbcf095e5872dce1d15006102807c2d566bd8db1bbe773b3c47fd99cec6",
+    "license": "Wiki contains no LICENSE file or explicit license declaration; do not assume repository LGPL automatically licenses separate wiki content. Attribution preserved; redistribution permission unresolved.",
+    "upstream_sha256": "fef33cbcf095e5872dce1d15006102807c2d566bd8db1bbe773b3c47fd99cec6",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "v1.30.0/OPENGREP.md",
+    "source_url": "https://github.com/opengrep/opengrep/blob/acf67b45c97c4b63626536605c77064ef536806d/OPENGREP.md",
+    "commit": "acf67b45c97c4b63626536605c77064ef536806d",
+    "retrieved": "2026-10-03",
+    "sha256": "6238b99991655b98d65d152ce678c8c9ce093f98bae0ac75f3d8e04c8de9e3b9",
+    "license": "Repository LGPL-2.1; retain individual file notices and COPYRIGHT. LICENSE document copied verbatim.",
+    "upstream_sha256": "6238b99991655b98d65d152ce678c8c9ce093f98bae0ac75f3d8e04c8de9e3b9",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "v1.30.0/README.md",
+    "source_url": "https://github.com/opengrep/opengrep/blob/acf67b45c97c4b63626536605c77064ef536806d/README.md",
+    "commit": "acf67b45c97c4b63626536605c77064ef536806d",
+    "retrieved": "2026-10-03",
+    "sha256": "2a4660348ac341d9ddbe3705866d3592ffc9ac54625a75a736429a5e11dfe838",
+    "license": "Repository LGPL-2.1; retain individual file notices and COPYRIGHT. LICENSE document copied verbatim.",
+    "upstream_sha256": "7b1d5423ca719ebafd88689da99817557ad5ec5438e261f13157521afd816b6d",
+    "modifications": "Navigation-only: vendored links localized and unvendored repository links qualified with pinned upstream revision; prose and code preserved."
+  },
+  {
+    "path": "v1.30.0/INSTALL.md",
+    "source_url": "https://github.com/opengrep/opengrep/blob/acf67b45c97c4b63626536605c77064ef536806d/INSTALL.md",
+    "commit": "acf67b45c97c4b63626536605c77064ef536806d",
+    "retrieved": "2026-10-03",
+    "sha256": "789571814f1971948259972526a6649142c96281d72e9d986818e1cacd1a784f",
+    "license": "Repository LGPL-2.1; retain individual file notices and COPYRIGHT. LICENSE document copied verbatim.",
+    "upstream_sha256": "5c841135e868fdea7ad8137226cb86e4e81ce6298024f2e2f67999c1cd750889",
+    "modifications": "Navigation-only: vendored links localized and unvendored repository links qualified with pinned upstream revision; prose and code preserved."
+  },
+  {
+    "path": "v1.30.0/LICENSE",
+    "source_url": "https://github.com/opengrep/opengrep/blob/acf67b45c97c4b63626536605c77064ef536806d/LICENSE",
+    "commit": "acf67b45c97c4b63626536605c77064ef536806d",
+    "retrieved": "2026-10-03",
+    "sha256": "20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331",
+    "license": "Repository LGPL-2.1; retain individual file notices and COPYRIGHT. LICENSE document copied verbatim.",
+    "upstream_sha256": "20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "v1.30.0/COPYRIGHT",
+    "source_url": "https://github.com/opengrep/opengrep/blob/acf67b45c97c4b63626536605c77064ef536806d/COPYRIGHT",
+    "commit": "acf67b45c97c4b63626536605c77064ef536806d",
+    "retrieved": "2026-10-03",
+    "sha256": "0f90eaca8e598c6c67a6cda7beb4470518fb2dababc996b3898344d380769aca",
+    "license": "Repository LGPL-2.1; retain individual file notices and COPYRIGHT. LICENSE document copied verbatim.",
+    "upstream_sha256": "0f90eaca8e598c6c67a6cda7beb4470518fb2dababc996b3898344d380769aca",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "v1.30.0/docs/INTRA_FUNCTION_IMPLEMENTATION.md",
+    "source_url": "https://github.com/opengrep/opengrep/blob/acf67b45c97c4b63626536605c77064ef536806d/docs/INTRA_FUNCTION_IMPLEMENTATION.md",
+    "commit": "acf67b45c97c4b63626536605c77064ef536806d",
+    "retrieved": "2026-10-03",
+    "sha256": "0597b9b0a6761c6a64f53c948fca2a6e00374a49bb8a5c6bf4246b65ee1e8ff1",
+    "license": "Repository LGPL-2.1; retain individual file notices and COPYRIGHT. LICENSE document copied verbatim.",
+    "upstream_sha256": "0597b9b0a6761c6a64f53c948fca2a6e00374a49bb8a5c6bf4246b65ee1e8ff1",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "v1.30.0/src/osemgrep/cli_scan/Scan_CLI.ml",
+    "source_url": "https://github.com/opengrep/opengrep/blob/acf67b45c97c4b63626536605c77064ef536806d/src/osemgrep/cli_scan/Scan_CLI.ml",
+    "commit": "acf67b45c97c4b63626536605c77064ef536806d",
+    "retrieved": "2026-10-03",
+    "sha256": "1054daef1db4bd210dadbfd6cdcac26ff5d13565875d2059d8c2f61cdc619b49",
+    "license": "Repository LGPL-2.1; retain individual file notices and COPYRIGHT. LICENSE document copied verbatim.",
+    "upstream_sha256": "1054daef1db4bd210dadbfd6cdcac26ff5d13565875d2059d8c2f61cdc619b49",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "v1.30.0/src/osemgrep/cli_test/Test_CLI.ml",
+    "source_url": "https://github.com/opengrep/opengrep/blob/acf67b45c97c4b63626536605c77064ef536806d/src/osemgrep/cli_test/Test_CLI.ml",
+    "commit": "acf67b45c97c4b63626536605c77064ef536806d",
+    "retrieved": "2026-10-03",
+    "sha256": "5bb961d05e1d1a498916822782d17e57690490db0849a3638fbc62659f2d7dc5",
+    "license": "Repository LGPL-2.1; retain individual file notices and COPYRIGHT. LICENSE document copied verbatim.",
+    "upstream_sha256": "5bb961d05e1d1a498916822782d17e57690490db0849a3638fbc62659f2d7dc5",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "v1.30.0/src/osemgrep/cli/CLI.ml",
+    "source_url": "https://github.com/opengrep/opengrep/blob/acf67b45c97c4b63626536605c77064ef536806d/src/osemgrep/cli/CLI.ml",
+    "commit": "acf67b45c97c4b63626536605c77064ef536806d",
+    "retrieved": "2026-10-03",
+    "sha256": "9f74abb238604f0a8b20ea999299e4a9312ba10a329ad574ab2da69dfed45e28",
+    "license": "Repository LGPL-2.1; retain individual file notices and COPYRIGHT. LICENSE document copied verbatim.",
+    "upstream_sha256": "9f74abb238604f0a8b20ea999299e4a9312ba10a329ad574ab2da69dfed45e28",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "v1.30.0/src/osemgrep/core_runner/Core_runner.ml",
+    "source_url": "https://github.com/opengrep/opengrep/blob/acf67b45c97c4b63626536605c77064ef536806d/src/osemgrep/core_runner/Core_runner.ml",
+    "commit": "acf67b45c97c4b63626536605c77064ef536806d",
+    "retrieved": "2026-10-03",
+    "sha256": "d4f3e3feb95668cb5e30783965b9a162ecdc85b8bc9127129b081dd962bce507",
+    "license": "Repository LGPL-2.1; retain individual file notices and COPYRIGHT. LICENSE document copied verbatim.",
+    "upstream_sha256": "d4f3e3feb95668cb5e30783965b9a162ecdc85b8bc9127129b081dd962bce507",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "v1.30.0/src/parsing/Parse_rule.ml",
+    "source_url": "https://github.com/opengrep/opengrep/blob/acf67b45c97c4b63626536605c77064ef536806d/src/parsing/Parse_rule.ml",
+    "commit": "acf67b45c97c4b63626536605c77064ef536806d",
+    "retrieved": "2026-10-03",
+    "sha256": "f50a9091e56aae56804429ebb18c10057c978ab163532fd0f325b9cc3d6e280c",
+    "license": "Repository LGPL-2.1; retain individual file notices and COPYRIGHT. LICENSE document copied verbatim.",
+    "upstream_sha256": "f50a9091e56aae56804429ebb18c10057c978ab163532fd0f325b9cc3d6e280c",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "v1.30.0/src/osemgrep/reporting/Matches_report.ml",
+    "source_url": "https://github.com/opengrep/opengrep/blob/acf67b45c97c4b63626536605c77064ef536806d/src/osemgrep/reporting/Matches_report.ml",
+    "commit": "acf67b45c97c4b63626536605c77064ef536806d",
+    "retrieved": "2026-10-03",
+    "sha256": "a09fce599ce4fddafea4e3aa55f8b27a211088e89d9e54e107c085534ea9e7f9",
+    "license": "Repository LGPL-2.1; retain individual file notices and COPYRIGHT. LICENSE document copied verbatim.",
+    "upstream_sha256": "a09fce599ce4fddafea4e3aa55f8b27a211088e89d9e54e107c085534ea9e7f9",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "v1.30.0/src/osemgrep/language_server/server/Session.ml",
+    "source_url": "https://github.com/opengrep/opengrep/blob/acf67b45c97c4b63626536605c77064ef536806d/src/osemgrep/language_server/server/Session.ml",
+    "commit": "acf67b45c97c4b63626536605c77064ef536806d",
+    "retrieved": "2026-10-03",
+    "sha256": "c038ba9dcceb7f19c6b926ace844deca39521cd8bb7a3e4e57adb38bc46fcf39",
+    "license": "Repository LGPL-2.1; retain individual file notices and COPYRIGHT. LICENSE document copied verbatim.",
+    "upstream_sha256": "c038ba9dcceb7f19c6b926ace844deca39521cd8bb7a3e4e57adb38bc46fcf39",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "main-interfile/README.md",
+    "source_url": "https://raw.githubusercontent.com/opengrep/opengrep/8bb8e37f5249ab2d101c3cef5e056e571f503311/docs/interfile/README.md",
+    "commit": "8bb8e37f5249ab2d101c3cef5e056e571f503311",
+    "retrieved": "2026-10-03",
+    "sha256": "0c8cfe6c72bff1d95dc89ea0a7a7a9ffe21c99547fd1119ace4d5ec8630f3e20",
+    "license": "Repository LGPL-2.1; see v1.30.0/LICENSE and COPYRIGHT; preserve upstream notices.",
+    "upstream_sha256": "3e6e94f4b111407bb8d8cd1cd8373fcf760e062bf7dc8497b188a22e28d4531d",
+    "modifications": "Navigation-only: vendored links localized and unvendored repository links qualified with pinned upstream revision; prose and code preserved."
+  },
+  {
+    "path": "main-interfile/01-architecture.md",
+    "source_url": "https://raw.githubusercontent.com/opengrep/opengrep/8bb8e37f5249ab2d101c3cef5e056e571f503311/docs/interfile/01-architecture.md",
+    "commit": "8bb8e37f5249ab2d101c3cef5e056e571f503311",
+    "retrieved": "2026-10-03",
+    "sha256": "6a72713e1dfc099030b95f20945aab137b5ec267fab9e2f6afbf67a6d80d057d",
+    "license": "Repository LGPL-2.1; see v1.30.0/LICENSE and COPYRIGHT; preserve upstream notices.",
+    "upstream_sha256": "82736d3a827cbe677e8fe452f85a200a831baa229931959db3e07c340e5c794d",
+    "modifications": "Navigation-only: vendored links localized and unvendored repository links qualified with pinned upstream revision; prose and code preserved."
+  },
+  {
+    "path": "main-interfile/02-call-graph.md",
+    "source_url": "https://raw.githubusercontent.com/opengrep/opengrep/8bb8e37f5249ab2d101c3cef5e056e571f503311/docs/interfile/02-call-graph.md",
+    "commit": "8bb8e37f5249ab2d101c3cef5e056e571f503311",
+    "retrieved": "2026-10-03",
+    "sha256": "6f8a74ddad02ffaec056acb12ce48df86d3b393c7ec7ca5872944e728d1d7655",
+    "license": "Repository LGPL-2.1; see v1.30.0/LICENSE and COPYRIGHT; preserve upstream notices.",
+    "upstream_sha256": "6f8a74ddad02ffaec056acb12ce48df86d3b393c7ec7ca5872944e728d1d7655",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "main-interfile/03-dispatch.md",
+    "source_url": "https://raw.githubusercontent.com/opengrep/opengrep/8bb8e37f5249ab2d101c3cef5e056e571f503311/docs/interfile/03-dispatch.md",
+    "commit": "8bb8e37f5249ab2d101c3cef5e056e571f503311",
+    "retrieved": "2026-10-03",
+    "sha256": "7c047ff2d9fb512b68807b067855f47b4e9cc0609e4ac3c19dee8fabb83fbbd6",
+    "license": "Repository LGPL-2.1; see v1.30.0/LICENSE and COPYRIGHT; preserve upstream notices.",
+    "upstream_sha256": "8a309b5d5d606ee606cf21dba2c0a75a2cd805001273bf0a05e3c7ad33ff2dfe",
+    "modifications": "Navigation-only: vendored links localized and unvendored repository links qualified with pinned upstream revision; prose and code preserved."
+  },
+  {
+    "path": "main-interfile/04-language-quirks.md",
+    "source_url": "https://raw.githubusercontent.com/opengrep/opengrep/8bb8e37f5249ab2d101c3cef5e056e571f503311/docs/interfile/04-language-quirks.md",
+    "commit": "8bb8e37f5249ab2d101c3cef5e056e571f503311",
+    "retrieved": "2026-10-03",
+    "sha256": "42069a5193c4541c958e23dd2154476e65d4f9c87e90f52bf8d472d62690ea21",
+    "license": "Repository LGPL-2.1; see v1.30.0/LICENSE and COPYRIGHT; preserve upstream notices.",
+    "upstream_sha256": "42069a5193c4541c958e23dd2154476e65d4f9c87e90f52bf8d472d62690ea21",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "main-interfile/05-cli-and-tools.md",
+    "source_url": "https://raw.githubusercontent.com/opengrep/opengrep/8bb8e37f5249ab2d101c3cef5e056e571f503311/docs/interfile/05-cli-and-tools.md",
+    "commit": "8bb8e37f5249ab2d101c3cef5e056e571f503311",
+    "retrieved": "2026-10-03",
+    "sha256": "11f1739279b7e2919831eb2f7c029976558732c47bcfe76b0ac970a8fce1f557",
+    "license": "Repository LGPL-2.1; see v1.30.0/LICENSE and COPYRIGHT; preserve upstream notices.",
+    "upstream_sha256": "11f1739279b7e2919831eb2f7c029976558732c47bcfe76b0ac970a8fce1f557",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "main-interfile/06-subtleties.md",
+    "source_url": "https://raw.githubusercontent.com/opengrep/opengrep/8bb8e37f5249ab2d101c3cef5e056e571f503311/docs/interfile/06-subtleties.md",
+    "commit": "8bb8e37f5249ab2d101c3cef5e056e571f503311",
+    "retrieved": "2026-10-03",
+    "sha256": "9b210ebb70bf0d7cbea1f6a16cb4b40037b72bbeef0338b77688b4d86d1ef5f4",
+    "license": "Repository LGPL-2.1; see v1.30.0/LICENSE and COPYRIGHT; preserve upstream notices.",
+    "upstream_sha256": "9b210ebb70bf0d7cbea1f6a16cb4b40037b72bbeef0338b77688b4d86d1ef5f4",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "v1.30.0/src/fixing/Autofix.ml",
+    "source_url": "https://raw.githubusercontent.com/opengrep/opengrep/acf67b45c97c4b63626536605c77064ef536806d/src/fixing/Autofix.ml",
+    "commit": "acf67b45c97c4b63626536605c77064ef536806d",
+    "retrieved": "2026-10-03",
+    "sha256": "914e874fe04168d28e00587e624213888c672c2ab5c367372945d7eacb7f37d3",
+    "upstream_sha256": "914e874fe04168d28e00587e624213888c672c2ab5c367372945d7eacb7f37d3",
+    "license": "Repository LGPL-2.1; retain individual file notices and COPYRIGHT.",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "v1.30.0/src/engine/Range_with_metavars.ml",
+    "source_url": "https://raw.githubusercontent.com/opengrep/opengrep/acf67b45c97c4b63626536605c77064ef536806d/src/engine/Range_with_metavars.ml",
+    "commit": "acf67b45c97c4b63626536605c77064ef536806d",
+    "retrieved": "2026-10-03",
+    "sha256": "78ef8cfa3a8861b5dbd9f3c90582f34b4e9f15a8242ddc034d1e3dfd8cd0bf93",
+    "upstream_sha256": "78ef8cfa3a8861b5dbd9f3c90582f34b4e9f15a8242ddc034d1e3dfd8cd0bf93",
+    "license": "Repository LGPL-2.1; retain individual file notices and COPYRIGHT.",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  },
+  {
+    "path": "v1.30.0/src/engine/Xpattern_matcher.ml",
+    "source_url": "https://raw.githubusercontent.com/opengrep/opengrep/acf67b45c97c4b63626536605c77064ef536806d/src/engine/Xpattern_matcher.ml",
+    "commit": "acf67b45c97c4b63626536605c77064ef536806d",
+    "retrieved": "2026-10-03",
+    "sha256": "07529e3774157cfb5e1696eac0e43333d253d86cd1e33fc976c58405d3a1a369",
+    "upstream_sha256": "07529e3774157cfb5e1696eac0e43333d253d86cd1e33fc976c58405d3a1a369",
+    "license": "Repository LGPL-2.1; retain individual file notices and COPYRIGHT.",
+    "modifications": "None; byte-for-byte upstream snapshot."
+  }
+]

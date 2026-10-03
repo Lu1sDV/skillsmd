@@ -1,0 +1,122 @@
+# ONE RULE: second-order shell injection through an untrusted persisted job.
+#
+# Flow: load/read-into -> JOB -> render_shell_command -> JOB + SHELL
+#       -> batch.add(command) -> tainted batch receiver -> batch.pop()
+#       -> run_shell($COMMAND) requires JOB and SHELL.
+#
+# All API names are educational models; see taint.py for their safety contracts.
+# This rule is intentionally narrower than a general shell-injection rule: raw
+# JOB data executed without the rendering stage is OUTSIDE ITS TARGET, not safe.
+# Labels represent provenance + a transformation, not two independent inputs.
+# Local semantics references:
+#   ../../references/semgrep/writing-rules/data-flow/taint-mode/advanced.md
+#     (taint labels, side effects, custom propagators)
+#   ../../references/semgrep/writing-rules/data-flow/taint-mode/overview.md
+#     (exact sources/sanitizers/sinks)
+# These upstream snapshots explain syntax; they do not promise engine parity.
+# Paired fixtures exercise the combined behavior on the selected OpenGrep engine.
+
+rules:
+  - id: lab-python-shell-taint
+    languages: [python]
+    mode: taint
+    severity: WARNING
+    message: >-
+      A shell command rendered from an untrusted persisted job reaches run_shell's
+      execution argument. Unchecked interpolation can execute attacker-controlled
+      operating-system commands when a worker processes the job. Reconstruct an
+      allowlisted command and use its returned buffer, or validate the entire
+      command with a fail-closed allowlist before staging or executing it.
+    metadata:
+      confidence: LOW
+      technology: [python, job-queues, shell]
+      # LOW is intentional: synthetic educational cases, not calibrated on real
+      # applications. Neither the severity nor example annotations imply accuracy
+      # measurements for an actual queue/command library.
+
+    pattern-sources:
+      # Step 1: a client-controlled record persisted earlier enters the worker.
+      # exact:true labels this call's RESULT, not every descendant expression.
+      # load_untrusted_job(run_shell(clean)) must not backdate JOB into that sink.
+      - pattern: load_untrusted_job(...)
+        exact: true
+        label: JOB
+
+      # Alternative entry into the SAME pipeline: an existing mutable job is
+      # overwritten. Focus must select the l-value, not the whole read-into call.
+      # by-side-effect:true makes later reads of $JOB carry JOB; without it only
+      # this occurrence is tainted and later rendering can miss the provenance.
+      # The true mode also taints the focused occurrence; it is not 'only'.
+      - patterns:
+          - pattern: read_untrusted_job_into($JOB)
+          - focus-metavariable: $JOB
+        exact: true
+        by-side-effect: true
+        label: JOB
+
+      # Step 2: unsafe interpolation makes the persisted job executable text.
+      # This is a DEPENDENT source: SHELL is added only when the matched renderer
+      # expression already carries JOB. A renderer invoked on a clean literal is
+      # not an unconditional SHELL source. Ordinary argument-to-return propagation
+      # preserves JOB; requires adds SHELL rather than replacing the old label.
+      # Do not focus $JOB here: that would label the input instead of the output.
+      # exact:true keeps SHELL off nested arguments evaluated BEFORE rendering;
+      # render_shell_command(run_shell(job)) is a raw-source bypass, not this flow.
+      - pattern: render_shell_command(...)
+        exact: true
+        requires: JOB
+        label: SHELL
+
+    pattern-propagators:
+      # Step 3: workers stage commands before another statement executes them.
+      # add() returns no useful command, so ordinary return propagation cannot
+      # model this write. Explicit from/to copies ALL labels from $COMMAND to
+      # $BATCH; it does not synthesize the dependent SHELL label on a raw JOB.
+      # $BATCH must be an l-value for receiver mutation to affect later reads.
+      # by-side-effect:true is the default, written explicitly to expose why a
+      # later pop() obtains receiver taint through ordinary call propagation.
+      # This conservative container model does not track individual members or
+      # clear receiver taint when a member is popped; use separate clean batches.
+      - pattern: $BATCH.add($COMMAND)
+        from: $COMMAND
+        to: $BATCH
+        by-side-effect: true
+
+    pattern-sinks:
+      # Step 4: only the first argument executes; audit= is inert log data under
+      # this API contract. Focus narrows BOTH reporting and label evaluation to
+      # the dangerous expression. Otherwise a clean command with tainted audit
+      # metadata could satisfy a whole-call sink and create a false positive.
+      # exact:true does not broaden the sink to all descendant subexpressions.
+      # Boolean requires is evaluated against the focused value's labels:
+      # BOTH provenance and the rendering stage must reach the command argument.
+      # It does not require that the labels come from two distinct sources, and
+      # it is not a safety guarantee for values bearing only JOB.
+      - patterns:
+          - pattern: run_shell($COMMAND, ...)
+          - focus-metavariable: $COMMAND
+        exact: true
+        requires: JOB and SHELL
+
+    pattern-sanitizers:
+      # Return-only sanitizer: construct a NEW command from a fixed allowlist.
+      # All labels are removed from the result, not the caller's original buffer.
+      # Discarding this return does NOT sanitize command or a staged receiver.
+      # Exact matching is essential: allowlisted_command(run_shell(tainted))
+      # must still report the inner execution, which happens before the sanitizer.
+      # This is not 'shell quoting is always safe'; the full safety contract is
+      # allowlisted reconstruction, not merely escaping arbitrary attacker text.
+      - pattern: allowlisted_command(...)
+        exact: true
+
+      # In-place validation: normal return guarantees the ENTIRE mutable command
+      # passes a fixed allowlist; failure raises and cannot continue to the sink.
+      # focus + by-side-effect cleans later reads of THIS l-value. A predicate
+      # returning False or checking only a substring cannot satisfy this contract.
+      # This fact is program-point-local, not permanent: assigning a newly rendered
+      # untrusted command later reintroduces JOB + SHELL, as the fixture shows.
+      - patterns:
+          - pattern: assert_allowlisted_command($COMMAND)
+          - focus-metavariable: $COMMAND
+        exact: true
+        by-side-effect: true

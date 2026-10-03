@@ -1,0 +1,3318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+    
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/Authentication</loc>
+    <lastmod>2026-10-02T21:18:14.128Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/Changelog</loc>
+    <lastmod>2026-09-24T20:17:27.660Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/Deprecation-Policy</loc>
+    <lastmod>2026-09-26T03:49:34.602Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/Introduction</loc>
+    <lastmod>2026-07-14T17:07:52.345Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/Terms-of-Use</loc>
+    <lastmod>2026-10-02T21:18:14.120Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/deploymentsservice/list-deployments</loc>
+    <lastmod>2026-09-22T16:37:26.608Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/findingsservice/list-code-supply-chain-or-ai-powered-detection-findings</loc>
+    <lastmod>2026-09-22T16:37:26.594Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/policiesservice/list-policies</loc>
+    <lastmod>2026-10-02T21:17:59.360Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/policiesservice/list-policy-rules</loc>
+    <lastmod>2026-10-02T21:17:59.372Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/policiesservice/update-policy</loc>
+    <lastmod>2026-10-02T21:17:59.381Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/projectsservice/add-tags-to-project</loc>
+    <lastmod>2026-09-22T16:37:26.689Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/projectsservice/delete-project</loc>
+    <lastmod>2026-09-22T16:37:26.722Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/projectsservice/get-project-details</loc>
+    <lastmod>2026-09-22T16:37:26.713Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/projectsservice/list-all-projects</loc>
+    <lastmod>2026-09-22T16:37:26.744Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/projectsservice/remove-tags-from-project</loc>
+    <lastmod>2026-09-22T16:37:26.702Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/projectsservice/toggle-managed-scans-for-a-project</loc>
+    <lastmod>2026-09-22T16:37:26.759Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/projectsservice/update-project-details</loc>
+    <lastmod>2026-09-22T16:37:26.733Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/scansservice/get-scan-details</loc>
+    <lastmod>2026-09-22T16:37:26.770Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/scansservice/list-scans-beta</loc>
+    <lastmod>2026-09-22T16:37:26.780Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/secretsservice/list-secrets</loc>
+    <lastmod>2026-10-02T21:17:59.439Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/supplychainservice/create-a-new-sbom-export-job</loc>
+    <lastmod>2026-10-02T21:17:59.451Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/supplychainservice/get-the-status-of-a-sbom-export-job</loc>
+    <lastmod>2026-10-02T21:17:59.463Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/supplychainservice/list-dependencies</loc>
+    <lastmod>2026-10-02T21:17:59.472Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/supplychainservice/list-lockfiles-in-a-given-repository-with-dependencies</loc>
+    <lastmod>2026-10-02T21:17:59.483Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/supplychainservice/list-repositories-with-dependencies</loc>
+    <lastmod>2026-10-02T21:17:59.493Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/ticketingservice/create-jira-tickets</loc>
+    <lastmod>2026-09-22T16:37:26.888Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/ticketingservice/link-an-existing-ticket-to-findings</loc>
+    <lastmod>2026-09-22T16:37:26.959Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/ticketingservice/unlink-a-jira-ticket</loc>
+    <lastmod>2026-09-22T16:37:26.971Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/ticketingservice/unlink-a-ticket-from-findings</loc>
+    <lastmod>2026-09-22T16:37:26.984Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v1/triageservice/bulk-triage</loc>
+    <lastmod>2026-09-22T16:37:26.995Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/Authentication</loc>
+    <lastmod>2026-10-02T21:18:14.127Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/Changelog</loc>
+    <lastmod>2026-10-02T16:05:33.181Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/Deprecation-Policy</loc>
+    <lastmod>2026-09-26T03:49:34.594Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/Introduction</loc>
+    <lastmod>2026-07-22T19:03:38.654Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/Terms-of-Use</loc>
+    <lastmod>2026-10-02T21:18:14.127Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/aifixjobsservice/create-fix-job</loc>
+    <lastmod>2026-10-02T16:05:13.162Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/aitasksservice/create-combined-task</loc>
+    <lastmod>2026-10-02T16:05:13.175Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/aitasksservice/create-pattern-fix-task</loc>
+    <lastmod>2026-10-02T16:05:13.188Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/aitasksservice/get-task-info</loc>
+    <lastmod>2026-10-02T16:05:13.199Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/autofixservice/create-autofix</loc>
+    <lastmod>2026-10-02T16:05:13.210Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/automationsservice/create-automation</loc>
+    <lastmod>2026-10-02T16:05:13.233Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/automationsservice/delete-automation</loc>
+    <lastmod>2026-10-02T16:05:13.253Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/automationsservice/list-automations</loc>
+    <lastmod>2026-10-02T16:05:13.221Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/automationsservice/list-automations-1</loc>
+    <lastmod>2026-10-02T16:05:13.270Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/automationsservice/update-automation</loc>
+    <lastmod>2026-10-02T16:05:13.242Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/autotriagefeedbackservice/submit-autotriage-feedback</loc>
+    <lastmod>2026-10-02T16:05:13.279Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentproductsservice/create-or-update-deployment-product-config</loc>
+    <lastmod>2026-10-02T16:05:13.464Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentproductsservice/get-deployment-admin-product-config</loc>
+    <lastmod>2026-10-02T16:05:13.474Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentproductsservice/get-deployment-product-config</loc>
+    <lastmod>2026-10-02T16:05:13.454Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentservice/add-deployment-user</loc>
+    <lastmod>2026-10-02T16:05:13.300Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentservice/create-deployment</loc>
+    <lastmod>2026-10-02T16:05:13.310Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentservice/get-deployment</loc>
+    <lastmod>2026-10-02T16:05:13.319Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentservice/get-deployment-authorized-actions</loc>
+    <lastmod>2026-10-02T16:05:13.339Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentservice/get-deployment-default-user-role</loc>
+    <lastmod>2026-10-02T16:05:13.349Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentservice/get-deployment-for-current-token</loc>
+    <lastmod>2026-10-02T16:05:13.358Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentservice/get-deployment-github-app-status</loc>
+    <lastmod>2026-10-02T16:05:13.368Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentservice/list-deployment-users</loc>
+    <lastmod>2026-10-02T16:05:13.290Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentservice/list-deployment-users-paginated</loc>
+    <lastmod>2026-10-02T16:05:13.379Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentservice/remove-deployment-user</loc>
+    <lastmod>2026-10-02T16:05:13.390Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentservice/send-product-toggle-feedback</loc>
+    <lastmod>2026-10-02T16:05:13.401Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentservice/toggle-cross-file-analysis</loc>
+    <lastmod>2026-10-02T16:05:13.411Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentservice/toggle-dependency-query</loc>
+    <lastmod>2026-10-02T16:05:13.422Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentservice/toggle-triage-via-comment</loc>
+    <lastmod>2026-10-02T16:05:13.432Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentservice/update-deployment</loc>
+    <lastmod>2026-10-02T16:05:13.328Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentservice/update-deployment-user-role</loc>
+    <lastmod>2026-10-02T16:05:13.442Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymentsservice/list-deployments</loc>
+    <lastmod>2026-10-02T16:05:13.540Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymenttagservice/create-or-update-a-deployment-tag</loc>
+    <lastmod>2026-10-02T16:05:13.495Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymenttagservice/delete-a-deployment-tag</loc>
+    <lastmod>2026-10-02T16:05:13.505Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymenttagservice/find-deployment-tags-with-project-counts</loc>
+    <lastmod>2026-10-02T16:05:13.519Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymenttagservice/get-a-deployment-tag</loc>
+    <lastmod>2026-10-02T16:05:13.484Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/deploymenttagservice/list-deployment-tags</loc>
+    <lastmod>2026-10-02T16:05:13.529Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/editorservice/run-pattern</loc>
+    <lastmod>2026-10-02T16:05:13.550Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/externalticketingservice/create-external-tickets</loc>
+    <lastmod>2026-10-02T16:05:13.562Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/externalticketingservice/delete-external-ticket</loc>
+    <lastmod>2026-10-02T16:05:13.571Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/externalticketingservice/get-external-ticketing-instances</loc>
+    <lastmod>2026-10-02T16:05:13.581Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/externalticketingservice/link-an-existing-ticket-to-findings</loc>
+    <lastmod>2026-10-02T16:05:13.591Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/externalticketingservice/unlink-a-ticket-from-findings</loc>
+    <lastmod>2026-10-02T16:05:13.602Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/ignoresservice/create-product-ignores</loc>
+    <lastmod>2026-10-02T16:05:13.622Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/ignoresservice/delete-product-ignores</loc>
+    <lastmod>2026-10-02T16:05:13.632Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/ignoresservice/get-product-ignores</loc>
+    <lastmod>2026-10-02T16:05:13.612Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/ignoresservice/update-product-ignores</loc>
+    <lastmod>2026-10-02T16:05:13.642Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/infrastructureconfigurationsservice/get-managed-scans-vpc-bootstrap-cloudformation-template</loc>
+    <lastmod>2026-10-02T16:05:13.655Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/issuesservice/bulk-update-issues</loc>
+    <lastmod>2026-10-02T16:05:13.665Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/issuesservice/export-issues</loc>
+    <lastmod>2026-10-02T16:05:13.676Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/issuesservice/get-issue</loc>
+    <lastmod>2026-10-02T16:05:13.685Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/issuesservice/get-issue-code-snippets</loc>
+    <lastmod>2026-10-02T16:05:13.695Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/issuesservice/get-issue-counts</loc>
+    <lastmod>2026-10-02T16:05:13.704Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/issuesservice/get-issue-filters</loc>
+    <lastmod>2026-10-02T16:05:13.714Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/issuesservice/list-issue-groups</loc>
+    <lastmod>2026-10-02T16:05:13.723Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/issuesservice/list-issues</loc>
+    <lastmod>2026-10-02T16:05:13.733Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/managedscansettingsservice/create-semgrep-managed-scan-settings</loc>
+    <lastmod>2026-10-02T16:05:13.822Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/managedscansettingsservice/delete-semgrep-managed-scan-settings</loc>
+    <lastmod>2026-10-02T16:05:13.843Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/managedscansettingsservice/get-semgrep-managed-scan-settings</loc>
+    <lastmod>2026-10-02T16:05:13.814Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/managedscansettingsservice/update-semgrep-managed-scan-settings</loc>
+    <lastmod>2026-10-02T16:05:13.833Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/memoriesservice/create-memory</loc>
+    <lastmod>2026-10-02T16:05:13.853Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/memoriesservice/create-memory-from-triage</loc>
+    <lastmod>2026-10-02T16:05:13.863Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/memoriesservice/delete-memory</loc>
+    <lastmod>2026-10-02T16:05:13.883Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/memoriesservice/find-relevant-issues</loc>
+    <lastmod>2026-10-02T16:05:13.893Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/memoriesservice/get-memories-by-ids</loc>
+    <lastmod>2026-10-02T16:05:13.903Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/memoriesservice/get-memory-statistics</loc>
+    <lastmod>2026-10-02T16:05:13.914Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/memoriesservice/list-memories</loc>
+    <lastmod>2026-10-02T16:05:13.924Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/memoriesservice/list-suggested-memories</loc>
+    <lastmod>2026-10-02T16:05:13.934Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/memoriesservice/update-memory</loc>
+    <lastmod>2026-10-02T16:05:13.873Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/miscservice/get-identity</loc>
+    <lastmod>2026-10-02T16:05:15.379Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/notificationrulesservice/create-notification-rule</loc>
+    <lastmod>2026-10-02T16:05:13.944Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/notificationrulesservice/delete-notification-rule</loc>
+    <lastmod>2026-10-02T16:05:13.966Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/notificationrulesservice/list-notification-rules</loc>
+    <lastmod>2026-10-02T16:05:13.976Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/notificationrulesservice/replace-notification-rule</loc>
+    <lastmod>2026-10-02T16:05:13.954Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/notificationrulesservice/test-notification-rule</loc>
+    <lastmod>2026-10-02T16:05:13.986Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/notificationwebhooksservice/create-notification-webhook</loc>
+    <lastmod>2026-10-02T16:05:14.005Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/notificationwebhooksservice/delete-notification-webhook</loc>
+    <lastmod>2026-10-02T16:05:14.040Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/notificationwebhooksservice/get-notification-webhook</loc>
+    <lastmod>2026-10-02T16:05:14.015Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/notificationwebhooksservice/list-notification-webhooks</loc>
+    <lastmod>2026-10-02T16:05:13.995Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/notificationwebhooksservice/test-notification-webhook</loc>
+    <lastmod>2026-10-02T16:05:14.054Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/notificationwebhooksservice/update-notification-webhook</loc>
+    <lastmod>2026-10-02T16:05:14.030Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/policiesservice/list-policies</loc>
+    <lastmod>2026-10-02T16:05:14.064Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/policiesservice/list-policy-rules</loc>
+    <lastmod>2026-10-02T16:05:14.073Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/policiesservice/update-policy-rule</loc>
+    <lastmod>2026-10-02T16:05:14.086Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/policiesv2service/apply-a-detection-policy</loc>
+    <lastmod>2026-10-02T16:05:14.107Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/policiesv2service/apply-remediation-policies</loc>
+    <lastmod>2026-10-02T16:05:14.130Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/policiesv2service/get-a-detection-policy</loc>
+    <lastmod>2026-10-02T16:05:14.097Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/policiesv2service/get-remediation-policies</loc>
+    <lastmod>2026-10-02T16:05:14.119Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/policiesv2service/get-the-detection-policy-summary</loc>
+    <lastmod>2026-10-02T16:05:14.139Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/policiesv2service/get-the-policy-vocabulary</loc>
+    <lastmod>2026-10-02T16:05:14.153Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/policiesv2service/preview-a-detection-policy-apply</loc>
+    <lastmod>2026-10-02T16:05:14.162Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/policiesv2service/preview-a-remediation-policies-apply</loc>
+    <lastmod>2026-10-02T16:05:14.173Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/projectmanagedscansettingsservice/bulk-get-many-projects-managed-scan-settings</loc>
+    <lastmod>2026-10-02T16:05:14.332Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/projectmanagedscansettingsservice/get-a-projects-managed-scan-settings</loc>
+    <lastmod>2026-10-02T16:05:14.344Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/projectsservice/add-semgrep-ci-secrets-to-github-repositories</loc>
+    <lastmod>2026-10-02T16:05:14.183Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/projectsservice/bulk-edit-projects-by-filter</loc>
+    <lastmod>2026-10-02T16:05:14.193Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/projectsservice/bulk-edit-selected-projects</loc>
+    <lastmod>2026-10-02T16:05:14.202Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/projectsservice/delete-project</loc>
+    <lastmod>2026-10-02T16:05:14.222Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/projectsservice/get-branch</loc>
+    <lastmod>2026-10-02T16:05:14.234Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/projectsservice/get-project</loc>
+    <lastmod>2026-10-02T16:05:14.212Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/projectsservice/get-project-count</loc>
+    <lastmod>2026-10-02T16:05:14.244Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/projectsservice/list-project-ids-by-tag</loc>
+    <lastmod>2026-10-02T16:05:14.253Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/projectsservice/list-projects</loc>
+    <lastmod>2026-10-02T16:05:14.275Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/projectsservice/provision-semgrep-ci-github-actions</loc>
+    <lastmod>2026-10-02T16:05:14.285Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/projectsservice/sync-all-projects-to-scm</loc>
+    <lastmod>2026-10-02T16:05:14.295Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/projectsservice/sync-project-to-scm</loc>
+    <lastmod>2026-10-02T16:05:14.305Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/projectsservice/update-project</loc>
+    <lastmod>2026-10-02T16:05:14.314Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/publicissuesservice/count-issues</loc>
+    <lastmod>2026-10-02T16:05:13.742Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/publicissuesservice/export-issues-as-csv</loc>
+    <lastmod>2026-10-02T16:05:13.754Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/publicissuesservice/get-issue-activity-history</loc>
+    <lastmod>2026-10-02T16:05:13.765Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/publicissuesservice/get-issue-by-id</loc>
+    <lastmod>2026-10-02T16:05:13.774Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/publicissuesservice/get-issue-export</loc>
+    <lastmod>2026-10-02T16:05:13.794Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/publicissuesservice/list-issues</loc>
+    <lastmod>2026-10-02T16:05:13.804Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/publicissuesservice/triage-issue</loc>
+    <lastmod>2026-10-02T16:05:13.784Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reportsservice/get-backlog-by-product-report</loc>
+    <lastmod>2026-10-02T16:05:14.359Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reportsservice/get-backlog-by-rule-report</loc>
+    <lastmod>2026-10-02T16:05:14.368Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reportsservice/get-backlog-by-severity-report</loc>
+    <lastmod>2026-10-02T16:05:14.379Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reportsservice/get-findings-activity-report</loc>
+    <lastmod>2026-10-02T16:05:14.390Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reportsservice/get-findings-by-project-and-product-report</loc>
+    <lastmod>2026-10-02T16:05:14.401Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reportsservice/get-findings-by-project-and-severity-report</loc>
+    <lastmod>2026-10-02T16:05:14.412Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reportsservice/get-findings-funnel-report</loc>
+    <lastmod>2026-10-02T16:05:14.422Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reportsservice/get-guardrails-activity-report</loc>
+    <lastmod>2026-10-02T16:05:14.433Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reportsservice/get-guardrails-adoption-report</loc>
+    <lastmod>2026-10-02T16:05:14.444Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reportsservice/get-malware-firewall-blocked-malicious-dependencies-by-advisory-report</loc>
+    <lastmod>2026-10-02T16:05:14.453Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reportsservice/get-malware-firewall-blocked-malicious-dependencies-by-dependency-version-and-ecosystem-report</loc>
+    <lastmod>2026-10-02T16:05:14.463Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reportsservice/get-malware-firewall-blocked-malicious-dependencies-by-ecosystem-report</loc>
+    <lastmod>2026-10-02T16:05:14.474Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reportsservice/get-malware-firewall-scan-activity-report</loc>
+    <lastmod>2026-10-02T16:05:14.485Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reportsservice/get-malware-firewall-summary-report</loc>
+    <lastmod>2026-10-02T16:05:14.496Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reportsservice/get-median-open-age-by-product-report</loc>
+    <lastmod>2026-10-02T16:05:14.505Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reportsservice/get-median-open-age-by-severity-report</loc>
+    <lastmod>2026-10-02T16:05:14.516Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reportsservice/get-report-findings</loc>
+    <lastmod>2026-10-02T16:05:14.525Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reviewcommentproductcontentservice/create-review-comment-product-content</loc>
+    <lastmod>2026-10-02T16:05:14.546Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reviewcommentproductcontentservice/delete-review-comment-product-content</loc>
+    <lastmod>2026-10-02T16:05:14.566Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reviewcommentproductcontentservice/list-review-comment-product-content</loc>
+    <lastmod>2026-10-02T16:05:14.536Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/reviewcommentproductcontentservice/update-review-comment-product-content</loc>
+    <lastmod>2026-10-02T16:05:14.556Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/ruleboardservice/create-ruleboard</loc>
+    <lastmod>2026-10-02T16:05:14.591Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/ruleboardservice/delete-ruleboard</loc>
+    <lastmod>2026-10-02T16:05:14.630Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/ruleboardservice/get-ruleboard</loc>
+    <lastmod>2026-10-02T21:18:00.207Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/ruleboardservice/get-ruleboard-finding-counts</loc>
+    <lastmod>2026-10-02T21:18:00.245Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/ruleboardservice/get-ruleboard-overview</loc>
+    <lastmod>2026-10-02T21:18:00.255Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/ruleboardservice/list-ruleboards</loc>
+    <lastmod>2026-10-02T21:18:00.194Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/ruleboardservice/update-ruleboard</loc>
+    <lastmod>2026-10-02T21:18:00.223Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/ruleboardservice/update-ruleboard-overview</loc>
+    <lastmod>2026-10-02T16:05:14.669Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scansservice/get-scan</loc>
+    <lastmod>2026-10-02T16:05:14.679Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scansservice/list-scans</loc>
+    <lastmod>2026-10-02T16:05:14.690Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scansservice/retry-failed-managed-scans</loc>
+    <lastmod>2026-10-02T16:05:14.701Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmappsservice/add-azure-devops-project</loc>
+    <lastmod>2026-10-02T16:05:14.826Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmappsservice/complete-azure-devops-scm-app-install</loc>
+    <lastmod>2026-10-02T16:05:14.837Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmappsservice/complete-cursor-origin-installation</loc>
+    <lastmod>2026-10-02T16:05:14.847Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmappsservice/complete-scm-app-request</loc>
+    <lastmod>2026-10-02T16:05:14.857Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmappsservice/create-azure-devops-scm-app-service-principal</loc>
+    <lastmod>2026-10-02T16:05:14.867Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmappsservice/create-scm-app-request</loc>
+    <lastmod>2026-10-02T16:05:14.877Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmappsservice/delete-scm-app</loc>
+    <lastmod>2026-10-02T16:05:14.887Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmappsservice/get-public-github-app-status</loc>
+    <lastmod>2026-10-02T16:05:14.898Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmappsservice/get-scm-app</loc>
+    <lastmod>2026-10-02T16:05:14.910Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmappsservice/list-scm-apps</loc>
+    <lastmod>2026-10-02T16:05:14.921Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmappsservice/rotate-scm-app-webhook-secret</loc>
+    <lastmod>2026-10-02T16:05:14.931Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmappsservice/start-cursor-origin-installation</loc>
+    <lastmod>2026-10-02T16:05:14.941Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmservice/check-scm-config</loc>
+    <lastmod>2026-10-02T16:05:14.952Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmservice/create-scm-config</loc>
+    <lastmod>2026-10-02T16:05:14.973Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmservice/delete-scm-config</loc>
+    <lastmod>2026-10-02T16:05:14.984Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmservice/list-scm-configs</loc>
+    <lastmod>2026-10-02T16:05:14.963Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmservice/search-scm-configs</loc>
+    <lastmod>2026-10-02T16:05:15.003Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmservice/sync-scm-config</loc>
+    <lastmod>2026-10-02T16:05:15.013Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmservice/update-scm-config</loc>
+    <lastmod>2026-10-02T16:05:14.993Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmsubscriptionsservice/list-scm-webhook-subscriptions</loc>
+    <lastmod>2026-10-02T16:05:15.030Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmsubscriptionsservice/rotate-scm-webhook-secret</loc>
+    <lastmod>2026-10-02T16:05:15.059Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmsubscriptionsservice/subscribe-to-scm-webhook</loc>
+    <lastmod>2026-10-02T16:05:15.040Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/scmsubscriptionsservice/unsubscribe-from-scm-webhook</loc>
+    <lastmod>2026-10-02T16:05:15.050Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/semgrepworkflowsservice/get-workflow-job-findings</loc>
+    <lastmod>2026-10-02T16:05:14.712Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/semgrepworkflowsservice/get-workflow-job-overview</loc>
+    <lastmod>2026-10-02T16:05:14.723Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/semgrepworkflowsservice/list-available-workflow-types</loc>
+    <lastmod>2026-10-02T16:05:14.736Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/semgrepworkflowsservice/list-workflow-jobs</loc>
+    <lastmod>2026-10-02T16:05:14.746Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/semgrepworkflowsservice/trigger-a-workflow-run</loc>
+    <lastmod>2026-10-02T16:05:14.755Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/slackservice/delete-slack-installation</loc>
+    <lastmod>2026-10-02T16:05:14.775Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/slackservice/get-slack-app-installation-url</loc>
+    <lastmod>2026-10-02T16:05:14.784Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/slackservice/get-slack-channel-mappings</loc>
+    <lastmod>2026-10-02T16:05:14.794Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/slackservice/get-slack-installation-details</loc>
+    <lastmod>2026-10-02T16:05:14.764Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/slackservice/get-slack-notification-mappings</loc>
+    <lastmod>2026-10-02T16:05:14.804Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/slackservice/handle-slack-oauth-callback</loc>
+    <lastmod>2026-10-02T16:05:14.816Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/smspackagemanagerconfigservice/create-package-manager-auth-config</loc>
+    <lastmod>2026-10-02T16:05:15.150Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/smspackagemanagerconfigservice/delete-package-manager-auth-config</loc>
+    <lastmod>2026-10-02T16:05:15.160Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/smspackagemanagerconfigservice/list-package-manager-auth-configs</loc>
+    <lastmod>2026-10-02T16:05:15.140Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/smspackagemanagerconfigservice/update-package-manager-auth-config</loc>
+    <lastmod>2026-10-02T16:05:15.173Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/smsscaresolutionconfigservice/get-sca-resolution-configs</loc>
+    <lastmod>2026-10-02T16:05:15.131Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/supplychain2service/generate-a-projects-sbom</loc>
+    <lastmod>2026-10-02T16:05:15.069Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/supplychain2service/list-dependencies</loc>
+    <lastmod>2026-10-02T16:05:15.079Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/supplychain2service/list-dependencies-1</loc>
+    <lastmod>2026-10-02T16:05:15.089Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/supplychain2service/list-findings-for-advisory</loc>
+    <lastmod>2026-10-02T16:05:15.100Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/supplychain2service/list-lockfiles-with-dependencies-in-a-given-repository</loc>
+    <lastmod>2026-10-02T16:05:15.110Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/supplychain2service/list-repositories-with-dependencies</loc>
+    <lastmod>2026-10-02T16:05:15.120Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/tasksservice/get-task-result</loc>
+    <lastmod>2026-10-02T16:05:15.183Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/teamsservice/check-rbac-status</loc>
+    <lastmod>2026-10-02T16:05:15.197Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/teamsservice/create-a-deployment-rbac-team</loc>
+    <lastmod>2026-10-02T16:05:15.208Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/teamsservice/delete-a-deployment-rbac-team</loc>
+    <lastmod>2026-10-02T16:05:15.228Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/teamsservice/get-a-deployment-rbac-team</loc>
+    <lastmod>2026-10-02T16:05:15.218Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/teamsservice/list-an-rbac-teams-child-teams</loc>
+    <lastmod>2026-10-02T16:05:15.249Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/teamsservice/list-an-rbac-teams-repositories</loc>
+    <lastmod>2026-10-02T16:05:15.260Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/teamsservice/list-an-rbac-teams-users</loc>
+    <lastmod>2026-10-02T16:05:15.275Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/teamsservice/list-deployment-teams</loc>
+    <lastmod>2026-10-02T16:05:15.285Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/teamsservice/update-a-deployment-rbac-team</loc>
+    <lastmod>2026-10-02T16:05:15.240Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/tokenservice/delete-tokens</loc>
+    <lastmod>2026-10-02T16:05:15.294Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/versionsservice/get-project-version-info</loc>
+    <lastmod>2026-10-02T16:05:15.305Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/wizcredentialservice/create-wiz-credential</loc>
+    <lastmod>2026-10-02T16:05:15.325Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/wizcredentialservice/delete-wiz-credential</loc>
+    <lastmod>2026-10-02T16:05:15.357Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/wizcredentialservice/get-wiz-credential</loc>
+    <lastmod>2026-10-02T16:05:15.333Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/wizcredentialservice/list-wiz-credentials</loc>
+    <lastmod>2026-10-02T16:05:15.314Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/wizcredentialservice/update-wiz-credential</loc>
+    <lastmod>2026-10-02T16:05:15.343Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/api-reference/v2/wizcredentialservice/validate-wiz-credential</loc>
+    <lastmod>2026-10-02T16:05:15.366Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/category/appsec-platform-integrations</loc>
+    <lastmod>2026-09-21T21:54:13.981Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/category/bitbucket-pr-comments</loc>
+    <lastmod>2026-10-02T21:18:14.114Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/category/ci-references</loc>
+    <lastmod>2026-10-02T21:18:14.112Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/category/ci-references-1</loc>
+    <lastmod>2026-10-02T21:18:14.121Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/category/deployment-at-scale</loc>
+    <lastmod>2026-10-02T21:18:14.110Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/category/glossaries</loc>
+    <lastmod>2026-10-02T21:18:14.123Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/category/glossaries-1</loc>
+    <lastmod>2026-10-02T21:18:14.133Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/category/go</loc>
+    <lastmod>2026-06-02T20:59:08.301Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/category/java</loc>
+    <lastmod>2026-06-02T20:59:08.295Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/category/javascript</loc>
+    <lastmod>2026-06-02T20:59:08.296Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/category/language-reference</loc>
+    <lastmod>2026-10-02T21:18:14.117Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/category/language-specific-features</loc>
+    <lastmod>2026-10-02T21:18:14.126Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/category/local-and-cli-scans</loc>
+    <lastmod>2026-10-02T21:18:14.113Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/category/pr-or-mr-comments</loc>
+    <lastmod>2026-10-02T21:18:14.125Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/category/python</loc>
+    <lastmod>2026-06-02T20:59:08.322Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/category/ruby</loc>
+    <lastmod>2026-06-02T20:59:08.325Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/category/scan-repositories-with-the-appsec-platform</loc>
+    <lastmod>2026-10-02T21:18:14.111Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/cheat-sheets/django-xss</loc>
+    <lastmod>2026-10-02T21:18:14.113Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/cheat-sheets/express-xss</loc>
+    <lastmod>2026-10-02T21:18:14.124Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/cheat-sheets/flask-xss</loc>
+    <lastmod>2026-10-02T21:18:14.121Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/cheat-sheets/go-command-injection</loc>
+    <lastmod>2026-10-02T21:18:14.130Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/cheat-sheets/go-xss</loc>
+    <lastmod>2026-10-02T21:18:14.125Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/cheat-sheets/java-code-injection</loc>
+    <lastmod>2026-10-02T21:18:14.110Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/cheat-sheets/java-command-injection</loc>
+    <lastmod>2026-10-02T21:18:14.119Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/cheat-sheets/java-jsp-xss</loc>
+    <lastmod>2026-10-02T21:18:14.111Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/cheat-sheets/java-xxe</loc>
+    <lastmod>2026-10-02T21:18:14.129Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/cheat-sheets/javascript-code-injection</loc>
+    <lastmod>2026-10-02T21:18:14.117Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/cheat-sheets/javascript-command-injection</loc>
+    <lastmod>2026-10-02T21:18:14.116Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/cheat-sheets/overview</loc>
+    <lastmod>2026-10-02T21:18:14.109Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/cheat-sheets/python-code-injection</loc>
+    <lastmod>2026-10-02T21:18:14.124Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/cheat-sheets/python-command-injection</loc>
+    <lastmod>2026-10-02T21:18:14.129Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/cheat-sheets/rails-xss</loc>
+    <lastmod>2026-10-02T21:18:14.118Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/cheat-sheets/ruby-code-injection</loc>
+    <lastmod>2026-10-02T21:18:14.120Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/cheat-sheets/ruby-command-injection</loc>
+    <lastmod>2026-10-02T21:18:14.119Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/cli-reference</loc>
+    <lastmod>2026-10-02T21:18:14.132Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/compliance/compliance-overview</loc>
+    <lastmod>2026-06-02T20:59:10.486Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/compliance/fedramp</loc>
+    <lastmod>2026-10-02T21:18:14.112Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/compliance/gdpr</loc>
+    <lastmod>2026-10-02T21:18:14.041Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/compliance/hipaa-hitrust</loc>
+    <lastmod>2026-10-02T21:18:14.034Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/compliance/iso-27017</loc>
+    <lastmod>2026-10-02T21:18:14.042Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/compliance/iso27001</loc>
+    <lastmod>2026-10-02T21:18:14.034Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/compliance/nist-800-171</loc>
+    <lastmod>2026-10-02T21:18:14.043Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/compliance/pci-dss</loc>
+    <lastmod>2026-10-02T21:18:14.051Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/compliance/soc2</loc>
+    <lastmod>2026-10-02T21:18:14.040Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/contributing/adding-a-language</loc>
+    <lastmod>2026-10-02T21:18:14.049Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/contributing/contributing</loc>
+    <lastmod>2026-09-02T22:14:54.950Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/contributing/contributing-code</loc>
+    <lastmod>2026-10-02T21:18:14.050Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/contributing/contributing-to-semgrep-rules-repository</loc>
+    <lastmod>2026-10-02T21:18:14.052Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/contributing/semgrep-contributing</loc>
+    <lastmod>2026-10-02T21:18:14.041Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/contributing/semgrep-core-contributing</loc>
+    <lastmod>2026-10-02T21:18:14.057Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/contributing/semgrep-philosophy</loc>
+    <lastmod>2026-10-02T21:18:14.053Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/contributing/semgrep-philosophy-1</loc>
+    <lastmod>2026-10-02T21:18:14.054Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/contributing/troubleshooting</loc>
+    <lastmod>2026-10-02T21:18:14.054Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/contributing/updating-a-grammar</loc>
+    <lastmod>2026-10-02T21:18:14.046Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/customize-semgrep-ce</loc>
+    <lastmod>2026-09-02T22:14:54.948Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/add-ai-to-scans</loc>
+    <lastmod>2026-10-02T21:18:14.046Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/add-semgrep-to-ci</loc>
+    <lastmod>2026-10-02T21:18:14.032Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/add-semgrep-to-other-ci-providers</loc>
+    <lastmod>2026-10-02T21:18:14.038Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/beyond-core-deployment</loc>
+    <lastmod>2026-08-12T18:51:51.970Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/checklist</loc>
+    <lastmod>2026-06-25T00:02:16.362Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/claim-a-license</loc>
+    <lastmod>2026-06-02T20:59:10.539Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/connect-scm</loc>
+    <lastmod>2026-10-02T21:18:14.048Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/core-deployment</loc>
+    <lastmod>2026-06-02T21:01:08.195Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/create-account-and-orgs</loc>
+    <lastmod>2026-10-02T21:18:14.043Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/customize-ci-jobs</loc>
+    <lastmod>2026-10-02T21:18:14.032Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/local-to-scp-scans</loc>
+    <lastmod>2026-10-02T21:18:14.037Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/manage-projects</loc>
+    <lastmod>2026-07-06T17:57:13.795Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/managed-scanning/azure</loc>
+    <lastmod>2026-10-02T21:18:14.035Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/managed-scanning/bitbucket</loc>
+    <lastmod>2026-07-06T14:47:03.844Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/managed-scanning/github</loc>
+    <lastmod>2026-09-02T22:14:53.686Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/managed-scanning/gitlab</loc>
+    <lastmod>2026-07-06T14:47:03.845Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/managed-scanning/overview</loc>
+    <lastmod>2026-06-02T20:59:12.116Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/oss-deployment</loc>
+    <lastmod>2026-09-02T22:14:53.670Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/prepare/network-access</loc>
+    <lastmod>2026-08-13T22:47:48.767Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/prepare/scm-permissions</loc>
+    <lastmod>2026-09-14T18:15:38.212Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/primary-branch</loc>
+    <lastmod>2026-10-02T21:18:14.052Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/scim</loc>
+    <lastmod>2026-09-22T22:07:23.012Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/sso</loc>
+    <lastmod>2026-10-02T21:18:14.055Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/teams/manage</loc>
+    <lastmod>2026-10-02T21:18:14.053Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/teams/overview</loc>
+    <lastmod>2026-09-22T20:35:15.916Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/deployment/tokens</loc>
+    <lastmod>2026-09-30T15:35:19.844Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/extensions/overview</loc>
+    <lastmod>2026-08-11T17:32:11.650Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/extensions/pre-commit</loc>
+    <lastmod>2026-10-02T21:18:14.033Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/extensions/semgrep-intellij</loc>
+    <lastmod>2026-10-02T21:18:14.031Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/extensions/semgrep-vs-code</loc>
+    <lastmod>2026-10-02T21:18:13.962Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/faq/comparisons/codeql</loc>
+    <lastmod>2026-09-02T22:14:53.666Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/faq/comparisons/endor-labs</loc>
+    <lastmod>2026-10-02T21:18:13.957Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/faq/comparisons/opengrep</loc>
+    <lastmod>2026-10-02T21:18:13.971Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/faq/comparisons/opengrep-1</loc>
+    <lastmod>2026-10-02T21:18:13.961Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/faq/comparisons/snyk</loc>
+    <lastmod>2026-10-02T21:18:13.973Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/faq/comparisons/sonarqube</loc>
+    <lastmod>2026-06-02T20:59:16.573Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/faq/overview</loc>
+    <lastmod>2026-10-02T21:18:13.973Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/for-developers/cli</loc>
+    <lastmod>2026-06-02T20:59:16.575Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/for-developers/detection</loc>
+    <lastmod>2026-09-02T22:14:53.669Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/for-developers/ide</loc>
+    <lastmod>2026-06-02T20:59:17.494Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/for-developers/overview</loc>
+    <lastmod>2026-09-02T22:14:53.672Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/for-developers/resolve-findings-through-app</loc>
+    <lastmod>2026-09-02T22:14:53.680Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/for-developers/resolve-findings-through-comments</loc>
+    <lastmod>2026-10-02T21:18:13.966Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/for-developers/signin</loc>
+    <lastmod>2026-10-02T21:18:13.965Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/getting-started/cli</loc>
+    <lastmod>2026-07-22T19:47:32.350Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/getting-started/quickstart</loc>
+    <lastmod>2026-06-11T20:52:41.881Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/getting-started/quickstart-ce</loc>
+    <lastmod>2026-07-22T19:47:32.352Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/getting-started/quickstart-managed-scans</loc>
+    <lastmod>2026-06-25T00:02:20.444Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/getting-started/scm-support</loc>
+    <lastmod>2026-10-01T17:56:52.195Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/ignoring-files-folders-code</loc>
+    <lastmod>2026-10-02T21:18:13.960Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev</loc>
+    <lastmod>2026-08-04T19:11:06.695Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/integrating</loc>
+    <lastmod>2026-06-02T20:59:18.748Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/introduction</loc>
+    <lastmod>2026-06-02T21:01:16.280Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb</loc>
+    <lastmod>2026-10-02T21:18:13.967Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/integrations</loc>
+    <lastmod>2026-10-02T21:18:13.960Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/integrations/customize-semgrep-precommit</loc>
+    <lastmod>2026-10-02T21:18:13.963Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/integrations/defect-dojo-integration</loc>
+    <lastmod>2026-10-02T21:18:13.966Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/integrations/pagination</loc>
+    <lastmod>2026-10-02T21:18:13.974Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/rules</loc>
+    <lastmod>2026-10-02T21:18:13.962Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/rules/changing-rule-severity-and-other-metadata</loc>
+    <lastmod>2026-10-02T21:18:13.974Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/rules/ellipsis-metavariables</loc>
+    <lastmod>2026-10-02T21:18:13.968Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/rules/exclude_rule_for_certain_filetypes</loc>
+    <lastmod>2026-10-02T21:18:13.972Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/rules/match-absence</loc>
+    <lastmod>2026-10-02T21:18:13.969Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/rules/match-comments</loc>
+    <lastmod>2026-10-02T21:18:13.971Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/rules/pattern-parse-error</loc>
+    <lastmod>2026-10-02T21:18:13.970Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/rules/pro-vs-community-secrets-vs-code-rules</loc>
+    <lastmod>2026-06-02T20:59:20.532Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/rules/rule-file-perf-principles</loc>
+    <lastmod>2026-10-02T21:18:13.958Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/rules/run-all-available-rules</loc>
+    <lastmod>2026-10-02T21:18:13.970Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/rules/understand-severities</loc>
+    <lastmod>2026-10-02T21:18:13.969Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/rules/using-pattern-not-inside</loc>
+    <lastmod>2026-10-02T21:18:13.959Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/rules/using-semgrep-rule-schema-in-vscode</loc>
+    <lastmod>2026-10-02T21:18:13.959Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform</loc>
+    <lastmod>2026-10-02T21:18:13.961Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/act-on-your-behalf</loc>
+    <lastmod>2026-10-02T21:18:13.967Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/api-404-token-scope</loc>
+    <lastmod>2026-10-02T21:18:13.963Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/automate-rules-deployment</loc>
+    <lastmod>2026-10-02T21:18:13.956Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/cannot-access-semgrep-after-github-login</loc>
+    <lastmod>2026-10-02T21:18:13.964Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/dependency-count-differ-platform</loc>
+    <lastmod>2026-06-02T20:59:21.459Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/error-externally-managed-environment</loc>
+    <lastmod>2026-06-02T20:59:23.553Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/fedramp-with-semgrep</loc>
+    <lastmod>2026-06-02T21:01:21.514Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/findings-count-differ-api-platform</loc>
+    <lastmod>2026-10-02T21:18:13.818Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/findings-count-differ-platform</loc>
+    <lastmod>2026-09-02T22:14:52.647Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/findings-in-open-not-provisionally-ignored</loc>
+    <lastmod>2026-10-02T21:18:13.808Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/gitlab-no-scms-with-code-access-found</loc>
+    <lastmod>2026-10-02T21:18:13.802Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/inline-pr-comments</loc>
+    <lastmod>2026-10-01T17:56:52.199Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/missing-pr-comments</loc>
+    <lastmod>2026-09-02T22:14:52.659Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/no-runs-in-github-merge-queues</loc>
+    <lastmod>2026-10-02T21:18:13.817Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/projects-not-yet-started-sms</loc>
+    <lastmod>2026-06-02T20:59:23.552Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/remove-users</loc>
+    <lastmod>2026-10-02T21:18:13.808Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/rerun-managed-scans</loc>
+    <lastmod>2026-10-02T21:18:13.815Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/saml-attributestatement</loc>
+    <lastmod>2026-10-02T21:18:13.807Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/saml-authentication-method-match</loc>
+    <lastmod>2026-10-02T21:18:13.804Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/saml-bad-signature</loc>
+    <lastmod>2026-10-02T21:18:13.815Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/saml-google-workspace</loc>
+    <lastmod>2026-10-02T21:18:13.799Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/saml-microsoft-entra-id</loc>
+    <lastmod>2026-10-02T21:18:13.814Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/saml-stops-working</loc>
+    <lastmod>2026-09-02T22:14:52.655Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/scan-duration-discrepancy</loc>
+    <lastmod>2026-06-02T20:59:25.591Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/scim-microsoft-entra-id</loc>
+    <lastmod>2026-09-22T22:07:22.254Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/scim-okta</loc>
+    <lastmod>2026-09-22T22:07:22.245Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/search-filter-sort-findings</loc>
+    <lastmod>2026-08-03T16:38:50.330Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/semgrep-login-cli-tenant</loc>
+    <lastmod>2026-10-02T21:18:13.806Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-appsec-platform/sso-attribute-error</loc>
+    <lastmod>2026-06-02T20:59:25.589Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci</loc>
+    <lastmod>2026-10-02T21:18:13.816Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/azure-self-hosted-ubuntu</loc>
+    <lastmod>2026-10-02T21:18:13.798Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/azure-using-templates-with-semgrep</loc>
+    <lastmod>2026-10-02T21:18:13.813Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/bitbucket-jenkins</loc>
+    <lastmod>2026-10-02T21:18:13.805Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/ci-vs-cli</loc>
+    <lastmod>2026-10-02T21:18:13.812Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/collect-gha-logs</loc>
+    <lastmod>2026-10-02T21:18:13.810Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/collect-gitlab-logs</loc>
+    <lastmod>2026-10-02T21:18:13.821Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/git-command-errors</loc>
+    <lastmod>2026-10-02T21:18:13.820Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/github-repository-rulesets-semgrep</loc>
+    <lastmod>2026-10-02T21:18:13.819Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/github-reusable-workflows-semgrep</loc>
+    <lastmod>2026-10-02T21:18:13.813Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/github-upload-findings-in-security-dashboard</loc>
+    <lastmod>2026-06-02T21:01:27.785Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/jenkins-diff-scans</loc>
+    <lastmod>2026-10-02T21:18:13.800Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/mr-comments-through-gitlab-runner</loc>
+    <lastmod>2026-10-02T21:18:13.827Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/new-scm-connections</loc>
+    <lastmod>2026-10-02T21:18:13.800Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/scan-compressed-files-artifacts</loc>
+    <lastmod>2026-10-02T21:18:13.799Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/scan-monorepo-in-parts</loc>
+    <lastmod>2026-10-02T21:18:13.804Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/semaphore-pipelines</loc>
+    <lastmod>2026-10-02T21:18:13.820Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/trigger-diff-scans-env-var</loc>
+    <lastmod>2026-10-02T21:18:13.828Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/upload-ci-findings-to-github</loc>
+    <lastmod>2026-10-02T21:18:13.811Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/upload-ci-findings-to-gitlab</loc>
+    <lastmod>2026-10-02T21:18:13.810Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/using-nonroot-docker-image-with-gha</loc>
+    <lastmod>2026-10-02T21:18:13.798Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-ci/why-duplicate-findings</loc>
+    <lastmod>2026-10-02T21:18:13.822Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-code</loc>
+    <lastmod>2026-10-02T21:18:13.802Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-code/InvalidHeaderValue</loc>
+    <lastmod>2026-10-02T21:18:13.809Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-code/collect-cli-logs</loc>
+    <lastmod>2026-06-02T20:59:30.416Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-code/finding_all_taints</loc>
+    <lastmod>2026-06-02T20:59:30.419Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-code/gitlab-group-variables</loc>
+    <lastmod>2026-10-02T21:18:13.803Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-code/reduce-false-positives</loc>
+    <lastmod>2026-06-02T20:59:30.415Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-code/run-specific-version</loc>
+    <lastmod>2026-07-06T13:48:48.697Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-code/scan-engine-kill</loc>
+    <lastmod>2026-09-02T22:14:51.777Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-code/semgrep-scan-troubleshooting</loc>
+    <lastmod>2026-09-02T22:14:51.771Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-code/semgrepignore-ignored</loc>
+    <lastmod>2026-06-02T20:59:31.707Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-code/support-for-language-versions</loc>
+    <lastmod>2026-06-02T20:59:31.708Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-code/unexpected-new-findings</loc>
+    <lastmod>2026-09-02T22:14:51.768Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-multimodal</loc>
+    <lastmod>2026-10-02T21:18:13.719Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-multimodal/azure-openai-error-429</loc>
+    <lastmod>2026-10-02T21:18:13.712Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-multimodal/missing-pr-mr-comments</loc>
+    <lastmod>2026-10-02T21:18:13.727Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-secrets</loc>
+    <lastmod>2026-10-02T21:18:13.717Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-secrets/no-example-secrets-found</loc>
+    <lastmod>2026-06-02T20:59:31.709Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-secrets/per-product-ignore-not-working</loc>
+    <lastmod>2026-06-02T20:59:31.709Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-supply-chain</loc>
+    <lastmod>2026-10-02T21:18:13.709Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-supply-chain/connect-a-private-registry</loc>
+    <lastmod>2026-10-02T21:18:13.720Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-supply-chain/connect-aws-codeartifact</loc>
+    <lastmod>2026-10-02T18:12:24.942Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-supply-chain/exclude-rule</loc>
+    <lastmod>2026-10-02T21:18:13.713Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-supply-chain/no-dependency-results</loc>
+    <lastmod>2026-10-02T21:18:13.727Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-supply-chain/no-upgrade-guidance-or-autofix</loc>
+    <lastmod>2026-10-02T21:18:13.723Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-supply-chain/scanning_multiple_lockfiles</loc>
+    <lastmod>2026-06-02T20:59:32.830Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-supply-chain/ssc-lockfiles-circleci</loc>
+    <lastmod>2026-06-02T20:59:32.827Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-supply-chain/ssc-python-lockfiles</loc>
+    <lastmod>2026-10-02T21:18:13.712Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/kb/semgrep-supply-chain/why-no-findings</loc>
+    <lastmod>2026-10-02T21:18:13.722Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/languages/csharp</loc>
+    <lastmod>2026-10-02T21:18:13.711Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/languages/go</loc>
+    <lastmod>2026-10-02T21:18:13.720Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/languages/java</loc>
+    <lastmod>2026-10-02T21:18:13.715Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/languages/javascript</loc>
+    <lastmod>2026-10-02T21:18:13.728Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/languages/kotlin</loc>
+    <lastmod>2026-10-02T21:18:13.728Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/languages/python</loc>
+    <lastmod>2026-10-02T21:18:13.719Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/languages/ruby</loc>
+    <lastmod>2026-10-02T21:18:13.717Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/languages/scala</loc>
+    <lastmod>2026-10-02T21:18:13.716Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/languages/swift</loc>
+    <lastmod>2026-10-02T21:18:13.715Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/learn</loc>
+    <lastmod>2026-10-02T21:18:13.721Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/learn/security-foundations/overview</loc>
+    <lastmod>2026-06-02T20:59:34.343Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/learn/security-foundations/sast/overview</loc>
+    <lastmod>2026-10-02T21:18:13.718Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/learn/security-foundations/security-testing-workflow</loc>
+    <lastmod>2026-10-02T21:18:13.710Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/learn/security-foundations/supply-chain-security</loc>
+    <lastmod>2026-10-02T21:18:13.714Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/learn/vulnerabilities/code-injection</loc>
+    <lastmod>2026-09-02T22:14:50.560Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/learn/vulnerabilities/command-injection</loc>
+    <lastmod>2026-10-02T21:18:13.722Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/learn/vulnerabilities/command-injection/argo-injection</loc>
+    <lastmod>2026-10-02T21:18:13.716Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/learn/vulnerabilities/command-injection/github-actions-injection</loc>
+    <lastmod>2026-10-02T21:18:13.724Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/learn/vulnerabilities/cross-site-scripting</loc>
+    <lastmod>2026-10-02T21:18:13.708Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/learn/vulnerabilities/idor</loc>
+    <lastmod>2026-09-02T22:14:50.544Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/learn/vulnerabilities/insecure-deserialization</loc>
+    <lastmod>2026-10-02T21:18:13.707Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/learn/vulnerabilities/insecure-deserialization/python</loc>
+    <lastmod>2026-10-02T21:18:13.708Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/learn/vulnerabilities/open-redirect</loc>
+    <lastmod>2026-10-02T21:18:13.711Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/learn/vulnerabilities/overview</loc>
+    <lastmod>2026-10-02T21:18:13.714Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/learn/vulnerabilities/server-side-request-forgery</loc>
+    <lastmod>2026-10-02T21:18:13.710Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/learn/vulnerabilities/sql-injection</loc>
+    <lastmod>2026-10-02T21:18:13.707Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/learn/vulnerabilities/xml-security</loc>
+    <lastmod>2026-10-02T21:18:13.648Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/licensing</loc>
+    <lastmod>2026-06-02T20:59:37.063Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/metrics</loc>
+    <lastmod>2026-09-02T22:14:50.563Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/metrics-1</loc>
+    <lastmod>2026-09-02T22:14:50.571Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/prerequisites</loc>
+    <lastmod>2026-06-02T20:59:37.067Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/references/feature-definitions</loc>
+    <lastmod>2026-10-02T21:18:13.643Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/references/language-maturity-levels</loc>
+    <lastmod>2026-10-02T21:18:13.644Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/2026-07-06</loc>
+    <lastmod>2026-09-03T17:43:38.273Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/2026-07-13</loc>
+    <lastmod>2026-08-14T13:39:27.535Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/2026-07-20</loc>
+    <lastmod>2026-08-04T19:11:06.449Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/2026-07-27</loc>
+    <lastmod>2026-08-14T13:39:27.534Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/2026-08-03</loc>
+    <lastmod>2026-08-14T13:39:27.514Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/2026-08-10</loc>
+    <lastmod>2026-09-22T19:19:47.604Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/2026-08-17</loc>
+    <lastmod>2026-08-25T16:03:58.278Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/2026-08-24</loc>
+    <lastmod>2026-09-02T16:29:59.463Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/2026-08-31</loc>
+    <lastmod>2026-09-09T15:51:22.025Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/2026-09-07</loc>
+    <lastmod>2026-09-22T20:35:15.606Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/2026-09-14</loc>
+    <lastmod>2026-09-22T20:35:15.605Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/2026-09-21</loc>
+    <lastmod>2026-10-02T21:18:13.645Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/april-2025</loc>
+    <lastmod>2026-09-03T17:43:38.279Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/april-2026</loc>
+    <lastmod>2026-06-08T16:10:04.344Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/august-2025</loc>
+    <lastmod>2026-06-08T16:10:04.342Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/december-2025</loc>
+    <lastmod>2026-09-02T22:14:50.557Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/february-2026</loc>
+    <lastmod>2026-09-02T22:14:48.804Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/january-2026</loc>
+    <lastmod>2026-06-02T20:59:39.241Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/july-2025</loc>
+    <lastmod>2026-09-03T17:43:38.197Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/june-2025</loc>
+    <lastmod>2026-09-02T22:14:48.798Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/june-2026</loc>
+    <lastmod>2026-09-03T17:43:38.192Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/march-2026</loc>
+    <lastmod>2026-09-02T22:14:48.796Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/may-2025</loc>
+    <lastmod>2026-09-02T22:14:48.808Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/may-2026</loc>
+    <lastmod>2026-06-08T16:04:58.976Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/november-2025</loc>
+    <lastmod>2026-09-02T22:14:48.808Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/october-2025</loc>
+    <lastmod>2026-09-02T22:14:48.796Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/release-notes/september-2025</loc>
+    <lastmod>2026-06-02T20:59:46.705Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/run-a-successful-pov</loc>
+    <lastmod>2026-10-02T21:18:13.175Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/run-a-successful-pov-1</loc>
+    <lastmod>2026-10-02T21:18:13.172Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/running-rules</loc>
+    <lastmod>2026-06-02T20:59:47.732Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/secure-guardrails/custom-guardrails-rules</loc>
+    <lastmod>2026-09-02T22:14:47.035Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/secure-guardrails/secure-defaults</loc>
+    <lastmod>2026-10-02T21:18:13.580Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/secure-guardrails/secure-guardrails-in-semgrep</loc>
+    <lastmod>2026-09-02T22:14:47.027Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/security</loc>
+    <lastmod>2026-10-02T21:18:13.582Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/azure-pr-comments</loc>
+    <lastmod>2026-10-02T21:18:13.178Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/bitbucket-cloud-pr-comments</loc>
+    <lastmod>2026-10-02T21:18:13.193Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/bitbucket-data-center-pr-comments</loc>
+    <lastmod>2026-10-02T21:18:13.176Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/cortex</loc>
+    <lastmod>2026-06-02T20:59:47.735Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/dashboard</loc>
+    <lastmod>2026-10-02T21:18:13.118Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/developer-exception-requests</loc>
+    <lastmod>2026-10-02T21:18:13.120Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/email-notifications</loc>
+    <lastmod>2026-08-20T17:46:23.262Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/github-pr-comments</loc>
+    <lastmod>2026-10-02T21:18:13.119Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/gitlab-mr-comments</loc>
+    <lastmod>2026-10-02T21:18:13.110Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/jira</loc>
+    <lastmod>2026-09-02T22:14:47.016Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/json-and-sarif</loc>
+    <lastmod>2026-06-02T20:59:50.045Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/notifications</loc>
+    <lastmod>2026-09-02T22:14:47.023Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/scm-code-access</loc>
+    <lastmod>2026-10-02T21:18:13.122Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/slack-notifications</loc>
+    <lastmod>2026-10-02T21:18:13.111Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/sysdig</loc>
+    <lastmod>2026-06-02T20:59:52.450Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/tags</loc>
+    <lastmod>2026-07-14T17:07:56.655Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/unified-policies/get-started</loc>
+    <lastmod>2026-10-02T21:18:13.114Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/unified-policies/overview</loc>
+    <lastmod>2026-10-02T21:18:13.112Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/webhooks</loc>
+    <lastmod>2026-09-02T22:14:47.034Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-appsec-platform/wiz</loc>
+    <lastmod>2026-10-02T21:18:13.118Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-ce-languages</loc>
+    <lastmod>2026-09-02T22:14:47.017Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-ci/ci-environment-variables</loc>
+    <lastmod>2026-10-02T21:18:13.108Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-ci/ci-environment-variables-1</loc>
+    <lastmod>2026-10-02T21:18:13.109Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-ci/configuring-blocking-and-errors-in-ci</loc>
+    <lastmod>2026-06-02T20:59:53.274Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-ci/findings-ci</loc>
+    <lastmod>2026-08-25T16:11:54.299Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-ci/findings-ci-1</loc>
+    <lastmod>2026-08-25T16:11:54.301Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-ci/network-broker</loc>
+    <lastmod>2026-09-29T23:20:45.007Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-ci/packages-in-semgrep-docker</loc>
+    <lastmod>2026-10-02T21:18:13.106Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-ci/packages-in-semgrep-docker-1</loc>
+    <lastmod>2026-10-02T21:18:13.104Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-ci/sample-ci-configs</loc>
+    <lastmod>2026-09-02T22:14:47.020Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-ci/sample-ci-configs-1</loc>
+    <lastmod>2026-09-02T22:14:47.029Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-code/ai-powered-detection-concepts</loc>
+    <lastmod>2026-10-02T21:18:13.104Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-code/editor</loc>
+    <lastmod>2026-10-02T21:18:13.121Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-code/finding-details</loc>
+    <lastmod>2026-10-02T21:18:13.111Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-code/findings</loc>
+    <lastmod>2026-10-02T21:18:13.121Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-code/glossary</loc>
+    <lastmod>2026-06-02T20:59:54.541Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-code/java</loc>
+    <lastmod>2026-09-02T22:14:46.053Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-code/overview</loc>
+    <lastmod>2026-10-02T21:18:13.109Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-code/policies</loc>
+    <lastmod>2026-10-02T21:18:13.117Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-code/pro-rules</loc>
+    <lastmod>2026-10-02T21:18:13.107Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-code/remove-duplicates</loc>
+    <lastmod>2026-09-02T22:14:46.056Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-code/semgrep-pro-engine-examples</loc>
+    <lastmod>2026-10-02T21:18:13.103Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-code/semgrep-pro-engine-intro</loc>
+    <lastmod>2026-09-02T22:14:46.045Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-code/triage-remediation</loc>
+    <lastmod>2026-08-25T23:42:46.924Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-code/triage-remediation/autofix</loc>
+    <lastmod>2026-09-10T22:24:57.723Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-guardian/authentication</loc>
+    <lastmod>2026-09-22T21:19:55.703Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-guardian/choose-your-setup</loc>
+    <lastmod>2026-09-21T21:54:13.391Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-guardian/enterprise-deployment</loc>
+    <lastmod>2026-09-22T21:19:55.700Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-guardian/ide-setup/claude-code</loc>
+    <lastmod>2026-09-21T21:54:13.399Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-guardian/ide-setup/codex</loc>
+    <lastmod>2026-09-21T21:54:12.684Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-guardian/ide-setup/cursor</loc>
+    <lastmod>2026-09-21T21:54:13.008Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-guardian/ide-setup/devin-windsurf</loc>
+    <lastmod>2026-09-21T21:54:13.162Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-guardian/ide-setup/github-copilot</loc>
+    <lastmod>2026-09-21T21:54:12.681Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-guardian/ide-setup/kiro</loc>
+    <lastmod>2026-09-21T21:54:12.679Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-guardian/ide-setup/other</loc>
+    <lastmod>2026-09-21T21:54:12.674Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-guardian/ide-setup/vscode</loc>
+    <lastmod>2026-09-21T21:54:12.673Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-guardian/install-cli</loc>
+    <lastmod>2026-09-21T21:54:12.672Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-guardian/overview</loc>
+    <lastmod>2026-09-29T23:05:43.037Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-guardian/quickstart</loc>
+    <lastmod>2026-09-21T21:54:12.670Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-guardian/rules-and-configuration</loc>
+    <lastmod>2026-09-22T21:19:55.704Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-multimodal/analyze</loc>
+    <lastmod>2026-10-02T21:18:13.017Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-multimodal/best-practices-for-memories</loc>
+    <lastmod>2026-09-02T22:14:46.054Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-multimodal/customize</loc>
+    <lastmod>2026-09-10T22:24:57.722Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-multimodal/getting-started</loc>
+    <lastmod>2026-09-03T17:43:37.055Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-multimodal/metrics</loc>
+    <lastmod>2026-06-02T20:59:55.750Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-multimodal/overview</loc>
+    <lastmod>2026-09-03T17:43:37.060Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-multimodal/privacy</loc>
+    <lastmod>2026-09-23T05:53:35.045Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-pro-vs-oss</loc>
+    <lastmod>2026-10-02T21:18:12.984Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-pro-vs-oss-1</loc>
+    <lastmod>2026-10-02T21:18:13.022Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-secrets/conceptual-overview</loc>
+    <lastmod>2026-10-02T21:18:13.016Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-secrets/finding-details</loc>
+    <lastmod>2026-09-02T22:14:46.050Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-secrets/findings</loc>
+    <lastmod>2026-10-02T21:18:12.984Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-secrets/generic-secrets</loc>
+    <lastmod>2026-10-02T21:18:12.982Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-secrets/getting-started</loc>
+    <lastmod>2026-08-20T17:46:21.580Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-secrets/glossary</loc>
+    <lastmod>2026-06-02T20:59:57.010Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-secrets/historical-scanning</loc>
+    <lastmod>2026-10-02T21:18:13.015Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-secrets/policies</loc>
+    <lastmod>2026-10-02T21:18:13.016Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-secrets/rules</loc>
+    <lastmod>2026-06-02T20:59:57.010Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-secrets/rules-1</loc>
+    <lastmod>2026-06-02T20:59:57.008Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-secrets/triage-remediation</loc>
+    <lastmod>2026-09-02T22:14:46.061Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-secrets/validators</loc>
+    <lastmod>2026-10-02T21:18:13.014Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-secrets/validators-1</loc>
+    <lastmod>2026-10-02T21:18:12.981Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/advisories</loc>
+    <lastmod>2026-10-02T21:18:12.983Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/autofix</loc>
+    <lastmod>2026-09-10T22:24:57.720Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/dependency-paths</loc>
+    <lastmod>2026-10-02T21:18:13.011Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/dependency-search</loc>
+    <lastmod>2026-10-02T21:18:13.019Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/finding-details</loc>
+    <lastmod>2026-07-06T13:48:50.639Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/findings</loc>
+    <lastmod>2026-10-02T21:18:13.037Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/glossary</loc>
+    <lastmod>2026-08-20T17:46:21.585Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/ignoring-dependencies</loc>
+    <lastmod>2026-10-02T21:18:13.013Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/ignoring-deps</loc>
+    <lastmod>2026-10-02T21:18:13.018Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/incident-notifications</loc>
+    <lastmod>2026-09-09T03:44:07.563Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/incident-response</loc>
+    <lastmod>2026-09-09T03:44:07.562Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/license-compliance</loc>
+    <lastmod>2026-10-02T21:18:13.018Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/malicious-dependencies</loc>
+    <lastmod>2026-10-02T21:18:12.982Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/overview</loc>
+    <lastmod>2026-09-03T17:43:37.032Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/policies</loc>
+    <lastmod>2026-10-02T21:18:13.015Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/requirements-and-feature-support</loc>
+    <lastmod>2026-09-22T20:35:15.398Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/sbom</loc>
+    <lastmod>2026-10-02T21:18:12.906Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/set-up-and-configure</loc>
+    <lastmod>2026-09-02T22:14:44.943Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/setup-infrastructure</loc>
+    <lastmod>2026-10-02T21:18:12.890Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/setup-maven</loc>
+    <lastmod>2026-10-02T21:18:12.889Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/triage-and-fix/overview</loc>
+    <lastmod>2026-10-02T21:18:12.889Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrep-supply-chain/upgrade-guidance</loc>
+    <lastmod>2026-09-04T21:21:28.911Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/semgrepignore-v2-reference</loc>
+    <lastmod>2026-10-02T21:18:12.888Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/support</loc>
+    <lastmod>2026-06-02T20:59:57.943Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/supported-languages</loc>
+    <lastmod>2026-10-02T21:18:12.887Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/trophy-case</loc>
+    <lastmod>2026-06-02T20:59:57.941Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/troubleshooting/rules</loc>
+    <lastmod>2026-10-02T21:18:12.886Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/troubleshooting/semgrep</loc>
+    <lastmod>2026-10-02T21:18:12.885Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/troubleshooting/semgrep-app</loc>
+    <lastmod>2026-10-02T21:18:12.886Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/update</loc>
+    <lastmod>2026-07-22T19:47:32.350Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/usage-and-billing/contributor-count-explained</loc>
+    <lastmod>2026-10-02T21:18:12.927Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/usage-and-billing/overview</loc>
+    <lastmod>2026-09-02T22:14:44.953Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/usage-and-billing/plan-changes-and-payments</loc>
+    <lastmod>2026-08-26T20:04:56.765Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/usage-and-billing/reconciliation</loc>
+    <lastmod>2026-06-02T20:59:59.505Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/whats-new</loc>
+    <lastmod>2026-10-02T21:18:12.899Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/workflows/get-started</loc>
+    <lastmod>2026-10-01T17:56:52.197Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/workflows/overview</loc>
+    <lastmod>2026-08-25T16:03:57.880Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/data-flow/constant-propagation</loc>
+    <lastmod>2026-10-02T21:18:12.895Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/data-flow/data-flow-overview</loc>
+    <lastmod>2026-06-02T21:00:00.710Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/data-flow/status</loc>
+    <lastmod>2026-10-02T21:18:12.895Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/data-flow/taint-mode/advanced</loc>
+    <lastmod>2026-10-02T21:18:12.899Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/data-flow/taint-mode/overview</loc>
+    <lastmod>2026-10-02T21:18:12.897Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/experiments/aliengrep</loc>
+    <lastmod>2026-10-02T21:18:12.896Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/experiments/deprecated-experiments</loc>
+    <lastmod>2026-10-02T21:18:12.892Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/experiments/display-propagated-metavariable</loc>
+    <lastmod>2026-10-02T21:18:12.901Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/experiments/introduction</loc>
+    <lastmod>2026-10-02T21:18:12.900Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/experiments/join-mode/overview</loc>
+    <lastmod>2026-06-02T21:02:02.910Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/experiments/join-mode/recursive-joins</loc>
+    <lastmod>2026-10-02T21:18:12.891Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/experiments/metavariable-type</loc>
+    <lastmod>2026-10-02T21:18:12.900Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/experiments/multiple-focus-metavariables</loc>
+    <lastmod>2026-06-02T21:00:01.830Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/experiments/pattern-syntax</loc>
+    <lastmod>2026-10-02T21:18:12.894Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/experiments/r2c-internal-project-depends-on</loc>
+    <lastmod>2026-10-02T21:18:12.898Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/experiments/symbolic-propagation</loc>
+    <lastmod>2026-09-02T22:14:44.923Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/generic-pattern-matching</loc>
+    <lastmod>2026-10-02T21:18:12.901Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/glossary</loc>
+    <lastmod>2026-09-02T22:14:44.920Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/metavariable-analysis</loc>
+    <lastmod>2026-10-02T21:18:12.891Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/overview</loc>
+    <lastmod>2026-06-02T21:00:01.851Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/overview-1</loc>
+    <lastmod>2026-06-02T21:00:01.832Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/pattern-examples</loc>
+    <lastmod>2026-10-02T21:18:12.890Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/pattern-syntax</loc>
+    <lastmod>2026-10-02T21:18:12.894Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/private-rules</loc>
+    <lastmod>2026-10-02T21:18:12.892Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/rule-defined-fix</loc>
+    <lastmod>2026-07-06T13:48:50.639Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/rule-ideas</loc>
+    <lastmod>2026-06-02T21:02:04.230Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/rule-syntax</loc>
+    <lastmod>2026-10-02T21:18:12.893Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://docs.semgrep.dev/writing-rules/testing-rules</loc>
+    <lastmod>2026-09-02T22:14:44.948Z</lastmod>
+  </url>
+</urlset>

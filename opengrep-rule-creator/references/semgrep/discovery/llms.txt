@@ -1,0 +1,234 @@
+# Semgrep
+
+## Home
+
+- [Semgrep Docs](https://docs.semgrep.dev/index.md): Get started with Semgrep to help you catch, flag, and fix real vulnerabilities before they ship.
+
+- [Scan & secure (156 pages)](https://docs.semgrep.dev/_llms/scan-and-secure.md): Documentation for Scan & secure.
+
+## Scan at code generation
+
+### Semgrep Guardian
+
+- [Semgrep Guardian](https://docs.semgrep.dev/semgrep-guardian/overview.md): Semgrep Guardian integrates with AI coding agents to catch security issues in generated code before it ships.
+- [Semgrep Guardian quickstart](https://docs.semgrep.dev/semgrep-guardian/quickstart.md): Set up Semgrep Guardian with Claude Code to scan AI-generated code and catch security issues before they ship.
+
+### Set up your coding agent
+
+- [Choose your Semgrep Guardian setup](https://docs.semgrep.dev/semgrep-guardian/choose-your-setup.md): Compare the remote Claude Code plugin against local CLI integrations before installing Semgrep Guardian.
+- [Install the Semgrep CLI for Guardian](https://docs.semgrep.dev/semgrep-guardian/install-cli.md): Install and sign in to the Semgrep CLI for Guardian integrations that run scans locally.
+- [Set up Semgrep Guardian with Claude Code](https://docs.semgrep.dev/semgrep-guardian/ide-setup/claude-code.md): Install Semgrep Guardian in Claude Code using the remote plugin (recommended) or the local plugin.
+- [Set up Semgrep Guardian with Cursor](https://docs.semgrep.dev/semgrep-guardian/ide-setup/cursor.md): Install Semgrep Guardian in Cursor using hooks and MCP.
+- [Set up Semgrep Guardian with Codex](https://docs.semgrep.dev/semgrep-guardian/ide-setup/codex.md): Configure the Semgrep MCP server for Codex.
+- [Set up Semgrep Guardian with GitHub Copilot](https://docs.semgrep.dev/semgrep-guardian/ide-setup/github-copilot.md): Configure the Semgrep MCP server for GitHub Copilot in Visual Studio, JetBrains, Xcode, or Eclipse.
+- [Set up Semgrep Guardian with VS Code](https://docs.semgrep.dev/semgrep-guardian/ide-setup/vscode.md): Configure the Semgrep MCP server for VS Code Copilot Chat Agent mode.
+- [Set up Semgrep Guardian with Devin (Windsurf)](https://docs.semgrep.dev/semgrep-guardian/ide-setup/devin-windsurf.md): Configure Cascade hooks so Windsurf runs Semgrep after file writes.
+- [Set up Semgrep Guardian with Kiro](https://docs.semgrep.dev/semgrep-guardian/ide-setup/kiro.md): Add the Semgrep MCP server to Kiro.
+- [Set up Semgrep Guardian with other IDEs](https://docs.semgrep.dev/semgrep-guardian/ide-setup/other.md): Add the Semgrep MCP server or a post-write hook to any MCP-compatible IDE.
+
+### Using Semgrep Guardian
+
+- [Semgrep Guardian rules and configuration](https://docs.semgrep.dev/semgrep-guardian/rules-and-configuration.md): Which rules Semgrep Guardian scans with, and why this differs between the Claude Code remote plugin and other integrations.
+
+### Deploy across your organization
+
+- [Semgrep Guardian authentication](https://docs.semgrep.dev/semgrep-guardian/authentication.md): How Semgrep Guardian signs in, where credentials are stored, and why shared tokens are discouraged.
+- [Semgrep Guardian enterprise deployment](https://docs.semgrep.dev/semgrep-guardian/enterprise-deployment.md): How to deploy Semgrep Guardian in your enterprise environment.
+
+## Write rules
+
+### Write rules for Semgrep Code
+
+- [Write rules](https://docs.semgrep.dev/writing-rules/overview.md): Semgrep uses rules, which encapsulate pattern matching logic and data flow analysis, to scan your code for security issues, style violations, bugs, and more. In addition to rules available to you in the Semgrep Registry, you can write custom rules to determine what Semgrep detects in your repositori…
+- [Private rules](https://docs.semgrep.dev/writing-rules/private-rules.md)
+- [Test rules](https://docs.semgrep.dev/writing-rules/testing-rules.md): Semgrep provides a testing mechanism for your rules. You can write code and provide annotations to let Semgrep know where you are or aren't expecting findings. Semgrep provides the following annotations:
+- [Troubleshooting rules](https://docs.semgrep.dev/troubleshooting/rules.md)
+- [Static analysis and rule-writing glossary](https://docs.semgrep.dev/writing-rules/glossary.md): The definitions provided here are specific to Semgrep.
+
+#### Rule structure syntax
+
+- [Rule structure syntax](https://docs.semgrep.dev/writing-rules/rule-syntax.md)
+- [Rule structure syntax examples](https://docs.semgrep.dev/writing-rules/rule-ideas.md): Not sure what to write a rule for? Below are some common questions, ideas, and topics to spur your imagination. Happy hacking! 💡
+
+#### Rule pattern syntax
+
+- [Rule pattern syntax](https://docs.semgrep.dev/writing-rules/pattern-syntax.md)
+- [Rule pattern syntax examples](https://docs.semgrep.dev/writing-rules/pattern-examples.md)
+
+#### Advanced rule-writing techniques
+
+- [Rule-defined fix](https://docs.semgrep.dev/writing-rules/rule-defined-fix.md): Rule-defined fix is a Semgrep feature that lets you add suggested fixes to rules.
+- [Generic pattern matching](https://docs.semgrep.dev/writing-rules/generic-pattern-matching.md)
+- [Metavariable analysis](https://docs.semgrep.dev/writing-rules/metavariable-analysis.md)
+
+##### Dataflow analysis
+
+- [Dataflow analysis engine overview](https://docs.semgrep.dev/writing-rules/data-flow/data-flow-overview.md): Semgrep provides an intraprocedural data-flow analysis engine that opens various Semgrep capabilities. Semgrep provides the following data-flow analyses:
+- [Constant propagation](https://docs.semgrep.dev/writing-rules/data-flow/constant-propagation.md)
+- [Dataflow status](https://docs.semgrep.dev/writing-rules/data-flow/status.md)
+
+###### Taint analysis
+
+- [Taint analysis overview](https://docs.semgrep.dev/writing-rules/data-flow/taint-mode/overview.md)
+- [Advanced taint analysis techniques](https://docs.semgrep.dev/writing-rules/data-flow/taint-mode/advanced.md)
+
+##### Experiments 🧪
+
+- [Introduction to Semgrep experiments](https://docs.semgrep.dev/writing-rules/experiments/introduction.md)
+- [Pattern syntax (experimental)](https://docs.semgrep.dev/writing-rules/experiments/pattern-syntax.md)
+- [Aliengrep](https://docs.semgrep.dev/writing-rules/experiments/aliengrep.md)
+- [Symbolic propagation](https://docs.semgrep.dev/writing-rules/experiments/symbolic-propagation.md): Symbolic propagation allows Semgrep to perform matching modulo variable assignments. Consider the following Python code:
+- [Display propagated value of metavariables](https://docs.semgrep.dev/writing-rules/experiments/display-propagated-metavariable.md)
+- [Include multiple focus metavariables using set union semantics](https://docs.semgrep.dev/writing-rules/experiments/multiple-focus-metavariables.md): Semgrep matches all pieces of code captured by focus metavariables when you specify them in a rule. Specify the metavariables you want to focus on in a YAML list format.
+- [r2c-internal-project-depends-on](https://docs.semgrep.dev/writing-rules/experiments/r2c-internal-project-depends-on.md)
+- [Match captured metavariables with specific types](https://docs.semgrep.dev/writing-rules/experiments/metavariable-type.md)
+- [Deprecated experiments](https://docs.semgrep.dev/writing-rules/experiments/deprecated-experiments.md)
+
+###### Join mode
+
+- [Join mode overview](https://docs.semgrep.dev/writing-rules/experiments/join-mode/overview.md): Join mode runs several Semgrep rules at once and only returns results if certain conditions on the results are met. Join mode is an experimental mode that lets you cross file boundaries, allowing you to write rules for whole code bases instead of individual files. As the name implies, this was inspi…
+- [Recursive joins](https://docs.semgrep.dev/writing-rules/experiments/join-mode/recursive-joins.md)
+
+### Write rules for Semgrep Secrets
+
+- [Semgrep Secrets rule structure and sample](https://docs.semgrep.dev/semgrep-secrets/rules.md): This article walks you through writing, publishing, and using Semgrep Secrets rules. It also demonstrates what a sample Semgrep Secrets rule looks like, with subsequent sections describing the key-value pairs in the context of a Semgrep Secrets rule.
+- [Write custom validators](https://docs.semgrep.dev/semgrep-secrets/validators.md)
+
+- [API (243 pages)](https://docs.semgrep.dev/_llms/api.md): Documentation for API.
+- [Help (164 pages)](https://docs.semgrep.dev/_llms/help.md): Documentation for Help.
+
+## Explore
+
+### What's Semgrep
+
+#### What's Semgrep
+
+- [Introduction to Semgrep](https://docs.semgrep.dev/introduction.md): Semgrep is a software security tool that provides static application security testing (SAST), software composition analysis (SCA), and secrets detection. Semgrep identifies vulnerabilities in your source code without executing your code. It integrates with IDEs and CI/CD, and can also run from the S…
+- [Frequently asked questions](https://docs.semgrep.dev/faq/overview.md)
+- [Run a successful proof-of-value (POV) trial with Semgrep](https://docs.semgrep.dev/run-a-successful-pov-1.md)
+- [Semgrep AppSec Platform versus Semgrep Community Edition](https://docs.semgrep.dev/semgrep-pro-vs-oss.md)
+- [Semgrep Community Edition (CE) philosophy](https://docs.semgrep.dev/contributing/semgrep-philosophy.md)
+- [Semgrep integration guide for partners](https://docs.semgrep.dev/integrating.md): We're excited that you're integrating Semgrep into your tooling! Our goal with Semgrep is to bring world-class security tools to developers based on our conviction that software will run the most exciting parts of the future. It's not something that we can do alone; we want to build a community arou…
+- [Semgrep metrics](https://docs.semgrep.dev/metrics.md): Semgrep CLI may collect aggregate metrics to help improve the product. This document describes:
+
+##### Comparisons with other tools
+
+- [Compare Semgrep to CodeQL](https://docs.semgrep.dev/faq/comparisons/codeql.md): Both Semgrep and CodeQL use static analysis to find bugs, but there are a few differences:
+- [Compare Semgrep to Endor Labs](https://docs.semgrep.dev/faq/comparisons/endor-labs.md)
+- [Compare Semgrep to Opengrep](https://docs.semgrep.dev/faq/comparisons/opengrep.md)
+- [Compare Semgrep to Snyk](https://docs.semgrep.dev/faq/comparisons/snyk.md)
+- [Compare Semgrep to SonarQube](https://docs.semgrep.dev/faq/comparisons/sonarqube.md): Both Semgrep and SonarQube use static analysis to find bugs, but there are a few differences:
+
+### For developers
+
+- [Semgrep for developers](https://docs.semgrep.dev/for-developers/overview.md): This guide is for developers who are using Semgrep in a team or organizational setting.
+- [Sign in to Semgrep](https://docs.semgrep.dev/for-developers/signin.md)
+
+#### Resolve findings
+
+- [Resolve findings in your pull request or merge request](https://docs.semgrep.dev/for-developers/resolve-findings-through-comments.md)
+- [Resolve findings through Semgrep AppSec Platform](https://docs.semgrep.dev/for-developers/resolve-findings-through-app.md): This guide explains how you can view and triage findings in bulk through the Semgrep AppSec Platform web app.
+
+#### Run scans
+
+- [Run local CLI scans](https://docs.semgrep.dev/for-developers/cli.md): You can run local Semgrep CLI scans with the Semgrep command-line tool.
+- [Run IDE scans](https://docs.semgrep.dev/for-developers/ide.md): Semgrep supports the following IDE extensions:
+
+#### References
+
+- [How Semgrep works](https://docs.semgrep.dev/for-developers/detection.md): Semgrep enables you to:
+
+### References
+
+- [Language maturity levels](https://docs.semgrep.dev/references/language-maturity-levels.md)
+- [Feature definitions](https://docs.semgrep.dev/references/feature-definitions.md)
+
+#### CI references
+
+- [CI references](https://docs.semgrep.dev/category/ci-references.md)
+- [Continuous integration (CI) environment variables](https://docs.semgrep.dev/semgrep-ci/ci-environment-variables.md)
+- [Sample continuous integration (CI) configurations](https://docs.semgrep.dev/semgrep-ci/sample-ci-configs.md): This document provides sample configuration snippets to run Semgrep CI on various continuous integration (CI) providers.
+- [Findings in CI](https://docs.semgrep.dev/semgrep-ci/findings-ci.md): When running any Semgrep product in CI, Semgrep is able to track the lifetime of an individual finding. When configured to perform a diff-aware scan, Semgrep only shows new findings relative to some specified baseline commit.
+- [Packages in the Semgrep docker image](https://docs.semgrep.dev/semgrep-ci/packages-in-semgrep-docker.md)
+
+#### Language-specific features
+
+- [Language-specific features](https://docs.semgrep.dev/category/language-specific-features.md)
+- [Semantic detection in Java](https://docs.semgrep.dev/semgrep-code/java.md): This document explains how Semgrep detects true positives and reduces false positives in Java.
+
+#### Glossaries
+
+- [Glossaries](https://docs.semgrep.dev/category/glossaries.md)
+- [Semgrep Code product terms](https://docs.semgrep.dev/semgrep-code/glossary.md): The terms and definitions provided here are specific to Semgrep Code.
+- [Semgrep Supply Chain glossary](https://docs.semgrep.dev/semgrep-supply-chain/glossary.md): The terms and definitions provided here are specific to Semgrep Supply Chain.
+
+### Support & resources
+
+- [Support](https://docs.semgrep.dev/support.md): This document provides various methods for all users of Semgrep to get help.
+
+## What's New
+
+### What's New
+
+- [What's New](https://docs.semgrep.dev/whats-new/index.md): Highlights of new Semgrep product features shipped each week.
+
+### Release notes
+
+#### Most recent posts
+
+##### 2026
+
+- [Week of September 21, 2026](https://docs.semgrep.dev/release-notes/2026-09-21.md): Updates made to Semgrep during the week of September 21-27, 2026.
+- [Week of September 14, 2026](https://docs.semgrep.dev/release-notes/2026-09-14.md): Updates made to Semgrep during the week of September 14-20, 2026.
+- [Week of September 7, 2026](https://docs.semgrep.dev/release-notes/2026-09-07.md): Updates made to Semgrep during the week of September 7-13, 2026.
+- [Week of August 31, 2026](https://docs.semgrep.dev/release-notes/2026-08-31.md): Updates made to Semgrep during the week of August 31-September 6, 2026.
+- [Week of August 24, 2026](https://docs.semgrep.dev/release-notes/2026-08-24.md): Updates made to Semgrep during the week of August 24-30, 2026.
+- [Week of August 17, 2026](https://docs.semgrep.dev/release-notes/2026-08-17.md): Updates made to Semgrep during the week of August 17-23, 2026.
+- [Week of August 10, 2026](https://docs.semgrep.dev/release-notes/2026-08-10.md): Updates made to Semgrep during the week of August 10-16, 2026.
+- [Week of August 3, 2026](https://docs.semgrep.dev/release-notes/2026-08-03.md): Updates made to Semgrep during the week of August 3-9, 2026.
+- [Week of July 27, 2026](https://docs.semgrep.dev/release-notes/2026-07-27.md): Updates made to Semgrep during the week of July 27-August 2, 2026.
+- [Week of July 20, 2026](https://docs.semgrep.dev/release-notes/2026-07-20.md): Updates made to Semgrep during the week of July 20-26, 2026.
+- [Week of July 13, 2026](https://docs.semgrep.dev/release-notes/2026-07-13.md): Updates made to Semgrep during the week of July 13-19, 2026.
+- [Week of July 6, 2026](https://docs.semgrep.dev/release-notes/2026-07-06.md): Updates made to Semgrep during the week of July 6-12, 2026.
+- [June 2026](https://docs.semgrep.dev/release-notes/june-2026.md): July 8, 2026 · 7 min read
+- [May 2026](https://docs.semgrep.dev/release-notes/may-2026.md): June 3, 2026 · 5 min read
+- [April 2026](https://docs.semgrep.dev/release-notes/april-2026.md): May 12, 2026 · 8 min read
+- [March 2026](https://docs.semgrep.dev/release-notes/march-2026.md): April 10, 2026 · 8 min read
+- [February 2026](https://docs.semgrep.dev/release-notes/february-2026.md): March 6, 2026 · 4 min read
+- [January 2026](https://docs.semgrep.dev/release-notes/january-2026.md): February 4, 2026 · 4 min read
+- [December 2025](https://docs.semgrep.dev/release-notes/december-2025.md): January 13, 2026 · 7 min read
+
+##### 2025
+
+- [November 2025](https://docs.semgrep.dev/release-notes/november-2025.md): December 9, 2025 · 6 min read
+- [October 2025](https://docs.semgrep.dev/release-notes/october-2025.md): November 11, 2025 · 3 min read
+- [September 2025](https://docs.semgrep.dev/release-notes/september-2025.md): October 23, 2025 · 3 min read
+- [August 2025](https://docs.semgrep.dev/release-notes/august-2025.md): September 3, 2025 · 3 min read
+- [July 2025](https://docs.semgrep.dev/release-notes/july-2025.md): August 8, 2025 · 5 min read
+- [June 2025](https://docs.semgrep.dev/release-notes/june-2025.md): July 18, 2025 · 6 min read
+- [May 2025](https://docs.semgrep.dev/release-notes/may-2025.md): May 30, 2025 · 5 min read
+- [April 2025](https://docs.semgrep.dev/release-notes/april-2025.md): April 30, 2025 · 4 min read
+
+## OpenAPI Specs
+
+- [public_v1.openapi](/public_v1.openapi.yaml)
+- [public_v2.openapi](/public_v2.openapi.yaml)
+
+## Optional
+
+- [Registry](https://semgrep.dev/explore/)
+- [Playground](https://semgrep.dev/playground/new)
+- [Academy](https://academy.semgrep.dev)
+- [Registry](https://semgrep.dev/explore)
+- [Playground](https://semgrep.dev/playground/new)
+- [Semgrep Academy](https://academy.semgrep.dev/)
+- [GitHub](https://github.com/semgrep/semgrep-docs)
+
+> The links below point to documentation indexes. Follow each `/_llms/` index recursively until you reach documentation pages.
+
+## Indexes
+
+- [Scan & secure (156 pages)](https://docs.semgrep.dev/_llms/scan-and-secure.md): Documentation for Scan & secure.
+- [API (243 pages)](https://docs.semgrep.dev/_llms/api.md): Documentation for API.
+- [API / v2 (Experimental) (213 pages)](https://docs.semgrep.dev/_llms/api/v2-experimental.md): Documentation for API / v2 (Experimental).
+- [Help (164 pages)](https://docs.semgrep.dev/_llms/help.md): Documentation for Help.

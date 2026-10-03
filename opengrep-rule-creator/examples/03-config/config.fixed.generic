@@ -1,0 +1,69 @@
+# STATIC SCANNER INPUT: Nginx-style configuration; do not deploy this fixture.
+# The generic matcher uses indentation and tokens, not Nginx inheritance or includes.
+
+server {
+    location /api/ {
+        proxy_pass https://backend.internal:8443;
+        proxy_ssl_trusted_certificate /etc/nginx/upstream-ca.pem;
+        # Positive A: HTTPS upstream precedes disabled verification.
+        # ruleid: lab-nginx-unverified-upstream
+        proxy_ssl_verify on;
+    }
+
+    location = /upload {
+        proxy_ssl_trusted_certificate /etc/nginx/upstream-ca.pem;
+        # Positive B: directive order reverses; the other structural branch applies.
+        # ruleid: lab-nginx-unverified-upstream
+        proxy_ssl_verify on; # preserve this trailing explanation in the fix
+        proxy_pass https://uploads.internal;
+    }
+
+    location /dynamic/ {
+        proxy_pass https://$upstream;
+        # Positive C: punctuation and a variable require $...UPSTREAM, not $UPSTREAM.
+        # ruleid: lab-nginx-unverified-upstream
+        proxy_ssl_verify on;
+    }
+
+    location /verified/ {
+        proxy_pass https://backend.internal;
+        # True negative: certificate verification is enabled.
+        # ok: lab-nginx-unverified-upstream
+        proxy_ssl_verify on;
+    }
+
+    location /plaintext/ {
+        proxy_pass http://backend.internal;
+        # Out of scope: no upstream TLS, so this flag has no certificate to verify.
+        # Plaintext transport might violate another policy; it is not declared safe.
+        # ok: lab-nginx-unverified-upstream
+        proxy_ssl_verify off;
+    }
+
+    location /comment/ {
+        proxy_pass https://backend.internal;
+        # A disabled directive in a comment is not active configuration.
+        # ok: lab-nginx-unverified-upstream
+        # proxy_ssl_verify off;
+        proxy_ssl_verify on;
+    }
+
+    location /upstream-only/ {
+        proxy_pass https://backend.internal;
+    }
+    location /flag-only/ {
+        # The preceding sibling's upstream MUST NOT combine with this directive.
+        # Inherited upstream/default settings are outside this explicit-pair rule.
+        # ok: lab-nginx-unverified-upstream
+        proxy_ssl_verify off;
+    }
+
+    location /nested/ {
+        proxy_pass http://frontend.internal;
+        location /nested/child/ {
+            # Parent HTTP setting and another sibling's HTTPS must not leak here.
+            # ok: lab-nginx-unverified-upstream
+            proxy_ssl_verify off;
+        }
+    }
+}

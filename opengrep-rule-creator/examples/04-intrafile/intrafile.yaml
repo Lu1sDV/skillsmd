@@ -1,0 +1,88 @@
+# ONE rule for a complete job-command pipeline, not separate teaching rules.
+# This is deliberately OpenGrep-specific at execution time: use
+#   opengrep scan -c intrafile.yaml intrafile.py --taint-intrafile
+# Omit --taint-intrafile for the zero-finding comparison. Use the native-version
+# verification commands in ../README.md; support depends on the exact code shape.
+# There is no interfile:true, proprietary flag, or per-rule forced intrafile
+# setting: the same YAML must support a genuine flag-off/flag-on experiment.
+rules:
+  - id: lab-python-intrafile-command
+    languages: [python]
+    mode: taint
+    severity: WARNING
+    message: >-
+      An untrusted request command crossed same-file job state and a callback
+      into shell execution without allowlisting. Whitespace normalization does
+      not prevent command injection, so an attacker could execute shell syntax.
+      Map user choices to fixed trusted commands with allowlisted_command, or
+      replace shell execution with an argument-vector API that does not invoke
+      a shell; do not interpolate user input into shell command strings.
+    metadata:
+      # Synthetic fixtures establish teaching intent, not real-world precision.
+      # Upgrade confidence only after calibration on representative codebases.
+      confidence: LOW
+      technology: [python, opengrep]
+      category: security
+      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command"
+
+    pattern-sources:
+      - patterns:
+          # Structural scope AND exact API call: only this application's request
+          # adapter reads executable job input. Other HTTP reads are not silently
+          # declared sources, and load_command() CALLS are not directly matched.
+          # Its actual body must create a source and return it for the native
+          # signature extractor to connect the otherwise source-free caller.
+          - pattern-inside: |
+              def load_command():
+                  ...
+          - pattern: read_request_field("command")
+        # Only the call result is tainted, not its literal field-name argument
+        # or arbitrary children of a larger expression. Scope does not mean
+        # "everything in the loader is tainted"; it intersects the call match.
+        exact: true
+
+    pattern-sinks:
+      - patterns:
+          # shell_exec is an EDUCATIONAL API with a precise contract: command
+          # is executed by a shell, audit is inert text. Do not copy its name to
+          # a production rule without identifying the real API and its options.
+          - pattern: shell_exec($COMMAND, audit=$AUDIT)
+          # First identify the call and bind both arguments, then retain ONLY
+          # the command expression's range for taint checking and reporting.
+          # A source flowing into $AUDIT alone is a negative, even when the
+          # command and audit arrived through the same constructor and HOF.
+          - focus-metavariable: $COMMAND
+        exact: true
+
+    pattern-sanitizers:
+      # The fixture DEFINES this helper: two user choices return fixed command
+      # literals; anything else raises. This grounded allowlist contract, not
+      # a naming heuristic or blanket exclusion, justifies sanitizing its return.
+      - pattern: allowlisted_command(...)
+        # Sanitize the returned selection, not the input variable in place and
+        # not nested evaluation. An unsafe sink inside an argument would still
+        # run before the sanitizer returns and must remain detectable.
+        exact: true
+
+    # Dataflow, not YAML order, connects these matches. With --taint-intrafile,
+    # native summaries must preserve source -> factory return -> constructor
+    # parameter -> self.pending initializer -> self.pending.pop -> method/helper
+    # return -> callback argument -> focused sink. Python collection models
+    # supply ThisTaintsReturn for pop; map binds its element to the
+    # lambda, and apply_command's real body binds a named callback's arguments.
+    # No propagator substitutes for these bodies, and no broad safe-functions
+    # option suppresses a missing hop. normalize_command/strip is NOT sanitized.
+    # checked_command is intentionally NOT matched: its safe return must be
+    # inferred through its allowlist call in the named callback. The inline lambda
+    # uses the directly modelled allowlist: 1.30.0 lost that wrapper's precision
+    # there. Split empty-field initialization + append also missed the unsafe
+    # flow; the fixture documents its single-expression constructor alternative.
+    #
+    # The fixture's two positive sites contrast built-in map with a custom HOF.
+    # Four negative sites cover safe named/inline callbacks, a clean sibling
+    # field, and source taint only in the non-executable sibling argument.
+    # Collection mutation modelling does NOT promise index-sensitive queues;
+    # one element avoids implying such precision. Native intrafile support also
+    # does not imply imported-callee, reflective-dispatch, inheritance, or
+    # mutually recursive signature support. Check the annotated fixture on the
+    # pinned engine before treating these expectations as compatibility facts.

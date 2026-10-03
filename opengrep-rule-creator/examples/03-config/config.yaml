@@ -1,0 +1,68 @@
+rules:
+  - id: lab-nginx-unverified-upstream
+    languages: [generic]  # Nginx has no dedicated parser in this example's engine.
+    severity: WARNING
+    message: >-
+      An explicit HTTPS proxy location disables upstream certificate verification;
+      a network attacker could impersonate the upstream. Set proxy_ssl_verify on
+      and configure proxy_ssl_trusted_certificate for the upstream CA; review
+      inherited settings and includes separately before deploying the change.
+    metadata:
+      confidence: LOW  # Lexical configuration model; no real deployment calibration.
+      technology: [nginx]
+      category: security
+      cwe: 'CWE-295: Improper Certificate Validation'
+    options:
+      # Commented-out directives must not behave as live configuration.
+      generic_comment_style: shell
+      # A bounded educational window, NOT an Nginx block-size limit. Longer
+      # locations may be missed; measure before increasing the matching span.
+      generic_ellipsis_max_span: 20
+
+    # Start with STRUCTURAL generic token patterns. Regex only constrains a bound
+    # URL; there is no whole-file pattern-regex search and no invented Nginx AST.
+    # Spacegrep's multiline nesting follows INDENTATION; braces alone are not an
+    # Nginx parser. The sibling/nested fixtures prove only their stated layout.
+    patterns:
+      - pattern-either:
+          # Generic matching is ordered: unlike Python keyword arguments, swapping
+          # these two directives needs another branch. Both branches bind the same
+          # $VERIFY and $...UPSTREAM for the shared filters and focused fix below.
+          - pattern: |
+              location $...LOCATION {
+                ...
+                proxy_pass $...UPSTREAM;
+                ...
+                proxy_ssl_verify $VERIFY;
+                ...
+              }
+          - pattern: |
+              location $...LOCATION {
+                ...
+                proxy_ssl_verify $VERIFY;
+                ...
+                proxy_pass $...UPSTREAM;
+                ...
+              }
+
+      - metavariable-regex:
+          metavariable: $...UPSTREAM
+          # A single-word metavariable would lose : / . $ and port punctuation.
+          # Ellipsis captures may retain surrounding whitespace. Forbid internal
+          # whitespace/semicolons so a capture cannot consume another directive.
+          regex: '^[ \t]*https://[^\s;]+[ \t]*$'
+      - metavariable-regex:
+          metavariable: $VERIFY
+          regex: '^off$'
+
+      # Focus selects the boolean after the full location has matched. Replacing
+      # the entire location would discard sibling directives and their comments.
+      - focus-metavariable: $VERIFY
+    fix: 'on'
+
+    # This is fail-closed configuration, not an automatically deployable patch:
+    # without a valid trusted CA, connections can fail. The fixture tests bytes,
+    # not TLS connectivity. No fix-regex: native 1.30.0 can lose that metadata on
+    # generic/synthetic matches; focused fix has an explicit golden-file check.
+    # Explicit pairs only: absence/defaults, includes, Nginx inheritance and runtime
+    # variable expansion require configuration-aware analysis outside this rule.

@@ -1,0 +1,889 @@
+{
+  "retrieved_at": "2026-10-03",
+  "writing_rules_page_count": 28,
+  "supplementary_page_count": 1,
+  "playground_snippet_count": 54,
+  "cheatsheet_data_keys": 30,
+  "source_repository": "https://github.com/semgrep/semgrep-docs",
+  "source_commit": "ae5d563568a18368b7cf2706b9aa95c7dc6b9e26",
+  "license": "LGPL-2.1 (upstream repository LICENSE)",
+  "hash_scope": "Stored adapted bytes; manifest intentionally does not hash itself.",
+  "resources": [
+    {
+      "url": "https://raw.githubusercontent.com/semgrep/semgrep-docs/ae5d563568a18368b7cf2706b9aa95c7dc6b9e26/LICENSE",
+      "local_path": "LICENSE",
+      "sha256": "814cf1a7e79dc6a3eda3d197fa7ded36c3b733917ed5da1e8cc135eb24f3ac09",
+      "kind": "license"
+    },
+    {
+      "url": "https://docs.semgrep.dev/llms.txt",
+      "local_path": "discovery/llms.txt",
+      "sha256": "94a55135130879686cb6a925ac537b4afead0b91beb5134671b486146e4a0782",
+      "kind": "discovery"
+    },
+    {
+      "url": "https://docs.semgrep.dev/sitemap.xml",
+      "local_path": "discovery/sitemap.xml",
+      "sha256": "ff4274bede07fcdfcee31ae7909c2cc73d52873740033021e2a98b30c3a61a74",
+      "kind": "discovery"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/semgrep/semgrep-docs/ae5d563568a18368b7cf2706b9aa95c7dc6b9e26/docs/images/semgrep-ci-4c94be66f30fef156679254592d3e2b1.gif",
+      "local_path": "assets/semgrep-ci-4c94be66f30fef156679254592d3e2b1.gif",
+      "sha256": "37b4c543d9fc5e0270db7d9ad1c12ec4d9dff936ca788e80c093ac821ae6765a",
+      "kind": "image"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/semgrep/semgrep-docs/ae5d563568a18368b7cf2706b9aa95c7dc6b9e26/docs/images/join-mode-example-4973e0f47741f0d4c628eb668bc8f3ba.png",
+      "local_path": "assets/join-mode-example-4973e0f47741f0d4c628eb668bc8f3ba.png",
+      "sha256": "9ecb1f65fc3c46485339b24a41303fd24bb7a1a0cf3b3a1dd7b542030014d8b7",
+      "kind": "image"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/08yB?definition=1&test_cases=1",
+      "local_path": "playground/08yB.json",
+      "sha256": "287a5fe094d0f83743a2e70cd3aae079ca303ef78fbb9dcd5cd76ca08058c87e",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/08yB?definition=1&test_cases=1",
+      "local_path": "playground/08yB.md",
+      "sha256": "8684d0e82ddacddf418891f7aba0fc2fbec8392b734e42af0fe2394aebd4f1e3",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/2Aoj?definition=1&test_cases=1",
+      "local_path": "playground/2Aoj.json",
+      "sha256": "96461d5054b8e6e3da2082f7ce43a63d239c0885824247b8764e9e31a9afc9d3",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/2Aoj?definition=1&test_cases=1",
+      "local_path": "playground/2Aoj.md",
+      "sha256": "5d83e4ec0cf7419554f322250ce0c24cb3d654df2ecd49295ba0a4c87976d0d2",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/2B3r?definition=1&test_cases=1",
+      "local_path": "playground/2B3r.json",
+      "sha256": "2ec742b81769b4f1e91737de0671dedf8490fb3b0b54082d2db2816060300d1e",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/2B3r?definition=1&test_cases=1",
+      "local_path": "playground/2B3r.md",
+      "sha256": "43a5590cb7079823863833a729916b53ea925394323ff6b807a42b25aa3ea501",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/4bv6x?definition=1&test_cases=1",
+      "local_path": "playground/4bv6x.json",
+      "sha256": "f7707d2db167b41e5dcfbd77ac8ebd996f44473dfe882d94b5459e5a32564a50",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/4bv6x?definition=1&test_cases=1",
+      "local_path": "playground/4bv6x.md",
+      "sha256": "82f17f33381abddfcbb7d584fae8e7e65d5dbf5a60965093044e0610fdc0f18e",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/4bvGz?definition=1&test_cases=1",
+      "local_path": "playground/4bvGz.json",
+      "sha256": "0bed5b0ebe8334400f42fef2a132751bb9c103a459e65243a8b5bfea809fe790",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/4bvGz?definition=1&test_cases=1",
+      "local_path": "playground/4bvGz.md",
+      "sha256": "0fb113f69f12e0f4c2189f97423687898db7ab4c4057eed963dae5d5e5fa6bb1",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/5r400?definition=1&test_cases=1",
+      "local_path": "playground/5r400.json",
+      "sha256": "69e51dadd0ae490fb0b89d71baaedb1576a00ce0e9ad55aae03bcb01c9399b16",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/5r400?definition=1&test_cases=1",
+      "local_path": "playground/5r400.md",
+      "sha256": "03af40ead92eea90b73565585a9836b640944b206d1c263dbc69fc80440b973a",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/5rvkj?definition=1&test_cases=1",
+      "local_path": "playground/5rvkj.json",
+      "sha256": "d0645c1dee37abedada5b9aa7cfbfef05ffc03f135cab3165e1ebd71bb66843f",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/5rvkj?definition=1&test_cases=1",
+      "local_path": "playground/5rvkj.md",
+      "sha256": "c8172adf7276b50e6a348661ad6feb61edb5d950b7df92172a4024f083746989",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/6JvzK?definition=1&test_cases=1",
+      "local_path": "playground/6JvzK.json",
+      "sha256": "0fb80ebc8c3fd84fd2c479e97ea420d0b03637e4c668fbd02b66f3470cb1239d",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/6JvzK?definition=1&test_cases=1",
+      "local_path": "playground/6JvzK.md",
+      "sha256": "94ccd0c3f577ebc86fde7fd7f8ff61532909b0ace4661f7f71ad31b92062e0ea",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/6KpK?definition=1&test_cases=1",
+      "local_path": "playground/6KpK.json",
+      "sha256": "4948009bbc3d3307f82e1c6c8554253ce786bc4b1b363fe4b9dcee55712c0ce9",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/6KpK?definition=1&test_cases=1",
+      "local_path": "playground/6KpK.md",
+      "sha256": "aeb8146a715dc8f7af152a7a85cc09eb6e5b19639b72c05b787e9c140fff945f",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/9Yjy?definition=1&test_cases=1",
+      "local_path": "playground/9Yjy.json",
+      "sha256": "7ea3c2e1951cea88c2508411883c4cb5cc8926d6fbdaeef127d9d8e8749f235e",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/9Yjy?definition=1&test_cases=1",
+      "local_path": "playground/9Yjy.md",
+      "sha256": "0f64fd4c1a6b7cfa13b0148f56c252dbdaa75a544703db3dfaf12046cf58ca50",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/D602?definition=1&test_cases=1",
+      "local_path": "playground/D602.json",
+      "sha256": "c294bbfa81658dcfc24019af2c1ae5c2884885d81add47896663678728ae8227",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/D602?definition=1&test_cases=1",
+      "local_path": "playground/D602.md",
+      "sha256": "c3fc11a1e048e07d36f99058c1c2b30dac045985f8d6de4682b47066f8665cb7",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/Dr0G?definition=1&test_cases=1",
+      "local_path": "playground/Dr0G.json",
+      "sha256": "276131d9dec15a71d3e46190dc7ff92dbf10a500be82a13a68426bda917a44c3",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/Dr0G?definition=1&test_cases=1",
+      "local_path": "playground/Dr0G.md",
+      "sha256": "f7363e4752bb157f387096ac3bdf59abf509f4fbbb3a5d9e320593901b26826b",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/Dyzd?definition=1&test_cases=1",
+      "local_path": "playground/Dyzd.json",
+      "sha256": "ce05df0d849629e0a090883dede6262ee65454d66620778dad3d86c2a36ccb3a",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/Dyzd?definition=1&test_cases=1",
+      "local_path": "playground/Dyzd.md",
+      "sha256": "070582884398f331fba6916d175093a47ec673042c702135a45e37e2f91b9202",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/G652?definition=1&test_cases=1",
+      "local_path": "playground/G652.json",
+      "sha256": "7c273ffd7d3f61e2d29f565ff73667303e0aff763c826e417070ad95dddd538c",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/G652?definition=1&test_cases=1",
+      "local_path": "playground/G652.md",
+      "sha256": "776ee2a9051e801d753f0023ead1f040a403eb32be9393a44a25793749637ffb",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/GdoK6?definition=1&test_cases=1",
+      "local_path": "playground/GdoK6.json",
+      "sha256": "cbf92a37a9d9ddd2e951ae7b2cabc7eb2a89872a0bc890dde34a5468215b3337",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/GdoK6?definition=1&test_cases=1",
+      "local_path": "playground/GdoK6.md",
+      "sha256": "5f0d877a3a5f8708b3b7913fd55b6301bfbcf99cd99ee8debda5fd2ef38330d6",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/GgZG?definition=1&test_cases=1",
+      "local_path": "playground/GgZG.json",
+      "sha256": "3cc8cae694af14b33c4b6abb46c81075f644c2c4fe8f1b7cab03d726ce647c52",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/GgZG?definition=1&test_cases=1",
+      "local_path": "playground/GgZG.md",
+      "sha256": "1a63ec6a7202751ffdc67e96d15c36cd0a8298c1619135b4ff9babe2f00cc218",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/Gw7z?definition=1&test_cases=1",
+      "local_path": "playground/Gw7z.json",
+      "sha256": "711ac905c08d0fd5a42600a8b6d9bc24ceef810afbfec2ea057e523c85f41936",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/Gw7z?definition=1&test_cases=1",
+      "local_path": "playground/Gw7z.md",
+      "sha256": "097b6e80d4b4d8d67e888a45a6f214df44809ed5e125c818ed3caf788537354d",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/JDPGP?definition=1&test_cases=1",
+      "local_path": "playground/JDPGP.json",
+      "sha256": "73a31dd832fdd1e66a326ca5950caca138c995ab07aeed03712efcddbb5cdc81",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/JDPGP?definition=1&test_cases=1",
+      "local_path": "playground/JDPGP.md",
+      "sha256": "d1a6a393b524175eb40e1ee2a36b9ea7a08d43e09cecf138e35751937323c2d9",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/JeBP?definition=1&test_cases=1",
+      "local_path": "playground/JeBP.json",
+      "sha256": "524092751866f973ee4474a42235fbb04962baed286ce73aff4849ac0ee15058",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/JeBP?definition=1&test_cases=1",
+      "local_path": "playground/JeBP.md",
+      "sha256": "6679b348d7c301d6d230bfec5c2107e0cb45fde89e247c2006bae4a9eb1b3f88",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/KxJ17?definition=1&test_cases=1",
+      "local_path": "playground/KxJ17.json",
+      "sha256": "b7f9e35a90854934a881edf5495e94e58b554a19e49f8abb2434b696f2465011",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/KxJ17?definition=1&test_cases=1",
+      "local_path": "playground/KxJ17.md",
+      "sha256": "684ab3b1126076b7fc132f6807f89fb2c41f4932c12daa8ca0755a769fcaa254",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/L1vJ6?definition=1&test_cases=1",
+      "local_path": "playground/L1vJ6.json",
+      "sha256": "02311704549190b46d9048c4c3a0ae451e057d14fd70878f967d180481d1c18f",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/L1vJ6?definition=1&test_cases=1",
+      "local_path": "playground/L1vJ6.md",
+      "sha256": "0b967737b34c6bc1932a20db1325def23c6cb8d0958e1955b39ba71c67e25bc2",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/NGXN?definition=1&test_cases=1",
+      "local_path": "playground/NGXN.json",
+      "sha256": "a330b709ae60996cb37c2bac4ad7e4a2d76c51b6d2222a53300336cad8bf81e8",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/NGXN?definition=1&test_cases=1",
+      "local_path": "playground/NGXN.md",
+      "sha256": "86840a3149f72144f9095b05744cb7f9028989b3c8662f630702b9cba4401d38",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/Nr3z?definition=1&test_cases=1",
+      "local_path": "playground/Nr3z.json",
+      "sha256": "e4c45ff68407f11b157149d13fb51cac876825ea4f0b994387c4a9fbc7afb5ad",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/Nr3z?definition=1&test_cases=1",
+      "local_path": "playground/Nr3z.md",
+      "sha256": "e3c7b11c0e181ddb22a6bb7f9c03d7aedc9103933e6db4d2182d6741212f4790",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/OrAAe?definition=1&test_cases=1",
+      "local_path": "playground/OrAAe.json",
+      "sha256": "852ac2ce2f7c1403ca449847ea4bfdf34b22ad26184104e0866622afdb40bb66",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/OrAAe?definition=1&test_cases=1",
+      "local_path": "playground/OrAAe.md",
+      "sha256": "0794258e96891fe5523e3e9b2638cbdd36d2a90ca71e819fc561c8d154ff6430",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/OrAzB?definition=1&test_cases=1",
+      "local_path": "playground/OrAzB.json",
+      "sha256": "de63c615ba79fc1d7e78cdf99c91c950564bee02954f0d250d9db219f08f2faa",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/OrAzB?definition=1&test_cases=1",
+      "local_path": "playground/OrAzB.md",
+      "sha256": "4af0a4d891af1bf02d4de740d19d11559a6c0ba248d53ba6427dc4f24e5823a6",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/PeBXv?definition=1&test_cases=1",
+      "local_path": "playground/PeBXv.json",
+      "sha256": "c67e33f100b953bb2634c252a5e2b261533b2583643163e8b86a64c3566a2bbd",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/PeBXv?definition=1&test_cases=1",
+      "local_path": "playground/PeBXv.md",
+      "sha256": "79dea8a49aeb2e2875fcc48c5b26097796891834bf0226c7417c65b3b983c942",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/Ppde?definition=1&test_cases=1",
+      "local_path": "playground/Ppde.json",
+      "sha256": "d8daf969301c942581cec0b953d7bd7fbed1d5f2759788d4e151d53486e4973e",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/Ppde?definition=1&test_cases=1",
+      "local_path": "playground/Ppde.md",
+      "sha256": "3de9958f5ff3b5867696cfb6d928a669c8609c4145c8882d7d97816956602e43",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/PwKY?definition=1&test_cases=1",
+      "local_path": "playground/PwKY.json",
+      "sha256": "15fbe8f1b6166a3f6c19260e6a5cf751fd1a6e06622fa040d0182395a73e413c",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/PwKY?definition=1&test_cases=1",
+      "local_path": "playground/PwKY.md",
+      "sha256": "d66b85854535d02124468fb94de343c116e3c7947e3d1596ddcefdce9f6eb65c",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/Qr3Y4?definition=1&test_cases=1",
+      "local_path": "playground/Qr3Y4.json",
+      "sha256": "319ee71e71a00e61caf0f9de4ff2afdd68797f437f3031fb87bdc57afe70bf88",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/Qr3Y4?definition=1&test_cases=1",
+      "local_path": "playground/Qr3Y4.md",
+      "sha256": "3179ad5729c59a5d578a79b99a8ed4d0edefa63a6a4b980ac35b4a603db284bf",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/WAYzL?definition=1&test_cases=1",
+      "local_path": "playground/WAYzL.json",
+      "sha256": "711b0e196625d80f4841ab2a9b3a475d7d0a227a7281da4171d9f42e32c26b89",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/WAYzL?definition=1&test_cases=1",
+      "local_path": "playground/WAYzL.md",
+      "sha256": "9e9659f59932cdbf67d35f858651a7b84a8961467e49ed38166efa03bbacca35",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/X56pj?definition=1&test_cases=1",
+      "local_path": "playground/X56pj.json",
+      "sha256": "28170444c415b447718920a5b322fdc6ad5dfcebc05e44f6cdea15f27ea0c7fa",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/X56pj?definition=1&test_cases=1",
+      "local_path": "playground/X56pj.md",
+      "sha256": "90eec64be880388a89887d0952f82825a7c3768308bce9dc99d9293b2031f440",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/ZoA4?definition=1&test_cases=1",
+      "local_path": "playground/ZoA4.json",
+      "sha256": "c5c9769240190633026a07ed7a3e758a2255b3effdbfff30991aaf419fbf6539",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/ZoA4?definition=1&test_cases=1",
+      "local_path": "playground/ZoA4.md",
+      "sha256": "edb5844f22ae11082b8fdf881860a279f3e7bcef99c05c52c7cf9f6b7f0eabe0",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/Zq5ow?definition=1&test_cases=1",
+      "local_path": "playground/Zq5ow.json",
+      "sha256": "d8b85effc4354b71bbcd4bea6d3dce1032cfb13aec022ee9f4c30bc93393fbd9",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/Zq5ow?definition=1&test_cases=1",
+      "local_path": "playground/Zq5ow.md",
+      "sha256": "d446339f93863b8aed912bcc3fe1c75dbcfdf800acb418e61c13712d8c4bd1db",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/Zqz8o?definition=1&test_cases=1",
+      "local_path": "playground/Zqz8o.json",
+      "sha256": "d4c9aab20e66b76bbf01920f52ea76199a10a1418c52ed1278b0fee5565d2e88",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/Zqz8o?definition=1&test_cases=1",
+      "local_path": "playground/Zqz8o.md",
+      "sha256": "6443fef2acb9733009331eb0813200eeefb7593a44b24574c12d352e2a4c95c3",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/bwekv?definition=1&test_cases=1",
+      "local_path": "playground/bwekv.json",
+      "sha256": "ebbacd1f01307d0dd93a65a6f3b9a0d7a206ae10c8c0c79be9e8852ac6d0f908",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/bwekv?definition=1&test_cases=1",
+      "local_path": "playground/bwekv.md",
+      "sha256": "3c05259d72fa2f479e36f773f7887c1217176b47155341611c185d8f208be69e",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/dGRE?definition=1&test_cases=1",
+      "local_path": "playground/dGRE.json",
+      "sha256": "ddd4c558389ca905e694caf47d792b47072574f19dc15c7021b5d36f29342816",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/dGRE?definition=1&test_cases=1",
+      "local_path": "playground/dGRE.md",
+      "sha256": "ec978b9cf62e78039caa05d2c55b57a6adb3e03044ca27a675403f812014abff",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/eqYN8?definition=1&test_cases=1",
+      "local_path": "playground/eqYN8.json",
+      "sha256": "d1e13b397c459d03fcd4f4cae82e4522f1f943210da9ab5fed6947e872b422bc",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/eqYN8?definition=1&test_cases=1",
+      "local_path": "playground/eqYN8.md",
+      "sha256": "02be251229eade79d508cb566ead167a34726779c8ab5fc769f2d25712e7d6f9",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/gBD0?definition=1&test_cases=1",
+      "local_path": "playground/gBD0.json",
+      "sha256": "98d36ecfe48c02c6331d99d84ebe4d9d8f7f9036d07df9ef99c3926fc27c4b30",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/gBD0?definition=1&test_cases=1",
+      "local_path": "playground/gBD0.md",
+      "sha256": "5656a91210f3adc823e84ca4d0fb5dc7648bf968eca29c8fc40cd265343f0361",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/jEGP?definition=1&test_cases=1",
+      "local_path": "playground/jEGP.json",
+      "sha256": "9ba49b82bbb8c197e17b8ba9f34c81567c80c36f312b6ccb45b8332cfc9f37f6",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/jEGP?definition=1&test_cases=1",
+      "local_path": "playground/jEGP.md",
+      "sha256": "770e0ee9a78e3e51e714721061706f89e63f605700284a312166a689d03ba813",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/jNnn?definition=1&test_cases=1",
+      "local_path": "playground/jNnn.json",
+      "sha256": "2c426de46e1eefca2bdd24c7fcbc5bc99a9ea375084626a688ee0843faf8f9bf",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/jNnn?definition=1&test_cases=1",
+      "local_path": "playground/jNnn.md",
+      "sha256": "a98dc59457fac525491787a4f33d3c6efbee58b5d6193b8fbf947fb8617af639",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/jwvn?definition=1&test_cases=1",
+      "local_path": "playground/jwvn.json",
+      "sha256": "e11e4468be45ecf63f3fcb07e0808c3dab24377c52909ca66509d815e45b58c1",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/jwvn?definition=1&test_cases=1",
+      "local_path": "playground/jwvn.md",
+      "sha256": "901c5ffb78c89d9c2d141844038689f5ecc29326b4a662ae5e5e8bea7607aca6",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/oqjgX?definition=1&test_cases=1",
+      "local_path": "playground/oqjgX.json",
+      "sha256": "9f692cf527676de3bc3daae917340eda623331ea4056faf94f361fccf679a1e0",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/oqjgX?definition=1&test_cases=1",
+      "local_path": "playground/oqjgX.md",
+      "sha256": "9db53fb0cc556e8e83f05deef3f72f134ea8f96c98ea5330038a7afc7aaedd25",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/qNwez?definition=1&test_cases=1",
+      "local_path": "playground/qNwez.json",
+      "sha256": "919c89cc0a76d0667c734d7caeafe551e5d5e595c408f81f9618c9008b5e9066",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/qNwez?definition=1&test_cases=1",
+      "local_path": "playground/qNwez.md",
+      "sha256": "44f1b8979410bedc92e2789900bb2704dd3f5250b1b2ae940cba690e7768023b",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/rEqJ?definition=1&test_cases=1",
+      "local_path": "playground/rEqJ.json",
+      "sha256": "808c880625b94029686476123d0612866b4e8b71c4100b820fe153143d72c6cd",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/rEqJ?definition=1&test_cases=1",
+      "local_path": "playground/rEqJ.md",
+      "sha256": "cf7963575847d6bcb6b5002648c8a9637b28db1cc4c7f81633eceabb33b2d385",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/v83Nl?definition=1&test_cases=1",
+      "local_path": "playground/v83Nl.json",
+      "sha256": "b01fa48d40045178b069c9f177527a8ae0cf7ad96d1cf3ff42007af8526c26b6",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/v83Nl?definition=1&test_cases=1",
+      "local_path": "playground/v83Nl.md",
+      "sha256": "2f99a283ad14f2ad604d01ae13622e90a73d885804e2073e5abc885e2ef5b383",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/v83Rb?definition=1&test_cases=1",
+      "local_path": "playground/v83Rb.json",
+      "sha256": "9ca931428d4139b6df0b60e381e46baf8bff6c10fc9a15e49ac81c7cd9fe29d7",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/v83Rb?definition=1&test_cases=1",
+      "local_path": "playground/v83Rb.md",
+      "sha256": "d8df9a1883a5e6de47e04d45e1d002ba9f096a6f7d5bfb4cb86d45d5771cfb1b",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/vEQ0?definition=1&test_cases=1",
+      "local_path": "playground/vEQ0.json",
+      "sha256": "26d352f526a2a35145d290276dc4334bafad2d828b4d66c963d06a7d22519ad3",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/vEQ0?definition=1&test_cases=1",
+      "local_path": "playground/vEQ0.md",
+      "sha256": "c3e72e858936d26f03d84936201c10b6f35a36b2781af161b7787ac388c6fc38",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/w6Qx?definition=1&test_cases=1",
+      "local_path": "playground/w6Qx.json",
+      "sha256": "ce1c034f1ea267d7a9d08ee76590647b354fe61abb568339c97c3a4ec3874384",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/w6Qx?definition=1&test_cases=1",
+      "local_path": "playground/w6Qx.md",
+      "sha256": "df2cf6eccfcf2f2e42771378a028412df1fb0398046139ca488ca7468ac1b462",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/wEQd?definition=1&test_cases=1",
+      "local_path": "playground/wEQd.json",
+      "sha256": "6ddac1c72a355f2b02653288a2df88a0bc63a01db009c9996dd0951a9a7588b7",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/wEQd?definition=1&test_cases=1",
+      "local_path": "playground/wEQd.md",
+      "sha256": "da19fda447165867826f572a063423d03e13237159ce3c385065160e010fc975",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/xG6g?definition=1&test_cases=1",
+      "local_path": "playground/xG6g.json",
+      "sha256": "cb5f9c90b23b91e2bbadcdbea4921e21c03eee30c0c423052b3154427b66a2da",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/xG6g?definition=1&test_cases=1",
+      "local_path": "playground/xG6g.md",
+      "sha256": "96a5270dafa9600a82571018fcc83be343cd9403cf63ffbf9955434295e05b98",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/yyjrx?definition=1&test_cases=1",
+      "local_path": "playground/yyjrx.json",
+      "sha256": "5bf0c1635009a7c6176237d7c740d2d4d7fb1a41ff1150beaa228ca5a60f44fc",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/yyjrx?definition=1&test_cases=1",
+      "local_path": "playground/yyjrx.md",
+      "sha256": "9e18fe0487f9f468bfe14c76759e17431de7694306a842bc7b90a36695ebd97c",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/zEXn?definition=1&test_cases=1",
+      "local_path": "playground/zEXn.json",
+      "sha256": "33ccd31a8b9cc173b6a97303be68931462665f395811caed08dbfef9e32ea0bb",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/zEXn?definition=1&test_cases=1",
+      "local_path": "playground/zEXn.md",
+      "sha256": "1d40c665b063b6503480f143f46c6731e7538f8fd4e49b10ff1da4b940809f93",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/zZx0?definition=1&test_cases=1",
+      "local_path": "playground/zZx0.json",
+      "sha256": "d212ca89c36ca6c3fcacc6a3e8a397f32288325388f14be1e836439dc96bce01",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/zZx0?definition=1&test_cases=1",
+      "local_path": "playground/zZx0.md",
+      "sha256": "0d9ea062b070f98d0a7b20469dad737fc3c6315c770c54db8e7aa8844728af5b",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/zdjnn?definition=1&test_cases=1",
+      "local_path": "playground/zdjnn.json",
+      "sha256": "beb0fda2dd98bfc5bd0a8700756e3093f79e1cf1abc77a426f1f949fd18bb20d",
+      "kind": "playground-api"
+    },
+    {
+      "url": "https://semgrep.dev/api/registry/rules/zdjnn?definition=1&test_cases=1",
+      "local_path": "playground/zdjnn.md",
+      "sha256": "49944d11368c596d675a30fb280c76bc1ddeeeb658f4a24699a1d0310dbf8ae8",
+      "kind": "playground-readable"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/data-flow/constant-propagation.md",
+      "local_path": "writing-rules/data-flow/constant-propagation.md",
+      "sha256": "35cc22dffac843aaecfb3a54cf58a4af570e9fd3b29d7a6a433aba31fbc0345f",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/data-flow/data-flow-overview.md",
+      "local_path": "writing-rules/data-flow/data-flow-overview.md",
+      "sha256": "9eb4b862236216a8bb4c7f5ae69b8701605eabbda715c5496021e95801ba16e0",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/data-flow/status.md",
+      "local_path": "writing-rules/data-flow/status.md",
+      "sha256": "056aac752f941cbf0d3ef2066f4359b4c88f1191273e27d13f44f0d22e02a3b7",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/data-flow/taint-mode/advanced.md",
+      "local_path": "writing-rules/data-flow/taint-mode/advanced.md",
+      "sha256": "43279d3bcbc0bc1011511e25d822b429f09f206f74a3b268d84137ad724b4c6f",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/data-flow/taint-mode/overview.md",
+      "local_path": "writing-rules/data-flow/taint-mode/overview.md",
+      "sha256": "2129f2c398a5e79056ef2f22f76bb8c38eed6d70bf947f560d4cf333e8d7cf2d",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/experiments/aliengrep.md",
+      "local_path": "writing-rules/experiments/aliengrep.md",
+      "sha256": "be5004086e9da00d3bc73e55270fdd5c30a3fb68026b9aaadbd6a5730009c18a",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/experiments/deprecated-experiments.md",
+      "local_path": "writing-rules/experiments/deprecated-experiments.md",
+      "sha256": "d62b68d2af984f94cfc6116b3e9442c87858b915c54553e58a56fe9ed2266f2b",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/experiments/display-propagated-metavariable.md",
+      "local_path": "writing-rules/experiments/display-propagated-metavariable.md",
+      "sha256": "9ce184f451860837d7e15125566cc25c8b1c5c56be2b31851da5dfc76b40cfd8",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/experiments/introduction.md",
+      "local_path": "writing-rules/experiments/introduction.md",
+      "sha256": "befaab073f1141437b666ccccac2381af241cd29d70b495e3d7afe8350f1e986",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/experiments/join-mode/overview.md",
+      "local_path": "writing-rules/experiments/join-mode/overview.md",
+      "sha256": "6f07e5bfdfb1a34b464ff985dc3ea746d6e4b64b747afd82b593e604d8c9f7ab",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/experiments/join-mode/recursive-joins.md",
+      "local_path": "writing-rules/experiments/join-mode/recursive-joins.md",
+      "sha256": "f10950fdc2a0b7899e3feee6dd851e818f2b929a24ab49ea5477e19b2f3b98fd",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/experiments/metavariable-type.md",
+      "local_path": "writing-rules/experiments/metavariable-type.md",
+      "sha256": "48d8c0d07eda29e0b6cc92907954a1605696c0324336dcb6721186cd93591503",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/experiments/multiple-focus-metavariables.md",
+      "local_path": "writing-rules/experiments/multiple-focus-metavariables.md",
+      "sha256": "c7b76625b22e694fe5b9bfb1e8857674d6b51f39440d16675d01372cc29d915a",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/experiments/pattern-syntax.md",
+      "local_path": "writing-rules/experiments/pattern-syntax.md",
+      "sha256": "f08df7acc682637f6a9af384a7afe0fbadce85f8be14cc8dc1231054a187acfd",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/experiments/r2c-internal-project-depends-on.md",
+      "local_path": "writing-rules/experiments/r2c-internal-project-depends-on.md",
+      "sha256": "a4f6f1d0ba84895f26df815abafedadf03bea53afdc4330b8000c7e78e2318f1",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/experiments/symbolic-propagation.md",
+      "local_path": "writing-rules/experiments/symbolic-propagation.md",
+      "sha256": "c5893833ddccea79c775432c1d007e9a32ab1f556659858705fa6d0f9c1558b8",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/generic-pattern-matching.md",
+      "local_path": "writing-rules/generic-pattern-matching.md",
+      "sha256": "47547c7d887603866fc89059362a5c10cf951576727bf9ab0b588635361c7ab7",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/glossary.md",
+      "local_path": "writing-rules/glossary.md",
+      "sha256": "a5c9eede9f764cdcc39798d3c771341660f0b9ab488782d7f7d6822edbdd40df",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/metavariable-analysis.md",
+      "local_path": "writing-rules/metavariable-analysis.md",
+      "sha256": "4eda1aeb94acc45891c35baff4d230fe5791ca334364b76814b251f53cd72082",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/overview.md",
+      "local_path": "writing-rules/overview.md",
+      "sha256": "3db4cfe6ae17bcf29465834434d552e80ff7f555926b4ef19bf6968397f39c94",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/pattern-examples.md",
+      "local_path": "writing-rules/pattern-examples.md",
+      "sha256": "dd8b3aab7f806ddb44182aa986c1e83b1935c9933cd04cf52808ce0e0ebbac2d",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/pattern-syntax.md",
+      "local_path": "writing-rules/pattern-syntax.md",
+      "sha256": "b454bda6d5d261df6db2d5b1e5e8ef48c98eaa988d31c774f3076c66faf616e3",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/private-rules.md",
+      "local_path": "writing-rules/private-rules.md",
+      "sha256": "17d625fad9d92c9863a31a1d74832e698ca716503e93e615248757826dce00eb",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/rule-defined-fix.md",
+      "local_path": "writing-rules/rule-defined-fix.md",
+      "sha256": "7bb32fcf62087eb0f9e88f7a0aafc4b1d6077e6f72a0d0c39cbc925e1072ecb3",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/rule-ideas.md",
+      "local_path": "writing-rules/rule-ideas.md",
+      "sha256": "e75d7851c5ec98dd9165f799e6283cc21f98a5fb41d57a5406767cbad738a571",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/rule-syntax.md",
+      "local_path": "writing-rules/rule-syntax.md",
+      "sha256": "5b46d01f7cb2301592367146a57efa4150da40f00dc6ff68ab68e3a4f73b7b27",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/testing-rules.md",
+      "local_path": "writing-rules/testing-rules.md",
+      "sha256": "0b4340ea98682a21f61ad8e2bce8e483d526c4a12db8f73367286348ef786a7f",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/troubleshooting/rules.md",
+      "local_path": "troubleshooting/rules.md",
+      "sha256": "e7a98f98a4f256ce7447569234c8c0770109ab72135ae5e051db8325ed32cfc2",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/overview-1.md",
+      "local_path": "writing-rules/overview-1.md",
+      "sha256": "21fc1d6ad086d14df710e24f0c0bd5eb8b0a06a3816c7459d94442556c36ecb8",
+      "kind": "documentation"
+    },
+    {
+      "url": "https://semgrep.dev/static/src-B5YEPFlv.js",
+      "local_path": "playground/cheatsheet.json",
+      "sha256": "f6144cf664705619a567eecef65c8744e6f8557c98ec07b3271da73765f582e8",
+      "kind": "cheatsheet-static-data"
+    },
+    {
+      "url": "https://semgrep.dev/static/src-B5YEPFlv.js",
+      "local_path": "playground/cheatsheet.md",
+      "sha256": "df37b155c84322c1d55cc82b38e8b7721516521e2dbca329e62823962aa2f58f",
+      "kind": "cheatsheet-readable"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/",
+      "local_path": "TOOLTIPS.md",
+      "sha256": "f05048a7865e5216a1228d33da2b15b09e57e779b2748af73f0415af3d677588",
+      "kind": "resolved-tooltip-prose"
+    },
+    {
+      "url": "https://docs.semgrep.dev/writing-rules/",
+      "local_path": "INDEX.md",
+      "sha256": "855dbb0fdd593f95323963a5ffea9d4d9ecc703d449218a4b29f3c130af64431",
+      "kind": "local-index"
+    }
+  ]
+}
