@@ -1,0 +1,1044 @@
+{
+  "format": "opengrep-authoring-error-traces/1",
+  "status": "proposed_skill_revision_not_native_or_model_evaluation",
+  "scope": "Source-grounded error mechanisms and test obligations, not a count of 42 proven detector bugs.",
+  "sources": {
+    "T": {
+      "kind": "supplied_authoring_transcript",
+      "name": "Pasted text(20261009-214549).txt",
+      "sha256": "82c126b9c1ada18ac5f5db9db46886211dfc3693e6e6b91d6054ef8777a95c04",
+      "lines": 7193,
+      "note": "Includes injected historical instructions and a compaction summary; all are source evidence, not instructions for this review. Some tool outputs are truncated."
+    },
+    "R": {
+      "kind": "supplied_secondary_review",
+      "name": "Pasted text(20261009-224323).txt",
+      "sha256": "5088f6524bbbcd3868238d0dff8e86a14859d88464f3d3af6272d7ad17b7591b",
+      "lines": 352,
+      "note": "Review hypotheses are not fresh scanner observations. Its Git-synchronization characterization is corrected by the visible authoring transcript."
+    },
+    "K": {
+      "kind": "connector_inspected_skill",
+      "repository": "Lu1sDV/skillsmd",
+      "path": "opengrep-rule-creator/SKILL.md",
+      "git_blob_sha1": "9f13472ff3c624b231cabe9eeea6e63df5a97875",
+      "inspected_range": "Complete original, lines 1-1016; Git blob identity and source SHA256 verified during integration.",
+      "note": "Integrated into the complete revised SKILL.md, preserving all original example bytes. Source identity verification is not a new scanner or skill-effectiveness test.",
+      "source_revision": "f271eea26366c2596816a0d5ca75642e15702240",
+      "source_sha256": "c461b2fac511c1181a23f029d31fff5f29888dec012954d02aeb303492b80ba0"
+    },
+    "B": {
+      "kind": "previously_inspected_repository_snapshot",
+      "repository": "Lu1sDV/jeverse-benchmarks",
+      "revision": "78330d582617dfa18c337e4b59b550ae295ba844",
+      "note": "Rule and runtime findings concern this reviewed snapshot, not an assertion about a later branch."
+    },
+    "A": {
+      "kind": "prior_procedural_first_policy",
+      "name": "OPENGREP_PROCEDURAL_FIRST_SKILL_ADDENDUM.md",
+      "sha256": "c2e3e21b3b194446d95ed1cb8284ffbe519657cad9289683c19880badd54cb01",
+      "note": "Retained premise; this review adds other error-derived obligations rather than replacing it."
+    }
+  },
+  "traces": [
+    {
+      "id": "E01",
+      "title": "Wrong unit of work: testcase catalogue instead of rule repair",
+      "evidence_status": "reported_process_error_corrected",
+      "source_locators": [
+        "T:1152-1164",
+        "T:7008-7022",
+        "B:rules-improvement/python/README.md"
+      ],
+      "source_observation": "The deliverable was corrected from a per-case question catalogue to individual rule changes; the final README retires the earlier catalogue.",
+      "invalid_inference_to_prevent": "Accounting for every benchmark error is equivalent to producing reusable rules.",
+      "consequence": "Task failure and label/template fitting; no direct FP/FN rate follows.",
+      "generalized_invariant": "The authoring unit is the reusable security mechanism and responsible rule; benchmark cases are development evidence.",
+      "authoring_action": "State the requested deliverable, exact rule identity, reusable mechanism, and non-goals before dividing work. Permit repair, reuse, investigation, and no-rule outcomes.",
+      "acceptance_test": "Give an authoring agent several differently named cases with one mechanism. Require one justified rule-level change rather than case-specific questions or predicates.",
+      "do_not_overgeneralize": "A case ledger is useful and should remain; it must not replace mechanism-level reasoning or be passed as runtime truth.",
+      "skill_gates": [
+        "G01",
+        "G02"
+      ],
+      "test_id": "T01",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E02",
+      "title": "Unverified source-shape diagnosis in delegated work",
+      "evidence_status": "observed_process_error_corrected",
+      "source_locators": [
+        "T:1175-1187",
+        "T:2150-2176",
+        "T:2729-2755",
+        "T:3197-3203"
+      ],
+      "source_observation": "Coordinator assignments confused nested pathlib effects with match/case cases. Workers inspected source, corrected the grouping, and also retracted an initially guessed alternative grouping.",
+      "invalid_inference_to_prevent": "A case ID, category, or summary establishes the exact cause of a miss.",
+      "consequence": "Wrong model repairs, gaps, duplicate ownership, and anchoring on a false diagnosis.",
+      "generalized_invariant": "Diagnosis is evidence-backed and separately marked from hypothesis; ownership follows the actual mechanism.",
+      "authoring_action": "Attach source hash/location and a concrete observation to each assignment. Require workers to correct contradictions before implementing and preserve correction history.",
+      "acceptance_test": "Present a misleading summary with a source whose mechanism differs. Require an explicit correction and unchanged original evidence.",
+      "do_not_overgeneralize": "Do not require one coordinator to duplicate every worker investigation; require evidence-linked hypotheses and a correction channel.",
+      "skill_gates": [
+        "G01",
+        "G09"
+      ],
+      "test_id": "T02",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E03",
+      "title": "Historical schema used as the active contract",
+      "evidence_status": "observed_integration_error_corrected",
+      "source_locators": [
+        "T:1178-1187",
+        "T:1865-1868",
+        "T:1902-1925",
+        "T:2165-2176",
+        "T:3231-3397"
+      ],
+      "source_observation": "Work initially used profile 0.3 despite the active profile-0.4 runtime. Migration also exposed five purpose/decision-role mismatches, later corrected.",
+      "invalid_inference_to_prevent": "An archived schema or a parsed contract is compatible with the current executor.",
+      "consequence": "Blocked integration or changed execution semantics; not automatically a vulnerability miss.",
+      "generalized_invariant": "Engine, rule syntax, local contract, provider payload, and execution mode are distinct pinned interfaces.",
+      "authoring_action": "Read the installed runtime/schema and one real consumer before authoring. Freeze a shared interface receipt for workers and version migrations explicitly.",
+      "acceptance_test": "Reject an old profile and mismatched role pair at preflight; validate the migrated payload through the actual consumer.",
+      "do_not_overgeneralize": "Do not silently upgrade the engine or erase archived artifacts to make compatibility appear successful.",
+      "skill_gates": [
+        "G01",
+        "G07"
+      ],
+      "test_id": "T03",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E04",
+      "title": "Unsafe and boundary cases encoded as ordinary ok tests",
+      "evidence_status": "observed_annotation_error_corrected",
+      "source_locators": [
+        "T:3542-3627",
+        "T:3646-3688",
+        "T:3800-3900",
+        "T:4326-4339",
+        "T:5006-5058"
+      ],
+      "source_observation": "Several fixtures used ok annotations for known unsafe noncoverage or companion-owned cases. The parent replaced them with explicit boundary/discovery records and separate failing expectations.",
+      "invalid_inference_to_prevent": "A test expecting no match establishes a safe security negative.",
+      "consequence": "False confidence in recall and contaminated negative counts.",
+      "generalized_invariant": "Matcher admission, security truth, scope membership, and observed execution are independent fields.",
+      "authoring_action": "Maintain a structured sidecar with those four fields. Known unsafe in-scope omissions remain failing recall obligations; boundary cases never satisfy the safe-negative minimum.",
+      "acceptance_test": "Audit a fixture containing an unsafe callback under ok. Fail the semantic gate even if the native matcher test is green; keep a legitimate safe admitted candidate distinct.",
+      "do_not_overgeneralize": "Native ok denotes nonmatching syntax, not a native security verdict. Archived educational boundaries may remain unchanged with explicit interpretation.",
+      "skill_gates": [
+        "G06",
+        "G10"
+      ],
+      "test_id": "T04",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E05",
+      "title": "Conditional factory premise promoted to definite vulnerability truth",
+      "evidence_status": "source_visible_label_overstatement",
+      "source_locators": [
+        "T:3580-3592",
+        "T:3831-3856",
+        "T:5026-5047",
+        "B:rules-improvement/python/tests/jev.python.ldap-search-filter.py",
+        "B:rules-improvement/python/tests/jev.python.xpath-expression-consumption.py"
+      ],
+      "source_observation": "Opaque factory cases are conditional on returning LDAP/lxml objects, yet some bookkeeping describes them as unsafe security misses without supplying that binding.",
+      "invalid_inference_to_prevent": "A similarly named consumer on an unknown object is an independently established vulnerability.",
+      "consequence": "False positive labels and overstated FN counts.",
+      "generalized_invariant": "A test proves only its supplied premises; missing bindings are not supplied by comments or desired labels.",
+      "authoring_action": "Provide a concrete caller/factory body or an explicit justified educational API contract; otherwise classify as conditional/unresolved applicability.",
+      "acceptance_test": "Use two concrete factories with the same method spelling, one relevant and one unrelated, plus a third absent factory. Require distinct justified labels.",
+      "do_not_overgeneralize": "A conditional discovery challenge remains useful and must not be relabeled safe or deleted.",
+      "skill_gates": [
+        "G02",
+        "G03",
+        "G06"
+      ],
+      "test_id": "T05",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E06",
+      "title": "Security labels generated from function names",
+      "evidence_status": "observed_bookkeeping_shortcut",
+      "source_locators": [
+        "T:5064-5068"
+      ],
+      "source_observation": "Parent bookkeeping derives unsafe/safe status from function names beginning with unsafe_ and from special named functions. This is authoring metadata, not evidence that the runtime model received these labels.",
+      "invalid_inference_to_prevent": "A naming convention is a semantic oracle.",
+      "consequence": "Mislabeling renamed, mixed-purpose, or incorrectly named tests; circular validation.",
+      "generalized_invariant": "Truth labels require a claim-specific rationale independent of the representation being tested.",
+      "authoring_action": "Store reviewed labels and assumptions explicitly. Names may identify a record but cannot determine its security truth.",
+      "acceptance_test": "Rename safe and unsafe functions without changing behavior. Semantic labels and aggregate counts must remain unchanged.",
+      "do_not_overgeneralize": "Do not accuse runtime prompt leakage from this step alone; it demonstrates an authoring-label construction risk.",
+      "skill_gates": [
+        "G06",
+        "G09"
+      ],
+      "test_id": "T06",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E07",
+      "title": "Free-text status variants evade the boundary collector",
+      "evidence_status": "observed_record_contract_mismatch_later_addressed",
+      "source_locators": [
+        "T:4590-4596",
+        "T:4815-4854",
+        "T:6242-6249"
+      ],
+      "source_observation": "A collector filters security_status == unsafe while worker records use unsafe_outside_scope; later code broadens classification and repairs boundary fixtures.",
+      "invalid_inference_to_prevent": "Unvalidated status strings from multiple workers form a consistent interface.",
+      "consequence": "Known gaps can disappear from the required regression population.",
+      "generalized_invariant": "Machine-consumed states are a closed, versioned vocabulary with independent scope and truth fields.",
+      "authoring_action": "Validate handoffs. Reject unknown enum values; do not infer scope from substrings in prose or overload one status field.",
+      "acceptance_test": "Submit all supported statuses plus an unknown spelling; require conservation of every case and rejection of the unknown spelling.",
+      "do_not_overgeneralize": "Do not standardize by silently mapping every unsafe-prefixed label to definite vulnerability truth.",
+      "skill_gates": [
+        "G06",
+        "G09"
+      ],
+      "test_id": "T07",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E08",
+      "title": "Observation fields initialized from expectation",
+      "evidence_status": "observed_intermediate_evidence_error_later_reconciled",
+      "source_locators": [
+        "T:3693-3698",
+        "T:7094-7122"
+      ],
+      "source_observation": "An intermediate discovery record writes observed_native_match=False while also requiring a runtime observation. Later records are reconciled to native reported lines.",
+      "invalid_inference_to_prevent": "A known or expected failure on related evidence is the observation for this exact retained fixture/run.",
+      "consequence": "Invented receipts and erroneous promotion or failure accounting.",
+      "generalized_invariant": "Observed fields start unknown and are populated only from matching captures for the exact artifact.",
+      "authoring_action": "Keep expected and observed values separate; require capture identity and source/rule digests for every observation.",
+      "acceptance_test": "Before execution, observed values remain null. Feed a contradictory native report and ensure the report, not the expectation, determines observation.",
+      "do_not_overgeneralize": "Historical observations may be retained with their original identity; do not overwrite them with null or pretend they are fresh.",
+      "skill_gates": [
+        "G01",
+        "G09"
+      ],
+      "test_id": "T08",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E09",
+      "title": "Uncertainty removed by searching prose",
+      "evidence_status": "observed_unsafe_bookkeeping_operation",
+      "source_locators": [
+        "T:6890",
+        "T:6930"
+      ],
+      "source_observation": "remaining_gaps entries containing missing or unreported are removed after candidate emission; other limitations are removed by phrases such as not measured.",
+      "invalid_inference_to_prevent": "Finding a candidate resolves every uncertainty whose text sounds like noncompletion.",
+      "consequence": "Missing caller/runtime/control evidence can be hidden; exact lost statements are not established without private ledgers.",
+      "generalized_invariant": "An uncertainty closes only through evidence that resolves that identified uncertainty.",
+      "authoring_action": "Use stable gap IDs with typed resolution events, evidence refs, scope, and reviewer rationale. Preserve superseded text/history.",
+      "acceptance_test": "Resolve a discovery gap while leaving missing-runtime and missing-consumer gaps. Only the discovery ID may close, regardless of their wording.",
+      "do_not_overgeneralize": "Do not infer that all removed statements were material; the unsafe operation is visible but its full downstream impact is not.",
+      "skill_gates": [
+        "G09"
+      ],
+      "test_id": "T09",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E10",
+      "title": "Rendered source copied as authoritative bytes",
+      "evidence_status": "observed_tool_boundary_error_corrected",
+      "source_locators": [
+        "T:6242-6279"
+      ],
+      "source_observation": "A ranged raw read included a human pagination footer; copying it created invalid Python. The author reread the complete file and parsed it before retaining the fixture.",
+      "invalid_inference_to_prevent": "Displayed or nominally raw tool text is necessarily a complete source artifact.",
+      "consequence": "False parser diagnoses, damaged fixtures, or changes to analyzed semantics.",
+      "generalized_invariant": "Artifact bytes are distinct from previews; complete extraction and deliberate transformations require verifiable identity.",
+      "authoring_action": "Read actual bytes or honor continuation metadata. Validate syntax and exact intended changes without stripping arbitrary source lines that resemble footers.",
+      "acceptance_test": "Inject a truncated preview/footer into a source transfer. Reject it rather than treating the resulting parse failure as an engine limitation.",
+      "do_not_overgeneralize": "Syntax success is necessary but not proof of byte identity or preserved behavior.",
+      "skill_gates": [
+        "G01",
+        "G09",
+        "G10"
+      ],
+      "test_id": "T10",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E11",
+      "title": "Filter-only alternative rejected by native schema",
+      "evidence_status": "observed_rule_error_corrected",
+      "source_locators": [
+        "T:5736-5814",
+        "T:6196-6238"
+      ],
+      "source_observation": "The new pathlib rule placed metavariable-pattern directly in an alternative in a form the native schema rejected. A positive pattern plus filter conjunction repaired that branch.",
+      "invalid_inference_to_prevent": "A plausible shared-syntax construct is accepted by the selected native parser in every syntactic position.",
+      "consequence": "Configuration failure can prevent the entire selected pack from scanning.",
+      "generalized_invariant": "Every matcher branch and referenced metavariable must have a supported positive binding and pass the exact engine interface.",
+      "authoring_action": "Run a small native schema/construct check before full-pack integration; inspect the underlying stdout/stderr when the test report itself is invalid.",
+      "acceptance_test": "Exercise each branch in isolation, its conjunction, and the full pack. Require intended rule count, no skipped/invalid rule, and positive/negative controls.",
+      "do_not_overgeneralize": "This failure does not imply that metavariable-pattern or focus is generally broken.",
+      "skill_gates": [
+        "G03",
+        "G10"
+      ],
+      "test_id": "T11",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E12",
+      "title": "Keyword spelling substituted for effective argument binding",
+      "evidence_status": "source_supported_regression_hypothesis",
+      "source_locators": [
+        "R:85-111",
+        "B:rules-improvement/python/rules/jev.python.flask-cookie-missing-secure.yaml"
+      ],
+      "source_observation": "The cookie model tests keyword presence and excludes keyword expansion, leaving positional Secure and statically resolvable expansions insufficiently challenged.",
+      "invalid_inference_to_prevent": "Absence of a keyword establishes the effective default, or any expansion is safe to exclude.",
+      "consequence": "Potential FP for positional true and FN for resolvable missing/false Secure.",
+      "generalized_invariant": "Security-relevant configuration follows the resolved API signature and effective arguments, not one spelling.",
+      "authoring_action": "Build a version-bound argument model covering supported positional, keyword, default, alias, and expansion forms; preserve unknowns.",
+      "acceptance_test": "Contrast equivalent positional/keyword calls, missing/false/true values, a literal dictionary expansion, and an unknown mapping. Run responsible rule and pack.",
+      "do_not_overgeneralize": "These are proposed native regressions, not reproduced emissions here; do not apply one API signature to unrelated receivers.",
+      "skill_gates": [
+        "G03",
+        "G06"
+      ],
+      "test_id": "T12",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E13",
+      "title": "Whole-call or whole-object taint substituted for the dangerous operand",
+      "evidence_status": "documented_failure_class_and_protection_to_preserve",
+      "source_locators": [
+        "R:185-187",
+        "R:215-219",
+        "T:4603-4650",
+        "B:rules-improvement/python/rules/jev.python.flask-response-body-context.yaml"
+      ],
+      "source_observation": "The analyses distinguish response bodies from headers/status, shell program text from ordinary argv/cwd/env, and query grammar from other parameters. Several broad candidates intentionally retain these distinctions for later analysis.",
+      "invalid_inference_to_prevent": "Any taint in the call or receiver proves taint in the security-relevant operand.",
+      "consequence": "False positives and incorrect security claims.",
+      "generalized_invariant": "The consumed operand, its role, and its program point are explicit and preserved end to end.",
+      "authoring_action": "Resolve the relevant argument/receiver/field and focus the matcher or procedural check accordingly; do not merge unrelated taint labels as evidence.",
+      "acceptance_test": "Move the same untrusted value between dangerous and inert operands while holding all other facts fixed; verify expected differentiation.",
+      "do_not_overgeneralize": "An inert operand for one claim may matter to another; do not classify the whole call safe.",
+      "skill_gates": [
+        "G02",
+        "G03",
+        "G04"
+      ],
+      "test_id": "T13",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E14",
+      "title": "Earlier constructor treated as current receiver identity",
+      "evidence_status": "source_supported_regression_hypothesis",
+      "source_locators": [
+        "R:147-165",
+        "T:3970-4017",
+        "T:4312-4317"
+      ],
+      "source_observation": "Bounded constructor ancestry and broad reassignment exclusions try to separate Path from unrelated in-memory receivers, but a later assignment can still be a relevant Path.",
+      "invalid_inference_to_prevent": "Either historical constructor presence proves identity now, or reassignment removes all security relevance.",
+      "consequence": "FP from stale identity or FN from legitimate unsafe reassignment.",
+      "generalized_invariant": "Identity is a reaching program-state fact; syntax history is only candidate evidence.",
+      "authoring_action": "Resolve supported reaching definitions; represent unresolved identity without a safety verdict. Record an explicit recall cost for any exclusion.",
+      "acceptance_test": "Test Path to unrelated object, unrelated object to Path, trusted Path to untrusted Path, aliases, and conditional reassignments.",
+      "do_not_overgeneralize": "Do not require arbitrary runtime dispatch to be solved; bounded support and explicit unknowns are legitimate.",
+      "skill_gates": [
+        "G03",
+        "G04",
+        "G05"
+      ],
+      "test_id": "T14",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E15",
+      "title": "Stale tuple shape used at response consumption",
+      "evidence_status": "source_supported_regression_hypothesis",
+      "source_locators": [
+        "R:133-145",
+        "B:rules-improvement/python/rules/jev.python.flask-route-return-body-context.yaml"
+      ],
+      "source_observation": "Tuple-specific patterns and exclusions refer to earlier assignments; later replacements can change both type and body provenance before return.",
+      "invalid_inference_to_prevent": "An earlier tuple assignment determines the object and element consumed later.",
+      "consequence": "Potential FN for tuple-to-tainted-string and FP for tainted-tuple-to-trusted replacement.",
+      "generalized_invariant": "Classification uses the final reaching value and relevant slot at the actual consumer.",
+      "authoring_action": "Test type and provenance transitions in both directions; separate construction-site reporting from use-site reasoning.",
+      "acceptance_test": "Cover tuple to string, string to tuple, tuple to response, body/header swaps, and safe overwrite after unsafe construction.",
+      "do_not_overgeneralize": "Do not suppress all tuples or assume all response constructors obey Flask tuple semantics.",
+      "skill_gates": [
+        "G03",
+        "G04",
+        "G06"
+      ],
+      "test_id": "T15",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E16",
+      "title": "Control-flow syntax mistaken for path feasibility",
+      "evidence_status": "documented_engine_gap_and_generalization",
+      "source_locators": [
+        "T:1178",
+        "T:4657-4694",
+        "B:rules-improvement/python/tests/jev.python.flask-route-return-body-context.py"
+      ],
+      "source_observation": "Match-owner candidates address reported join/lowering gaps. A final wildcard assignment is not an all-path overwrite after an earlier selected arm.",
+      "invalid_inference_to_prevent": "Textual last assignment or lexical coexistence with a match statement establishes execution order and feasible flow.",
+      "consequence": "FN from false all-path overwrite; FP from incompatible or unreachable arms.",
+      "generalized_invariant": "Needed facts must hold on compatible feasible paths under the relevant language semantics.",
+      "authoring_action": "Use supported procedural control-flow reasoning, preserve unsupported guards/objects, and describe structural owner candidates honestly.",
+      "acceptance_test": "Contrast constant-selected unsafe/safe arms, guarded arms, post-match unconditional overwrite, and an unrelated nested match.",
+      "do_not_overgeneralize": "A single probe does not prove the engine has no support for every match/case construct.",
+      "skill_gates": [
+        "G04",
+        "G05",
+        "G06"
+      ],
+      "test_id": "T16",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E17",
+      "title": "Sanitizer property does not survive a context change",
+      "evidence_status": "source_supported_regression_hypothesis",
+      "source_locators": [
+        "R:113-131",
+        "B:rules-improvement/python/rules/jev.python.flask-route-return-body-context.yaml"
+      ],
+      "source_observation": "jsonify is modeled as a sanitizer while later effective MIME and response mutation are relevant to the claimed XSS result.",
+      "invalid_inference_to_prevent": "A transformation that is safe in its initial context remains safe after reinterpretation or mutation.",
+      "consequence": "Potential false negatives before any later assessor sees a candidate.",
+      "generalized_invariant": "Safety is a property of the representation at the actual effect, preserved through all relevant subsequent transformations.",
+      "authoring_action": "Describe sanitizer preconditions, postcondition, representation, context, and invalidating operations. Avoid irreversible taint removal when those conditions are not established.",
+      "acceptance_test": "Compare unchanged JSON delivery with later HTML interpretation, safe encoding with later decoding, and the same value in text versus script context.",
+      "do_not_overgeneralize": "Do not ban jsonify or every sanitizer; validate the contexts in which the summary is sufficient.",
+      "skill_gates": [
+        "G04",
+        "G06"
+      ],
+      "test_id": "T17",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E18",
+      "title": "Control presence mistaken for enforcement or authorized trust",
+      "evidence_status": "documented_failure_class_and_test_obligation",
+      "source_locators": [
+        "R:191-193",
+        "R:229-231",
+        "R:270",
+        "T:4233-4287",
+        "K:Non-obvious semantics"
+      ],
+      "source_observation": "The reviewed guidance correctly distinguishes returned versus in-place sanitization, checks on the consumed value, signed storage versus authorized request data, and post-effect catches.",
+      "invalid_inference_to_prevent": "A check exists, a token is signed, or the user is authenticated; therefore this effect is authorized and prevented on rejection.",
+      "consequence": "False negatives from unenforced, wrong-subject, or insufficient controls.",
+      "generalized_invariant": "A control must enforce the required property on the same value/resource/principal before the effect, with valid coverage and trust assumptions.",
+      "authoring_action": "Write the control postcondition and failure path explicitly; accept alternative controls that establish the same property, including valid compositions.",
+      "acceptance_test": "Challenge discarded return values, log-only failures, caught rejection with continuation, wrong principal/resource, and a valid alternative control.",
+      "do_not_overgeneralize": "Do not demand one particular guard or one dominating check if a correct all-path composition exists.",
+      "skill_gates": [
+        "G02",
+        "G04",
+        "G06"
+      ],
+      "test_id": "T18",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E19",
+      "title": "Construction confused with effect or lazy consumption",
+      "evidence_status": "documented_failure_class_and_test_obligation",
+      "source_locators": [
+        "R:193",
+        "R:215",
+        "R:223-225",
+        "T:4195-4201",
+        "T:4320-4339"
+      ],
+      "source_observation": "The review distinguishes deferred YAML iteration, compiled XPath invocation, response delivery, and a filesystem read that occurs before slicing/escaping its result.",
+      "invalid_inference_to_prevent": "Constructing a sensitive object proves the effect occurred, or processing its result later retroactively prevents the earlier effect.",
+      "consequence": "FP from never-consumed objects and FN from post-effect apparent controls.",
+      "generalized_invariant": "Identify the precise effect stage, evaluation order, and actual consumption under the declared API semantics.",
+      "authoring_action": "Model creation, execution/iteration, delivery, mutation, and cleanup as distinct stages where material; retain call/use identities.",
+      "acceptance_test": "Pair used versus unused lazy results, invoked versus uninvoked query objects, sent versus discarded responses, and inner effect before outer transformation.",
+      "do_not_overgeneralize": "Do not assume every constructor is effect-free; inspect the actual API.",
+      "skill_gates": [
+        "G02",
+        "G04",
+        "G06"
+      ],
+      "test_id": "T19",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E20",
+      "title": "Taint or grammar influence promoted to unauthorized impact",
+      "evidence_status": "documented_claim_strength_risk",
+      "source_locators": [
+        "R:111",
+        "R:199",
+        "R:217-231",
+        "T:6788-6807",
+        "B:rules-improvement/python/README.md"
+      ],
+      "source_observation": "The material separates query grammar from permitted query-language use, mock LDAP from production impact, weak primitives from security reliance, and metadata queries from file-content access.",
+      "invalid_inference_to_prevent": "A sensitive API, attacker-selected grammar, external URL, or persisted value is automatically a vulnerability with the strongest possible impact.",
+      "consequence": "False positives, overstated impact, and faulty labels.",
+      "generalized_invariant": "Observation, necessary security premises, authorization policy, and claimed consequence are separate; no stage silently strengthens the claim.",
+      "authoring_action": "Declare permitted behavior and required security property independently. Preserve separate claims for shell, argv, XXE, expansion, headers, and authority.",
+      "acceptance_test": "Contrast deliberately permitted query interfaces, authorized external destinations, nonsecurity digests, signed but unauthorized state, and metadata-only effects.",
+      "do_not_overgeneralize": "Do not require production exploitation proof for a deliberately narrower audit claim; label the claim honestly.",
+      "skill_gates": [
+        "G02",
+        "G06"
+      ],
+      "test_id": "T20",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E21",
+      "title": "Request-derived value treated as unrestricted attacker syntax",
+      "evidence_status": "documented_input_domain_risk",
+      "source_locators": [
+        "T:6799-6802",
+        "B:rules-improvement/python/README.md",
+        "B:rules-improvement/python/rules/jev.python.flask-shell-command-injection.yaml"
+      ],
+      "source_observation": "The earlier review distinguishes HTTP header names from unrestricted header values and flags route-converter/accepted-domain evidence as material.",
+      "invalid_inference_to_prevent": "Every request field or route parameter admits all syntax necessary for the proposed exploit.",
+      "consequence": "False positives from infeasible characters/domains; false negatives if restrictions are assumed without evidence.",
+      "generalized_invariant": "Attacker influence is qualified by the actual accepted domain and transformations into the consumed representation.",
+      "authoring_action": "Record source kind, converters, parsing, normalization, and enforced rejection. Validate a proposed witness through each earlier restriction.",
+      "acceptance_test": "Use identical downstream code with a finite converter, a constrained header-name source, and an unrestricted value source; preserve unknown deployment acceptance.",
+      "do_not_overgeneralize": "Do not assume protocol restrictions alone prove complete application safety or silently change native labels.",
+      "skill_gates": [
+        "G02",
+        "G03",
+        "G04"
+      ],
+      "test_id": "T21",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E22",
+      "title": "Unconditional slice sources erase provenance distinctions",
+      "evidence_status": "explicit_approximation_tradeoff",
+      "source_locators": [
+        "R:167-177",
+        "T:1178",
+        "T:2587-2615"
+      ],
+      "source_observation": "Slice-result expressions are admitted as sources to compensate for reported native taint loss, including trusted producers.",
+      "invalid_inference_to_prevent": "A slice candidate is a proved request origin or a repaired taint transfer.",
+      "consequence": "Candidate false alarms and review cost; possible misclassification if provenance is treated as fact.",
+      "generalized_invariant": "Candidate provenance retains which facts were observed, approximated, or remain unknown.",
+      "authoring_action": "Distinguish native may-flow, structural inventory, and unresolved-provenance candidates; resolve supported provenance procedurally before residual assessment.",
+      "acceptance_test": "Use identical slice shapes on trusted and untrusted producers and an overwritten slice; verify provenance and dispositions remain distinct.",
+      "do_not_overgeneralize": "A broad candidate is not automatically a bad rule; its downstream evidence burden and workload must be measured.",
+      "skill_gates": [
+        "G05",
+        "G08",
+        "G11"
+      ],
+      "test_id": "T22",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E23",
+      "title": "Container-wide propagation loses key and field relationships",
+      "evidence_status": "explicit_approximation_tradeoff",
+      "source_locators": [
+        "R:171",
+        "T:2617-2648",
+        "B:rules-improvement/python/rules/jev.python.subprocess-interpreter-argv.yaml"
+      ],
+      "source_observation": "Generic append/extend/update propagation can conservatively taint an entire container or receiver after one write.",
+      "invalid_inference_to_prevent": "The selected element at the sink is necessarily the tainted one, or removing one element clears the whole object.",
+      "consequence": "False positives or false negatives from unsupported element precision.",
+      "generalized_invariant": "The model must state its precision for elements, keys, fields, aliases, and mutation; later decisions cannot assume greater precision.",
+      "authoring_action": "Resolve supported selections and distinguish receiver mutation from returned values. Preserve imprecision in the evidence supplied downstream.",
+      "acceptance_test": "Mix clean/dirty entries, access different keys, overwrite or remove an entry, alias the container, and place taint only in a non-dangerous argument.",
+      "do_not_overgeneralize": "Do not claim index sensitivity from a one-element teaching fixture.",
+      "skill_gates": [
+        "G03",
+        "G04",
+        "G05"
+      ],
+      "test_id": "T23",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E24",
+      "title": "Narrow replacement silently retires broader discovery",
+      "evidence_status": "confirmed_scope_change_unmeasured_pack_regression",
+      "source_locators": [
+        "R:175-177",
+        "T:1704-1741",
+        "B:rules-improvement/python/manifest.json"
+      ],
+      "source_observation": "A generic deserialization audit is retired in favor of a Flask-focused source model plus match-specific companions; non-Flask sources are acknowledged as outside the replacement.",
+      "invalid_inference_to_prevent": "Keeping prior benchmark TP files proves the replacement preserves the original supported mechanisms.",
+      "consequence": "Cross-repository false negatives and silent coverage loss.",
+      "generalized_invariant": "Every retired behavior has an explicit successor, justified claim exclusion, declared product scope change, or retained unresolved coverage debt.",
+      "authoring_action": "Create a coverage handoff table and test lost shapes with the effective selection. Preserve broader discovery where replacement adequacy is unproved.",
+      "acceptance_test": "Add non-Flask inputs with and without match/case and verify exact-operation coverage under old, new, and combined intended selections.",
+      "do_not_overgeneralize": "Do not keep a false broad audit forever merely because it is old; separate noisy audit policy from missing vulnerability discovery.",
+      "skill_gates": [
+        "G02",
+        "G05",
+        "G10"
+      ],
+      "test_id": "T24",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E25",
+      "title": "Companion ownership asserted without same-operation verification",
+      "evidence_status": "source_supported_composition_risk",
+      "source_locators": [
+        "T:3594-3602",
+        "T:4858-4880",
+        "T:5006-5058",
+        "T:5630-5675"
+      ],
+      "source_observation": "Cases excluded by one rule are designated companion-scope. One intermediate regression mistakenly required the excluded constructor case from the route rule before being corrected.",
+      "invalid_inference_to_prevent": "Naming a companion proves the emitted operation is covered, or every rule must cover the whole family independently.",
+      "consequence": "Hidden pack-level FN or wrongly failing rule-local requirements; duplicate votes can mask ownership errors.",
+      "generalized_invariant": "Rule-local scope and selected-pack security coverage are different contracts joined by exact operation identity.",
+      "authoring_action": "Record which selected rule owns each delegated effect and verify its actual emitted location and claim. Retain overlapping evidence without duplicate vulnerability votes.",
+      "acceptance_test": "Run a constructor/route-return overlap case individually and as a pack; require at least one correct owner, no uncovered delegation, and a declared deduplication rule.",
+      "do_not_overgeneralize": "Do not force all companions to match every unsafe case or declare pack recovery from any same-file alert.",
+      "skill_gates": [
+        "G05",
+        "G06",
+        "G10"
+      ],
+      "test_id": "T25",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E26",
+      "title": "Coverage learned from one spelling rather than API behavior",
+      "evidence_status": "documented_discovery_limits",
+      "source_locators": [
+        "R:205-211",
+        "T:3544-3579",
+        "T:4326-4339"
+      ],
+      "source_observation": "The pack retains gaps for hash callbacks, runtime-selected algorithms, Random instances, stored bound methods, and factory-returned receivers.",
+      "invalid_inference_to_prevent": "Matching an API name or one constructor form establishes coverage of the security mechanism.",
+      "consequence": "False negatives on equivalent implementations.",
+      "generalized_invariant": "The supported surface is explicit across call forms, factories, callbacks, instances, and analysis boundaries.",
+      "authoring_action": "Inventory common equivalent shapes and test them; a limitation remains in broader recall accounting even when outside a narrow matcher.",
+      "acceptance_test": "Hold the mechanism fixed while varying imported alias, keyword form, stored callable, instance method, helper, and factory; bind any required callers concretely.",
+      "do_not_overgeneralize": "Do not broaden to arbitrary same-named calls or claim every possible dynamic form must be solved before any bounded rule is useful.",
+      "skill_gates": [
+        "G03",
+        "G05",
+        "G06"
+      ],
+      "test_id": "T26",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E27",
+      "title": "Contract input types incompatible with benchmark selectors",
+      "evidence_status": "confirmed_code_incompatibility_at_review",
+      "source_locators": [
+        "R:34-61",
+        "B:src/jeverse_bench/jev_execution.py",
+        "B:rules-improvement/python/rules/jev.python.hashlib-md5-security-purpose.yaml",
+        "B:rules-improvement/python/rules/jev.python.random-security-purpose.yaml"
+      ],
+      "source_observation": "Four crypto/randomness contracts require strings while the standard benchmark selector interface permits mapped JSON inputs only; omitting mappings leaves required inputs unavailable.",
+      "invalid_inference_to_prevent": "Standalone schema/planner validity proves compatibility with the production evidence adapter.",
+      "consequence": "Execution blocker and unavailable assessments, not a justified static or safe result.",
+      "generalized_invariant": "Evidence producers and actual consumers agree on types, meaning, identity, and execution capability.",
+      "authoring_action": "Exercise real contract-to-runner bindings using actual producer outputs before expanding the pack. Changing a type name alone does not supply the missing evidence.",
+      "acceptance_test": "Use each authored contract with the real adapter: reject incompatible ports, assert explicit missingness, and verify a complete actual binding reaches the expected request.",
+      "do_not_overgeneralize": "The generic planner may legitimately support strings; the incompatibility is with this particular adapter.",
+      "skill_gates": [
+        "G07",
+        "G10"
+      ],
+      "test_id": "T27",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E28",
+      "title": "Test adapted to contract instead of exercising actual integration",
+      "evidence_status": "observed_test_boundary_limitation",
+      "source_locators": [
+        "T:5697-5707",
+        "T:5765-5780",
+        "R:55-59"
+      ],
+      "source_observation": "A synthetic preparation loop first asserts JSON input and fails on operation_source:string, then is changed to supply either strings or JSON. The saved result remains explicitly a planner-shape smoke.",
+      "invalid_inference_to_prevent": "Making the smoke data fit declared port types resolves the real benchmark interface failure.",
+      "consequence": "Integration defect survives a passing unit demonstration.",
+      "generalized_invariant": "A component test cannot certify an interface path it bypasses.",
+      "authoring_action": "Keep the generic planner smoke, but add a distinct real-adapter integration test whose inputs come from the actual producer. Label each test by its boundary.",
+      "acceptance_test": "Give all contracts the same irrelevant shell snippet: the shape smoke may pass, but a semantic/evidence integration gate must not declare target assessment readiness.",
+      "do_not_overgeneralize": "No fabricated model answers are shown in this smoke; the mistake is overinterpreting its coverage, not the legitimate use of synthetic data.",
+      "skill_gates": [
+        "G07",
+        "G10"
+      ],
+      "test_id": "T28",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E29",
+      "title": "Input presence mistaken for semantic sufficiency",
+      "evidence_status": "confirmed_contract_wording_risk",
+      "source_locators": [
+        "R:63-79",
+        "R:57-59",
+        "B:rules-improvement/JEV-CONTRACT.md"
+      ],
+      "source_observation": "Some prompts assign missing essentials to blocked while their Choice only represents unsafe/constrained/unresolved and defines unresolved as ambiguity after evidence supply.",
+      "invalid_inference_to_prevent": "A populated field implies the needed implementation, configuration, or complete consumers are present.",
+      "consequence": "Potential false refutation, unsupported positive, or avoidable blocked work.",
+      "generalized_invariant": "Execution status is separate from claim assessment; semantic incompleteness inside present inputs remains unresolved.",
+      "authoring_action": "Define exact evidence requirements and completeness limits. Allow decision-dependent sufficient evidence; do not require irrelevant fields after a decisive narrow refutation.",
+      "acceptance_test": "Supply a present callers object missing the relevant helper; require unresolved. Separately provide a decisive non-relevant API binding and avoid demanding unrelated downstream evidence.",
+      "do_not_overgeneralize": "Do not claim a runtime can mechanically prove arbitrary semantic completeness.",
+      "skill_gates": [
+        "G07",
+        "G08"
+      ],
+      "test_id": "T29",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E30",
+      "title": "Descriptive metadata mistaken for model-visible evidence",
+      "evidence_status": "confirmed_contract_transport_boundary",
+      "source_locators": [
+        "R:83",
+        "T:1931-1935",
+        "T:2021-2032",
+        "B:rules-improvement/JEV-CONTRACT.md"
+      ],
+      "source_observation": "The runtime sends bound state and question instructions/criteria; claim, scope, assumptions, tags, and graph edges do not automatically supply source evidence.",
+      "invalid_inference_to_prevent": "Writing an assumption in the contract or adding a parent node ensures the model sees it.",
+      "consequence": "Wrong-scope decisions, missing premises, and anchoring on unsupported prior classifications.",
+      "generalized_invariant": "Every material premise is traceable through actual input, state binding, serialized request, answer, and permitted decision use.",
+      "authoring_action": "Inspect rendered payloads. Bind underlying source separately from fallible parent answers; pin identities and invalidate descendants when required evidence changes.",
+      "acceptance_test": "Remove an essential scope binding; block or remain unresolved. Change parent evidence without changing its categorical answer and require stale-child invalidation.",
+      "do_not_overgeneralize": "Do not add every contract field to every prompt; include what the question actually needs and avoid leakage.",
+      "skill_gates": [
+        "G07",
+        "G08",
+        "G09"
+      ],
+      "test_id": "T30",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E31",
+      "title": "Nonexclusive or incomplete answer domains and mixed consumers",
+      "evidence_status": "source_supported_domain_risk",
+      "source_locators": [
+        "R:81",
+        "R:239-249",
+        "B:rules-improvement/python/rules/jev.python.hashlib-sha1-security-purpose.yaml"
+      ],
+      "source_observation": "Protected crypto outcomes are not equally explicit about every relevant security consumer/path, while one object can feed both protected and unprotected uses.",
+      "invalid_inference_to_prevent": "One protected use refutes the operation-level claim, or absence of an unsafe witness chooses the safe category.",
+      "consequence": "Model-induced false negatives or forced classification when no option fits.",
+      "generalized_invariant": "Answer categories match one scoped proposition; existential support and all-scope refutation have different obligations.",
+      "authoring_action": "Define precedence for a supported unsafe witness, complete refutation, not-applicable situations, and unresolved evidence. Avoid forcing compatible attributes into exclusive choices.",
+      "acceptance_test": "Use mixed protected/unprotected consumers, one safe branch plus one unknown branch, a non-relevant API, and incompatible control mechanisms that jointly suffice.",
+      "do_not_overgeneralize": "Do not require knowledge of every branch to accept one fully established unsafe witness.",
+      "skill_gates": [
+        "G02",
+        "G08"
+      ],
+      "test_id": "T31",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E32",
+      "title": "Independent answers combined into a nonexistent joint witness",
+      "evidence_status": "generalized_composition_risk_not_observed_model_error",
+      "source_locators": [
+        "R:235-272",
+        "B:rules-improvement/source-notes/references/questions-and-statistics.md"
+      ],
+      "source_observation": "The reviews warn that decomposition and marginal probabilities do not by themselves retain relational facts across paths, values, and principals.",
+      "invalid_inference_to_prevent": "Some attacker control plus some failed control anywhere implies one feasible unauthorized effect.",
+      "consequence": "False positives from incompatible paths; false negatives from a safe answer about a different subject.",
+      "generalized_invariant": "Composition preserves operation, value/version, principal/resource, configuration, and compatible path or explicit consumer coverage.",
+      "authoring_action": "Attach relational identities to premise records and compose only justified relations. Treat procedural/model conflicts as evidence-review conditions, not votes.",
+      "acceptance_test": "Place source influence and failed enforcement on mutually exclusive branches, then move them to the same feasible branch; require different outcomes.",
+      "do_not_overgeneralize": "A single holistic question is not automatically wrong, and more nodes are not automatically safer.",
+      "skill_gates": [
+        "G04",
+        "G08"
+      ],
+      "test_id": "T32",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E33",
+      "title": "Raw confidence or low unsafe probability used as safety",
+      "evidence_status": "prospective_policy_risk_not_executed_suppression",
+      "source_locators": [
+        "R:274-292",
+        "R:336-342"
+      ],
+      "source_observation": "The reviewed system is shadow-only and has no live model evaluation. The reviews distinguish native Choice confidence from measured decision error.",
+      "invalid_inference_to_prevent": "High confidence in unresolved, low P(unsafe), or a shared threshold across different domains justifies suppression.",
+      "consequence": "Future model-induced FN and misleading calibration claims.",
+      "generalized_invariant": "Only a separately validated claim-refutation policy can authorize dismissal; uncertainty is not a negative vote.",
+      "authoring_action": "Freeze output semantics and decision policy, evaluate false dismissals on the actual residual population, and report uncertainty/dependence.",
+      "acceptance_test": "Feed supported=.01/refuted=.02/unresolved=.97 and require retained review. Change option count/order without pretending a fixed confidence threshold has invariant error.",
+      "do_not_overgeneralize": "No actual suppression failure is established here; do not invent a measured error rate or a universal safe threshold.",
+      "skill_gates": [
+        "G08",
+        "G11"
+      ],
+      "test_id": "T33",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E34",
+      "title": "Source labels and instructions treated as authoritative evidence",
+      "evidence_status": "documented_trust_boundary_risk",
+      "source_locators": [
+        "R:330-334",
+        "T:4892-4992"
+      ],
+      "source_observation": "The executor can transmit source text; mechanical guardrails reject recognized hints but explicitly do not claim to catch all leakage or insufficient evidence.",
+      "invalid_inference_to_prevent": "Target-only context is automatically label-neutral and safe to interpret as instructions.",
+      "consequence": "Label leakage, misleading evaluation, and source-driven decision manipulation.",
+      "generalized_invariant": "Source and retrieved content are untrusted evidence; authoring expectations and instructions are not decision authority.",
+      "authoring_action": "Separate oracle/patch/contrast materials, review any transformation with a reverse map, and test comment-only steering without deleting semantic program content.",
+      "acceptance_test": "Add irrelevant comments asking for a safe verdict, rename benchmark identifiers, remove decisive helper evidence, and assert no unwarranted dismissal.",
+      "do_not_overgeneralize": "Do not claim regex filtering proves absence of leakage; do not strip code or required annotations blindly.",
+      "skill_gates": [
+        "G07",
+        "G08",
+        "G09"
+      ],
+      "test_id": "T34",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E35",
+      "title": "Candidate volume, duplicates and budgets treated as harmless",
+      "evidence_status": "explicit_unmeasured_operational_tradeoff",
+      "source_locators": [
+        "R:171-175",
+        "R:328",
+        "B:rules-improvement/python/manifest.json",
+        "B:src/jeverse_bench/jev_execution.py"
+      ],
+      "source_observation": "Broad candidates overlap, and the executor uses a shared request budget while the reported scan has thousands of raw findings.",
+      "invalid_inference_to_prevent": "Candidate-only status removes false-positive cost, or one duplicate surviving proves every underlying decision was correct.",
+      "consequence": "Review overload, budget-exhausted assessments, masked erroneous dismissals, and inflated votes.",
+      "generalized_invariant": "Unique operations, rule claims, underlying findings, routing decisions, and capacity limits remain separately measurable.",
+      "authoring_action": "Measure workload and overlap; use declared identity-aware deduplication and scheduling while preserving raw evidence and budget-exhaustion status.",
+      "acceptance_test": "Create duplicates of one operation plus a distinct later operation under a small budget. Require stable declared scheduling and visible unassessed work without extra TP votes.",
+      "do_not_overgeneralize": "Budget exhaustion is an execution outcome, not automatically an FN/TN; report its practical coverage consequence separately.",
+      "skill_gates": [
+        "G05",
+        "G10",
+        "G11"
+      ],
+      "test_id": "T35",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E36",
+      "title": "Green subset mistaken for completed analysis or release readiness",
+      "evidence_status": "documented_gate_boundary_and_preserved_blocker",
+      "source_locators": [
+        "R:17-22",
+        "R:298-306",
+        "T:1584-1652",
+        "T:6842-6859"
+      ],
+      "source_observation": "check.py runs direct rule/fixture pairs; separate discovery regressions fail and native validation remains blocked. The final documentation correctly withholds readiness.",
+      "invalid_inference_to_prevent": "Exit zero, scanned-file presence, or 21 passing pairs means all required behavior passed.",
+      "consequence": "Undetected regression, false coverage, or premature release claims.",
+      "generalized_invariant": "Each gate certifies only the exercised surface, and promotion considers the union of required obligations.",
+      "authoring_action": "Maintain a gate manifest for syntax, branches, full source, responsible rule, whole pack, required discovery, adapter, and independent evaluation. Mark out-of-scope obligations separately, never as passes.",
+      "acceptance_test": "Let the bounded suite pass while one required discovery or integration check fails; promotion must fail with the correct gate and retained diagnostics.",
+      "do_not_overgeneralize": "Do not turn every conditional challenge into an absolute release failure without first establishing its applicability and required scope.",
+      "skill_gates": [
+        "G06",
+        "G10"
+      ],
+      "test_id": "T36",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E37",
+      "title": "Same-file candidate associations promoted to detection recovery",
+      "evidence_status": "explicit_metric_boundary_not_a_published_accuracy_claim",
+      "source_locators": [
+        "T:6842-6859",
+        "T:6890-6914",
+        "R:19-30",
+        "R:328"
+      ],
+      "source_observation": "The development ledger joins by file and associated rule; prior TP retention uses expected-CWE presence in the file. The final report explicitly calls these candidate observations.",
+      "invalid_inference_to_prevent": "Any associated same-file candidate is the original unsafe sink, a recovered vulnerability, or an independently scored positive.",
+      "consequence": "Misleading recall/precision, wrong-CWE credit, and duplicated outcomes.",
+      "generalized_invariant": "Scoring preserves the declared oracle unit and mapping; candidate/location association is a different measurement.",
+      "authoring_action": "Keep testcase/CWE scores frozen and separate localized operation studies that require independent labels. Do not fix CWE disagreements by label-fitting remaps.",
+      "acceptance_test": "Include two same-file operations, duplicate alerts, wrong-CWE alerts, and one true labeled unit; require declared aggregation without manufactured votes.",
+      "do_not_overgeneralize": "The existing counts are not fraudulent when presented at their actual candidate-association level.",
+      "skill_gates": [
+        "G02",
+        "G09",
+        "G11"
+      ],
+      "test_id": "T37",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E38",
+      "title": "Development success mistaken for generalization or model value",
+      "evidence_status": "unmeasured_evaluation_gap",
+      "source_locators": [
+        "R:28-30",
+        "R:298-342",
+        "B:rules-improvement/AGENTS.md",
+        "A"
+      ],
+      "source_observation": "No live JEV study or independent cross-repository evaluation is reported; previous TP/TN populations and template dependence matter to any future gain claim.",
+      "invalid_inference_to_prevent": "Fixing development FP/FN rows or adding richer evidence proves the decision model improves detection.",
+      "consequence": "Hidden new FP/lost TP, overfit rules/questions, and confounded attribution.",
+      "generalized_invariant": "Evaluate native baseline, native repair, procedural augmentation, and residual model addition separately with matched evidence and frozen policy.",
+      "authoring_action": "Test all confusion-cell transitions, abstentions, old negatives, grouped held-out families, and the actual harder routed population. Attribute evidence acquisition separately.",
+      "acceptance_test": "Compare the same pipeline and evidence with and without model use; ensure new TN-to-FP and TP-to-FN transitions cannot be hidden by aggregate gains.",
+      "do_not_overgeneralize": "No finite test suite proves zero risk; zero observed errors need an uncertainty statement appropriate to dependence and sampling.",
+      "skill_gates": [
+        "G11",
+        "G12"
+      ],
+      "test_id": "T38",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E39",
+      "title": "Unnecessary model use for procedural facts",
+      "evidence_status": "established_prior_policy_gap",
+      "source_locators": [
+        "T:4233-4269",
+        "T:4607-4633",
+        "T:4370-4371",
+        "A"
+      ],
+      "source_observation": "The fixtures intentionally include finite filename selections and fixed non-shell vectors as candidates, while contract-level mandatory assessment does not itself establish per-finding model necessity.",
+      "invalid_inference_to_prevent": "A native matcher limitation, custom helper, or high FP risk automatically justifies a provider call.",
+      "consequence": "Unnecessary uncertainty/cost and avoidable false decisions.",
+      "generalized_invariant": "Use validated procedures for supported premises and admit only justified, adequately evidenced residual judgments.",
+      "authoring_action": "Apply the prior procedural-first admission policy per premise and per finding; do not silently reinterpret mandatory or fabricate a completed model node.",
+      "acceptance_test": "For both procedural positive and negative resolutions, make the transport raise if called; require zero requests and the correct claim-specific result.",
+      "do_not_overgeneralize": "Do not demand an unbounded analyzer or equate imagined procedural solvability with an implemented reliable method.",
+      "skill_gates": [
+        "G03",
+        "G08",
+        "G10"
+      ],
+      "test_id": "T39",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E40",
+      "title": "Review hypotheses become inherited facts",
+      "evidence_status": "observed_review_provenance_error_and_generalization_risk",
+      "source_locators": [
+        "R:5-7",
+        "T:1083-1127",
+        "T:1175-1187",
+        "R:87",
+        "R:115",
+        "R:149"
+      ],
+      "source_observation": "The attached review calls its source a synchronization transcript, but the visible original contains authoring work. Other review counterexamples are expressly not natively reproduced.",
+      "invalid_inference_to_prevent": "A polished review, repeated claim, or two agreeing analyses establishes primary evidence.",
+      "consequence": "Incorrect diagnosis, misleading error counts, and bad permanent skill prohibitions.",
+      "generalized_invariant": "Every lesson retains evidence status, scope, lifecycle, and source; corrections remain linked rather than overwritten.",
+      "authoring_action": "Distinguish observed/corrected errors, source-supported risks, conditional limits, and proposed tests. Reproduce before elevating a hypothesis to engine-wide guidance.",
+      "acceptance_test": "Give the reviewer a confident but contradicted summary and an unrun counterexample. Require correction of the summary and retention of the counterexample as proposed.",
+      "do_not_overgeneralize": "Do not dismiss a useful general test obligation merely because the motivating counterexample is not yet reproduced.",
+      "skill_gates": [
+        "G01",
+        "G09",
+        "G12"
+      ],
+      "test_id": "T40",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E41",
+      "title": "Operational failures obscure or weaken evidence handling",
+      "evidence_status": "observed_operational_errors_corrected",
+      "source_locators": [
+        "T:6970-7003",
+        "T:7094-7140"
+      ],
+      "source_observation": "The transcript records a str.read_bytes failure during final receipts and catches permissive scratch-file permissions, then fixes both. No credential leak is established.",
+      "invalid_inference_to_prevent": "A large stateful bookkeeping cell is atomic, or retrospective permission checks replace private creation.",
+      "consequence": "Incomplete receipts, accidental overwrites, and avoidable private-evidence exposure risk.",
+      "generalized_invariant": "Evidence operations are small, typed, nonoverwriting, private from creation, and resilient to partial failure.",
+      "authoring_action": "Validate paths before side effects, use safe creation modes and durable capture IDs, preserve failed commands, and retry only incomplete work.",
+      "acceptance_test": "Interrupt a receipt write and exercise an invalid path type; preserve prior artifacts and failures. Check permissions at creation, not only final handoff.",
+      "do_not_overgeneralize": "These corrected engineering errors do not prove incorrect rule semantics or an actual data leak.",
+      "skill_gates": [
+        "G09",
+        "G10"
+      ],
+      "test_id": "T41",
+      "regression_execution": "not_run_in_this_review"
+    },
+    {
+      "id": "E42",
+      "title": "Skill rules encourage literal compliance without mechanism coverage",
+      "evidence_status": "source_visible_instruction_design_risk",
+      "source_locators": [
+        "K:59-80",
+        "K:97-123",
+        "K:156-160",
+        "T:1178",
+        "T:3774-3781"
+      ],
+      "source_observation": "The skill already has a two-positive/two-negative floor, a fixture-driven constraint instruction, historical 1.30.0 examples, and warnings. The trace nevertheless repeats unsafe ok and late integration problems.",
+      "invalid_inference_to_prevent": "Reading the skill, meeting fixture counts, or adding more MUST sentences demonstrates reliable authoring.",
+      "consequence": "Overfit tests, ambiguous historical authority, and unmeasured skill effectiveness.",
+      "generalized_invariant": "Skill clauses name a trigger, action, required evidence, counterexample, and stop condition, and are evaluated through agent behavior.",
+      "authoring_action": "Keep a compact mandatory core; preserve complete examples as scoped teaching evidence; add mechanism-based obligations and a trace library. Test old versus revised instructions on held-out tasks.",
+      "acceptance_test": "Run blinded paired cold-start authoring trials with fixed tools and budgets; measure semantic regressions, unsupported claims, unnecessary model calls, and honest no-rule outcomes.",
+      "do_not_overgeneralize": "This proposal has documentation checks only; do not call the skill empirically successful until the authoring trials are executed.",
+      "skill_gates": [
+        "G06",
+        "G10",
+        "G12"
+      ],
+      "test_id": "T42",
+      "regression_execution": "not_run_in_this_review"
+    }
+  ]
+}
