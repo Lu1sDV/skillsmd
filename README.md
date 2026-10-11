@@ -29,7 +29,15 @@ A collection of Claude Code skills — self-contained markdown files that give C
 | [skill-smell-checker](skill-smell-checker/) | Audit all 26 SKILL.md smells from arXiv:2607.01456 — 5 deterministic harness checks plus 21 evidence-backed semantic checks |
 | [sink-research-orchestrator](sink-research-orchestrator/) | Orchestrate parallel research swarms for unseen sink languages/techniques — lane decomposition, structured JSON citations, quality gates |
 | [skillsmp-search](skillsmp-search/) | Search 11,000+ community skills and install them locally |
+| [rust-idiomatic](rust-idiomatic/) | Ownership and lifetimes, errors, iterators, strings, standard-library usage, and everyday Cargo/tooling workflows |
+| [rust-algorithms](rust-algorithms/) | Collection selection and 17 algorithm patterns with Rust-specific invariants, complexity, and boundary cases |
+| [rust-api-design](rust-api-design/) | Rust-native API design — enums versus traits, builders, typestate, newtypes, composition, and consolidated design patterns |
+| [rust-concurrency](rust-concurrency/) | Threads, Send/Sync, locks, channels, async coordination, cancellation, shutdown, backpressure, and Rayon |
 | [rust-performance](rust-performance/) | Writing and reviewing fast Rust plus evidence-first optimization — allocation/reuse, iterators, layout, hashing, async/backpressure, build profiles, Clippy gates, baselines, profiling, benchmarks, contention, and NUMA triage |
+| [rust-tdd](rust-tdd/) | Test-first Rust development — red-green-refactor, regression fixes, property tests, test doubles, coverage, and testable design |
+| [rust-macros](rust-macros/) | Declarative and procedural macros — matching, hygiene, generated APIs, diagnostics, expansion, and testing |
+| [rust-unsafe-ffi](rust-unsafe-ffi/) | Unsafe proof obligations and native FFI — pointer validity, ownership, ABI/layout, unwinding, safe wrappers, and verification |
+| [rust-wasm](rust-wasm/) | Browser WebAssembly and WASI/components — targets, JS bindings, boundary contracts, packaging, deployment, and testing |
 | [ssrf-testing](ssrf-testing/) | SSRF testing and prevention — detection, cloud metadata exploitation, filter bypass, defense strategies |
 | [tavily-web](tavily-web/) | Web search, extraction, crawling, and AI-powered research via Tavily API (curl only) |
 | [telethon-development](telethon-development/) | Telethon MTProto client — FloodWait handling, mocking, session management, DB integration |
@@ -42,6 +50,60 @@ A collection of Claude Code skills — self-contained markdown files that give C
 | [web-performance-optimization](web-performance-optimization/) | Lighthouse scores, Core Web Vitals, page load and rendering optimization |
 | [zero-dof](zero-dof/) | Zero-DOF programming — executable oracles, opposing constraints, mandatory playbooks, gaming prevention for LLM coding agents |
 | [zeroclaw](zeroclaw/) | Build, configure, deploy ZeroClaw AI agent infrastructure |
+
+## Rust skill suite
+
+Eight task-oriented skills consolidate the [18 StructWeave Rust guides](https://github.com/nirajkvinit/StructWeave-Algorithms/tree/49e7f127eaf0fc71694a4b53f31ac3a2b8cdb168/languages/rust).
+The existing `rust-performance` remains the ninth Rust skill; it owns measured
+optimization rather than duplicating the new skills' correctness workflows.
+
+| Catalogue chapters | Primary destination |
+|---|---|
+| 01 syntax, 02 ownership, 05 idioms, 17 standard library | `rust-idiomatic`; synchronization routes to `rust-concurrency` |
+| 03 data structures, 04 algorithm patterns | `rust-algorithms` |
+| 06 concurrency | `rust-concurrency` |
+| 07 tooling | General project workflow in `rust-idiomatic`; test execution and test CI in `rust-tdd` |
+| 08 SOLID, 09–11 design patterns, 12 anti-patterns | `rust-api-design`; domain-specific pitfalls live beside the relevant workflow |
+| 13 interview traps | Distributed into the corresponding domain references, not a separate interview skill |
+| 14 macros | `rust-macros` |
+| 15 unsafe/FFI | `rust-unsafe-ffi` |
+| 16 WebAssembly | `rust-wasm` |
+| 18 test-driven development | `rust-tdd` |
+
+Consolidation decisions:
+
+- Group by activation task, not by textbook category. Syntax and standard-library
+  tables are references; SOLID and GoF categories inform concrete API choices.
+- Keep TDD standalone: test-first development is a workflow, not a Cargo option.
+- Keep macros, unsafe/FFI, and Wasm separate: generated syntax, native memory
+  safety, and target/runtime integration require different checks.
+- Preserve individual installation: each new bundle contains its references,
+  source attribution, and the upstream MIT notice. Handoffs name optional skills
+  rather than requiring sibling directories.
+- Treat StructWeave as source material, not a correctness oracle. Adapted guidance
+  records preconditions and version assumptions; unsupported empirical claims and
+  blanket performance prescriptions are not carried over.
+
+Each new skill's README documents checkout-based installation and example checks.
+The existing CI discovers `SKILL.md` files automatically for validation and manifest
+generation; no hand-maintained skill manifest is required.
+
+### Rust suite verification
+
+Verified on 2026-10-11 with Rust 1.98.1:
+
+- Eight independent reviewer audits completed. The macro review found a generated
+  primitive-name shadowing defect; the corrected recipe includes a downstream
+  regression case, reproduced failing before the fix and passing afterward.
+- All eight bundles passed YAML metadata, upstream-notice, and isolated-copy
+  installation checks; 133 local documentation links resolved without siblings.
+- 71 Rustdoc checks passed across 24 documents, including intentional compile
+  failures. The TDD example's documented boundary bug produced the intended
+  assertion failure.
+- The complete procedural-macro Cargo consumer and real C-to-Rust ABI caller ran
+  successfully. Browser/WASI runtimes, Miri, sanitizers, and other optional
+  ecosystem recipes were not executed; their prerequisites and commands remain
+  explicit in the relevant references. This is not an MSRV certification.
 
 ## Commands
 
