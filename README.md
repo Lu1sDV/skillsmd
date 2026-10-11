@@ -29,6 +29,7 @@ A collection of Claude Code skills — self-contained markdown files that give C
 | [skill-smell-checker](skill-smell-checker/) | Audit all 26 SKILL.md smells from arXiv:2607.01456 — 5 deterministic harness checks plus 21 evidence-backed semantic checks |
 | [sink-research-orchestrator](sink-research-orchestrator/) | Orchestrate parallel research swarms for unseen sink languages/techniques — lane decomposition, structured JSON citations, quality gates |
 | [skillsmp-search](skillsmp-search/) | Search 11,000+ community skills and install them locally |
+| [rust-guidelines](rust-guidelines/) | Compact Rust API and engineering checklist — topic-based disclosure, explicit contracts, opt-in memory profiles, and verification |
 | [rust-idiomatic](rust-idiomatic/) | Ownership and lifetimes, errors, iterators, strings, standard-library usage, and everyday Cargo/tooling workflows |
 | [rust-algorithms](rust-algorithms/) | Collection selection and 17 algorithm patterns with Rust-specific invariants, complexity, and boundary cases |
 | [rust-api-design](rust-api-design/) | Rust-native API design — enums versus traits, builders, typestate, newtypes, composition, and consolidated design patterns |
@@ -56,6 +57,9 @@ A collection of Claude Code skills — self-contained markdown files that give C
 Eight task-oriented skills consolidate the [18 StructWeave Rust guides](https://github.com/nirajkvinit/StructWeave-Algorithms/tree/49e7f127eaf0fc71694a4b53f31ac3a2b8cdb168/languages/rust).
 The existing `rust-performance` remains the ninth Rust skill; it owns measured
 optimization rather than duplicating the new skills' correctness workflows.
+
+The compact [rust-guidelines](rust-guidelines/) checklist complements these nine
+skills with API and engineering review guidance; its six references load by topic.
 
 | Catalogue chapters | Primary destination |
 |---|---|
