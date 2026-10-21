@@ -33,6 +33,7 @@ A collection of Claude Code skills — self-contained markdown files that give C
 | [rust-idiomatic](rust-idiomatic/) | Ownership and lifetimes, errors, iterators, strings, standard-library usage, and everyday Cargo/tooling workflows |
 | [rust-algorithms](rust-algorithms/) | Collection selection and 17 algorithm patterns with Rust-specific invariants, complexity, and boundary cases |
 | [rust-api-design](rust-api-design/) | Rust-native API design — enums versus traits, builders, typestate, newtypes, composition, and consolidated design patterns |
+| [rust-type-diagnostics](rust-type-diagnostics/) | Advanced Rust type diagnosis — coercion sites and generic barriers, reference patterns, implied lifetime bounds, variance, exact `Any` downcasts, trait upcasting, and drop checking |
 | [rust-concurrency](rust-concurrency/) | Threads, Send/Sync, locks, channels, async coordination, cancellation, shutdown, backpressure, and Rayon |
 | [rust-performance](rust-performance/) | Writing and reviewing fast Rust plus evidence-first optimization — allocation/reuse, iterators, layout, hashing, async/backpressure, build profiles, Clippy gates, baselines, profiling, benchmarks, contention, and NUMA triage |
 | [rust-tdd](rust-tdd/) | Test-first Rust development — red-green-refactor, regression fixes, property tests, test doubles, coverage, and testable design |
@@ -60,6 +61,14 @@ optimization rather than duplicating the new skills' correctness workflows.
 
 The compact [rust-guidelines](rust-guidelines/) checklist complements these nine
 skills with API and engineering review guidance; its six references load by topic.
+
+[rust-type-diagnostics](rust-type-diagnostics/) adds focused compiler/type
+reasoning drawn from a full review of *Advanced Rust* and checked against primary
+Rust documentation. Its four topic references cover coercions and patterns,
+implied bounds and variance, type erasure, and drop checking. It hands ordinary
+ownership, API design, concurrency, performance, and unsafe/FFI work back to the
+existing skills rather than repeating their workflows. The source book is not
+bundled; original examples and a correction/source map are included.
 
 | Catalogue chapters | Primary destination |
 |---|---|
