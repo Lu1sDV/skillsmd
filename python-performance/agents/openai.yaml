@@ -1,0 +1,4 @@
+interface:
+  display_name: "Python Performance"
+  short_description: "Profile, optimize, and verify Python performance"
+  default_prompt: "Use $python-performance to diagnose the bottleneck, make a justified optimization, and verify correctness and performance."

@@ -29,6 +29,7 @@ A collection of Claude Code skills — self-contained markdown files that give C
 | [python-stdlib](python-stdlib/) | Standard-library APIs — iterators/caching, files/time, serialization/regex, records, cleanup, logging and subprocesses |
 | [python-api-design](python-api-design/) | Python-native API design — typing, protocols, SOLID, consolidated design patterns, descriptors and class contracts |
 | [python-concurrency](python-concurrency/) | Threads, processes, asyncio, cancellation, backpressure, shutdown, free threading and interpreter isolation |
+| [python-performance](python-performance/) | Profiling, fair benchmarks and measured optimization — CPU, memory, algorithms, concurrency, I/O, databases and numerical workloads; concise workflow with topic references |
 | [python-tdd](python-tdd/) | Test-first Python — red-green-refactor, pytest/unittest, fixtures/doubles, properties, real boundaries and test CI |
 | [python-system-design](python-system-design/) | Python application architecture — packages, WSGI/ASGI, frameworks, background jobs, transactions and configuration |
 | [python-exploitation](python-exploitation/) | Offensive Python & CTF — pyjail/sandbox escape, builtins recovery, import/char blacklist bypass, pickle/marshal RCE, Jinja2/RestrictedPython SSTI, PEP 578 audit-hook bypass, bytecode crafting, 3.8–3.13 internals |
@@ -67,6 +68,10 @@ pinned at Python-content commit `0b88a786ef09681717a805d9f7e0b195ab610f6c`.
 Each bundle installs independently and contains its own progressive references,
 usage/installation README, runnable examples, source/adaptation map, and upstream
 MIT notice. The existing `python-exploitation` skill remains separate and unchanged.
+
+[python-performance](python-performance/) complements the suite with measured
+optimization: a compact workflow, ten on-demand references, primary-source guidance
+and a dependency-free environment capture helper. It installs independently.
 
 | Macro-topic | Skill | Source chapters |
 |---|---|---|
