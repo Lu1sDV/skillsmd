@@ -24,6 +24,13 @@ A collection of Claude Code skills — self-contained markdown files that give C
 | [ofelia](ofelia/) | Docker job scheduler — cron for containers via INI files or Docker labels |
 | [opengrep-rule-creator](opengrep-rule-creator/) | OpenGrep-first rule authoring — offline rule-writing docs, version-specific compatibility, four complex commented rules, and evidence-based publication gates |
 | [photon-geocoder](photon-geocoder/) | Geocoding, reverse geocoding, and address autocomplete via Photon/OSM API |
+| [python-idiomatic](python-idiomatic/) | Everyday Python — object semantics, iteration, decorators, exceptions, imports, environments and tooling |
+| [python-algorithms](python-algorithms/) | Collection selection and all 17 Python algorithm patterns with invariants, complexity and boundary cases |
+| [python-stdlib](python-stdlib/) | Standard-library APIs — iterators/caching, files/time, serialization/regex, records, cleanup, logging and subprocesses |
+| [python-api-design](python-api-design/) | Python-native API design — typing, protocols, SOLID, consolidated design patterns, descriptors and class contracts |
+| [python-concurrency](python-concurrency/) | Threads, processes, asyncio, cancellation, backpressure, shutdown, free threading and interpreter isolation |
+| [python-tdd](python-tdd/) | Test-first Python — red-green-refactor, pytest/unittest, fixtures/doubles, properties, real boundaries and test CI |
+| [python-system-design](python-system-design/) | Python application architecture — packages, WSGI/ASGI, frameworks, background jobs, transactions and configuration |
 | [python-exploitation](python-exploitation/) | Offensive Python & CTF — pyjail/sandbox escape, builtins recovery, import/char blacklist bypass, pickle/marshal RCE, Jinja2/RestrictedPython SSTI, PEP 578 audit-hook bypass, bytecode crafting, 3.8–3.13 internals |
 | [security-fix-oracle](security-fix-oracle/) | Mine a repo's git history into a labeled, leakage-free security-fix dataset — Haiku/Sonnet triage, merge-safe diff fetch, gold/weak tiers, CVSS 3.1 (LLM vector + procedural score), SZZ vulnerability-introducer attribution + skill-gap; runnable harness included |
 | [skill-smell-checker](skill-smell-checker/) | Audit all 26 SKILL.md smells from arXiv:2607.01456 — 5 deterministic harness checks plus 21 evidence-backed semantic checks |
@@ -52,6 +59,73 @@ A collection of Claude Code skills — self-contained markdown files that give C
 | [web-performance-optimization](web-performance-optimization/) | Lighthouse scores, Core Web Vitals, page load and rendering optimization |
 | [zero-dof](zero-dof/) | Zero-DOF programming — executable oracles, opposing constraints, mandatory playbooks, gaming prevention for LLM coding agents |
 | [zeroclaw](zeroclaw/) | Build, configure, deploy ZeroClaw AI agent infrastructure |
+
+## Python skill suite
+
+Seven task-oriented skills consolidate the [17 StructWeave Python guides](https://github.com/nirajkvinit/StructWeave-Algorithms/tree/0b88a786ef09681717a805d9f7e0b195ab610f6c/languages/python),
+pinned at Python-content commit `0b88a786ef09681717a805d9f7e0b195ab610f6c`.
+Each bundle installs independently and contains its own progressive references,
+usage/installation README, runnable examples, source/adaptation map, and upstream
+MIT notice. The existing `python-exploitation` skill remains separate and unchanged.
+
+| Macro-topic | Skill | Source chapters |
+|---|---|---|
+| Language, idioms and everyday tooling | [python-idiomatic](python-idiomatic/) | 01 syntax, 03 idioms; general tooling from 08; language pitfalls from 13–14 |
+| Data structures and algorithms | [python-algorithms](python-algorithms/) | 02 collections, all 17 patterns in 04; algorithm APIs from 05 |
+| Standard-library boundaries | [python-stdlib](python-stdlib/) | 05 utilities, 16 production standard library |
+| Typing, API contracts and design patterns | [python-api-design](python-api-design/) | 06 typing, 09 SOLID, 10–12 creational/structural/behavioral patterns; class pitfalls from 13–14 |
+| Concurrency and parallel execution | [python-concurrency](python-concurrency/) | 07 concurrency/async; relevant traps from 13–14 |
+| Test-driven development | [python-tdd](python-tdd/) | 17 TDD; testing/test CI from 08 and test pitfalls from 13 |
+| Application and service architecture | [python-system-design](python-system-design/) | 15 system design |
+
+Consolidation decisions:
+
+- Group by activation task; distribute interview traps and anti-patterns to the
+  relevant domain rather than create overlapping skills.
+- Keep typing/SOLID/patterns together as API contracts, separate from service
+  runtime, transaction and deployment boundaries.
+- Merge the two stdlib catalogues; keep algorithm invariants in python-algorithms.
+- Keep TDD standalone; general environment/debug/lint/profiling stays in
+  python-idiomatic, while test execution and test CI belong to python-tdd.
+- Keep bundles independent, preserve explicit version gates, and record source
+  corrections instead of copying forecasts or universal safety/speed claims.
+
+Run the `python3 -m doctest` commands in each bundle's README from the checkout or
+an isolated copied bundle. Non-doctest framework, process, static-checker and
+optional-dependency recipes declare their prerequisites separately. Existing CI
+discovers `SKILL.md` files automatically; no hand-maintained manifest is added.
+
+### Authoring review
+
+Reviewed against [Anthropic's skill authoring guidance](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices).
+Entrypoints now contain routing, workflows and essential guards; detailed examples
+and API catalogues load on demand. All 26 references remain directly reachable from
+their skill, with contents lists for navigation.
+
+| Measure | Before review | After review | Reduction |
+|---|---:|---:|---:|
+| Combined `SKILL.md` body words | 7,605 | 3,629 | 52.3% |
+
+Unique examples were moved intact; only the duplicate mutable-default example and
+generic return-42 TaskGroup example were removed. Descriptions retain the repository's
+required `Use when` opening rather than adopting the guide's third-person preference.
+
+### Python suite verification
+
+Verified on 2026-10-23 with CPython 3.14.8 after the concision review:
+
+- Two independent final reviews covered all seven bundles; no actionable findings
+  remain. All entrypoints passed YAML and the five static skill-smell checks.
+- Isolated installs passed 693 doctest checks and 247 local link/anchor checks;
+  licenses and all retained executable fences match the reviewed baseline.
+- Eight pytest/Hypothesis cases, `spawn`/`forkserver` process pools and the
+  interpreter-executor recipe passed. The relocated threshold mutant failed at
+  the intended boundary, then the original passed. Both concurrency regressions
+  remain exercised.
+- Seven fresh-context routing probes selected the intended skill and reference.
+  These probes do not establish Haiku/Sonnet/Opus cross-model effectiveness.
+- Older Python versions, Windows, free-threaded builds, optional frameworks/brokers,
+  static-checker acceptance and production deployment remain unverified.
 
 ## Rust skill suite
 
