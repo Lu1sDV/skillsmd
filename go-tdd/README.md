@@ -3,7 +3,7 @@
 Standalone Go red-green-refactor: observable boundaries and state transitions,
 named table/subtests, cleanup and parallel isolation, real local HTTP/files,
 doubles with honest limits, properties/fuzzing, benchmarks, synctest, and test CI.
-Framework-independent strategy can optionally hand off to **test-engineering**;
+Consult **test-engineering** only for an explicitly requested system-wide strategy;
 no sibling skill, upstream checkout, external service, or Go dependency is
 required to use this bundle's examples.
 
@@ -147,8 +147,8 @@ Expected red: `Take(10) = insufficient budget; want <nil>` in
 passes after restoring `>`. The command verifies the named assertion rather than
 accepting any failure and restores source in a `finally` block before the green
 run. All modifications are inside an automatically deleted temporary copy;
-the published source stays correct. These outcomes remain **expected**, not
-observed by this bundle author.
+the published source stays correct. These are the expected outcomes; the recorded
+verification appears under [Runnable examples](#runnable-examples).
 
 ## Pinned source coverage
 

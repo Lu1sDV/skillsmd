@@ -149,6 +149,9 @@ assert representation. Use `TestX(*testing.T)`, `BenchmarkX(*testing.B)`,
   typed errors; exact text only when text is itself a public contract.
 - `t.Run` scopes setup/failure and enables focused selectors. Use nested BDD
   names if they aid reading; avoid a forest of identical setup helpers.
+- If the project already uses Testify, construct `assert.New(t)`/`require.New(t)`
+  inside each `t.Run` with that subtest's `t`; reusing a parent-bound helper
+  misattributes failures and can misuse `FailNow`.
 - `t.Helper` attributes failures to the caller. Fatal on unusable setup, then
   compare independent outcomes with Errorf. Several assertions can prove one
   transition; the rule is not “one assertion per test.”

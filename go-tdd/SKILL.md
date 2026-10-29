@@ -74,6 +74,8 @@ unperformed checks. Coverage is statement execution, not branch/path proof;
 mutation results are signals, not correctness guarantees. Already-green tests
 are coverage, not observed red. Never present expected results as execution.
 
-This bundle works alone. Optional **test-engineering** handoff covers generic
-risk/system strategy; concurrency architecture is outside this testing workflow.
+This bundle works alone. Consult **test-engineering** only for an explicitly
+requested system-wide test strategy. Preserve contract-based, risk-driven coverage;
+do not import numeric coverage targets or fixed test-pyramid ratios. Concurrency
+architecture is outside this testing workflow.
 See [examples](examples/) and the [upstream license](LICENSE.upstream).

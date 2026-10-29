@@ -1,5 +1,10 @@
 # Everyday workflow and version decisions
 
+- [Naming, imports and initialization](#naming-imports-and-initialization)
+- [Module and toolchain decisions](#module-and-toolchain-decisions)
+- [Semantic navigation and refactoring](#semantic-navigation-and-refactoring)
+- [Commands and their limits](#commands-and-their-limits)
+
 ## Naming, imports and initialization
 
 Use lowercase, purpose-named packages, not a dumping-ground `util`/`common`.
@@ -59,6 +64,16 @@ platform-specific files and cgo before changing minimums.
 | Generic aliases, `tool` directive, JSON `omitzero`, `testing.B.Loop` | 1.24; no generic methods with their own type parameters |
 | Runnable bundle minimum | 1.25.0, no third-party dependencies |
 
+## Semantic navigation and refactoring
+
+When `gopls` is available, use references/implementations and semantic rename for
+symbol changes, then inspect diagnostics after each coherent edit. [References](https://go.dev/gopls/features/navigation#references)
+cover only the analyzed build configuration; check relevant GOOS/build tags
+separately. Call hierarchy omits dynamic calls. A [rename that compiles](https://go.dev/gopls/features/transformation#rename)
+can still change runtime interface assertions, reflection and wire names derived
+from exported fields. Check string-based lookups, templates and external consumers,
+then run focused behavior tests; compilation alone does not validate those contracts.
+
 ## Commands and their limits
 
 Run commands in the intended module, keeping dependency mutation separate from
@@ -87,8 +102,8 @@ requirements; `go install command@version` installs a versioned standalone tool.
 From Go 1.24, `go get -tool package@version` records a tool and `go tool <name>` runs
 it; `go install tool` installs tools declared by the current module. Pin actual
 versions, not `@latest`, for repeatable workflows. Validate third-party linter schema
-against its pinned major release: the source's golangci-lint config mixes eras and
-must not be copied blindly. Do not exempt test error handling as a blanket rule.
+and configuration against its pinned major release. Do not exempt test error handling
+as a blanket rule.
 
 `go generate ./...` executes declared commands; it is not part of `go build` and can
 run arbitrary programs. Review generated diffs and pin generators. Linker `-X` can

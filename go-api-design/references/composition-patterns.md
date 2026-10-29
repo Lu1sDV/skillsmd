@@ -389,18 +389,9 @@ implementation or selecting among implementations. The standard library does
 both. Do not create a broad producer-owned repository interface merely to make
 all wrappers implement it. Composition does not repair an oversized contract.
 
-## Sources and correction decisions
+## API contracts
 
-Adapted from [StructWeave structural patterns, pinned chapter 10](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/golang/10-design-patterns-structural.md).
-All seven patterns and the interface/concrete-return guidance are retained;
-repeated file/menu, email/migration, style/icon and proxy scaffolds are consolidated
-into the decisions above. Deliberate corrections: no fake backend successes,
-no arbitrary XML-map decoding, no unsafe formatted JSON/HTML, no dropped
-Reader data/errors, no transparent-HTTP-wrapper claim from embedding, no
-mutation-safe or single-load claim from concurrent maps, no stale-repopulation
-assumption after invalidation, and no universal ban on interface return values.
-
-Authoritative API contracts: [io.Reader](https://pkg.go.dev/io#Reader),
+[io.Reader](https://pkg.go.dev/io#Reader),
 [http.ResponseWriter](https://pkg.go.dev/net/http#ResponseWriter),
 [http.ResponseController](https://pkg.go.dev/net/http#ResponseController),
 [sync.Map](https://pkg.go.dev/sync#Map),

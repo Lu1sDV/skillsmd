@@ -19,8 +19,9 @@ description: >
 | Adapter, bridge, composite, decorator, facade, flyweight, proxy | Explicit composition — [Composition](references/composition-patterns.md) |
 | Chain, command, iterator, mediator, memento, observer, state, strategy, template, visitor | Functions and owned state — [Behavior](references/behavior-patterns.md) |
 
-Load only the needed local reference; no sibling or online documentation is
-required. Pattern names do not mandate interfaces or structs.
+Load only the needed local reference. For Composition and Behavior, read the task
+table and contents first, then only the relevant sections. Sibling and online
+documentation is optional. Pattern names do not mandate interfaces or structs.
 
 ## Workflow
 
@@ -42,6 +43,8 @@ required. Pattern names do not mandate interfaces or structs.
 6. **Finish migration.** Update all affected callers, docs and tests. Document
    signature/default/error/ownership/lifecycle changes; unresolved consumers block
    completion, rather than count as compatibility work.
+   For renames, optionally consult [semantic tool limits](../go-idiomatic/references/workflow-versions.md#semantic-navigation-and-refactoring)
+   if **go-idiomatic** is installed.
 
 ## High-risk guardrails
 
