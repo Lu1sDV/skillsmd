@@ -556,21 +556,9 @@ Those optional hand-offs do not replace the local decisions above or require a
 sibling installation to understand them. No untested mini-breaker framework is
 included here.
 
-## Sources and correction decisions
+## API contracts
 
-Adapted from [StructWeave behavioral patterns, pinned chapter 11](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/golang/11-design-patterns-behavioral.md).
-All ten named behavioral patterns, pagination/tree/function variants, and the
-source circuit-breaker/retry discussion are retained. Bulkhead decisions make
-the concurrency boundary explicit. Consolidation replaces linked validator,
-editor, payment and event-bus frameworks with ordinary functions and narrow data.
-Deliberate corrections: stop without a surplus iterator pull, carry iteration
-errors, no callback under a registry lock, snapshot contents not slice headers,
-explicit unsubscribe/closure ownership, history only after success, UTF-8/bounds
-validation, no arbitrary state setter, no virtual-hook claim for embedding,
-no fake transaction/archive/provider results, and no missing half-open probe
-reservation or indiscriminate uncancellable retries.
-
-Authoritative API contracts: [iter](https://pkg.go.dev/iter),
+[iter](https://pkg.go.dev/iter),
 [bufio.Scanner](https://pkg.go.dev/bufio#Scanner),
 [go/ast.Inspect](https://pkg.go.dev/go/ast#Inspect),
 [errors.Join](https://pkg.go.dev/errors#Join),

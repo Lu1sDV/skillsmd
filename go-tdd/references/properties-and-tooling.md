@@ -150,6 +150,26 @@ nanosecond result alone does not justify optimization or a universal speedup
 claim. CPU/heap profiles should explain an observed bottleneck; avoid profiling
 tiny test setup and calling it application throughput.
 
+### Before/after comparison
+
+Choose the sample count and benchmark selector before measuring; this example
+uses ten runs. Capture baseline and candidate under the same environment above,
+with identical inputs and timing boundaries. Measure variants serially on shared
+hardware. Save both outputs and compare with
+[benchstat](https://pkg.go.dev/golang.org/x/perf/cmd/benchstat); do not extend
+sampling until significance appears.
+
+```sh
+# Baseline checkout; repeat in the candidate checkout, writing after.txt.
+go test -run '^$' -bench '^BenchmarkBudgetNewAndTake$' -benchmem -count=10 . > before.txt
+benchstat /path/to/before.txt /path/to/after.txt
+```
+
+Report effect sizes, uncertainty and allocation changes, including `~` (no
+statistically significant difference detected). Treat that as inconclusive, not
+equivalence; never suppress it. Statistical significance does not establish
+practical value.
+
 ## Race detection and CI
 
 Representative commands from `examples/` (Go toolchain and C toolchain must

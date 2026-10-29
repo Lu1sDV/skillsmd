@@ -19,8 +19,7 @@ description: >
 | Two heaps, interval merge, cyclic placement | [Ordering and placement](references/ordering-and-placement.md) |
 | Trees, BFS/DFS, islands, topological order, backtracking, DP, greedy | [Traversal and optimization](references/traversal-and-optimization.md) |
 
-Load only the relevant guide. All **14** source families are covered; its **17**
-heading is wrong, not a request to invent three families.
+Load only the relevant guide.
 
 ## Workflow
 

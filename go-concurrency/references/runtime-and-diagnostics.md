@@ -120,11 +120,19 @@ I/O lacking an unblock path. Compare goroutine profiles under repeated bounded
 workloads; a raw global goroutine count includes unrelated runtime/application
 work and is not a deterministic per-test leak assertion.
 
-Use `go test -blockprofile=block.out -mutexprofile=mutex.out ./...` for contention
-and `go tool pprof block.out` / `mutex.out` to inspect; enable appropriate profile
-rates for live applications. `go test -trace=trace.out ./...` and
-`go tool trace trace.out` expose scheduling/blocking. Memory profiles show sampled
-allocation/retention, not automatically which protocol leaked a goroutine.
+From `examples/`, profile one package at a time:
+
+```sh
+go test -count=1 -blockprofile=block.out -mutexprofile=mutex.out .
+go test -count=1 -trace=trace.out .
+```
+
+For another project, replace `.` with one affected package; these flags reject
+patterns such as `./...` when they match multiple packages. Inspect contention
+with `go tool pprof block.out` / `mutex.out`, and scheduling/blocking with
+`go tool trace trace.out`; enable appropriate profile rates for live applications.
+Memory profiles show sampled allocation/retention, not automatically which
+protocol leaked a goroutine.
 Protect diagnostic endpoints/profiles: stacks and labels may expose sensitive
 information. Remove local profile outputs after use; they are not bundle files.
 

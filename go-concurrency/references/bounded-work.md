@@ -5,6 +5,7 @@
 - [Budget the whole path](#budget-the-whole-path)
 - [Executable fan-out, fan-in and pipeline](#executable-fan-out-fan-in-and-pipeline)
 - [Semaphore admission](#semaphore-admission)
+- [errgroup in existing projects](#errgroup-in-existing-projects)
 - [Rate limits and token buckets](#rate-limits-and-token-buckets)
 - [Pub/sub and slow consumers](#pubsub-and-slow-consumers)
 
@@ -128,6 +129,17 @@ admission:
 This recipe's `visit` has no error result; do not discard failures to fit that
 signature. Prefer `ForEach` when real operations return errors. A semaphore
 controls concurrency, not starts per second, FIFO fairness or weighted resources.
+
+## errgroup in existing projects
+
+For projects already using [`errgroup`](https://pkg.go.dev/golang.org/x/sync/errgroup),
+`WithContext`'s derived context is canceled when `Wait` returns, even on success;
+do not reuse it for later work. With `SetLimit`, `Go` blocks at capacity: nested
+submissions can deadlock when active workers occupy all slots. Never change the
+limit while tasks are active. If admission must stop promptly on cancellation,
+use an explicit context-aware admission policy rather than assuming `Go` observes
+the context. `Wait` still requires every started function to return; cancellation
+does not preempt tasks.
 
 ## Rate limits and token buckets
 
