@@ -14,6 +14,13 @@ A collection of Claude Code skills — self-contained markdown files that give C
 | [fuzzgpt](fuzzgpt/) | History-driven LLM fuzzing (FuzzGPT-derived, arXiv:2304.02014) — mine bug history, auto-label buggy APIs, few-shot/zero-shot/retrieval edge-case generation, crash + differential oracles; target-agnostic, pairs with vuln-research |
 | [bug-bounty-reporting](bug-bounty-reporting/) | Write concise, human-sounding bug bounty reports with direct-impact PoCs, claim-to-evidence gates, transactional cleanup, and frozen-snapshot independent verification |
 | [glitchtip](glitchtip/) | Deploy, configure, integrate GlitchTip error tracking and uptime monitoring |
+| [go-idiomatic](go-idiomatic/) | Everyday Go — value/storage semantics, errors, resources, loop captures, modules and tooling |
+| [go-algorithms](go-algorithms/) | Go collections and 14 algorithm families — invariants, complexity, Unicode, overflow and mutation boundaries |
+| [go-api-design](go-api-design/) | Generics, interface contracts, Go-native SOLID and consolidated creation/composition/behavior patterns |
+| [go-concurrency](go-concurrency/) | Goroutines, channels, synchronization, bounded pipelines, cancellation, shutdown and race diagnosis |
+| [go-stdlib](go-stdlib/) | Standard-library boundaries — I/O/files, text/encoding, time/networking, logging, flags, crypto and SQL |
+| [go-tdd](go-tdd/) | Test-first Go — table/subtests, real boundaries, properties/fuzzing, synctest, benchmarks and test CI |
+| [go-system-design](go-system-design/) | Go application architecture — packages/modules, CLI/services, configuration, transactions and lifecycle |
 | [joern](joern/) | Joern CPG analysis — interprocedural dataflow, blast-radius mapping, sink hunting, callgraph queries across 14+ languages |
 | [hermes-mr-watch](hermes-mr-watch/) | Safely configure remote Hermes GitLab MR lifecycle watchers over SSH |
 | [hermes-self-evolution](hermes-self-evolution/) | Hermes Agent-style self-evolving loop — memory, session recall, skill creation, and skill patching |
@@ -60,6 +67,97 @@ A collection of Claude Code skills — self-contained markdown files that give C
 | [web-performance-optimization](web-performance-optimization/) | Lighthouse scores, Core Web Vitals, page load and rendering optimization |
 | [zero-dof](zero-dof/) | Zero-DOF programming — executable oracles, opposing constraints, mandatory playbooks, gaming prevention for LLM coding agents |
 | [zeroclaw](zeroclaw/) | Build, configure, deploy ZeroClaw AI agent infrastructure |
+
+## Go skill suite
+
+Seven task-oriented skills consolidate the [15 StructWeave Go guides](https://github.com/nirajkvinit/StructWeave-Algorithms/tree/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/golang),
+pinned at commit `e2a796e212d431c906c85957ea3c203ce0e2218f`.
+Each bundle installs independently and includes a concise `SKILL.md`, local
+topic references, installation/usage README, executable examples, source/correction
+map and upstream MIT notice.
+
+| Macro-topic | Skill | Source chapters |
+|---|---|---|
+| Language, idioms and everyday tooling | [go-idiomatic](go-idiomatic/) | 01 syntax, 05 idioms; language traps/anti-patterns from 07/12 |
+| Data structures and algorithms | [go-algorithms](go-algorithms/) | 02 collections, 04 algorithm patterns |
+| Generics, API contracts and design patterns | [go-api-design](go-api-design/) | 06 generics, 08 SOLID, 09–11 creation/structural/behavioral patterns |
+| Concurrency and coordination | [go-concurrency](go-concurrency/) | 03 concurrency; relevant sections of 07/12/14 |
+| Standard-library boundaries | [go-stdlib](go-stdlib/) | 14 standard library, with topic-specific handoffs |
+| Test-driven development | [go-tdd](go-tdd/) | 15 TDD; tests/tooling from 03/05/12/14 |
+| Application and service architecture | [go-system-design](go-system-design/) | 13 system design; package-design pitfalls from 12 |
+
+Consolidation decisions:
+
+- Group by activation task, not chapter; distribute traps and anti-patterns beside
+  their fixes. Keep generics/interface contracts with API design and TDD standalone.
+- Keep `SKILL.md` focused on routing, workflow, essential guardrails and versions;
+  detailed examples and pattern catalogues load from local references.
+- Preserve all actual source topics, not unsupported claims: chapter 04 advertises
+  17 patterns but contains 14 named algorithm families. Record this discrepancy
+  rather than invent three families. Correct EOF-with-data, iterator, JSON,
+  cancellation, loop-version and stable synctest API mistakes in the relevant bundle.
+- Use optional named handoffs, not sibling-file dependencies. Examples have isolated
+  stdlib-only modules declaring Go 1.25.0; individual API/language gates are explicit.
+
+Run each bundle's documented commands from its `examples/` directory. Existing CI
+discovers `SKILL.md` files automatically; no hand-maintained manifest is added.
+
+### Go suite review and verification
+
+Verified on 2026-10-29 with `go1.26.10-X:nodwarf5 linux/amd64`:
+
+- Two independent correctness reviewers covered all seven bundles; a separate
+  concision reviewer covered every entrypoint. Confirmed findings were fixed.
+- Concision edits preserve frontmatter triggers, routing, high-risk rules,
+  completion requirements and local reference coverage. Detailed algorithm version
+  history now routes directly to its existing reference section.
+
+| Measure | Before review | After review | Reduction |
+|---|---:|---:|---:|
+| Combined `SKILL.md` body words | 4,141 | 3,792 | 8.4% |
+
+- All seven isolated copies passed metadata, upstream-notice and the five static
+  skill-smell checks; 315 local documentation links/anchors resolved without siblings.
+- All seven `go test -race -count=1 -timeout=60s ./...` suites and `go vet ./...`
+  passed. Tests reported 59 top-level test/example/fuzz targets, with 121 passing
+  entries including subtests/seeds. The algorithm oracle also covers 1,573 cases.
+- All seven real demos passed, including temporary-file operations, bounded worker
+  shutdown, stdin parsing and a self-stopping loopback HTTP exchange.
+- The TDD exact-boundary mutant failed at the intended assertion; restoration
+  passed. A five-second, two-worker native fuzz campaign passed.
+- Vet exposed unkeyed external struct literals; correctness review exposed ignored
+  stdout errors. The latter reproduced in five demos before repair. All seven
+  now fail with the expected write error against Linux `/dev/full`.
+
+Minimum-version Go 1.25 execution, other OSes, live SQL drivers/databases,
+production durability/load, benchmarks and every Markdown-only recipe remain
+unverified. Static review and finite race/fuzz runs are not universal proofs.
+
+Linux stdout regression probe, from the repository root (Python 3 plus Go 1.25+):
+
+```sh
+python3 - <<'PY'
+import os
+from pathlib import Path
+import subprocess
+
+names = ("idiomatic", "algorithms", "api-design", "concurrency", "stdlib", "tdd", "system-design")
+env = dict(os.environ, GOWORK="off", GOTOOLCHAIN="local",
+           LINECOUNT_MAX_BYTES="1048576", LINECOUNT_TIMEOUT="3s")
+for name in names:
+    command = ["go", "run", "./cmd/demo"]
+    if name == "system-design":
+        command.append("demo")
+    data = '{"name":"Ada","limit":3}\n' if name == "stdlib" else None
+    with open("/dev/full", "w") as sink:
+        result = subprocess.run(command, cwd=Path(f"go-{name}/examples"), env=env,
+                                input=data, text=True, stdout=sink,
+                                stderr=subprocess.PIPE, timeout=30)
+    assert result.returncode != 0 and "no space left on device" in result.stderr, (
+        name, result.returncode, result.stderr)
+    print(f"go-{name}: output failure propagated")
+PY
+```
 
 ## Python skill suite
 
