@@ -56,6 +56,16 @@ can already make that future non-`Send` before its first poll.
   bounds. Borrowing futures can instead be awaited/composed in the caller's
   task without spawning them.
 
+For callbacks whose futures borrow arguments or captured state, consider the
+appropriate `AsyncFn` / `AsyncFnMut` / `AsyncFnOnce` bound (Rust 1.85+) when
+`Fn* -> Fut` cannot express that relationship. Do not add clones or `'static`
+just to mask it. A `Send` callable can return a non-`Send` future. For generic
+spawning APIs, expose the future's `Send` requirement: use `Fut: Future + Send`
+where applicable, or a custom trait method returning `impl Future<Output = T> + Send`
+for borrowing APIs. Keep the interface within the project's supported toolchain.
+See [async callback contracts](https://doc.rust-lang.org/std/ops/trait.AsyncFnMut.html)
+and [future bounds in traits](https://blog.rust-lang.org/2023/12/21/async-fn-rpit-in-traits/).
+
 Sources: [spawn bounds](https://tokio.rs/tokio/tutorial/spawning),
 [`spawn_local`](https://docs.rs/tokio/latest/tokio/task/fn.spawn_local.html).
 
@@ -108,6 +118,13 @@ Sources: [shared-state guidance](https://tokio.rs/tokio/tutorial/shared-state),
 | `watch` | Latest configuration/status | Intermediate values can be overwritten; not a work queue |
 | `broadcast` | Events for current subscribers | Slow receivers can return `Lagged`; explicitly resync, tolerate loss, or fail |
 | `Semaphore` | Active-resource budget | Controls permits, not a message queue or the total number of waiting tasks |
+
+In a `watch` loop, use `borrow_and_update()` after `changed().await` so a value
+sent between notification and reading is also marked seen; `borrow()` can leave
+that update pending and process the same value twice. Drop the returned `Ref`
+before any `.await` because it holds a read lock; copy/clone a snapshot only when
+needed across suspension. Handle channel closure and decide whether to process
+the initially seen value. See [watch receiver semantics](https://docs.rs/tokio/latest/tokio/sync/watch/).
 
 A bounded channel limits buffered **messages**, not bytes, producer-owned values,
 spawned task count, downstream buffers, or completed results awaiting collection.

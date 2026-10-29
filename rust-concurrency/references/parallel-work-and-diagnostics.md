@@ -132,6 +132,15 @@ present. For an async system, distinguish runtime starvation from a task that
 is simply pending on I/O. Add narrowly scoped diagnostic instrumentation only
 when needed to establish the path, not as an unrelated subsystem.
 
+When the project uses `tracing`, do not hold a `Span::enter` / `entered` guard
+across `.await`: yielding can attribute another task's events to that span even
+on one thread. Use `#[instrument]` or `future.instrument(span)`, and attach the
+intended context to spawned work. For synchronous sections, `span.in_scope` exits
+the span before suspension. `#[instrument]` records arguments by default; select
+`skip` / `skip_all` and explicit fields for sensitive or expensive-to-format values.
+Sources: [async span handling](https://docs.rs/tracing/latest/tracing/span/struct.Span.html#in-asynchronous-code),
+[instrumented fields](https://docs.rs/tracing/latest/tracing/attr.instrument.html).
+
 ## Regression checks for the discovered contract
 
 Use deterministic channels, barriers, or condition variables to establish the

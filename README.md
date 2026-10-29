@@ -242,8 +242,8 @@ Verified on 2026-10-23 with CPython 3.14.8 after the concision review:
 ## Rust skill suite
 
 Eight task-oriented skills consolidate the [18 StructWeave Rust guides](https://github.com/nirajkvinit/StructWeave-Algorithms/tree/49e7f127eaf0fc71694a4b53f31ac3a2b8cdb168/languages/rust).
-The existing `rust-performance` remains the ninth Rust skill; it owns measured
-optimization rather than duplicating the new skills' correctness workflows.
+The existing `rust-performance` remains the ninth Rust skill; it owns performance
+writing/review and measured optimization, with detailed guidance loaded by topic.
 
 The compact [rust-guidelines](rust-guidelines/) checklist complements these nine
 skills with API and engineering review guidance; its six references load by topic.
@@ -303,6 +303,23 @@ Verified on 2026-10-11 with Rust 1.98.1:
   successfully. Browser/WASI runtimes, Miri, sanitizers, and other optional
   ecosystem recipes were not executed; their prerequisites and commands remain
   explicit in the relevant references. This is not an MSRV certification.
+
+### Selective Rust rule review
+
+On 2026-10-29, reviewed all 265 rules in
+[leonardomso/rust-skills](https://github.com/leonardomso/rust-skills/tree/fd2a861ab0406a4ac536a55274d14ea6fd1ca9c9).
+Selected additions cover async tracing, `watch` races, async callback bounds,
+`Borrow` semantics, Serde contracts, build-script inputs, lint expectations, and
+package/API compatibility checks. They live in existing references with primary
+documentation links; the upstream rule corpus is not bundled.
+
+The performance entry was reduced from 406 to 139 lines while preserving writing,
+review, and measurement workflows. Corrected examples distinguish async locks,
+true/false sharing, ABI constraints, and SIMD requirements. Six dependency-free
+performance Rustdoc examples passed on Rust 1.85.0 (edition 2024), including empty,
+uneven, and overprovisioned worker partitions. A fresh-context concurrency review
+caught the intended tracing and `watch` defects; this is a focused check, not an
+effectiveness benchmark across models.
 
 ## TypeScript skill suite
 

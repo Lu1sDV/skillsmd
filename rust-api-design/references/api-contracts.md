@@ -160,6 +160,11 @@ itself break callers. Internal/private refactors do not require a public extensi
 framework. Review the [Cargo SemVer guide](https://doc.rust-lang.org/cargo/reference/semver.html)
 and [Rust API Guidelines checklist](https://rust-lang.github.io/api-guidelines/checklist.html).
 
+For published library changes, consider [cargo-semver-checks](https://github.com/obi1kenobi/cargo-semver-checks)
+against the intended release baseline and supported feature/target configurations.
+Passing structural API checks does not establish behavioral or wire-format
+compatibility; retain tests for those contracts.
+
 ## Sources
 
 Adapted from StructWeave [08 SOLID](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/49e7f127eaf0fc71694a4b53f31ac3a2b8cdb168/languages/rust/08-solid-principles.md),

@@ -32,6 +32,12 @@ when the repository maintains the needed lockfile. Include boundary/error tests;
 use property, fuzz, differential, or concurrency checks when the risk warrants them.
 An optimized assertion-enabled lane complements, not replaces, normal release tests.
 
+For a release, inspect `cargo package --list` and run `cargo package` with
+verification enabled for the intended package. Check required sources/assets and
+registry-resolvable non-dev dependency versions: the normalized manifest and
+extracted archive must build independently of the checkout. Workspace tests alone do not
+establish this. See [Cargo packaging](https://doc.rust-lang.org/cargo/commands/cargo-package.html).
+
 ## Lint scope
 
 Tune lints to the MSRV and project; keep exceptions narrow and explained.

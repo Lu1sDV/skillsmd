@@ -110,6 +110,17 @@ scope and inspect `default-members`. Workspaces are useful for related packages,
 not a requirement for every small binary. Release LTO/codegen tuning belongs to
 optional **rust-performance**, not a default starter template.
 
+## When changing build scripts
+
+`build.rs` runs on the host: read `TARGET` / `CARGO_CFG_*` for target decisions;
+`cfg!` describes the host. Write generated artifacts to `OUT_DIR` and account for
+retained outputs. Declare relevant file/environment inputs with `rerun-if-changed`
+and `rerun-if-env-changed`; verify a clean build and an incremental rebuild after
+changing an input. With no rerun directives, Cargo watches package changes, not
+every invocation. Declare custom cfg names and allowed values with
+`rustc-check-cfg` even when inactive; `rustc-cfg` enables a cfg, not its declaration.
+Use syntax supported by the project's Cargo/MSRV. See [Cargo build scripts](https://doc.rust-lang.org/cargo/reference/build-scripts.html).
+
 ## Formatting, linting and editor setup
 
 - Follow existing rustfmt configuration. Start with stable options; upstream
@@ -123,6 +134,10 @@ optional **rust-performance**, not a default starter template.
   suggestions that change error or overflow semantics. Prefer a narrowly scoped,
   explained allowance over muting an entire category. Do not enable all of
   `clippy::restriction` indiscriminately.
+- When the lint is intentionally present in the checked configurations, prefer
+  a scoped `#[expect(lint, reason = "...")]` on supported toolchains (Rust 1.81+).
+  An obsolete exception then warns; retain an explained `allow` when the lint's
+  presence legitimately varies. See [lint expectations](https://doc.rust-lang.org/reference/attributes/diagnostics.html#the-expect-attribute).
 - `cargo clippy --fix` and `cargo fmt` mutate source; use only when authorized and
   review resulting changes. `-D warnings` is a project gate, not universal policy;
   compiler updates can add warnings, so keep toolchain drift intentional.

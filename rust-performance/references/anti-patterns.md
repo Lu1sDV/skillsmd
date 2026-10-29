@@ -1,11 +1,21 @@
 # Rust Anti-Patterns: cost, evidence, fix
 
-Each entry: what the code looks like, what it costs, the measurement that
-proves it, and the fix. Ordered by how often it shows up. Claims marked
+Each entry: what the code looks like, possible costs, evidence from a particular
+workload, and a candidate fix. Claims marked
 *(measured)* come from a benchmark in the cited source; claims marked
 *(estimated)* are reasoning from the source's data, not a direct measurement.
 
 Primary sources are listed in [sources.md](sources.md).
+
+## Contents
+
+- [Allocation](#1-allocation)
+- [Iterators](#2-iterators)
+- [Data layout](#3-data-layout)
+- [Hashing](#4-hashing)
+- [Concurrency](#5-concurrency)
+- [Build configuration](#6-build-configuration)
+- [Clippy gates](#7-clippy-gates)
 
 ---
 
@@ -20,9 +30,9 @@ for x in input { v.push(x); }        // reallocs as capacity grows
 
 Growth is quasi-doubling, and the first capacity depends on element size —
 current `RawVec` starts at 8 elements for 1-byte types and 4 for most other
-nonzero-sized types up to 1 KiB, then doubles. Each step copies the elements and
-frees the old block. Filling a 20-element vector of a moderate-size type by
-`push` therefore costs four allocations:
+nonzero-sized types up to 1 KiB, then doubles. Growth may move the allocation or
+extend it in place; this sequence is an implementation detail. Reserving a known
+size avoids repeated growth requests:
 
 ```rust
 let mut v = Vec::with_capacity(input.len());
@@ -178,12 +188,11 @@ Clippy: `redundant_allocation`. One owner.
 
 ### 1.9 `SmallVec` without measuring
 
-`SmallVec<[T; N]>` keeps up to `N` elements inline. It reliably reduces
-allocation rate but **is slightly slower than `Vec` for ordinary operations** —
-every operation checks whether the elements are inline or heap. Large `N` or a
-large `T` makes the `SmallVec` bigger than the `Vec` it replaces and makes
-copying it slower. If you know the exact maximum length, `ArrayVec` avoids the
-heap fallback entirely and is faster.
+`SmallVec<[T; N]>` keeps up to `N` elements inline. It can reduce allocations
+when that capacity fits the actual size distribution, but adds inline/heap
+handling and can enlarge its containing value. Large `N` or `T` can increase
+copying and cache costs. `ArrayVec` avoids a heap fallback when a fixed capacity
+and explicit exhaustion policy fit the contract. Neither is universally faster.
 
 Measured in one project: inline small-vector storage cut runtime **12–25%** for a
 workload whose `BigInt` values were `Vec<BigDigit>` — one heap indirection for a
@@ -202,7 +211,7 @@ The Rust Book measures both on the same text: explicit loop `19,620,300 ±
 within variance. The Book's own point is that it is "not to prove that the two
 versions are equivalent"; it says equivalent loop and iterator code optimizes
 similarly *in many cases*, and recommends re-measuring on your own inputs.
-Write the iterator.
+Prefer the clearer form unless the relevant measurements justify a change.
 
 ### 2.2 The real cost: abstraction at the hot boundary
 
@@ -228,12 +237,14 @@ across calls. When you own both sides of a hot iterator, expose a batch API.
   a reference to the iterator item. An `Option`-returning `f` does not justify
   `filter_map(f)`: that drops `p` and unwraps/discards output options.
   Whether the equivalent fused adapter is faster requires measurement.
-- `chain` can be slower than a single iterator. Avoid in hot paths.
+- If `chain` appears in a measured bottleneck, compare an equivalent traversal;
+  do not assume the adapter survives optimization or dominates the cost.
 - `chunks_exact` when the chunk size divides the length exactly; otherwise
   `chunks_exact` + `remainder`. Same for `chunks_mut`, `rchunks*`.
-- `iter().copied()` over `iter()` for small integer element types — the consumer
-  gets values by value and LLVM generates better code.
-- `size_hint` on hand-written iterators so `collect`/`extend` reserve once.
+- `iter().copied()` gives the consumer values rather than references; compare
+  generated code or measurements before claiming a gain.
+- Give hand-written iterators truthful `size_hint` bounds; useful bounds can
+  reduce growth, but do not promise one allocation for every consumer.
 
 ---
 
@@ -362,8 +373,9 @@ conclusion is that a mutex "can outperform naive atomics in highly contended
 single-counter patterns", and its profiling points at an AArch64 atomic RMW path
 — so this is not an architecture-independent contention threshold.
 
-Fix the sharing rather than the primitive: per-thread counters or thread-local
-sharding, merged at the end. Then the atomic is uncontended and wins again.
+Reduce the sharing with per-thread counters or thread-local sharding, merged
+when the semantics allow it; measure the merge and storage costs too. This is
+true sharing of one counter, not false sharing between independent locations.
 
 ### 5.2 `std::sync::Mutex` vs `parking_lot::Mutex`
 
@@ -387,8 +399,9 @@ or doing I/O under a lock is a design bug.** No mutex makes that good.
 ### 5.3 Blocking a Tokio worker
 
 Tokio's scheduler is cooperative, not preemptive. `.await` is an *opportunity* to
-yield — if the awaited resource is already ready, the task never yields and no
-other task on that worker runs. Tokio will not detect this and add threads.
+yield, not a guarantee: a ready future may continue immediately. Some Tokio
+operations participate in cooperative budgeting, but arbitrary computation does
+not become preemptible. Do not expect the runtime to add workers to rescue it.
 
 ```rust
 async fn handler(req: Request) -> Response {
@@ -449,8 +462,10 @@ fix is the same: scope the lock so it is dropped before the `.await`, or use an
 async-aware mutex, which is designed to be held across one. Clippy:
 `await_holding_lock` (suspicious group).
 
-Same class of bug for `RefCell` borrows across `.await`, where the failure is a
-runtime borrow panic rather than a deadlock: `await_holding_refcell_ref`.
+An async mutex guard may span `.await`; review cancellation, partially updated
+state, and wait cycles rather than banning that use. A `RefCell` borrow held
+across suspension can cause a runtime borrow panic when another path requests an
+incompatible borrow: `await_holding_refcell_ref`.
 
 ### 5.6 Over-spawning
 
@@ -491,17 +506,17 @@ Only the workspace-root `Cargo.toml` profile is honoured.
 
 | Setting | Effect | Caveat |
 |---|---|---|
-| `--release` | 10–100× vs dev | dev also keeps debug assertions and overflow checks |
-| `codegen-units = 1` | better runtime, smaller binary | slower compile (defaults: 256 incremental, 16 non-incremental) |
-| `lto = "thin"` | 10–20% possible | substantially faster to link than fat, similar gains |
+| `--release` | optimized artifact | use the actual profile; debug performance can itself be the target |
+| `codegen-units = 1` | more optimization across codegen units | can increase compile time; measure runtime and size |
+| `lto = "thin"` | cross-crate optimization | measure link time, runtime, and size against the baseline |
 | `lto = "fat"` | more aggressive | **may not improve** speed or size |
-| `lto = "off"` | faster builds | likely slower and larger |
-| `opt-level = 3` | fastest in most cases | can be *slower* than `2` |
+| `lto = "off"` | disables LTO | compare build time and resulting artifact costs |
+| `opt-level = 3` | more optimization | can be *slower* than `2` |
 | `opt-level = "s"` | size-oriented | slightly more inlining/vectorization than `"z"` |
-| `opt-level = "z"` | smallest | **disables loop vectorization**; not guaranteed smaller |
-| `panic = "abort"` | smaller, slightly faster | no unwinding; ignored by tests/benches/build scripts/proc macros |
-| `target-cpu = native` | emits AVX and friends | binary no longer runs on older CPUs |
-| PGO | 10%+ possible | needs a representative profile run; unsupported for crates.io binaries |
+| `opt-level = "z"` | size-oriented | **disables loop vectorization**; not guaranteed smaller |
+| `panic = "abort"` | may reduce artifact/build cost | changes failure semantics; test/tool targets have separate restrictions |
+| `target-cpu = native` | permits host-specific instructions | deployed CPUs must support the selected features |
+| PGO | optimizes using execution profiles | train on representative workloads and keep profiles compatible with the build |
 
 Cargo's own doc explicitly warns that `s`/`z` are not necessarily smaller and
 that level 3 can be slower than 2. Re-measure across rustc versions.
@@ -616,7 +631,8 @@ the whole group; `restriction` and `nursery` should always be cherry-picked.
 - [ ] Indices and field widths sized to the actual data range
 - [ ] Hashing measured before the hasher is swapped; not attacker-controlled keys
 - [ ] No blocking or CPU-heavy work on an async worker
-- [ ] Channels bounded; guards not held across `.await`
+- [ ] Queue/task/payload limits explicit; blocking guards do not span `.await`
+- [ ] Async lock use preserves cancellation safety and avoids wait cycles
 - [ ] Shared mutable state sharded, not hammered
 - [ ] No speculative performance complexity on cold paths; ordinary ownership choices remain valid
 - [ ] Release profile sane; allocator and PGO changes measured, not assumed

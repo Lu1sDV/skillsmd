@@ -14,7 +14,7 @@ Consolidates and merges three upstream `rust-performance` skills:
 |---|---|
 | [full-stack-skills/rust-skills](https://www.skills.sh/full-stack-skills/rust-skills/rust-performance) | Measurement-layer routing, benchmark/regression-gate discipline, memory + binary-size + compile-time tracking |
 | [terraphim/terraphim-skills](https://www.skills.sh/terraphim/terraphim-skills/rust-performance) | Correctness-first gate, tooling commands, build profiles, Criterion/hyperfine templates, PR checklist |
-| [huiali/rust-skills](https://www.skills.sh/huiali/rust-skills/rust-performance) | Optimization priority ladder, concrete patterns, false sharing / lock contention / NUMA triage, trap tables |
+| [huiali/rust-skills](https://www.skills.sh/huiali/rust-skills/rust-performance) | Concrete patterns and contention/NUMA topics; fixed optimization ordering and universal gains are deliberately omitted |
 
 ## Install
 
@@ -30,7 +30,7 @@ Or via the marketplace:
 
 ## Contents
 
-- [`SKILL.md`](SKILL.md) — writing/review guidance, Clippy gates, priority ladder, measurement routing, workflow, hard rules, and symptom-to-cause triage
+- [`SKILL.md`](SKILL.md) — compact writing/review gates, section routing, conditional measurement workflow, and completion evidence
 - [`references/optimization-patterns.md`](references/optimization-patterns.md) — allocation, layout, zero-copy, SIMD, false sharing, contention, NUMA
 - [`references/measurement-and-profiling.md`](references/measurement-and-profiling.md) — tooling commands, build profiles, benchmark templates, regression gates, report format
 
@@ -45,3 +45,22 @@ Or via the marketplace:
   optimization claims, not for ordinary initial implementation.
 - Drop the former blanket 20% clarity threshold: complexity must earn its cost
   on the actual workload, not meet a universal percentage.
+- Keep benchmark anecdotes and detailed catalogs in references. Prioritize the
+  measured dominant cause instead of a fixed ladder or assumed speedup range.
+- Distinguish blocking from async mutex guards and true from false sharing;
+  preserve foreign layout and floating-point contracts during optimization.
+
+## Example checks
+
+The dependency-free examples in `optimization-patterns.md` can be checked with
+Rust 1.85 or newer:
+
+```bash
+rustdoc --test --edition=2024 references/optimization-patterns.md
+```
+
+The scoped counting example rejects a zero worker limit through `NonZeroUsize`,
+handles empty input and limits larger than the input, and checks uneven partitions
+against explicit expected counts. These checks establish example behavior, not
+a performance improvement. Benchmark harnesses with project placeholders are
+marked schematic and require the consuming project's dependencies and workload.
