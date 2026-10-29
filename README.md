@@ -2,6 +2,16 @@
 
 A collection of Claude Code skills — self-contained markdown files that give Claude specialized knowledge for specific tools, platforms, and workflows.
 
+## Documentation layout
+
+Repository-wide and skillset documentation lives in this root `README.md`.
+Every independent skill keeps its installation and usage overview in a
+`README.md` at its own root. This convention applies to all skills and suites.
+
+Agent workflows stay in `SKILL.md`; focused references, examples and executable
+resources stay with the skill that uses them. Bundled upstream reference
+snapshots retain their original layout and attribution.
+
 ## Skills
 
 | Skill | Description |
@@ -324,42 +334,121 @@ effectiveness benchmark across models.
 ## TypeScript skill suite
 
 Nine task-oriented skills consolidate the [16 StructWeave TypeScript guides](https://github.com/nirajkvinit/StructWeave-Algorithms/tree/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript),
-pinned at commit `e2a796e212d431c906c85957ea3c203ce0e2218f`.
-Each root-level bundle contains a concise `SKILL.md`, focused local references,
-agent metadata and the upstream MIT notice. Copy the complete folder so its
-references and attribution travel with it.
+pinned at commit `e2a796e212d431c906c85957ea3c203ce0e2218f`. Reviewed on 2026-10-29.
 
 | Macro-topic | Skill | Source chapters |
 |---|---|---|
-| Language and runtime foundations | [typescript-language-runtime](typescript-language-runtime/) | 01 syntax, 07 modern TypeScript |
-| Type modeling and generic APIs | [typescript-type-modeling](typescript-type-modeling/) | 03 type system, 05 utility types/generics |
-| Collections and standard-library APIs | [typescript-collections](typescript-collections/) | 02 data structures, 15 standard library |
-| Algorithmic problem solving | [typescript-algorithm-patterns](typescript-algorithm-patterns/) | 04 algorithm patterns |
-| Asynchrony and concurrency | [typescript-async-concurrency](typescript-async-concurrency/) | 06 async patterns; async portions of 15 |
-| Tooling, testing and TDD | [typescript-tooling-tdd](typescript-tooling-tdd/) | 08 tooling/testing, 16 TDD |
-| Maintainable architecture and code quality | [typescript-maintainable-design](typescript-maintainable-design/) | 09 SOLID, 13 anti-patterns |
-| Design-pattern selection and implementation | [typescript-design-patterns](typescript-design-patterns/) | 10–12 creational, structural and behavioral patterns |
-| Interview reasoning and diagnostics | [typescript-interview-review](typescript-interview-review/) | 14 interview traps |
+| Language and runtime foundations | [typescript-language-runtime](typescript-language-runtime/) | [01 Syntax quick reference](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript/01-syntax-quick-reference.md); [07 Modern TypeScript](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript/07-modern-typescript.md) |
+| Type modeling and generic APIs | [typescript-type-modeling](typescript-type-modeling/) | [03 Type system mastery](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript/03-type-system-mastery.md); [05 Utility types and generics](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript/05-utility-types-generics.md) |
+| Collections and standard-library APIs | [typescript-collections](typescript-collections/) | [02 Data structures](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript/02-data-structures.md); [15 Standard-library essentials](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript/15-std-library-essentials.md) |
+| Algorithmic problem solving | [typescript-algorithm-patterns](typescript-algorithm-patterns/) | [04 Interview patterns](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript/04-interview-patterns.md) |
+| Asynchrony and concurrency | [typescript-async-concurrency](typescript-async-concurrency/) | [06 Async patterns](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript/06-async-patterns.md); [15 Standard-library essentials](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript/15-std-library-essentials.md) (async portions) |
+| Tooling, testing and TDD | [typescript-tooling-tdd](typescript-tooling-tdd/) | [08 Tooling and testing](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript/08-tooling-testing.md); [16 Test-driven development](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript/16-test-driven-development.md) |
+| Maintainable architecture and code quality | [typescript-maintainable-design](typescript-maintainable-design/) | [09 SOLID principles](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript/09-solid-principles.md); [13 Anti-patterns and best practices](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript/13-anti-patterns-best-practices.md) |
+| Design-pattern selection and implementation | [typescript-design-patterns](typescript-design-patterns/) | [10 Creational patterns](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript/10-design-patterns-creational.md); [11 Structural patterns](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript/11-design-patterns-structural.md); [12 Behavioral patterns](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript/12-design-patterns-behavioral.md) |
+| Interview reasoning and diagnostics | [typescript-interview-review](typescript-interview-review/) | [14 Interview trap questions](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript/14-interview-trap-questions.md) |
 
-The algorithm skill retains all 17 source families; the design-pattern skill
-covers the source's 22 named patterns. Detailed decisions load from 22 local
-references, while optional handoffs name related skills without requiring sibling
-files. The adaptation corrects runtime/type-checking confusion, callback variance,
-unsafe validators, promise-pool bookkeeping, empty-input cases and misleading
-complexity or immutability claims.
+Every numbered source chapter has a primary destination above. The source README
+provides the upstream overview. Boundaries follow activation tasks: language and
+runtime stay together; types and generics share API contracts; collections cover
+representation while algorithms cover problem-solving invariants. Async owns
+settlement and cancellation. Tooling and TDD share project verification.
+Maintainable design diagnoses responsibilities; design patterns select mechanisms.
+Interview review handles explanation and diagnosis.
 
-Focused additions cover compiler-program coverage and diagnostics, packed-package
-consumer checks, proven module-boundary enforcement, and branded/generated type
-ownership. They extend existing workflows through conditional references and short
-decision rules; basic syntax and pattern explanations are kept brief.
+### TypeScript usage and package contents
 
-The [TypeScript catalog and source map](docs/typescript-skills.md) records chapter
-coverage, corrections and verification. All nine bundles passed structural checks;
-the four included TypeScript examples compiled with strict TypeScript 5.8.3 settings.
-Independent temporary exercises also passed compiler/runtime checks for validation,
-bounded concurrency and Unicode-aware sliding windows under Node v24.22.1. Those
-exercise implementations are excluded from the bundles; the recorded checks do
-not certify every upstream example or compiler/runtime version.
+Each independently usable folder contains a concise `README.md`, the `SKILL.md`
+entry point, `agents/openai.yaml`, focused `references/`, and `LICENSE.upstream`.
+Copy the complete folder into the skill location supported by your agent.
+Repository storage alone does not install or activate it.
+
+Example requests:
+
+- `Use $typescript-language-runtime to diagnose why this script compiles but fails under Node.`
+- `Use $typescript-async-concurrency to implement a bounded pool with explicit rejection behavior.`
+- `Use $typescript-tooling-tdd to reproduce this bug and run the relevant project checks.`
+
+Each skill's README includes its own invocation and reference index. Entry points
+focus on decisions, invariants, failure modes and completion evidence; details
+load from the relevant reference. Optional handoffs name another skill without
+requiring sibling files.
+
+### TypeScript adaptation notes
+
+The algorithm skill covers the source's seventeen families: two pointers, sliding window, binary search, prefix sums, monotonic stacks, hash-map patterns, two heaps, interval merging, cyclic sort, BFS/DFS, backtracking, dynamic programming, greedy methods, topological sorting, union-find, tries, and bit manipulation. Read only the reference relevant to the problem.
+
+The design-pattern skill covers the source's five creational, seven structural, and ten behavioral patterns. It preserves the source's actual scope rather than claiming to cover every named pattern in software design.
+
+Treat source snippets as learning examples and inspect their contracts before reuse. The skills address these findings:
+
+| Area | Source issue or limitation | Guidance in this set |
+| --- | --- | --- |
+| Runtime support | Broad native-TypeScript and version claims | Check actual runtime support; separate stripping, transformation, type checking, and host APIs |
+| Type-system history | `satisfies` attributed to the wrong release | Identify it as a TypeScript 4.9 feature when history matters |
+| Runtime validation | Guards assert field types after testing only property existence | Check values and every field promised by the predicate |
+| Function variance | Reversed callback/substitution examples | Check contravariant parameter direction and method exceptions under the actual compiler settings |
+| Async limits | Some sample pools retain settled work or remove the wrong promise | Track exact active tasks, test peak concurrency, and make settlement policy explicit |
+| Empty inputs | Minimum-window and LIS examples omit important empty cases | Define empty-input contracts before entering loops or reducing results |
+| Traversal complexity | Queue examples repeatedly remove the first array element | Use a head cursor or suitable queue and account for actual operations |
+| Immutability | A shallow freeze of a clone is described as deep immutability | Separate copying, ownership, readonly types, and runtime freezing |
+| Testing | Some properties compare the same implementation to itself or assume all objects round-trip through JSON | Use independent invariants and a supported input domain |
+| TDD | A cleanup example introduces additional validation behavior | Add each new rule through its own behavior test |
+
+Primary references for significant language/tooling corrections: [Node TypeScript support](https://nodejs.org/api/typescript.html), [TypeScript 4.9](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html), [strict function variance](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-6.html), [TypeScript 5.5 narrowing](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-5.html), and [Vitest type checking](https://vitest.dev/guide/testing-types.html). Further source links are bundled with the relevant skill.
+
+### TypeScript workflow additions
+
+The 2026-10-29 marketplace review selected procedures that add observable evidence
+or a concrete design decision. The suite remains nine skills with 22 local
+references; the entry points route to the relevant details only when needed.
+
+| Addition | Location | Completion criterion |
+| --- | --- | --- |
+| Compiler coverage, resolution, editor mismatch, and performance diagnosis | [Compiler diagnostics](typescript-tooling-tdd/references/compiler-diagnostics.md) | Identify the actual checked program and cause; compare equivalent measurements and preserve correctness |
+| Published package compatibility | [Package consumer checks](typescript-tooling-tdd/references/package-consumers.md) | Inspect and install the packed artifact; verify promised runtime and type entry points |
+| Module-boundary enforcement | [Maintainability checklist](typescript-maintainable-design/references/review-checklist.md) | Allowed import passes, a resolvable forbidden import fails under the intended rule, restored code passes |
+| Domain identity and generated-schema ownership | [Type-design decisions](typescript-type-modeling/references/type-design-decisions.md) | Construct brands through the owning boundary, reject domain mix-ups, derive from the existing schema owner |
+
+The original procedures were informed by selected parts of
+[Sentimony's TypeScript workflow](https://github.com/sentimony/skills/blob/61919613972e63f2c833c1c5ad4744d7c40ad05a/plugins/skills/skills/typescript/SKILL.md),
+[tsdown's package validation](https://github.com/rolldown/tsdown/blob/83b6fb5a5ecd7c041ecebc8d9fdc15efc3127103/skills/tsdown/references/option-lint.md),
+[Matt Pocock's boundary verification](https://github.com/mattpocock/skills/blob/a496f5513d4a4cf889bc48e189e579f4b0bdf6aa/skills/in-progress/setup-ts-deep-modules/SKILL.md),
+and [Poteto's type-design rules](https://github.com/poteto/plugins/blob/74dd2291e8e37b12fd6dc49b2acbd655c6bdaf12/pstack/skills/typescript-best-practices/references/patterns.md).
+Technical details use the primary documentation linked from the new references.
+Existing syntax reminders, utility-type glossaries, and repeated pattern definitions
+were shortened while retaining the task-specific failure checks and source coverage.
+
+### TypeScript verification
+
+#### Initial validation
+
+- Passed the skill-creator structural validator for all nine skills.
+- Checked frontmatter, folder/name agreement, UI metadata, literal invocation names, required attribution, and absence of template placeholders.
+- Resolved all 29 local file links in the prepared set and all 66 pinned source-file links, including their section anchors.
+- Compiled all four included TypeScript examples with TypeScript 5.8.3 using `strict`, `noUncheckedIndexedAccess`, and `exactOptionalPropertyTypes`.
+- Exercised the skills independently on runtime metric validation with a correlated generic property reader, ordered bounded concurrency with first-error handling and draining, and a Unicode-aware minimum-cover substring algorithm.
+- Passed the three exercises' compiler and runtime checks under TypeScript 5.8.3 and Node v24.22.1. The algorithm exercise also matched an independent bounded brute-force oracle.
+
+These checks establish package integrity and representative skill behavior. They do not constitute exhaustive testing of every upstream teaching example or every compiler/runtime version. Temporary exercise implementations are excluded from the skill package.
+
+#### Focused revision verification
+
+- Revalidated all nine skill bundles, their metadata, portable local references,
+  unchanged upstream notices, and all 22 named design patterns.
+- Exercised the tooling skill in two independent fresh contexts under TypeScript
+  5.8.3 and Node v24.22.1. One identified a passing solution-config command that
+  checked no source, then exposed TS2322 in its referenced project. The other
+  packed and installed a library whose producer checks passed: its ESM runtime
+  import worked, but the omitted declaration file caused consumer TS7016 and
+  ineffective negative type checks.
+- These exercises verify diagnostic behavior for those cases. Compiler speedups,
+  editor performance, and every consumer runtime/resolver combination were not
+  benchmarked or certified. Temporary projects and archives are outside the suite.
+
+### TypeScript attribution
+
+Adapted from [StructWeave-Algorithms](https://github.com/nirajkvinit/StructWeave-Algorithms), copyright (c) 2024-2025 StructWeave Contributors, distributed under the MIT License. The upstream license is included in each skill folder so attribution travels with an independently copied skill.
 
 ## Commands
 
