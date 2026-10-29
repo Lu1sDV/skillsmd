@@ -24,39 +24,22 @@ Read [runtime-compatibility.md](references/runtime-compatibility.md) for module,
 
 ## Implement the smallest coherent change
 
-1. Keep local inference where it expresses intent; annotate public boundaries and ambiguous empty/nullable state.
-2. Model finite alternatives with literal unions or a small discriminated union. Route complex generic relationships to `typescript-type-modeling`.
-3. Use `const` for stable bindings and `let` for reassignment. Treat mutation of referenced objects as a separate design decision.
-4. Handle `null` and `undefined` explicitly. Preserve valid `0`, `false`, and empty strings when choosing defaults.
-5. Use ordinary functions, closures, classes, or modules according to lifecycle and state ownership. Do not add classes solely to hold stateless functions.
-6. Match the existing module system. Use `import type` for erased dependencies and the import extensions required by the actual execution path.
-7. Treat external JSON, environment variables, storage, and user input as untrusted runtime values. Validate them before promising a domain type.
-8. Keep parsing and domain validation distinct: a syntactically valid number, date, or JSON object may still violate the contract.
+1. Preserve local inference; annotate public boundaries and ambiguous empty/nullable state. Route complex generic relationships to `typescript-type-modeling`.
+2. Preserve valid `0`, `false`, and empty strings when defaulting absent values: use `??` for nullish fallback and `||` only when all falsy values should trigger it.
+3. Choose functions, classes, and modules by state ownership and lifecycle. Preserve the intended `this` receiver when detaching methods or passing callbacks.
+4. Match the existing module system. Use `import type` for erased dependencies and the import extensions required by the actual execution path.
+5. Accept external JSON, environment variables, storage, and user input as `unknown`; validate field values and domain constraints before promising a type. Successful parsing alone does not establish validity.
 
 Read [runtime-boundaries.md](references/runtime-boundaries.md) when adding a parser, a type guard, an API client, or configuration loading.
 
-## Apply language decision rules
-
-| Situation | Action |
-| --- | --- |
-| Default only absent values | Use `??` or an explicit nullish check; use `||` only when all falsy values should trigger a fallback. |
-| Optional property chain | Guard each nullable boundary; do not use `?.` to bypass an undeclared property or swallow a required invariant. |
-| Detached method or callback | Check how `this` is supplied; use a closure, explicit receiver, or binding when necessary. |
-| Constant collection or object | Separate a constant binding, a readonly type, and runtime freezing; document required depth and aliasing. |
-| Integer arithmetic | Establish safe-integer limits, division rounding, and whether `bigint` is required; avoid implicit number/bigint mixing. |
-| String indexing | Decide whether the unit is UTF-16 code units, Unicode code points, or grapheme clusters. |
-| Array sorting or copying | Supply a numeric comparator when needed; choose mutating or copy-producing operations deliberately. |
-| Enum, parameter property, or decorator | Check the transform/runtime path before using syntax that needs generated JavaScript. |
-| Generic assertion over external data | Replace the assertion with validation; a type argument cannot verify a payload. |
-| Compiler library update | Check runtime availability separately; adding `lib` declarations does not install a polyfill. |
-
 ## Protect important invariants
 
-- Prefer `unknown` over `any` at untrusted boundaries; narrow through real checks.
 - Use an assertion only when an invariant is established elsewhere and cannot be expressed directly. Explain that invariant next to the assertion.
-- Do not use a non-null assertion to hide a missing-value case in an API contract.
+- Guard each nullable access. Do not use optional chaining or a non-null assertion to hide a required value or an undeclared property.
 - Distinguish TypeScript `private` from JavaScript `#private` when runtime encapsulation matters.
-- Treat `readonly`, `as const`, `satisfies`, and utility types as static tools; they do not sanitize data or enforce runtime immutability.
+- Separate binding constancy, readonly types, runtime freezing, and aliasing. `as const`, `satisfies`, and utility types do not sanitize values or enforce deep immutability.
+- For numeric or string operations, establish safe-integer limits, division rounding, number/bigint separation, and the intended Unicode unit. Use `typescript-collections` for detailed collection/API decisions.
+- Verify transforms for enums, parameter properties, and decorators. Adding `lib` declarations does not install runtime APIs or polyfills.
 - Avoid claiming all code examples in a tutorial are standalone compilable modules. Isolate only the relevant example and supply its dependencies.
 - Preserve the project's compiler/runtime unless an upgrade is required by the requested change.
 

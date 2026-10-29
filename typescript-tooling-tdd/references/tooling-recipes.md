@@ -10,7 +10,7 @@ Read the owning package manifest and lockfile; determine whether the code is a p
 | Runtime execution | Start/dev scripts, runtime version, loader or bundler | Keep the supported execution path; validate syntax restrictions |
 | Node ESM/CJS | Package `type`, file extensions, exports, Node-aware module options | Align emitted imports and runtime lookup |
 | Bundled code | Bundler config, aliases, environment, module resolution | Let the bundler own transformations and resolution |
-| Library output | Entry points, exports, declarations, supported consumers | Verify declaration output and a representative consumer import |
+| Library output | Entry points, exports, declarations, supported consumers | Verify packed output in isolated supported consumers |
 | Static quality | ESLint/Biome/Prettier config and scripts | Preserve one coherent project convention |
 | Tests | Runner version, environments, setup, discovery patterns | Run the test in the same environment as the affected code |
 

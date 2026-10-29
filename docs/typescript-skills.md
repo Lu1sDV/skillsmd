@@ -6,7 +6,7 @@ Nine reusable skills distilled from the sixteen numbered chapters of the [Struct
 
 **Reviewed:** 2026-10-29
 
-**Scope:** TypeScript language/runtime, type modeling, collections, algorithms, asynchronous code, software design, tooling, testing, and interview diagnostics.
+**Scope:** TypeScript language/runtime, type modeling, collections, algorithms, asynchronous code, software design, tooling, testing, and interview diagnostics, with focused compiler and package-consumer checks.
 
 ## Macro-topic catalog
 
@@ -91,6 +91,28 @@ Treat source snippets as learning examples and inspect their contracts before re
 
 Primary references for significant language/tooling corrections: [Node TypeScript support](https://nodejs.org/api/typescript.html), [TypeScript 4.9](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html), [strict function variance](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-6.html), [TypeScript 5.5 narrowing](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-5.html), and [Vitest type checking](https://vitest.dev/guide/testing-types.html). Further source links are bundled with the relevant skill.
 
+## Focused workflow additions
+
+The 2026-10-29 marketplace review selected procedures that add observable evidence
+or a concrete design decision. The suite remains nine skills with 22 local
+references; the entry points route to the relevant details only when needed.
+
+| Addition | Location | Completion criterion |
+| --- | --- | --- |
+| Compiler coverage, resolution, editor mismatch, and performance diagnosis | [Compiler diagnostics](../typescript-tooling-tdd/references/compiler-diagnostics.md) | Identify the actual checked program and cause; compare equivalent measurements and preserve correctness |
+| Published package compatibility | [Package consumer checks](../typescript-tooling-tdd/references/package-consumers.md) | Inspect and install the packed artifact; verify promised runtime and type entry points |
+| Module-boundary enforcement | [Maintainability checklist](../typescript-maintainable-design/references/review-checklist.md) | Allowed import passes, a resolvable forbidden import fails under the intended rule, restored code passes |
+| Domain identity and generated-schema ownership | [Type-design decisions](../typescript-type-modeling/references/type-design-decisions.md) | Construct brands through the owning boundary, reject domain mix-ups, derive from the existing schema owner |
+
+The original procedures were informed by selected parts of
+[Sentimony's TypeScript workflow](https://github.com/sentimony/skills/blob/61919613972e63f2c833c1c5ad4744d7c40ad05a/plugins/skills/skills/typescript/SKILL.md),
+[tsdown's package validation](https://github.com/rolldown/tsdown/blob/83b6fb5a5ecd7c041ecebc8d9fdc15efc3127103/skills/tsdown/references/option-lint.md),
+[Matt Pocock's boundary verification](https://github.com/mattpocock/skills/blob/a496f5513d4a4cf889bc48e189e579f4b0bdf6aa/skills/in-progress/setup-ts-deep-modules/SKILL.md),
+and [Poteto's type-design rules](https://github.com/poteto/plugins/blob/74dd2291e8e37b12fd6dc49b2acbd655c6bdaf12/pstack/skills/typescript-best-practices/references/patterns.md).
+Technical details use the primary documentation linked from the new references.
+Existing syntax reminders, utility-type glossaries, and repeated pattern definitions
+were shortened while retaining the task-specific failure checks and source coverage.
+
 ## Example requests
 
 - `Use $typescript-language-runtime to diagnose why this TypeScript script compiles but fails under Node.`
@@ -103,7 +125,7 @@ Primary references for significant language/tooling corrections: [Node TypeScrip
 - `Use $typescript-design-patterns to choose a simple design for interchangeable payment providers.`
 - `Use $typescript-interview-review to explain this callback-variance question with a compiler-checked example.`
 
-## Validation performed
+## Initial validation
 
 - Passed the skill-creator structural validator for all nine skills.
 - Checked frontmatter, folder/name agreement, UI metadata, literal invocation names, required attribution, and absence of template placeholders.
@@ -113,6 +135,20 @@ Primary references for significant language/tooling corrections: [Node TypeScrip
 - Passed the three exercises' compiler and runtime checks under TypeScript 5.8.3 and Node v24.22.1. The algorithm exercise also matched an independent bounded brute-force oracle.
 
 These checks establish package integrity and representative skill behavior. They do not constitute exhaustive testing of every upstream teaching example or every compiler/runtime version. Temporary exercise implementations are excluded from the skill package.
+
+## Focused revision verification
+
+- Revalidated all nine skill bundles, their metadata, portable local references,
+  unchanged upstream notices, and all 22 named design patterns.
+- Exercised the tooling skill in two independent fresh contexts under TypeScript
+  5.8.3 and Node v24.22.1. One identified a passing solution-config command that
+  checked no source, then exposed TS2322 in its referenced project. The other
+  packed and installed a library whose producer checks passed: its ESM runtime
+  import worked, but the omitted declaration file caused consumer TS7016 and
+  ineffective negative type checks.
+- These exercises verify diagnostic behavior for those cases. Compiler speedups,
+  editor performance, and every consumer runtime/resolver combination were not
+  benchmarked or certified. Temporary projects and archives are outside the suite.
 
 ## Repository integration
 

@@ -26,7 +26,7 @@ Read [type-design-decisions.md](references/type-design-decisions.md) when choosi
 
 1. Model finite states or alternatives with a discriminant. Put variant-specific required fields on the corresponding variant.
 2. Use an interface or object type for a coherent shape. Choose declaration merging only when open extension is intended.
-3. Derive related types with `typeof`, `keyof`, indexed access, and built-in utilities before creating a custom utility.
+3. Identify any schema or generator that owns the shape. Derive local views from its types, or from existing values, before declaring a parallel contract.
 4. Add a generic parameter only to express a useful relationship. Constrain it to capabilities the implementation actually needs.
 5. Preserve useful inference at call sites. Use `satisfies` for compatibility checking, readonly inputs for nonmutating APIs, and const type parameters when literal preservation is required and supported.
 6. Narrow through checks the runtime performs. Treat an explicit predicate or assertion as a proof obligation, not compiler-verified validation.
@@ -38,6 +38,7 @@ Read [type-design-decisions.md](references/type-design-decisions.md) when choosi
 | Requirement | Preferred starting point |
 | --- | --- |
 | Distinct success/error or lifecycle states | Discriminated union with exhaustive handling. |
+| Same primitive, different domain identities or units | A brand when accidental interchange is a real risk; construct it through the owning boundary. |
 | Select or omit known properties in a static view | `Pick` or `Omit`; separately construct runtime output if fields must be removed. |
 | Optional update fields | `Partial`, with an explicit policy for absent versus present `undefined` values. |
 | Finite complete lookup table | `Record<KeyUnion, Value>` and, where useful, `satisfies`. |

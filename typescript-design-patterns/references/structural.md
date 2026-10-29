@@ -3,18 +3,6 @@
 Identify the contract boundary and ownership of wrapped objects before choosing
 how to compose them. Prefer ordinary functions or objects when they express it.
 
-## Select and reject
-
-| Requirement | Choose | Avoid when |
-| --- | --- | --- |
-| Translate a legacy/external interface into a desired contract | Adapter | A direct call already matches the consumer's needs |
-| Separate two dimensions that vary independently | Bridge | There is only one meaningful dimension of change |
-| Operate uniformly on leaves and nested groups | Composite | The data is flat or leaf/group operations are fundamentally different |
-| Combine optional responsibilities around a common interface | Decorator | One explicit function is clearer than a configurable wrapper stack |
-| Offer a smaller entry point to a subsystem | Facade | It would hide necessary controls or become a new god object |
-| Share repeated immutable intrinsic data | Flyweight | Memory sharing has no meaningful benefit or data must vary per instance |
-| Mediate access, lazy lifetime, or caching behind a contract | Proxy | Indirection changes identity/behavior without serving a requirement |
-
 ## Adapt contracts and simplify interfaces
 
 1. For an Adapter, enumerate mismatches: field names, units, timestamps, optional

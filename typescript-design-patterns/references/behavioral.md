@@ -3,30 +3,6 @@
 Choose from the contract governing decisions, communication, state, or traversal.
 Prefer a typed function or discriminated union before introducing a hierarchy.
 
-## Contents
-
-- [Select and reject](#select-and-reject)
-- [Strategy, State, and Template Method](#strategy-state-and-template-method)
-- [Observer and Mediator](#observer-and-mediator)
-- [Commands and mementos](#commands-and-mementos)
-- [Chains, iterators, and visitors](#chains-iterators-and-visitors)
-- [Source](#source)
-
-## Select and reject
-
-| Requirement | Choose and implement | Avoid when |
-| --- | --- | --- |
-| Process through configurable handlers | Chain of Responsibility as middleware/functions or linked handlers | One clear operation has no routing or composition need |
-| Capture an action for queuing, history, retry, or reversal | Command as data plus a handler or an object | A direct call needs no deferred identity or history |
-| Traverse without exposing storage | Iterator via `Iterable`, generators, or async iterables | Existing array iteration already expresses the contract |
-| Coordinate interactions among participants | Mediator with focused domain orchestration | It would centralize unrelated behavior into a global bus |
-| Restore a prior state | Memento with isolated snapshots | Recalculation or a small inverse operation is sufficient |
-| Notify subscribed consumers | Observer with typed callbacks and disposal | A direct call better expresses a required dependency |
-| Restrict behavior by current lifecycle state | State with a discriminated union or state objects | There is no meaningful transition model |
-| Select interchangeable policy | Strategy as a typed function or small interface | A fixed policy or small local conditional is sufficient |
-| Keep an invariant workflow with specialized steps | Template Method with explicit hooks | Composed callbacks express variation more simply |
-| Add operations over a stable family of nodes | Visitor with a typed result or exhaustive union functions | Node variants change constantly or a direct traversal is clearer |
-
 ## Strategy, State, and Template Method
 
 1. For Strategy, state the shared input/output/error contract. Let the client
@@ -56,7 +32,7 @@ Prefer a typed function or discriminated union before introducing a hierarchy.
 - Keep a mediator scoped to a cohesive coordination problem. Preserve explicit
   dependencies for required operations rather than hiding them behind global events.
 
-## Commands and mementos
+## Command and Memento
 
 1. Decide whether history records actions, snapshots, or both. Define snapshot
    isolation, allowed value shapes, and a memory/history limit appropriate to use.
@@ -89,8 +65,9 @@ For iteration, use the standard protocol when consumers expect `for...of` or
 repeated `shift()` in large breadth-first traversal; define graph/cycle behavior
 when the data is not guaranteed to be a tree.
 
-For Visitor, parameterize the operation's result or use an exhaustive discriminated
-union to avoid pervasive result assertions. Verify each operator's semantics;
+Use Visitor when operations vary over a stable node family; prefer exhaustive
+functions when node variants change frequently. Parameterize the result to avoid
+pervasive result assertions. Verify each operator's semantics;
 the source evaluator's unary `!` example returns its operand unchanged, so do not
 reuse that implementation as a correct evaluator.
 

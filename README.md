@@ -65,7 +65,7 @@ A collection of Claude Code skills — self-contained markdown files that give C
 | [typescript-collections](typescript-collections/) | Collections and runtime APIs — queues/heaps, equality, ownership, iterators, Unicode, binary data, JSON, dates and cloning |
 | [typescript-algorithm-patterns](typescript-algorithm-patterns/) | All 17 TypeScript algorithm families — pattern selection, invariants, complexity, mutation and boundary cases |
 | [typescript-async-concurrency](typescript-async-concurrency/) | Promises and bounded work — ordering, failure propagation, cancellation, retries, queues, debounce and async iteration |
-| [typescript-tooling-tdd](typescript-tooling-tdd/) | Project-aware TypeScript tooling and test-first development — compiler/modules, tests, CI, regression fixes and properties |
+| [typescript-tooling-tdd](typescript-tooling-tdd/) | Project-aware TypeScript tooling and test-first development — compiler coverage/performance, package consumers, tests, CI and regressions |
 | [typescript-maintainable-design](typescript-maintainable-design/) | SOLID and focused TypeScript refactoring — dependency boundaries, behavior contracts, shared state, errors and import cycles |
 | [typescript-design-patterns](typescript-design-patterns/) | Practical selection and implementation of 22 creational, structural and behavioral patterns with lifecycle checks |
 | [typescript-interview-review](typescript-interview-review/) | TypeScript interview reasoning — compiler/runtime distinctions, narrowing, variance, inference, overloads and counterexamples |
@@ -342,11 +342,16 @@ references and attribution travel with it.
 | Interview reasoning and diagnostics | [typescript-interview-review](typescript-interview-review/) | 14 interview traps |
 
 The algorithm skill retains all 17 source families; the design-pattern skill
-covers the source's 22 named patterns. Detailed decisions load from 20 local
+covers the source's 22 named patterns. Detailed decisions load from 22 local
 references, while optional handoffs name related skills without requiring sibling
 files. The adaptation corrects runtime/type-checking confusion, callback variance,
 unsafe validators, promise-pool bookkeeping, empty-input cases and misleading
 complexity or immutability claims.
+
+Focused additions cover compiler-program coverage and diagnostics, packed-package
+consumer checks, proven module-boundary enforcement, and branded/generated type
+ownership. They extend existing workflows through conditional references and short
+decision rules; basic syntax and pattern explanations are kept brief.
 
 The [TypeScript catalog and source map](docs/typescript-skills.md) records chapter
 coverage, corrections and verification. All nine bundles passed structural checks;

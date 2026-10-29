@@ -13,6 +13,22 @@
 
 Do not claim every interface is faster than every type alias. If compiler performance matters, inspect the actual expensive relationship and simplify it using measured evidence.
 
+## Preserve domain identity and schema ownership
+
+Use a brand when distinct IDs, units, or validated values share a primitive and
+accidental interchange is a real defect. Follow the repository's convention;
+ordinary aliases do not distinguish identical structural types.
+
+Construct branded values through the owning constructor or decoder. Identity
+tagging alone does not validate input or establish authorization. Reconstruct
+brands from untrusted serialized data through the appropriate boundary checks.
+Verify an accepted construction and a rejected domain mix with existing type tests;
+verify any runtime validation rule separately.
+
+For wire or storage shapes, locate the owning OpenAPI, GraphQL, protobuf, or other
+schema/generator. Derive local projections from its generated types instead of
+maintaining parallel declarations. Check serialization and parsing independently.
+
 ## Preserve relationships in generics
 
 Use each type parameter to express a relation the caller benefits from. A parameter appearing only once often adds no useful relation. Use `readonly T[]` when reading without mutation so callers can supply mutable arrays or readonly collections.
@@ -29,19 +45,14 @@ Do not widen `key` to `string` and then cast the result. Avoid unnecessary `Reco
 
 Distinguish a generic default from an argument default. A default type parameter supplies a type when inference or an explicit argument does not; it does not synthesize a runtime value.
 
-## Choose utilities by operation
+## Check utility contracts
 
-| Operation | Tools and limitations |
-| --- | --- |
-| Project object fields | `Pick`, `Omit`; no runtime removal. |
-| Modify property requirements | `Partial`, `Required`; generally shallow. |
-| Expose a readonly view | `Readonly`, readonly arrays/tuples; no runtime freezing. |
-| Filter union members | `Exclude`, `Extract`, `NonNullable`; not a runtime filter. |
-| Derive callable structure | `Parameters`, `ReturnType`, `ConstructorParameters`, `InstanceType`; inspect overload and generic behavior. |
-| Resolve awaited value | `Awaited`; prefer its thenable-aware behavior to a Promise-only approximation. |
-| Transform keys or literals | Mapped/template-literal types; watch large unions and dropped non-string keys. |
-
-With `exactOptionalPropertyTypes`, an optional property and a property explicitly allowing `undefined` are different contracts. Keep the distinction in updates and serializers.
+Built-in utilities transform static views, not runtime values; common property
+utilities are shallow. Check overload/generic behavior when deriving callable
+types, preserve `Awaited`'s thenable support, and account for union growth or lost
+non-string keys in mapped/template-literal transforms. With
+`exactOptionalPropertyTypes`, preserve absent versus explicit `undefined` semantics
+in updates and serializers.
 
 ## Control conditional types
 

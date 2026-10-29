@@ -44,7 +44,8 @@ Introduce an extension mechanism only for a real variation requirement. Do not
 create a class, interface, factory, and container for every function.
 
 Read [the review checklist](references/review-checklist.md) for boundary,
-state, import, error, and performance checks relevant to the concrete problem.
+state, import, error, and performance checks, including a deliberate violation
+probe when adding module-boundary enforcement.
 
 ## Implement with explicit ownership
 

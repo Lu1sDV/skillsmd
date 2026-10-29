@@ -29,32 +29,15 @@ Keep the implementation as small as the contract allows.
 
 ## Select one family reference
 
-| Problem | Start with | Read |
-| --- | --- | --- |
-| Product selection, compatible families, construction steps, copies, shared resources | Factory, Abstract Factory, Builder, Prototype, scoped Singleton | [Creational patterns](references/creational.md) |
-| Interface mismatch, subsystem entry point, trees, wrappers, independent dimensions, access, shared data | Adapter, Facade, Composite, Decorator, Bridge, Proxy, Flyweight | [Structural patterns](references/structural.md) |
-| Interchangeable policy, transitions, events, coordination, undo, middleware, traversal, extension hooks | Strategy, State, Observer, Mediator, Command, Memento, Chain of Responsibility, Iterator, Template Method, Visitor | [Behavioral patterns](references/behavioral.md) |
+| Problem | Read |
+| --- | --- |
+| Product selection, compatible families, construction stages, copies, shared resources | [Creational patterns](references/creational.md) |
+| Contract translation, wrappers, trees, independent dimensions, access, shared data | [Structural patterns](references/structural.md) |
+| Policy, transitions, events, coordination, undo, middleware, traversal, extension hooks | [Behavioral patterns](references/behavioral.md) |
 
 Load only the family needed for the task. Use the other references only when
 comparing overlapping choices, such as Decorator versus Proxy or Command versus
 Memento. Keep creation policy separate from the behavior being created.
-
-## Resolve the important distinctions
-
-- Choose **Adapter** to translate a contract, **Facade** to simplify a subsystem,
-  and **Bridge** for two dimensions that must vary independently.
-- Choose **Decorator** to compose responsibilities and **Proxy** to mediate
-  access or lifetime. Define wrapper order and preserve the delegated contract.
-- Choose **Strategy** when a client selects a policy and **State** when valid
-  behavior follows the current state and its transition rules.
-- Choose **Command** to capture an action and **Memento** to capture state.
-  Combine them only when the history requirements need both.
-- Choose **Observer** for subscriptions and **Mediator** for coordination.
-  Assign ownership of subscriptions and define listener failure behavior.
-- Choose **Visitor** for changing operations over a relatively stable node family.
-  Prefer a discriminated union with exhaustive functions when that stays clearer.
-- Distinguish a simple factory function from the subclass-based Factory Method
-  pattern. Distinguish the Decorator pattern from TypeScript `@decorator` syntax.
 
 ## Implement the contract
 

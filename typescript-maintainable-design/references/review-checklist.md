@@ -78,6 +78,19 @@ behavioral safety independently of whether a particular assignment compiles.
    build model benefits. Verify output paths, dependencies, and runtime resolution;
    do not assume a package count implies a particular build architecture.
 
+When adding or repairing boundary enforcement:
+
+1. Identify public entry points and forbidden dependency edges from the existing
+   architecture. Reuse its enforcement tool and configuration where possible.
+2. Establish a passing allowed import. In a temporary fixture or isolated edit,
+   introduce one resolvable import that violates the intended boundary.
+3. Run the relevant check and require failure from the expected boundary rule;
+   a missing module or unrelated compiler error does not demonstrate enforcement.
+4. Remove only the probe, preserving pre-existing edits, then require another pass.
+   Clean up even if a check fails; report if the rule never rejected the probe.
+5. Confirm the same check runs through the project's intended local/CI gate.
+   Report the allowed edge, rejected edge, rule, and command outcomes.
+
 ## Performance changes
 
 | Candidate change | Preserve | Measure when relevant |

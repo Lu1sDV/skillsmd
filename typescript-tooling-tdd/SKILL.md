@@ -2,10 +2,11 @@
 name: typescript-tooling-tdd
 description: >
   Use when configuring, diagnosing, or validating TypeScript development workflows: tsconfig
-  or module-resolution failures, missing type checks, Vitest/Jest/Node test setup,
-  regression tests, red-green-refactor changes, flaky async tests, property-based testing,
-  coverage analysis, linting, debugging, CI, or testability refactors. Preserve the existing
-  package manager and toolchain unless a migration is requested.
+  or module-resolution failures, missing or slow type checks, editor/CLI disagreement,
+  package exports or declaration compatibility, Vitest/Jest/Node test setup, regression
+  tests, red-green-refactor changes, flaky async tests, property-based testing, coverage,
+  linting, debugging, CI, or testability refactors. Preserve the existing package manager
+  and toolchain unless a migration is requested.
 ---
 
 # TypeScript Tooling and TDD
@@ -22,7 +23,8 @@ description: >
 
 | Request | Start with | Completion evidence |
 | --- | --- | --- |
-| Compiler or import failure | Resolve config inheritance, package boundaries, and runtime resolution | Type check plus actual application/build entry point |
+| Compiler, import, coverage, or performance problem | [Compiler diagnostics](references/compiler-diagnostics.md) | Verified program coverage, identified cause, and relevant type/runtime checks |
+| Package exports or declarations change | [Package consumer checks](references/package-consumers.md) | Packed artifact works for the promised consumers |
 | Behavior change | A small failing acceptance or unit test | New behavior and affected regressions pass |
 | Bug fix | A deterministic reproducer | It fails before the fix and passes afterward |
 | Legacy refactor | Characterization at a public boundary | Supported behavior is preserved |
