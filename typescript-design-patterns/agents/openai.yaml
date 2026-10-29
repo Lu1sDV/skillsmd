@@ -1,0 +1,4 @@
+interface:
+  display_name: "TypeScript Design Patterns"
+  short_description: "Select and apply practical TypeScript patterns"
+  default_prompt: "Use $typescript-design-patterns to choose and implement the simplest pattern that satisfies this TypeScript design requirement."

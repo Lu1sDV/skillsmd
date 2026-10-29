@@ -1,0 +1,4 @@
+interface:
+  display_name: "TypeScript Language and Runtime"
+  short_description: "Write compatible TypeScript and validate runtime data"
+  default_prompt: "Use $typescript-language-runtime to implement this feature with syntax, imports, and runtime validation that fit this project."

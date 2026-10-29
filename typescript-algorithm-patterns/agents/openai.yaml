@@ -1,0 +1,4 @@
+interface:
+  display_name: "TypeScript Algorithm Patterns"
+  short_description: "Select and verify TypeScript algorithm patterns"
+  default_prompt: "Use $typescript-algorithm-patterns to solve this problem, explain the invariant, and verify its complexity and edge cases."

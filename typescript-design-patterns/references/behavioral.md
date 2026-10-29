@@ -1,0 +1,101 @@
+# Behavioral patterns
+
+Choose from the contract governing decisions, communication, state, or traversal.
+Prefer a typed function or discriminated union before introducing a hierarchy.
+
+## Contents
+
+- [Select and reject](#select-and-reject)
+- [Strategy, State, and Template Method](#strategy-state-and-template-method)
+- [Observer and Mediator](#observer-and-mediator)
+- [Commands and mementos](#commands-and-mementos)
+- [Chains, iterators, and visitors](#chains-iterators-and-visitors)
+- [Source](#source)
+
+## Select and reject
+
+| Requirement | Choose and implement | Avoid when |
+| --- | --- | --- |
+| Process through configurable handlers | Chain of Responsibility as middleware/functions or linked handlers | One clear operation has no routing or composition need |
+| Capture an action for queuing, history, retry, or reversal | Command as data plus a handler or an object | A direct call needs no deferred identity or history |
+| Traverse without exposing storage | Iterator via `Iterable`, generators, or async iterables | Existing array iteration already expresses the contract |
+| Coordinate interactions among participants | Mediator with focused domain orchestration | It would centralize unrelated behavior into a global bus |
+| Restore a prior state | Memento with isolated snapshots | Recalculation or a small inverse operation is sufficient |
+| Notify subscribed consumers | Observer with typed callbacks and disposal | A direct call better expresses a required dependency |
+| Restrict behavior by current lifecycle state | State with a discriminated union or state objects | There is no meaningful transition model |
+| Select interchangeable policy | Strategy as a typed function or small interface | A fixed policy or small local conditional is sufficient |
+| Keep an invariant workflow with specialized steps | Template Method with explicit hooks | Composed callbacks express variation more simply |
+| Add operations over a stable family of nodes | Visitor with a typed result or exhaustive union functions | Node variants change constantly or a direct traversal is clearer |
+
+## Strategy, State, and Template Method
+
+1. For Strategy, state the shared input/output/error contract. Let the client
+   choose policy explicitly; keep policy independent from the context's storage.
+2. Test each strategy against common constraints. Verify edge inputs and document
+   the behavior intentionally allowed to differ.
+3. For State, write a transition table before implementation. Distinguish valid
+   transitions, idempotent repeats, and rejected actions. Preserve data required
+   by later states rather than discarding it accidentally during replacement.
+4. Use a discriminant to make legal state data visible to the compiler. Check
+   exhaustiveness and validate runtime transitions even with static state types.
+5. For Template Method, identify mandatory steps, extension hooks, and cleanup.
+   Protect ordering and error invariants. Prefer composed callbacks when runtime
+   configuration or simple function substitution satisfies the requirement.
+
+## Observer and Mediator
+
+- Define an event-to-payload type map. Correlate event names with payloads; a
+  generic payload paired with an unrestricted string does not enforce that relation.
+- Assign each subscription a disposal owner. Return an unsubscribe function or
+  follow the project's established disposable pattern; avoid orphan listeners.
+- Define ordering, duplicate subscriptions, mutation during notification, and
+  reentrancy. Decide whether notification uses a snapshot of the listener set.
+- Define listener failures explicitly: stop, isolate/report, or aggregate. If
+  listeners may be async, decide whether publishers await them and how rejections
+  are observed; a `void` callback type does not by itself prevent returned promises.
+- Keep a mediator scoped to a cohesive coordination problem. Preserve explicit
+  dependencies for required operations rather than hiding them behind global events.
+
+## Commands and mementos
+
+1. Decide whether history records actions, snapshots, or both. Define snapshot
+   isolation, allowed value shapes, and a memory/history limit appropriate to use.
+2. Capture command parameters and any prior state needed for reversal. Define
+   whether repeated execution means redo, retry, or a new action.
+3. Record a command in successful history only after its operation succeeds.
+   Define behavior after partial failure; several effects are not automatically
+   atomic because they live in one command.
+4. Reverse composite commands in reverse order. For external side effects, design
+   an explicit compensation contract instead of assuming exact undo is possible.
+5. Clear the redo branch after a new edit. Test initial/empty history, undo to the
+   earliest state, redo to the latest, and a new edit after undo.
+6. Restore an isolated snapshot or explicitly documented shared state. JSON
+   serialization is not a general clone of arbitrary TypeScript values.
+
+## Chains, iterators, and visitors
+
+| Pattern | Preserve | Check |
+| --- | --- | --- |
+| Chain of Responsibility | Handler order, stop/pass meaning, completion and errors | No handler, early stop, thrown/rejected error, duplicate continuation |
+| Iterator | Traversal order, exhaustion, mutation policy, resource ownership | Empty input, repeated iteration, early exit, generator cleanup |
+| Visitor | Complete node handling and result type for an operation | Every node kind, nested structures, unsupported operators, invalid data |
+
+For middleware, distinguish a chain that stops at one handler from a pipeline
+where multiple stages intentionally run. Await downstream work when cleanup or
+post-processing depends on it; do not fire-and-forget `next()`.
+
+For iteration, use the standard protocol when consumers expect `for...of` or
+`for await...of`. A custom `hasNext()/next()` API is a separate contract. Avoid
+repeated `shift()` in large breadth-first traversal; define graph/cycle behavior
+when the data is not guaranteed to be a tree.
+
+For Visitor, parameterize the operation's result or use an exhaustive discriminated
+union to avoid pervasive result assertions. Verify each operator's semantics;
+the source evaluator's unary `!` example returns its operand unchanged, so do not
+reuse that implementation as a correct evaluator.
+
+## Source
+
+Adapted topic selection from [chapter 12: Behavioral Design Patterns](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript/12-design-patterns-behavioral.md).
+Use its ten covered patterns as the taxonomy; add lifecycle, failure, history,
+and type-correlation checks when translating examples into real code.

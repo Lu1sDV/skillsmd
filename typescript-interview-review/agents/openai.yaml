@@ -1,0 +1,4 @@
+interface:
+  display_name: "TypeScript Interview Review"
+  short_description: "Explain TypeScript traps and coach technical interviews"
+  default_prompt: "Use $typescript-interview-review to explain the compile-time and runtime behavior of this example and ask one follow-up question."

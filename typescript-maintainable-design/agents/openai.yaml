@@ -1,0 +1,4 @@
+interface:
+  display_name: "TypeScript Maintainable Design"
+  short_description: "Refactor TypeScript with clear behavior contracts"
+  default_prompt: "Use $typescript-maintainable-design to review and refactor this TypeScript code while preserving its public behavior."

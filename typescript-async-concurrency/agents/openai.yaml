@@ -1,0 +1,4 @@
+interface:
+  display_name: "TypeScript Async & Concurrency"
+  short_description: "Build bounded async workflows with reliable cleanup"
+  default_prompt: "Use $typescript-async-concurrency to implement this asynchronous workflow with explicit concurrency, failure, and cancellation behavior."

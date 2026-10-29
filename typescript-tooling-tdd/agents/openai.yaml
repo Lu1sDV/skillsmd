@@ -1,0 +1,4 @@
+interface:
+  display_name: "TypeScript Tooling and TDD"
+  short_description: "Configure tools and test TypeScript behavior"
+  default_prompt: "Use $typescript-tooling-tdd to add a focused failing test, implement the behavior, and run the project checks."

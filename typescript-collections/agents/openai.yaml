@@ -1,0 +1,4 @@
+interface:
+  display_name: "TypeScript Collections & Runtime APIs"
+  short_description: "Choose safe collections and built-in runtime APIs"
+  default_prompt: "Use $typescript-collections to choose a data structure and implement this data transformation with explicit mutation and runtime contracts."

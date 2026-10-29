@@ -60,6 +60,15 @@ A collection of Claude Code skills — self-contained markdown files that give C
 | [telethon-development](telethon-development/) | Telethon MTProto client — FloodWait handling, mocking, session management, DB integration |
 | [test-engineering](test-engineering/) | Framework-agnostic test strategy, automation planning, coverage analysis |
 | [tri-model-consensus](tri-model-consensus/) | Tri-model adversarial consensus — route tasks to Claude+Codex+Gemini, cross-grade discrepancies, merge the strongest output |
+| [typescript-language-runtime](typescript-language-runtime/) | TypeScript language and runtime — nullish handling, functions/classes, modules, runtime validation and execution compatibility |
+| [typescript-type-modeling](typescript-type-modeling/) | Domain types and generic APIs — discriminated unions, narrowing, utility types, mapped/conditional types and compiler contracts |
+| [typescript-collections](typescript-collections/) | Collections and runtime APIs — queues/heaps, equality, ownership, iterators, Unicode, binary data, JSON, dates and cloning |
+| [typescript-algorithm-patterns](typescript-algorithm-patterns/) | All 17 TypeScript algorithm families — pattern selection, invariants, complexity, mutation and boundary cases |
+| [typescript-async-concurrency](typescript-async-concurrency/) | Promises and bounded work — ordering, failure propagation, cancellation, retries, queues, debounce and async iteration |
+| [typescript-tooling-tdd](typescript-tooling-tdd/) | Project-aware TypeScript tooling and test-first development — compiler/modules, tests, CI, regression fixes and properties |
+| [typescript-maintainable-design](typescript-maintainable-design/) | SOLID and focused TypeScript refactoring — dependency boundaries, behavior contracts, shared state, errors and import cycles |
+| [typescript-design-patterns](typescript-design-patterns/) | Practical selection and implementation of 22 creational, structural and behavioral patterns with lifecycle checks |
+| [typescript-interview-review](typescript-interview-review/) | TypeScript interview reasoning — compiler/runtime distinctions, narrowing, variance, inference, overloads and counterexamples |
 | [universal-research-orchestrator](universal-research-orchestrator/) | Domain-agnostic 5-phase research pipeline — parallel 8–12 lane search, synthesis, citation, validation, source archival for exhaustive research tasks |
 | [universal-skill-finder](universal-skill-finder/) | Search SkillsMP + skills.sh in one pass — merged results table with a Market column showing where each skill was found (skillsmp / skills.sh / both) |
 | [vast-experiment-ops](vast-experiment-ops/) | Operate and report Vast.ai GPU experiments — TF32 FP32-equivalence failures on CUDA, SSH-banner-corrupted JSON metrics, accurate held-out/test-scope claims |
@@ -294,6 +303,41 @@ Verified on 2026-10-11 with Rust 1.98.1:
   successfully. Browser/WASI runtimes, Miri, sanitizers, and other optional
   ecosystem recipes were not executed; their prerequisites and commands remain
   explicit in the relevant references. This is not an MSRV certification.
+
+## TypeScript skill suite
+
+Nine task-oriented skills consolidate the [16 StructWeave TypeScript guides](https://github.com/nirajkvinit/StructWeave-Algorithms/tree/e2a796e212d431c906c85957ea3c203ce0e2218f/languages/typescript),
+pinned at commit `e2a796e212d431c906c85957ea3c203ce0e2218f`.
+Each root-level bundle contains a concise `SKILL.md`, focused local references,
+agent metadata and the upstream MIT notice. Copy the complete folder so its
+references and attribution travel with it.
+
+| Macro-topic | Skill | Source chapters |
+|---|---|---|
+| Language and runtime foundations | [typescript-language-runtime](typescript-language-runtime/) | 01 syntax, 07 modern TypeScript |
+| Type modeling and generic APIs | [typescript-type-modeling](typescript-type-modeling/) | 03 type system, 05 utility types/generics |
+| Collections and standard-library APIs | [typescript-collections](typescript-collections/) | 02 data structures, 15 standard library |
+| Algorithmic problem solving | [typescript-algorithm-patterns](typescript-algorithm-patterns/) | 04 algorithm patterns |
+| Asynchrony and concurrency | [typescript-async-concurrency](typescript-async-concurrency/) | 06 async patterns; async portions of 15 |
+| Tooling, testing and TDD | [typescript-tooling-tdd](typescript-tooling-tdd/) | 08 tooling/testing, 16 TDD |
+| Maintainable architecture and code quality | [typescript-maintainable-design](typescript-maintainable-design/) | 09 SOLID, 13 anti-patterns |
+| Design-pattern selection and implementation | [typescript-design-patterns](typescript-design-patterns/) | 10–12 creational, structural and behavioral patterns |
+| Interview reasoning and diagnostics | [typescript-interview-review](typescript-interview-review/) | 14 interview traps |
+
+The algorithm skill retains all 17 source families; the design-pattern skill
+covers the source's 22 named patterns. Detailed decisions load from 20 local
+references, while optional handoffs name related skills without requiring sibling
+files. The adaptation corrects runtime/type-checking confusion, callback variance,
+unsafe validators, promise-pool bookkeeping, empty-input cases and misleading
+complexity or immutability claims.
+
+The [TypeScript catalog and source map](docs/typescript-skills.md) records chapter
+coverage, corrections and verification. All nine bundles passed structural checks;
+the four included TypeScript examples compiled with strict TypeScript 5.8.3 settings.
+Independent temporary exercises also passed compiler/runtime checks for validation,
+bounded concurrency and Unicode-aware sliding windows under Node v24.22.1. Those
+exercise implementations are excluded from the bundles; the recorded checks do
+not certify every upstream example or compiler/runtime version.
 
 ## Commands
 

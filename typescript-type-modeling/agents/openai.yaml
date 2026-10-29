@@ -1,0 +1,4 @@
+interface:
+  display_name: "TypeScript Type Modeling"
+  short_description: "Design precise types, generics, and safe API contracts"
+  default_prompt: "Use $typescript-type-modeling to model these domain states and design a typed API with positive and negative examples."
