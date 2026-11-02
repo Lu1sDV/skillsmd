@@ -12,7 +12,10 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+*.kate-swp
 *~
+__pycache__/
+*.pyc
 
 # Logs
 *.log

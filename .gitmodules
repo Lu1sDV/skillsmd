@@ -1,0 +1,3 @@
+[submodule "ai-design-skills"]
+	path = ai-design-skills
+	url = https://github.com/elayadesign/ai-design-skills.git

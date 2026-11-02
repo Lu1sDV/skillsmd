@@ -12,6 +12,20 @@ Agent workflows stay in `SKILL.md`; focused references, examples and executable
 resources stay with the skill that uses them. Bundled upstream reference
 snapshots retain their original layout and attribution.
 
+## Third-party submodules
+
+| Collection | Upstream | License |
+|------------|----------|---------|
+| [ai-design-skills](ai-design-skills/) | [elayadesign/ai-design-skills](https://github.com/elayadesign/ai-design-skills) | [MIT](ai-design-skills/LICENSE), copyright retained by upstream |
+
+This collection is maintained upstream, not authored by this repository. Git pins the submodule to a specific commit.
+
+After cloning this repository, fetch its contents with:
+
+```bash
+git submodule update --init --recursive
+```
+
 ## Skills
 
 | Skill | Description |
@@ -20,6 +34,7 @@ snapshots retain their original layout and attribution.
 | [cook](cook/) | Composable agent orchestration — review loops, repeat passes, parallel races, vs comparisons, ralph task-list progression |
 | [ctfd](ctfd/) | Develop, debug, deploy CTFd platform — plugins, themes, Docker stack, testing |
 | [debate](debate/) | Bounded multi-agent debate for contested 2–4 position decisions — pinned debaters, steelman swap, judge synthesis |
+| [evaluating-enhancing-vulnerability-reasoning](evaluating-enhancing-vulnerability-reasoning/) | DAG-structured vulnerability reasoning (DAGVul) — causal fact/inference/sink graphs instead of linear chain-of-thought |
 | [feature-engineering](feature-engineering/) | Time series feature engineering — calendar features, cyclical encoding, rolling stats, differencing |
 | [fuzzgpt](fuzzgpt/) | History-driven LLM fuzzing (FuzzGPT-derived, arXiv:2304.02014) — mine bug history, auto-label buggy APIs, few-shot/zero-shot/retrieval edge-case generation, crash + differential oracles; target-agnostic, pairs with vuln-research |
 | [bug-bounty-reporting](bug-bounty-reporting/) | Write concise, human-sounding bug bounty reports with direct-impact PoCs, claim-to-evidence gates, transactional cleanup, and frozen-snapshot independent verification |
@@ -40,6 +55,7 @@ snapshots retain their original layout and attribution.
 | [obsidian-spaced-repetition](obsidian-spaced-repetition/) | Manage Obsidian Spaced Repetition through the official CLI — flashcards, decks, review commands, and scheduling-safe note edits |
 | [ofelia](ofelia/) | Docker job scheduler — cron for containers via INI files or Docker labels |
 | [opengrep-rule-creator](opengrep-rule-creator/) | OpenGrep-first rule authoring — offline rule-writing docs, version-specific compatibility, four complex commented rules, and evidence-based publication gates |
+| [parallel-search](parallel-search/) | Vendored third-party skill (normallygaussian, via clawdbot/skills) — Parallel API web search with ranked, LLM-optimized excerpts |
 | [photon-geocoder](photon-geocoder/) | Geocoding, reverse geocoding, and address autocomplete via Photon/OSM API |
 | [python-idiomatic](python-idiomatic/) | Everyday Python — object semantics, iteration, decorators, exceptions, imports, environments and tooling |
 | [python-algorithms](python-algorithms/) | Collection selection and all 17 Python algorithm patterns with invariants, complexity and boundary cases |
