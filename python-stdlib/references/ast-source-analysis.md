@@ -29,6 +29,7 @@ by an ordinary AST.
 >>> parsed = ast.parse(source)
 >>> assert isinstance(parsed, ast.Module)
 >>> assert sum(isinstance(n, ast.Return) for n in ast.walk(parsed)) == 1
+
 ```
 
 ## Construct complete syntax trees
@@ -53,6 +54,7 @@ validation or invalid control flow.
 ...     pass
 ... else:
 ...     raise AssertionError("3.15 constructor accepted an unknown field")
+
 ```
 
 The `eval` here executes **only fixed, trusted, generated example code**. Do
@@ -79,6 +81,7 @@ correctness.
 >>> import ast
 >>> assert ast.compare(ast.parse("x = 1"), ast.parse("x=1"))
 >>> assert not ast.compare(ast.parse("x=1"), ast.parse("x=2"))
+
 ```
 
 Visitor migrations use `visit_Constant` rather than obsolete `visit_Num`,

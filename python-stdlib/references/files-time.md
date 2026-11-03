@@ -95,6 +95,7 @@ Do not use cached type information to authorize later destructive actions.
 ...         pass
 ...     else:
 ...         raise AssertionError("absence was not distinguished")
+
 ```
 
 ## Temporary files and publication
