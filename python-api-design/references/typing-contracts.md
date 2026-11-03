@@ -213,11 +213,41 @@ signature if consumers do not gain useful precision. Use `ParamSpec` to preserve
 a wrapped callable's parameters, as in [Composition](structural.md).
 
 `TypeGuard[T]` (3.10+) narrows the positive branch; `TypeIs[T]` (3.13+) also narrows
-the negative branch and requires a type consistent with the input. Their bodies
-must actually establish what they promise. Mutation through another alias after
-narrowing can invalidate assumptions. `assert_type` is a checker assertion and a
+the negative branch and requires a type consistent with the input. A `TypeIs[T]`
+predicate must return `True` **if and only if** its input belongs to `T`: a
+predicate returning `False` for an empty `str` cannot soundly claim `TypeIs[str]`.
+Otherwise the negative branch may be incorrectly narrowed. Test both outcomes,
+including values near the recognition boundary. Mutation through another alias
+after narrowing can invalidate assumptions. `assert_type` is a checker assertion and a
 runtime identity operation; `assert_never` (3.11+) also raises if reached at runtime.
 `Never` and `NoReturn` represent the same bottom type, not different precision tiers.
+
+```pycon
+>>> from typing import TypeIs
+>>> def is_text(value: object) -> TypeIs[str]:
+...     return isinstance(value, str)
+>>> assert is_text("") and is_text("hello") and not is_text(0)
+
+```
+
+A modernization of a runtime alias is **not** necessarily cosmetic. `Alias = str`
+binds the class object, whereas `type Alias = str` (3.12+) creates a
+`typing.TypeAliasType` object. The latter is not a valid classinfo for
+`isinstance`/`issubclass` and may affect runtime registries and reflection.
+Review consumers before applying Ruff's unsafe PEP 695 alias fix:
+
+```pycon
+>>> RuntimeText = str
+>>> type StaticText = str
+>>> assert isinstance("hello", RuntimeText)
+>>> try:
+...     isinstance("hello", StaticText)
+... except TypeError:
+...     pass
+... else:
+...     raise AssertionError("a type alias was treated as a class object")
+
+```
 
 ## Validation-library contracts when Pydantic is already used
 
@@ -284,8 +314,11 @@ resolved typing forms and metadata matter; it may raise on unavailable names.
 `TYPE_CHECKING` imports are not made available at runtime by magic. On 3.14+ use
 `annotationlib.get_annotations` with `Format.VALUE`, `FORWARDREF`, or `STRING`
 according to whether resolution, unresolved references, or display is needed.
-These formats are not a sandbox: annotation introspection may execute arbitrary
-code. Deferred evaluation is not zero-cost typing or input validation.
+These formats are not a sandbox: even `STRING` and `FORWARDREF` do not promise
+execution-free introspection of an arbitrary annotation provider. Annotation
+functions may execute code, so inspect only trusted objects at runtime; source
+scanners should prefer source parsing over importing unfamiliar targets. Deferred
+evaluation is not zero-cost typing or input validation.
 
 `Final` prevents rebinding only in static analysis; it does not freeze a container.
 `ClassVar` marks class-level intent and affects dataclass field treatment, not
@@ -314,6 +347,8 @@ positive and intentionally rejected consumer cases separate from runtime example
 First-party references: [typing](https://docs.python.org/3.15/library/typing.html),
 [ABCs](https://docs.python.org/3.15/library/abc.html),
 [annotationlib](https://docs.python.org/3.15/library/annotationlib.html),
+[TypeIs soundness](https://typing.python.org/en/latest/guides/type_narrowing.html),
+[Ruff PEP 695 alias fix safety](https://docs.astral.sh/ruff/rules/non-pep695-type-alias/),
 [TypedDict specification](https://typing.python.org/en/latest/spec/typeddict.html),
 [Pydantic fields](https://docs.pydantic.dev/latest/concepts/fields/),
 [validators](https://docs.pydantic.dev/latest/concepts/validators/),

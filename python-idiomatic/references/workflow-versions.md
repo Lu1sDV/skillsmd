@@ -66,10 +66,27 @@ run does not establish that a framework can resolve annotations dynamically.
 
 On 3.15, `lazy import` / `lazy from` defer module loading until first use. They
 are module-scope constructs, disallowed inside functions/classes and
-`try`/`except`/`finally` blocks. Failures move to first use and registration side
-effects may not run at startup. Use laziness only after checking those contracts;
-keep eager guarded imports for optional-dependency detection. Module `__getattr__`
-(PEP 562) can serve deliberate lazy public exports, but is not a blanket cycle fix.
+`try`/`except`/`finally` blocks; star and future imports cannot be lazy.
+Failures and registration side effects move from startup to first use. That use
+can occur in another thread or context: import coordination is not proof that
+application initialization side effects are valid there. Check required startup
+registration, fail-fast dependencies, first-use latency and first-use thread/context.
+Keep eager guarded imports for optional-dependency detection.
+
+For code that must **parse** on pre-3.15 runtimes, ordinary import statements
+may be selected for laziness in 3.15+ using the documented module-level
+`__lazy_modules__` declaration (check its matching/import rules). Earlier
+interpreters ignore this declaration and keep the imports eager:
+
+```python
+# Eager on older runtimes, selected import lazy on Python 3.15+
+__lazy_modules__ = ["expensive_backend"]
+import expensive_backend
+```
+
+Use only if the older runtime's import-time behavior and dependency contract are
+also acceptable. Module `__getattr__` (PEP 562) can implement deliberate lazy
+public exports, but is not a blanket cycle fix.
 
 ## Formatting and static analysis
 
@@ -167,7 +184,7 @@ Bracketless `except A, B:` is allowed in 3.14 when there is no `as` binding;
 retain `except (A, B) as error:` for binding and portable clarity. Python 3.14
 remote debugging (`python -m pdb -p PID`, `sys.remote_exec`) depends on platform,
 permissions, target support, and safe points; it is not a universal zero-overhead
-capability. The target can disable it with `-X disable_remote_debug` or
+capability. The target can disable it with `-X disable-remote-debug` or
 `PYTHON_DISABLE_REMOTE_DEBUG=1`. Never attach to an unapproved process.
 
 Free-threaded builds and multiple interpreters require separate concurrency
@@ -178,11 +195,13 @@ availability) belong to **python-stdlib**.
 Sources: [venv](https://docs.python.org/3.15/library/venv.html),
 [imports](https://docs.python.org/3.15/reference/import.html),
 [lazy imports](https://docs.python.org/3.15/reference/simple_stmts.html#lazy-imports),
+[PEP 810](https://peps.python.org/pep-0810/),
 [module attribute hooks](https://docs.python.org/3.15/reference/datamodel.html#customizing-module-attribute-access),
 [Python 3.15 changes](https://docs.python.org/3.15/whatsnew/3.15.html),
 [TypeIs](https://docs.python.org/3.15/library/typing.html#typing.TypeIs),
 [frozendict](https://docs.python.org/3.15/builtins/stdtypes.html#frozendict),
 [pdb](https://docs.python.org/3.15/library/pdb.html),
+[remote-debug controls](https://docs.python.org/3.15/using/cmdline.html),
 [profiling](https://docs.python.org/3.15/library/profiling.html),
 [Ruff F811](https://docs.astral.sh/ruff/rules/redefined-while-unused/),
 [Ruff TC004](https://docs.astral.sh/ruff/rules/runtime-import-in-type-checking-block/).

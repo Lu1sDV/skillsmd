@@ -3,6 +3,7 @@
 ## Contents
 
 - [File operations and missing-versus-invalid data](#file-operations-are-not-existence-predicates)
+- [File classification and errors](#file-classification-is-not-error-reporting)
 - [Temporary-file ownership](#temporary-files-and-publication)
 - [Copy, move, archive and deletion](#copy-move-archive-and-deletion-contracts)
 - [Timestamps, durations and calendars](#timestamps-durations-and-calendars)
@@ -60,6 +61,42 @@ Text streams normally normalize newlines. Use `newline=""` to preserve the line
 endings when the parser owns that policy. Do not use `.strip()` to remove a line
 terminator when leading/trailing spaces are payload. A single extremely long line
 can defeat an otherwise streaming memory budget; use bounded reads if required.
+
+## File classification is not error reporting
+
+From 3.14, `Path.exists()`, `is_file()`, `is_dir()` and related predicates
+return `False` for many invalid or inaccessible paths as well as absent or
+different-kind paths. That is convenient for UI decisions, but **not** evidence
+that a scanner completed a search or that a file is absent. When those cases
+matter, call `stat()` or `lstat()` under a narrow `try` and distinguish
+`FileNotFoundError` from `PermissionError` and other `OSError` outcomes.
+Avoid treating a failed directory walk as an empty finding set.
+
+`Path.info` (3.14+) caches file-type queries; a `Path` yielded by `iterdir()`
+may already contain directory-entry information. Its answers can become stale
+after changes, and merely accessing `info` does no I/O. Use a fresh `Path`
+instance or `stat()` for a fresh observation, and remember that even `stat()`
+is not a race-free authorization/containment check for hostile changing paths.
+Do not use cached type information to authorize later destructive actions.
+
+```pycon
+>>> from pathlib import Path
+>>> from tempfile import TemporaryDirectory
+>>> with TemporaryDirectory() as temporary:
+...     present = Path(temporary) / "record"
+...     _ = present.write_text("ok", encoding="utf-8")
+...     assert present.is_file()
+...     assert present.stat().st_size == 2
+...     absent = Path(temporary) / "absent"
+...     assert not absent.exists()
+...     try:
+...         absent.stat()
+...     except FileNotFoundError:
+...         pass
+...     else:
+...         raise AssertionError("absence was not distinguished")
+
+```
 
 ## Temporary files and publication
 
@@ -203,6 +240,7 @@ not on every loop. Do not silently return the input for unsupported negative day
 ## Authorities
 
 [pathlib](https://docs.python.org/3.15/library/pathlib.html),
+[Path.info cache](https://docs.python.org/3.15/library/pathlib.html#pathlib.Path.info),
 [shutil](https://docs.python.org/3.15/library/shutil.html),
 [os.replace](https://docs.python.org/3.15/library/os.html#os.replace),
 [tempfile](https://docs.python.org/3.15/library/tempfile.html),

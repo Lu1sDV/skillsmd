@@ -2,7 +2,8 @@
 name: python-idiomatic
 description: >
   Use when writing or reviewing Python language semantics, fixing aliasing,
-  mutable defaults, late-bound closures, exhausted generators, import cycles,
+  mutable defaults, late-bound closures, `locals()` snapshots, exhausted
+  generators, import cycles,
   swallowed exceptions, or resource leaks; choosing comprehensions, decorators,
   context managers, match statements, or Python environment/debugging tools.
 ---
@@ -17,7 +18,7 @@ compatibility contract when applying it.
 
 | Task | Load |
 |---|---|
-| Identity/equality, copying, defaults, scope, numbers/text, ordinary classes | [Language semantics](references/language-semantics.md) |
+| Identity/equality, copying, defaults, `locals()`, scope, numbers/text, ordinary classes | [Language semantics](references/language-semantics.md) |
 | Generator exhaustion, comprehensions, zip, match, decorators/caches | [Iteration and decorators](references/iteration-decorators.md) |
 | Narrow handlers, exception chaining, cleanup, lazy resource lifetime | [Errors and resources](references/errors-resources.md) |
 | Imports, environment mismatch, lint/debug/profile, version gates | [Workflow and versions](references/workflow-versions.md) |
@@ -52,6 +53,8 @@ are separate tasks.
   deeply immutable. Default arguments and closure capture can retain shared state.
 - Preserve valid zero/empty values: use `is None` or a private sentinel for absence.
   An exhausted generator is still truthy.
+- In optimized function scopes, `locals()` yields a snapshot; mutating its dict
+  cannot update the actual local variables. Frame-local debugger access differs.
 - Lazy execution defers errors and can retain resources. `break` does not promise
   iterator closure. Never return an iterator over a closed resource or close a
   borrowed stream without ownership transfer.
@@ -73,7 +76,8 @@ skip required work or call static review runtime verification.
 Optional installed-skill handoffs: **python-stdlib** for library APIs,
 **python-api-design** for typing/class protocols, **python-concurrency** for
 execution coordination, **python-algorithms** for data structures/complexity,
-**python-tdd** for tests, **python-system-design** for packaging/deployment.
+**python-tdd** for tests, **python-system-design** for packaging/deployment,
+**python-performance** for profiling, benchmarking and evidence-based optimization.
 None is an installation dependency.
 
 See [README](README.md#sources-and-adaptation) for pinned source coverage,

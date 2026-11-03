@@ -1,16 +1,22 @@
-name: Validate Python Design Skills
+name: Validate Python Skill Examples
 
 on:
   push:
     branches: [main]
     paths:
       - 'python-api-design/**'
+      - 'python-concurrency/**'
+      - 'python-idiomatic/**'
+      - 'python-stdlib/**'
       - 'python-system-design/**'
       - '.github/workflows/validate-python-design.yml'
   pull_request:
     branches: [main]
     paths:
       - 'python-api-design/**'
+      - 'python-concurrency/**'
+      - 'python-idiomatic/**'
+      - 'python-stdlib/**'
       - 'python-system-design/**'
       - '.github/workflows/validate-python-design.yml'
   workflow_dispatch:
@@ -42,7 +48,8 @@ jobs:
           print(sys.version)
           with tempfile.TemporaryDirectory() as temporary:
               os.chdir(temporary)
-              for name in ('python-api-design', 'python-system-design'):
+              for name in ('python-idiomatic', 'python-api-design', 'python-concurrency',
+                           'python-stdlib', 'python-system-design'):
                   bundle = Path(temporary) / name
                   shutil.copytree(source / name, bundle)
                   attempted = failed = 0
@@ -51,7 +58,7 @@ jobs:
                       attempted += result.attempted
                       failed += result.failed
                   print(f'{name}: {attempted} checks, {failed} failures')
-                  failures += failed
+                  failures += failed + (attempted == 0)
               os.chdir(source)
           raise SystemExit(bool(failures))
           PY

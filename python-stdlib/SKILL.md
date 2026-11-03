@@ -3,7 +3,8 @@ name: python-stdlib
 description: >
   Use when choosing or debugging Python standard-library APIs for iteration,
   caching, files, timestamps, JSON/CSV/TOML, regex, logging, dataclasses,
-  resource cleanup, or subprocesses, especially boundary and data-loss bugs.
+  resource cleanup, subprocesses, or AST-based source analysis, especially
+  versioned parser, boundary and data-loss bugs.
 ---
 
 # Python Standard Library
@@ -16,6 +17,7 @@ description: >
 | Paths, text encoding, copying/deleting files, archives, UTC and durations | [Files and time](references/files-time.md) |
 | JSON/CSV/TOML, Unicode regex, text transformations and diffs | [Serialization and text](references/serialization-text.md) |
 | Dataclasses/enums, resource lifetimes, logging, environment and child processes | [Records and processes](references/records-processes.md) |
+| Python AST parsing/transformations, 3.15 constructor changes, source scanners | [AST and source analysis](references/ast-source-analysis.md) |
 | Runtime migration, removed APIs or missing stdlib modules | [Runtime compatibility](references/runtime-compatibility.md) |
 
 Load only the relevant reference. Each is bundled locally; sibling skills are
@@ -42,11 +44,16 @@ Python.org on a future refresh. Older project support is a separate constraint.
 - **Consumption and retention:** iterators are one-shot; `tee`/`cycle` can buffer.
   Caches retain inputs/results, share mutable results, and are not single-flight.
   Do not cache coroutine or generator objects.
+- **Filesystem classification:** `Path.exists()`/`is_file()` may report false
+  for inaccessible paths on 3.14+; `Path.info` can cache stale file types. Use
+  error-reporting `stat`/`lstat` when inaccessible versus absent matters.
 - **Filesystem safety:** lexical containment and resolve-then-check are not
   race-free symlink defenses. Copy/move/overwrite operations need an explicit
   metadata, atomicity and deletion policy; broad error suppression hides failures.
 - **Time semantics:** `replace(tzinfo=...)` labels wall time; `astimezone` converts
   an instant. Define DST ambiguity; use a monotonic clock for elapsed deadlines.
+- **Source AST is not semantic proof:** Python 3.15 rejects incomplete/extra
+  AST constructor fields; parsing alone does not establish name/data-flow models.
 - **Parsing is not validation:** JSON accepts duplicate keys/nonfinite constants;
   `strict=True` does not reject them. CSV quoting does not neutralize spreadsheet
   formulas. Never unpickle untrusted data.

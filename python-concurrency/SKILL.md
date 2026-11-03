@@ -2,7 +2,8 @@
 name: python-concurrency
 description: >
   Use when choosing or debugging Python threads, process pools, asyncio tasks,
-  TaskGroup cancellation, timeouts, bounded queues, worker shutdown, deadlocks,
+  TaskGroup cancellation or early termination, timeouts, bounded queues,
+  worker shutdown, deadlocks,
   GIL assumptions, free-threaded CPython, multiple interpreters, or AnyIO/Trio
   cancellation differences. Targets the latest stable CPython baseline.
 ---
@@ -14,7 +15,7 @@ description: >
 | Situation | Default and reference |
 |---|---|
 | Blocking calls, CPU work, shared state, executor hangs | Start sequential; use bounded threads for blocking I/O and consider processes for substantial GIL-bound CPU work. [Execution and coordination](references/execution-and-coordination.md) |
-| Async-compatible I/O, task failure, deadlines or growing backlog | Use the existing loop, structured task ownership and bounded admission. [Async lifecycle](references/asyncio-lifecycle.md) |
+| Async-compatible I/O, task failure, group early exit, deadlines or growing backlog | Use the existing loop, structured task ownership and bounded admission. [Async lifecycle](references/asyncio-lifecycle.md) |
 | Runtime upgrade, free threading or multiple interpreters | Check the actual build, start method and dependency compatibility. [Runtime versions](references/runtime-versions.md) |
 
 Load the relevant reference before changing its mechanism. Target **CPython 3.15.2**
@@ -48,6 +49,8 @@ When applying this skill to an older project, preserve its declared support poli
   use loop-local primitives for tasks, not for OS-thread/process synchronization.
 - **Async syntax does not make blocking work nonblocking.** Use async-compatible
   APIs or owned offloading. Await in a host's existing loop; do not nest loops.
+- **TaskGroup early exit is not a forced stop.** On 3.15+, `TaskGroup.cancel()`
+  requests cancellation of pending children and its body; exiting awaits cleanup.
 - **Cancellation is not rollback or thread termination.** Release resources in
   `finally`, normally re-raise `CancelledError`, and await task cleanup. A timeout
   can leave an effect's outcome unknown; cancelling a `to_thread()` awaiter leaves

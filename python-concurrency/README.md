@@ -23,7 +23,7 @@ instructions, not runtime dependencies; no package or framework is installed.
 ## Usage prompts
 
 - "Choose threads, asyncio, or processes for this mixed I/O and CPU pipeline."
-- "Review this TaskGroup for cancellation, partial effects, and worker cleanup."
+- "Review this TaskGroup for cancellation, early exit, partial effects, and cleanup."
 - "Bound this queue without leaving an unbounded backlog of waiting tasks."
 - "Explain why cancelling to_thread did not stop my blocking operation."
 - "Make this worker pool portable to current forkserver and interpreter isolation."
@@ -34,7 +34,7 @@ instructions, not runtime dependencies; no package or framework is installed.
 |---|---|
 | [SKILL.md](SKILL.md) | Mechanism routing, contract workflow, high-risk pitfalls, completion evidence |
 | [Execution and coordination](references/execution-and-coordination.md) | Threads, synchronization, bounded queues, rate limiting, executors, process ownership/smoke recipe, deadlock diagnosis |
-| [Async lifecycle](references/asyncio-lifecycle.md) | Task/stream ownership, cancellation, backpressure, thread bridging, AnyIO/Trio boundaries, diagnostics |
+| [Async lifecycle](references/asyncio-lifecycle.md) | Task/stream ownership, 3.15 `TaskGroup.cancel()`, cancellation, backpressure, thread bridging, AnyIO/Trio boundaries, diagnostics |
 | [Runtime versions](references/runtime-versions.md) | 3.15 baseline, GIL/build probes, start methods, interpreter transfers, context flags and migration notes |
 
 ## Runnable examples and limits
@@ -175,3 +175,13 @@ focused on choosing a model and proving ownership; external-command lifecycle
 details live in **python-stdlib**, framework request-loop rules in **python-system-design**,
 and performance claims require measurement. No universal speedup, worker count,
 mandatory third-party runtime or copied “best practice” checklist is added.
+
+### Modern-Python group lifecycle refresh (2026-11-03)
+
+The supplied modern-Python review highlighted the 3.15 `TaskGroup.cancel()`
+early-exit method. The [async lifecycle reference](references/asyncio-lifecycle.md#taskgroup-cancel-deliberate-early-exit-on-315)
+now distinguishes group-body cancellation, unfinished children, normal group
+exit, independent failures and resource cleanup; it includes a bounded
+stdlib-only example. Source:
+[Python 3.15 TaskGroup](https://docs.python.org/3.15/library/asyncio-task.html#task-groups).
+Execution on 3.15 is required before adding a new passing-check claim.

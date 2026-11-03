@@ -28,10 +28,10 @@ cp -r python-idiomatic ~/.claude/skills/
 | File | Scope |
 |---|---|
 | [SKILL.md](SKILL.md) | Concise trigger, symptom routing, workflow and high-risk rules; examples live in the references |
-| [Language semantics](references/language-semantics.md) | Values, numbers/text, mutation/copying, defaults, scope, ordinary classes |
+| [Language semantics](references/language-semantics.md) | Values, numbers/text, mutation/copying, defaults, `locals()` snapshots, scope, ordinary classes |
 | [Iteration and decorators](references/iteration-decorators.md) | Comprehensions, iterator consumption, match/loop flow, wrappers/caches |
 | [Errors and resources](references/errors-resources.md) | Narrow handlers, chaining, context managers, ownership, GC |
-| [Workflow and versions](references/workflow-versions.md) | Environments, imports, analysis/debug/profile tools, compatibility |
+| [Workflow and versions](references/workflow-versions.md) | Environments, lazy import/startup effects, analysis/debug tools, compatibility |
 
 ## Runnable examples and runtime limits
 
@@ -101,7 +101,8 @@ MIT notice is retained verbatim in [LICENSE.upstream](LICENSE.upstream).
   and grammar relaxations correctly. T-strings don't sanitize SQL; deferred
   annotations don't enforce runtime argument types. Keep newer syntax out of
   baseline doctests, retain portable parenthesized except clauses, and use the
-  documented `disable_remote_debug` flag spelling rather than upstream's hyphens.
+  documented `disable-remote-debug` flag spelling; earlier underscore guidance
+  was incorrect for CPython 3.15.2.
 - Ruff isn't a complete drop-in replacement for all Pylint/Flake8 capabilities;
   retain existing tool policy. Use monotonic duration clocks and measured workload
   evidence, not wall-clock timers or unconditional performance claims.
@@ -138,3 +139,21 @@ Requirements describe observable behavior; recommendations state their condition
 No fixed JIT gains, universal string-concatenation cost, mandatory formatter change,
 or complete historical feature table was accepted. Recheck the stable release
 and affected tool behavior when updating this bundle.
+
+### Modern-Python guidance consolidation (2026-11-03)
+
+General language/style/review advice remains owned by **python-idiomatic**:
+there is no separate general-purpose Python guidelines activation entrypoint.
+Specialist rules stay with their independently installable task skills.
+This refresh adds PEP 667 function-local snapshots, first-use lazy-import
+thread/context and compatibility checks, corrects the documented remote-debug
+switch, and routes measured tuning to optional **python-performance**. It does
+not prescribe Ruff, uv, a particular formatter or Python-version upgrade.
+
+The supplied 3.13–3.15 review was treated as a candidate source, not as
+authoritative release documentation; original rules were checked against
+[PEP 667](https://peps.python.org/pep-0667/),
+[PEP 810](https://peps.python.org/pep-0810/),
+[the 3.15 import grammar](https://docs.python.org/3.15/reference/simple_stmts.html),
+and [the 3.15 command-line options](https://docs.python.org/3.15/using/cmdline.html).
+New examples must be checked on the 3.15 baseline before reporting execution results.

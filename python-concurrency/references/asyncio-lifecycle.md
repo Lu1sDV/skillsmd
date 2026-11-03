@@ -4,6 +4,7 @@
 
 - [Start and own tasks deliberately](#start-and-own-tasks-deliberately)
 - [Close streams and generators](#close-streams-and-generators-at-the-owned-boundary)
+- [TaskGroup deliberate early exit](#taskgroup-cancel-deliberate-early-exit-on-315)
 - [Cancellation and deadlines](#cancellation-and-deadlines-describe-lifetime-not-rollback)
 - [Bound admission and worker lifetime together](#bound-admission-and-worker-lifetime-together)
 - [Keep blocking work off the loop](#keep-blocking-work-off-the-loop-without-losing-its-real-lifetime)
@@ -27,7 +28,7 @@ Use `asyncio.get_running_loop()` inside async code when a loop object is needed.
 | API | Result/error policy | Lifetime obligation |
 |---|---|---|
 | `await coroutine()` | One operation, current task | Caller owns its effects and cleanup |
-| `TaskGroup` (3.11+) | Related children; ordinary failure cancels siblings and is grouped on exit | All children finish before group exit |
+| `TaskGroup` (3.11+, `cancel()` 3.15+) | Related children; ordinary failure cancels siblings; deliberate 3.15 `cancel()` exits normally | All children/body finish cancellation cleanup before exit |
 | `gather(*aws)` | Input-ordered results; first ordinary exception propagates without cancelling siblings | Know who awaits surviving children |
 | `gather(..., return_exceptions=True)` | Failures become result values | Inspect each outcome; do not mistake failure values for success |
 | `wait(tasks, ...)` | Returns done/pending sets; accepts tasks/futures, not raw coroutines on 3.11+ | Pending work is not cancelled automatically |
@@ -87,6 +88,47 @@ nested `ExceptionGroup` values. Use `except*` to handle selected exception types
 leave unrelated failures visible. `KeyboardInterrupt` and `SystemExit` have
 special re-raise behavior after children finish. A child that ends by ordinary
 cancellation alone does not trigger the same sibling-failure policy.
+
+## TaskGroup cancel: deliberate early exit on 3.15
+
+Python 3.15 adds `TaskGroup.cancel()` to end a group's lifetime *without*
+inventing an exception-raising terminator task. It requests `cancel()` on
+unfinished children **and on the task executing the group's body**; the
+context manager consumes its own cancellation and exits without propagating
+that `CancelledError`. The method is idempotent, works before entry (the
+group cancels on entry), and is harmless after exit. Children still receive
+cooperative cancellation, so their `finally` cleanup must complete before
+the group can finish. Independent failures and external cancellation retain
+their separate documented handling; this is neither rollback nor a forced
+stop. Do not add an `uncancel()` ritual to normal group use.
+
+```pycon
+>>> import asyncio
+>>> async def deliberately_stop_group():
+...     ready = asyncio.Event()
+...     cleaned = []
+...     async def worker():
+...         try:
+...             ready.set()
+...             await asyncio.Event().wait()
+...         finally:
+...             cleaned.append("closed")
+...     async with asyncio.TaskGroup() as group:
+...         child = group.create_task(worker())
+...         await ready.wait()
+...         group.cancel()
+...         group.cancel()  # Idempotent.
+...         await asyncio.sleep(0)  # Body receives the group's cancellation.
+...     assert child.cancelled()
+...     return cleaned
+>>> assert asyncio.run(deliberately_stop_group()) == ["closed"]
+
+```
+
+Use `TaskGroup.cancel()` only for a group-wide early-exit policy. If a single
+child is irrelevant but others must continue, cancel/settle that child's task
+under the group's ownership instead. On pre-3.15 runtimes, choose a documented
+equivalent control protocol without introducing unsupported calls.
 
 ## Close streams and generators at the owned boundary
 
@@ -384,7 +426,7 @@ a deadlock from one snapshot. No tool inspection substitutes for a wait graph.
 
 ## First-party contracts
 
-- [Task creation, TaskGroup, cancellation, gather, wait, deadlines, shield, to_thread](https://docs.python.org/3.15/library/asyncio-task.html)
+- [Task creation, TaskGroup and its 3.15 cancel method, cancellation, gather, wait, deadlines, shield, to_thread](https://docs.python.org/3.15/library/asyncio-task.html)
 - [Deterministic async-generator cleanup](https://docs.python.org/3.15/library/contextlib.html#contextlib.aclosing)
 - [Runner shutdown](https://docs.python.org/3.15/library/asyncio-runner.html)
 - [Asyncio queues, task accounting, and shutdown](https://docs.python.org/3.15/library/asyncio-queue.html)

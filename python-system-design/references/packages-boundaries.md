@@ -5,6 +5,7 @@
 - [Choose a shape by coupling, not size](#choose-a-shape-by-coupling-not-size)
 - [Dependency direction and composition](#dependency-direction-and-composition)
 - [Installing the application is a boundary](#installing-the-application-is-a-boundary)
+- [Startup hooks and lockfile interchange](#startup-hooks-and-lockfile-interchange)
 - [Workspace and distribution boundaries](#workspace-and-distribution-boundaries)
 - [When a service boundary is justified](#when-a-service-boundary-is-justified)
 - [Make tests follow the boundary](#make-tests-follow-the-boundary)
@@ -177,6 +178,45 @@ the current directory, user site and `PYTHON*` environment variables. See
 
 Primary packaging references: [pyproject metadata](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/)
 and [pip editable versus regular installs](https://pip.pypa.io/en/stable/topics/local-project-installs/).
+
+## Startup hooks and lockfile interchange
+
+Python 3.15 adds `name.start` startup files in site-packages. Each non-comment
+entry resolves an importable `pkg.mod:callable` and calls it with no arguments
+at interpreter startup when `site` processes that site-packages directory.
+Existing executable `import` lines in `.pth` files are deprecated but still
+run during the transition **unless** a matching `name.start` file exists, in
+which case those lines in the matching `name.pth` are ignored. Path extension
+lines in `.pth` files are a separate mechanism. The startup hook is not a
+console entry point requiring an explicit user command.
+
+Inspect `*.pth`, `*.start`, `sitecustomize`/`usercustomize`, the selected
+virtual environment and included system/user site directories when auditing
+unexpected startup behavior. A package inventory alone does not list every
+executable startup hook. Run the *installed* artifact under a disposable
+environment and check failures, imported modules, setup side effects and extra
+startup costs. `-S` suppresses automatic `site` initialization, but changes
+normal path/environment assumptions and is not a security sandbox. Keep
+import-time code small and allow required registration explicitly; do not run
+untrusted packages merely to inspect their annotations.
+
+Packaging interoperability is a separate decision. PEP 751 defines
+`pylock.toml`, but uv's **native project lock** is `uv.lock`; export to
+`pylock.toml` when the consuming tool needs the standardized representation,
+then verify the export's actual resolution/environment limitations. It is not
+a mandated replacement for the native lock or a substitute for testing installed
+artifacts. `uv sync --locked` checks that the lock is current; `--frozen`
+uses it without checking freshness. Choose explicit development groups for
+the commands that need them; published extras are a different contract.
+CycloneDX export is currently preview functionality in uv: review its supported
+flags and output instead of treating it as a universal stable SBOM pipeline.
+
+Sources: [site startup files](https://docs.python.org/3.15/library/site.html),
+[PEP 829](https://peps.python.org/pep-0829/),
+[PEP 751](https://peps.python.org/pep-0751/),
+[uv project lock](https://docs.astral.sh/uv/concepts/projects/layout/),
+[uv sync](https://docs.astral.sh/uv/concepts/projects/sync/),
+[uv export](https://docs.astral.sh/uv/concepts/projects/export/).
 
 ## Workspace and distribution boundaries
 

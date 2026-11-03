@@ -180,6 +180,23 @@ bindings raise, unlike `{**left, **right}`/`left | right`, where right wins.
 Tuple-return and extended unpacking express fixed structure; starred assignment
 collects a list and requires enough input elements.
 
+In optimized function, generator and coroutine scopes, `locals()` gives a fresh
+snapshot: assigning into that dictionary does **not** rebind local variables.
+Module and class namespace behavior differs; frame `f_locals` is a separate,
+write-through debugger interface in 3.13+ (PEP 667), not an application settings
+API. For dynamic execution requiring observable writes, pass an explicit namespace.
+
+```pycon
+>>> def inspect_locals():
+...     value = 2
+...     snapshot = locals()
+...     snapshot["value"] = 9
+...     return value, snapshot["value"], locals()["value"], snapshot is locals()
+>>> inspect_locals()
+(2, 9, 2, False)
+
+```
+
 Normal function lookup follows local/enclosing/global/builtins. Binding anywhere
 in a function normally makes the name local throughout that function, so reading
 before binding raises `UnboundLocalError`. `nonlocal` rebinds an enclosing
@@ -234,6 +251,8 @@ contracts are optional **python-api-design** handoffs.
 Sources: [data model](https://docs.python.org/3.15/reference/datamodel.html),
 [expressions](https://docs.python.org/3.15/reference/expressions.html),
 [execution model](https://docs.python.org/3.15/reference/executionmodel.html),
+[`locals()`](https://docs.python.org/3.15/library/functions.html#locals),
+[PEP 667](https://peps.python.org/pep-0667/),
 [copy](https://docs.python.org/3.15/library/copy.html),
 [sentinel](https://docs.python.org/3.15/builtins/functions.html#sentinel),
 [Unicode HOWTO](https://docs.python.org/3.15/howto/unicode.html#comparing-strings),
