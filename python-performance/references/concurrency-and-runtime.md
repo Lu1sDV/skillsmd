@@ -67,27 +67,27 @@ Check each NumPy operation: many native routines release the GIL; object-dtype o
 
 ## Bound asynchronous pipelines
 
-Find loop stalls from blocking clients, synchronous filesystem work, CPU loops, serialization, and logging before adding tasks. Asyncio debug mode's configurable slow-callback threshold defaults to 100 ms; rebenchmark without diagnostics. [Asyncio development](https://docs.python.org/3.14/library/asyncio-dev.html)
+Find loop stalls from blocking clients, synchronous filesystem work, CPU loops, serialization, and logging before adding tasks. Asyncio debug mode's configurable slow-callback threshold defaults to 100 ms; rebenchmark without diagnostics. [Asyncio development](https://docs.python.org/3.15/library/asyncio-dev.html)
 
-Use `asyncio.to_thread()` (3.9+) for thread-suitable blocking work. With the GIL enabled, pure-Python CPU normally remains serial; native GIL-releasing work is an exception. Evaluate process/interpreter executors for substantial CPU work. [to_thread](https://docs.python.org/3.14/library/asyncio-task.html#asyncio.to_thread)
+Use `asyncio.to_thread()` (3.9+) for thread-suitable blocking work. With the GIL enabled, pure-Python CPU normally remains serial; native GIL-releasing work is an exception. Evaluate process/interpreter executors for substantial CPU work. [to_thread](https://docs.python.org/3.15/library/asyncio-task.html#asyncio.to_thread)
 
 Stream through `asyncio.Queue(maxsize=N)`, positive `N`, and fixed consumers; full queues block producers. Bound task creation/admission: semaphores limit protected operations, not already-allocated tasks. [Queues](https://docs.python.org/3.15/library/asyncio-queue.html), [semaphores](https://docs.python.org/3.15/library/asyncio-sync.html#asyncio.Semaphore)
 
-Use `TaskGroup` (3.11+) for shared task lifetime and sibling cancellation on failure. Preserve semantics: `gather()` propagating the first exception does not automatically cancel other awaitables. Clean up with `try/finally`; normally propagate `CancelledError`. Apply external-wait deadlines and verify cleanup. [Tasks/cancellation](https://docs.python.org/3.14/library/asyncio-task.html)
+Use `TaskGroup` (3.11+) for shared task lifetime and sibling cancellation on failure. Preserve semantics: `gather()` propagating the first exception does not automatically cancel other awaitables. Clean up with `try/finally`; normally propagate `CancelledError`. Apply external-wait deadlines and verify cleanup. [Tasks/cancellation](https://docs.python.org/3.15/library/asyncio-task.html)
 
 Stream results/retain required aggregates. Measure connection-pool waits, retry load, downstream limits. Inspect suspension points: `async def` leaves synchronous work blocking.
 
 ## Use processes and subinterpreters deliberately
 
-Send compact inputs, reuse workers, batch to amortize transfer. Put callables in importable modules; guard process-starting entry points with `if __name__ == "__main__":`. Verify serialization: REPL-local functions, lambdas, closures may fail. [Multiprocessing guidelines](https://docs.python.org/3.14/library/multiprocessing.html#programming-guidelines)
+Send compact inputs, reuse workers, batch to amortize transfer. Put callables in importable modules; guard process-starting entry points with `if __name__ == "__main__":`. Verify serialization: REPL-local functions, lambdas, closures may fail. [Multiprocessing guidelines](https://docs.python.org/3.15/library/multiprocessing.html#programming-guidelines)
 
-Inspect start methods: 3.14 removed default `fork` everywhere; supported POSIX generally uses `forkserver`, macOS/Windows `spawn`. Check patch-level exceptions and available methods. Accept caller-supplied library contexts; avoid forcing `fork` to recover older benchmark results. [Start methods](https://docs.python.org/3.14/library/multiprocessing.html#contexts-and-start-methods)
+Inspect start methods: 3.14 removed default `fork` everywhere; supported POSIX generally uses `forkserver`, macOS/Windows `spawn`. Check patch-level exceptions and available methods. Accept caller-supplied library contexts; avoid forcing `fork` to recover older benchmark results. [Start methods](https://docs.python.org/3.15/library/multiprocessing.html#contexts-and-start-methods)
 
 Measure parent/worker memory together. Consider shared memory when repeated large-buffer copies demonstrably dominate; specify ownership, synchronization, `close()`, appropriate `unlink()` cleanup. Arbitrary Python objects are not transparently shared. [Shared memory](https://docs.python.org/3.15/library/multiprocessing.shared_memory.html)
 
-On 3.14+, `Executor.map(..., buffersize=N)` bounds submissions with unyielded results. Tune `chunksize` separately; it affects process pools only. Avoid waiting for same-pool tasks inside saturated pools. `cancel_futures=True` cancels pending tasks, not running work; timeouts do not prove execution stopped. [Executors](https://docs.python.org/3.14/library/concurrent.futures.html)
+On 3.14+, `Executor.map(..., buffersize=N)` bounds submissions with unyielded results. Tune `chunksize` separately; it affects process pools only. Avoid waiting for same-pool tasks inside saturated pools. `cancel_futures=True` cancels pending tasks, not running work; timeouts do not prove execution stopped. [Executors](https://docs.python.org/3.15/library/concurrent.futures.html)
 
-Evaluate `InterpreterPoolExecutor` (3.14+): isolated interpreters, each with its own GIL; pickled callables, arguments, and results. Measure transfer costs. [InterpreterPoolExecutor](https://docs.python.org/3.14/library/concurrent.futures.html#interpreterpoolexecutor)
+Evaluate `InterpreterPoolExecutor` (3.14+): isolated interpreters, each with its own GIL; pickled callables, arguments, and results. Measure transfer costs. [InterpreterPoolExecutor](https://docs.python.org/3.15/library/concurrent.futures.html#interpreterpoolexecutor)
 
 Account for isolated imports/runtime state; verify extension compatibility. Mutable objects are generally copied, not implicitly shared. Creating an interpreter alone starts no thread; the executor combines both. Isolation is no security boundary. [Multiple interpreters](https://docs.python.org/3.15/library/concurrent.interpreters.html)
 
