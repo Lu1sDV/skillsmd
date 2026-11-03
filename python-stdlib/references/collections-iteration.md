@@ -91,7 +91,8 @@ Counter()
 
 ## Caching and function adaptation
 
-Use `cache` only for a finite problem or deliberately bounded lifetime. Use
+`cache` is `lru_cache(maxsize=None)`: an unbounded cache. Use it only for a finite
+problem or deliberately bounded lifetime. Use
 `lru_cache(maxsize=...)` when entry eviction is enough. It is not a TTL cache,
 byte budget, distributed cache, or request coalescer. Inputs must be hashable;
 lists/dicts cannot be keys. For a memoized grid algorithm, capture one immutable
@@ -119,6 +120,9 @@ Other adapters:
 - `partial` binds chosen arguments; it does not copy mutable bound values.
 - `wraps` preserves metadata and exposes `__wrapped__`; it does not validate types
   or automatically turn a synchronous wrapper into a coroutine wrapper.
+- `singledispatch` selects by the first argument's runtime type and its class
+  hierarchy, not by all annotated arguments or container element types. Use it
+  for an extensible type-based operation, not as general pattern matching.
 - Prefer a `key` to `cmp_to_key`. A comparator needs a coherent ordering; use the
   conversion only when an existing comparison API is the right contract.
 - `total_ordering` fills comparison methods, not missing domain semantics. Return
@@ -135,7 +139,7 @@ copy protocol, preserves repeated-reference structure via a memo, and may leave
 immutable objects shared; it cannot duplicate arbitrary files, locks or external
 resources. Copy only the state whose ownership needs to change. `copy.replace`
 (3.13+) supports named tuples, dataclasses, and types with `__replace__`; replacement
-is not recursive. `dataclasses.replace` is available on the 3.11 example baseline.
+is not recursive. `dataclasses.replace` is appropriate when the input is a dataclass.
 
 Use `sum`, `min`/`max` with a defined empty policy, `math.prod`, `math.gcd`,
 `math.lcm`, `math.comb`, and `math.perm` rather than home-grown reductions. `isqrt`
@@ -144,6 +148,9 @@ at a fixed word width, but operations grow more expensive with bit length.
 `math.isclose` needs a domain-appropriate tolerance (often an absolute tolerance
 near zero); `math.fsum` improves floating summation, not decimal exactness.
 Use `Decimal` constructed from strings when decimal semantics are required.
+For credentials or unpredictable tokens, use `secrets`, not the default
+pseudorandom generator in `random`; deterministic simulation/test randomness has
+a different contract.
 
 `string.ascii_letters` and `string.digits` are explicitly ASCII. `str.isalpha` and
 `str.isdigit` accept a wider Unicode domain. `all(...)` is true on an empty input;
@@ -164,10 +171,11 @@ check nonemptiness when validating a required identifier.
 
 ## Authorities
 
-[collections](https://docs.python.org/3.14/library/collections.html),
-[itertools](https://docs.python.org/3.14/library/itertools.html),
-[functools](https://docs.python.org/3.14/library/functools.html),
-[copy](https://docs.python.org/3.14/library/copy.html),
-[math](https://docs.python.org/3.14/library/math.html),
-[operator](https://docs.python.org/3.14/library/operator.html),
-[string](https://docs.python.org/3.14/library/string.html).
+[collections](https://docs.python.org/3.15/library/collections.html),
+[itertools](https://docs.python.org/3.15/library/itertools.html),
+[functools](https://docs.python.org/3.15/library/functools.html),
+[copy](https://docs.python.org/3.15/library/copy.html),
+[math](https://docs.python.org/3.15/library/math.html),
+[secrets](https://docs.python.org/3.15/library/secrets.html),
+[operator](https://docs.python.org/3.15/library/operator.html),
+[string](https://docs.python.org/3.15/library/string.html).
