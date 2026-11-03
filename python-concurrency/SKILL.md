@@ -3,7 +3,8 @@ name: python-concurrency
 description: >
   Use when choosing or debugging Python threads, process pools, asyncio tasks,
   TaskGroup cancellation, timeouts, bounded queues, worker shutdown, deadlocks,
-  GIL assumptions, free-threaded CPython, or Python 3.14 multiple interpreters.
+  GIL assumptions, free-threaded CPython, multiple interpreters, or AnyIO/Trio
+  cancellation differences. Targets the latest stable CPython baseline.
 ---
 
 # Python Concurrency
@@ -14,10 +15,11 @@ description: >
 |---|---|
 | Blocking calls, CPU work, shared state, executor hangs | Start sequential; use bounded threads for blocking I/O and consider processes for substantial GIL-bound CPU work. [Execution and coordination](references/execution-and-coordination.md) |
 | Async-compatible I/O, task failure, deadlines or growing backlog | Use the existing loop, structured task ownership and bounded admission. [Async lifecycle](references/asyncio-lifecycle.md) |
-| Runtime upgrade, free threading or Python 3.14 interpreters | Check the actual build, start method and dependency compatibility. [Runtime versions](references/runtime-versions.md) |
+| Runtime upgrade, free threading or multiple interpreters | Check the actual build, start method and dependency compatibility. [Runtime versions](references/runtime-versions.md) |
 
-Load the relevant reference before changing its mechanism. Examples use Python
-3.11+ except explicitly gated APIs; preserve the consuming project's version floor.
+Load the relevant reference before changing its mechanism. Target **CPython 3.15.2**
+(stable baseline checked 2026-11-03); recheck Python.org on a future refresh.
+When applying this skill to an older project, preserve its declared support policy.
 
 ## Workflow
 
