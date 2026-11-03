@@ -11,9 +11,10 @@
 
 For source inspection, read text/bytes under the caller's encoding and size
 policy, then use `ast.parse` without importing or executing the target package.
-Importing a package can run `__init__` code, registration, extension imports and
-3.15 startup hooks in the *scanner's* interpreter. Source parsing alone does not
-need those effects. Bound files and input complexity; parsing an untrusted,
+Importing a package can run `__init__` code, registration and extension
+imports in the *scanner's* interpreter. Independently, its installed environment
+may already have executed `.pth`/3.15 `.start` hooks during interpreter startup.
+Source parsing needs neither target-package imports nor executing target code. Bound files and input complexity; parsing an untrusted,
 enormous or deeply nested input is not an unlimited-resource sandbox.
 
 `ast.parse(source, feature_version=(3, minor))` requests a best-effort grammar
