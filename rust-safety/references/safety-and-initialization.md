@@ -18,6 +18,14 @@ other safe state management to `static mut`.
 [Reference: unsafety](https://doc.rust-lang.org/reference/unsafety.html),
 [Reference: unions](https://doc.rust-lang.org/reference/items/unions.html).
 
+A `debug_assert!` can document an invariant but must not be its only enforcer
+before unsafe access in builds that disable it. Inspect the effective consumer
+profile, not just this library's manifest; Cargo uses workspace-root profiles.
+An independently established type/private invariant or unsafe caller contract
+can make the assertion redundant. Do not infer a defect from lexical proximity.
+[debug_assert contract](https://doc.rust-lang.org/std/macro.debug_assert.html),
+[Cargo profile scope](https://doc.rust-lang.org/cargo/reference/profiles.html).
+
 ## Raw pointers: prove the operation, not the address
 
 | Obligation | How to establish it | Common false proof |
@@ -63,6 +71,8 @@ Reborrows derived from it are normal; “two `&mut` values exist” alone is not
 complete explanation of a violation. Track derivation, which bytes are accessed,
 and reference liveness. `UnsafeCell` is not a data-race exemption or a license
 for multiple active exclusive references.
+Include foreign callbacks that can access the same bytes while a Rust reference
+is live; the foreign call does not suspend that reference's obligations.
 [Reference aliasing rules](https://doc.rust-lang.org/reference/behavior-considered-undefined.html#r-undefined.alias).
 
 Pointers carry permissions as well as addresses. Prefer keeping pointers as
@@ -74,6 +84,18 @@ weaker tooling support. Neither approach revives a freed allocation or enlarges
 access permissions. Exact semantics are still evolving.
 [std provenance and APIs](https://doc.rust-lang.org/std/ptr/index.html#strict-provenance).
 
+A raw pointer cast itself is not a read, a reference construction, or a proof of
+validity. Dropping slice metadata does not shrink the underlying allocation to
+one element; retain the actual bounds separately. By-value `transmute` requires
+equal sizes and valid source/result values, not equal alignment of those values;
+pointee alignment and ownership still matter. Prefer explicit byte conversions.
+Union fields have no language-level active-field restriction: prove validity at
+the read type, including initialization. An integer's accepting all bit patterns
+does **not** permit reading uninitialized bytes or padding as that integer.
+[transmute contract](https://doc.rust-lang.org/std/mem/fn.transmute.html),
+[union reads](https://doc.rust-lang.org/reference/items/unions.html#reading-and-writing-union-fields),
+[MaybeUninit invariants](https://doc.rust-lang.org/std/mem/union.MaybeUninit.html#initialization-invariant).
+
 ### Packed data and hardware
 
 Never create an unaligned reference as an intermediate step. For a packed field,
@@ -82,6 +104,11 @@ value. Formatting can implicitly borrow a field, so copy it into an aligned
 local first. Prefer explicit byte decoding for serialized formats: C layout is
 not a portable wire format.
 [Reference: packed alignment](https://doc.rust-lang.org/reference/type-layout.html#the-alignment-modifiers).
+
+`repr(packed)` changes alignment, not the unspecified Rust field order. When
+interoperation genuinely requires both C ordering and packing, inspect
+`repr(C, packed)` and the exact foreign layout; neither substitutes for a
+portable byte decoder or makes an unaligned reference valid.
 
 MMIO is a separate, target-specific contract: mapped register address, width,
 alignment, access side effects, ordering, and exclusive device access. Use the
@@ -120,6 +147,15 @@ Use this transition discipline:
 
 [Sources: MaybeUninit examples and APIs](https://doc.rust-lang.org/std/mem/union.MaybeUninit.html),
 [raw read ownership](https://doc.rust-lang.org/std/ptr/fn.read.html#ownership-of-the-returned-value).
+
+Destruction is the reverse transition. Before invoking a potentially panicking
+element destructor, remove that element from metadata that would allow another
+read/drop, or install an unwind guard that preserves memory safety. Audit custom
+`clear`, truncate, iterators, and safe reuse after a caught panic, not just
+construction. Memory safety after unwind is mandatory; transactional rollback
+of logical state is a separate promise.
+[drop_in_place example](https://doc.rust-lang.org/std/ptr/fn.drop_in_place.html),
+[Nomicon exception safety](https://doc.rust-lang.org/nomicon/exception-safety.html).
 
 For FFI output, the foreign contract must guarantee the writable bound **before**
 the call. A returned `written <= capacity` check is useful but cannot undo an
@@ -170,6 +206,19 @@ Safe callers can `mem::forget` your guard: leaks may be acceptable, dangling
 borrowed callbacks are not. Safety must not rely on every returned guard being
 dropped. [std forget safety](https://doc.rust-lang.org/std/mem/fn.forget.html).
 
+Do not expose a manually dropped inner value through safe accessors or derived
+`Debug`/`Clone`/comparison/hash implementations. Prefer `Option::take` or consuming
+ownership APIs over a separate flag plus a zombie `ManuallyDrop` field. Rules for
+moving a dropped `Box`-containing `ManuallyDrop` have changed across Rust versions;
+this bundle's 1.85 baseline does not rely on newer allowances.
+[ManuallyDrop hazards and version caveat](https://doc.rust-lang.org/std/mem/struct.ManuallyDrop.html).
+
+For a forgettable proxy such as a draining iterator, establish a safe conservative
+owner state **before** returning the proxy. Forgetting may leak more resources,
+but cannot leave the owner claiming moved-out values are live. A destructor that
+repairs invariants only on normal scope exit is insufficient.
+[Nomicon leak amplification](https://doc.rust-lang.org/nomicon/leaking.html).
+
 ## Unsafe traits and pinning
 
 - Mark a trait unsafe only when unsafe consumers need to rely on an implementor
@@ -177,6 +226,14 @@ dropped. [std forget safety](https://doc.rust-lang.org/std/mem/fn.forget.html).
   `# Safety`; justify each implementation. A bad safe `Ord` or `Clone` impl may
   break logical expectations but must not be trusted to preserve memory safety.
   [Nomicon: unsafe traits](https://doc.rust-lang.org/nomicon/safe-unsafe-meaning.html).
+  In particular, generic `Iterator::size_hint`/`ExactSizeIterator::len` and
+  `Read::read` results are not unchecked bounds proofs. Safe implementations can
+  lie or panic; count actual initialized elements and validate before unsafe use.
+  `Read::read` also requires an initialized byte buffer: an implementation may
+  inspect it. Do not reinterpret uninitialized `[MaybeUninit<u8>]` storage as
+  `&mut [u8]` to obtain that buffer.
+  [ExactSizeIterator](https://doc.rust-lang.org/std/iter/trait.ExactSizeIterator.html),
+  [Read contract](https://doc.rust-lang.org/std/io/trait.Read.html#method.read).
 - Prove `Send` and `Sync` separately: `Send` permits transferring ownership;
   `Sync` permits sharing `&T` between threads. Check pointee trait bounds,
   synchronization, foreign global state, callbacks, and which thread may drop
@@ -197,6 +254,12 @@ dropped. [std forget safety](https://doc.rust-lang.org/std/mem/fn.forget.html).
   replacement, and the pinning drop guarantee together. `Pin<Box<T>>` alone
   does not make an arbitrary self-referential design sound.
   [std pin contract](https://doc.rust-lang.org/std/pin/index.html).
+  Dropping a `Pin<&mut T>` does not end an established pinning obligation on a
+  `!Unpin` pointee. Review structural projections and destruction before storage
+  reuse, including panicking field destructors. Structural pinning requires the
+  enclosing type not to be `repr(packed)`: packed fields may move for destruction
+  rather than being dropped in place. Follow the structural-pinning requirements
+  of the linked `Pin` contract, not a blanket ban on using `Pin` with `Unpin` data.
 
 The Rust Reference explicitly describes its UB list as non-exhaustive. Distinguish
 “this public function is unsound” from “every invocation immediately has UB.”

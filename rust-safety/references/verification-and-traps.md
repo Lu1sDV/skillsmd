@@ -22,14 +22,56 @@ preconditions such as allocation ownership cannot be validated by inspecting a
 pointer's numerical address. For unsafe internals, exercise valid boundary states
 and use compile-fail tests for lifetime/type restrictions rather than UB demos.
 
+## Classify evidence before assigning impact
+
+| Result | Required distinction |
+|---|---|
+| Soundness defect | A permitted safe call sequence can violate an unsafe contract; no deployed network route is needed to establish unsoundness |
+| Application vulnerability | Attacker influence, reachable operation, failed defense, and concrete consumer harm under the actual build/runtime |
+| Correctness defect | A contract fails; security consequences have not been established |
+| Hardening observation | Missing lint/comment/optional mitigation, without evidence of a violated execution contract |
+| Unverified or blocked | Missing callers, target, tool, configuration, or reproduction; not a clean result |
+
+For each finding report: **location; violated contract/source; trigger and call
+path; defenses checked; impact; minimal correction; executed evidence and limits**.
+Refute a defect when its required precondition cannot occur. Do not merely reduce
+severity because the alleged unsafe operation is actually valid. Preserve unknowns
+without presenting every suspicious API or failed proof as a vulnerability.
+
+For DoS, distinguish request failure, a panicking task, worker starvation, and
+process death. Observe the real serving process and recovery policy. For library
+soundness, include downstream-safe misuse and hostile safe trait implementations;
+do not require an artificial remote exploit. Check relevant feature/target/build
+variants rather than automatically enabling mutually incompatible features.
+
+## Do not execute untrusted projects as reconnaissance
+
+Cargo build/check/test and procedural macros/build scripts can execute host code.
+Miri isolation is explicitly **not** a security sandbox. Inspect first; obtain
+execution authority and use an appropriate external sandbox with no production
+credentials or writable unrelated data. Do not run discovered skill installers
+or target helpers just to inspect their contents.
+[Cargo build scripts](https://doc.rust-lang.org/cargo/reference/build-scripts.html),
+[proc-macro security](https://doc.rust-lang.org/reference/procedural-macros.html),
+[Miri's isolation caveat](https://github.com/rust-lang/miri).
+
+Even `cargo audit` needs care on an untrusted checkout: generating a missing
+lockfile invokes Cargo. Its maintainers recommend supplying the existing lockfile
+with `--file` and running outside the project. Record advisory database freshness,
+tool/configuration, ignored advisories, and warnings; exit status alone is not
+“no unsound dependencies.” Advisory scans find known reports, not all source bugs.
+[cargo-audit security caveat](https://github.com/rustsec/rustsec/tree/main/cargo-audit).
+
 ## Stable Rust checks
 
-For this installed bundle, the dependency-free runnable examples are in
-`safety-and-initialization.md` and `c-boundaries.md`. From the repository root:
+For this installed bundle, run the dependency-free examples from the repository
+root (the descriptor example is Unix-only):
 
 ```sh
-rustdoc --test --edition=2024 rust-unsafe-ffi/references/safety-and-initialization.md
-rustdoc --test --edition=2024 rust-unsafe-ffi/references/c-boundaries.md
+rustdoc --test --edition=2024 rust-safety/references/safety-and-initialization.md
+rustdoc --test --edition=2024 rust-safety/references/c-boundaries.md
+rustdoc --test --edition=2024 rust-safety/references/availability-and-resources.md
+rustdoc --test --edition=2024 rust-safety/references/input-and-os-boundaries.md
 ```
 
 Inside a consuming Rust crate, use its supported features/targets and normal test
@@ -39,6 +81,10 @@ when checking the example's native ABI; it requires a C toolchain and Linux load
 conventions. These commands are instructions, not recorded results.
 
 ## Miri: useful evidence with explicit boundaries
+
+Tool behavior below was checked against the documented options on 2026-11-03.
+Before running a recipe, verify it against the chosen toolchain's own docs; stop
+and report unsupported flags or targets rather than silently weakening checks.
 
 [Miri's own documentation](https://github.com/rust-lang/miri) describes its checks
 and limitations. It interprets Rust executions and can detect out-of-bounds
@@ -82,10 +128,11 @@ Limits to report:
 
 [Source: Miri limitations and native-library flags](https://github.com/rust-lang/miri).
 
-Do not copy stale switches: current Miri does not need an upstream-style
-`-Zmiri-leak-check` to enable leak checking. `-Zmiri-preemption-rate=0` **disables**
-preemption; it is not a switch that enables race detection.
-[Source: current Miri options](https://github.com/rust-lang/miri).
+Do not copy stale switches: the inspected Miri documentation enables leak
+checking by default without `-Zmiri-leak-check`. Its `-Zmiri-preemption-rate=0`
+**disables** preemption; it does not enable race detection. Recheck these options
+for the selected nightly rather than treating this snapshot as a timeless default.
+[Source: Miri options](https://github.com/rust-lang/miri).
 
 ## Sanitizers and the foreign side
 
@@ -120,6 +167,29 @@ into one command. For mixed Rust/C/C++:
    a host run succeeds.
 
 [Source: instrumentation and mixed-language caveats](https://doc.rust-lang.org/unstable-book/compiler-flags/sanitizer.html#instrumentation-of-external-dependencies-and-std).
+
+## Fuzzing and concurrency models
+
+Fuzz the real parser/FFI boundary with constrained input sizes and preserve a
+minimized reproducer. Include composition, formatting, and error cleanup where
+they consume the produced value, not just successful parsing. Fuzzing supplies
+executed cases, not a proof of coverage or safety; sanitizer findings still need
+source/contract triage. Use compile-fail tests for forbidden safe API use.
+[Rust Fuzz Book](https://rust-fuzz.github.io/book/).
+
+For concurrency, a scheduled regression should force the problematic ordering
+without arbitrary sleeps. Loom can explore modeled schedules with its replacement
+types, but ordinary synchronization outside that model is not automatically
+covered; bounds and memory-model limitations remain. Retain native integration
+checks. Do not equate relaxed logical races with Rust data races.
+[Loom usage and limitations](https://docs.rs/loom/latest/loom/),
+[Nomicon race distinctions](https://doc.rust-lang.org/nomicon/races.html).
+
+Validate release behavior separately when the claim depends on overflow,
+debug assertions, panic strategy, or stack use. Use resource-bounded subprocesses
+for expected crashes and disable core dumps where they could contain sensitive
+data. Do not claim Windows, alternate architectures, Miri, or foreign-library
+coverage from a Linux stable-Rust doctest.
 
 ## Reasoning traps retained and corrected
 
@@ -163,8 +233,9 @@ Adapted from StructWeave-Algorithms at Rust-content revision
 This bundle replaces unsafe demonstrations and incomplete `SafeVec`/lock-free
 examples with complete valid contract examples and explicit handoffs. It adds
 `MaybeUninit`/drop-state reasoning, callback quiescence and forgotten-guard safety,
-current Rust 2024 syntax, provenance qualifications, sanitizer limits, and a real
+Rust 2024 syntax, provenance qualifications, sanitizer limits, and a real
 C caller. Reference/std rules take precedence over older teaching shorthand;
-notably, the current Reference's foreign-exception catch semantics are more
-specific than the Nomicon's older blanket wording. First-party sources are linked
-next to the corresponding claims throughout the three references.
+the foreign-exception catch semantics in the inspected Reference are more specific
+than the Nomicon's older blanket wording. First-party sources are linked
+next to the corresponding claims. The broader research and admission decisions
+are recorded in [Sources and decisions](sources-and-decisions.md).

@@ -79,5 +79,5 @@ were replaced with validation, explicit host contracts, and first-party guidance
 Image processing retains a meaningful invariant-focused example; vendor-specific
 edge deployments route through their actual SDK/world/host contract rather than
 an unmaintained provider matrix. Profiling belongs to optional **rust-performance**,
-raw-memory proofs to **rust-unsafe-ffi**, and test workflow to standalone **rust-tdd**;
+raw-memory proofs to **rust-safety**, and test workflow to standalone **rust-tdd**;
 none is required to read or install this bundle.

@@ -79,7 +79,7 @@ git submodule update --init --recursive
 | [rust-performance](rust-performance/) | Writing and reviewing fast Rust plus evidence-first optimization — allocation/reuse, iterators, layout, hashing, async/backpressure, build profiles, Clippy gates, baselines, profiling, benchmarks, contention, and NUMA triage |
 | [rust-tdd](rust-tdd/) | Test-first Rust development — red-green-refactor, regression fixes, property tests, test doubles, coverage, and testable design |
 | [rust-macros](rust-macros/) | Declarative and procedural macros — matching, hygiene, generated APIs, diagnostics, expansion, and testing |
-| [rust-unsafe-ffi](rust-unsafe-ffi/) | Unsafe proof obligations and native FFI — pointer validity, ownership, ABI/layout, unwinding, safe wrappers, and verification |
+| [rust-safety](rust-safety/) | Rust safety/security review — unsafe and FFI proofs, availability/resource limits, input/OS boundaries, concurrency invariants, and verification |
 | [rust-wasm](rust-wasm/) | Browser WebAssembly and WASI/components — targets, JS bindings, boundary contracts, packaging, deployment, and testing |
 | [ssrf-testing](ssrf-testing/) | SSRF testing and prevention — detection, cloud metadata exploitation, filter bypass, defense strategies |
 | [tavily-web](tavily-web/) | Web search, extraction, crawling, and AI-powered research via Tavily API (curl only) |
@@ -420,7 +420,7 @@ bundled; original examples and a correction/source map are included.
 | 08 SOLID, 09–11 design patterns, 12 anti-patterns | `rust-api-design`; domain-specific pitfalls live beside the relevant workflow |
 | 13 interview traps | Distributed into the corresponding domain references, not a separate interview skill |
 | 14 macros | `rust-macros` |
-| 15 unsafe/FFI | `rust-unsafe-ffi` |
+| 15 unsafe/FFI, expanded with Rust-specific safety/security review | `rust-safety` |
 | 16 WebAssembly | `rust-wasm` |
 | 18 test-driven development | `rust-tdd` |
 

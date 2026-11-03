@@ -141,7 +141,7 @@ boundaries. Choose a richer error enum when callers need to distinguish failures
 If installed, use **rust-idiomatic** for borrow-checker mechanics and error
 implementation, **rust-tdd** for red-green-refactor and contract-test design,
 **rust-concurrency** for channels, cancellation, locks, and async traits,
-**rust-unsafe-ffi** for unsafe boundary proofs, and **rust-performance** for
+**rust-safety** for unsafe boundary proofs, and **rust-performance** for
 measured dispatch, allocation, interning, and layout costs.
 
 The runnable examples are dependency-free and target edition 2024 (Rust 1.85+);

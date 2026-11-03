@@ -38,7 +38,7 @@ dependencies. Optional named handoffs work when those skills are installed.
 
 This skill focuses on design contracts, not compiler tutorials, concurrent runtime
 implementation, unsafe proofs, or benchmark tuning. Those tasks can hand off to
-rust-idiomatic, rust-concurrency, rust-unsafe-ffi, rust-tdd, rust-algorithms, or
+rust-idiomatic, rust-concurrency, rust-safety, rust-tdd, rust-algorithms, or
 rust-performance when installed.
 
 ## Runnable documentation checks

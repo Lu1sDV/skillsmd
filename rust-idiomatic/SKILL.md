@@ -138,7 +138,7 @@ newtypes/builders, SOLID/GoF tradeoffs; **rust-tdd** for red-green-refactor,
 regression/property tests and test CI; **rust-algorithms** for data-structure and
 algorithm selection; **rust-concurrency** for synchronization/async; and
 **rust-performance** for measurement, allocation/layout tuning, or build costs.
-Use **rust-macros**, **rust-unsafe-ffi**, or **rust-wasm** for those boundaries.
+Use **rust-macros**, **rust-safety**, or **rust-wasm** for those boundaries.
 These are optional handoffs, not required files in this bundle.
 
 ## Sources

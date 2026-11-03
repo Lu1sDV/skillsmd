@@ -14,7 +14,7 @@ existing Rust skills rather than adding another general language guide.
   safe owner scopes and guaranteed versus observed destruction order.
 
 Everyday ownership and errors remain with `rust-idiomatic`; public API decisions
-with `rust-api-design`; unsafe obligations with `rust-unsafe-ffi`. Other skills
+with `rust-api-design`; unsafe obligations with `rust-safety`. Other skills
 are optional handoffs, not installation dependencies.
 
 ## Install and use

@@ -3,7 +3,7 @@
 Use when a compiler diagnostic mentions a borrow being used when an owner is
 dropped, or when actual destruction timing contradicts a last-use assumption.
 Ordinary moves and partial moves belong to `rust-idiomatic`; unsafe manual
-cleanup, pinning implementations and FFI belong to `rust-unsafe-ffi`.
+cleanup, pinning implementations and FFI belong to `rust-safety`.
 
 ## Diagnostic sequence
 

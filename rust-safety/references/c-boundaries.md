@@ -47,6 +47,16 @@ or Rust ownership containers directly as a general-purpose C wire interface.
 [CStr ABI caveat](https://doc.rust-lang.org/std/ffi/struct.CStr.html),
 [Reference layout](https://doc.rust-lang.org/reference/type-layout.html).
 
+An earlier `MaybeUninit::zeroed()` is not a durable proof that padding stays
+initialized across typed moves. Trace the exact raw-byte export; prefer
+field-wise serialization. A disclosure claim needs a trace from exported bytes
+to an observing consumer, not merely the presence of an ABI call or `repr(C)`.
+For foreign writes into niche-bearing `Option` fields, the documented `None`
+representation does not validate a non-null `Some` reference, owner, or callback.
+Use the exact type's representation guarantees, not a universal zero-byte rule.
+[MaybeUninit padding](https://doc.rust-lang.org/std/mem/union.MaybeUninit.html#method.zeroed),
+[Option representation](https://doc.rust-lang.org/std/option/index.html#representation).
+
 ## Complete safe-wrapper contract example
 
 This is a real Rust-implemented C ABI operation with a safe Rust wrapper, not a
@@ -158,8 +168,8 @@ int main(void) {
 ```
 
 ```sh
-rustc --edition=2024 --crate-type=cdylib --crate-name rust_unsafe_ffi_demo wrapper.rs -o librust_unsafe_ffi_demo.so
-cc -std=c11 -Wall -Wextra -Werror caller.c -L. -lrust_unsafe_ffi_demo -Wl,-rpath,'$ORIGIN' -o caller
+rustc --edition=2024 --crate-type=cdylib --crate-name rust_safety_demo wrapper.rs -o librust_safety_demo.so
+cc -std=c11 -Wall -Wextra -Werror caller.c -L. -lrust_safety_demo -Wl,-rpath,'$ORIGIN' -o caller
 ./caller
 ```
 
@@ -252,7 +262,7 @@ Before offering a **safe** registration API, prove all of these:
 1. Can registration fail after taking ownership or invoking the callback? Match
    the library's precise ownership transition on each status.
 2. Is invocation synchronous, deferred, concurrent, or reentrant? An `FnMut`
-   trampoline cannot create simultaneous `&mut` references to the same context.
+   trampoline must not create simultaneous `&mut` references to the same context.
    A non-reentrant mutex can deadlock if the callback recursively triggers itself.
    A normal safe recursive method is not inherently UB; conflicting accesses are.
 3. Can foreign threads invoke it? Enforce the necessary `Send`/`Sync` bounds and
@@ -288,13 +298,17 @@ Before offering a **safe** registration API, prove all of these:
   new operations visible. Migration tooling cannot verify the safety argument.
   [Edition Guide: unsafe operations](https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html).
 
+These annotations expose proof obligations; they do not fulfill them. The unwind
+table follows the Reference inspected on 2026-11-03; check the consuming Rust
+version, ABI, and target/runtime contract before depending on a boundary behavior.
+
 | Situation | Consequence / policy |
 |---|---|
 | Rust panic reaches a non-unwinding `extern "C"` boundary | Process aborts; it is not simply “all FFI panics are UB” |
 | Foreign exception enters through a non-unwinding ABI | UB; catch/translate it on the foreign side |
 | Deliberate cross-language unwinding | Use matching `C-unwind` declarations/pointers and compatible code/runtimes throughout |
 | `panic=abort` | `catch_unwind` cannot recover; the process aborts |
-| Catching a foreign unwind with Rust `catch_unwind` | Not a portable exception adapter; current Reference permits abort or an opaque `Err`, unspecified which |
+| Catching a foreign unwind with Rust `catch_unwind` | Not a portable exception adapter; the Reference permits abort or an opaque `Err`, unspecified which |
 | Foreign `longjmp` skips Rust frames/destructors | Can violate Rust runtime assumptions; do not use it as error propagation across Rust frames |
 
 Prefer explicit error statuses/results rather than panic-based expected failures.

@@ -30,7 +30,7 @@ they do not turn implementation details into guarantees.
 | 6. Relationships in Lifetimes | Implied bounds and position-sensitive variance | Lifetime fundamentals and ordinary HRTB introductions remain `rust-idiomatic` |
 | 7. Trait Limitations, Object Safety, and the Orphan Rule | Handoff rather than another trait checklist | `rust-api-design` owns dyn compatibility, trait architecture, newtypes and sealing |
 | 8. Downcasting | Exact erased-type, borrowed-content and reference/wrapper diagnosis | Choosing runtime erasure remains an API-design decision |
-| 9. Drop Check | Drop-check obligations, safe owner scopes and destruction-order distinctions | Unsafe manual cleanup, pinning and FFI remain `rust-unsafe-ffi` |
+| 9. Drop Check | Drop-check obligations, safe owner scopes and destruction-order distinctions | Unsafe manual cleanup, pinning and FFI remain `rust-safety` |
 
 The overlap comparison included the Rust suite at `skillsmd`: algorithms,
 API design, concurrency, guidelines, idiomatic Rust, macros, performance, TDD,

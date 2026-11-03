@@ -33,7 +33,7 @@ installation dependency:
   dyn-compatibility checklists, coherence/orphan remedies and sealing.
 - `rust-concurrency`: Send/Sync, task capture, locks, cancellation and shutdown.
 - `rust-performance` / `rust-algorithms`: measured cost and algorithm selection.
-- `rust-unsafe-ffi`: aliasing/provenance proofs, pinning implementations, manual
+- `rust-safety`: aliasing/provenance proofs, pinning implementations, manual
   destruction, unsafe traits and foreign unwind boundaries.
 - `rust-macros`, `rust-tdd`, `rust-wasm`: their respective generation, test-first,
   and target/runtime workflows.

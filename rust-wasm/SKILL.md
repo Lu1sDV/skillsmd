@@ -139,7 +139,7 @@ authorized in the current task.
 - **rust-idiomatic**: shared Rust error and ownership design.
 - **rust-api-design**: public API evolution and type boundaries.
 - **rust-concurrency**: cancellation, backpressure, synchronization, worker coordination.
-- **rust-unsafe-ffi**: unavoidable raw-memory ABI proof obligations.
+- **rust-safety**: unavoidable raw-memory ABI proof obligations.
 - **rust-tdd**: boundary regression tests and observable red-green-refactor.
 - **rust-performance**: measured allocation, binary-size, or throughput changes.
 

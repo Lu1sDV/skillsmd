@@ -133,7 +133,7 @@ identity, initialized length, capacity, permitted writers, reentrancy, growth,
 view refresh, and exactly-once deallocation. A pointer plus length from JS is not
 proof that it names a valid Rust allocation. `Vec::with_capacity` creates capacity,
 not initialized elements; forgetting it leaks and does not transfer a usable
-allocator contract to JS. Hand off raw-memory design to **rust-unsafe-ffi** if installed.
+allocator contract to JS. Hand off raw-memory design to **rust-safety** if installed.
 
 For callbacks, store the Rust closure with the object that owns the event listener.
 Unregister it before drop. A closure leaked with `forget` will not provide orderly

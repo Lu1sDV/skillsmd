@@ -151,7 +151,7 @@ If installed, use **rust-tdd** for red-green-refactor and regression-test design
 **rust-idiomatic** for general ownership/error handling, **rust-api-design** for
 public async interfaces, and **rust-performance** for profiling and measured
 contention, allocation, and scheduling changes. Manual unsafe concurrency
-requires a proof review with **rust-unsafe-ffi**, if installed.
+requires a proof review with **rust-safety**, if installed.
 
 ## Sources
 
