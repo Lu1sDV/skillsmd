@@ -312,7 +312,7 @@ For Sudoku use separate row/column/box sets, with `box=(row//3)*3+col//3` for a
 
 ## 7. Two heaps
 
-Maintain a negated lower-half heap and upper-half min-heap. Lower size equals
+Maintain a lower-half max-heap and upper-half min-heap. Lower size equals
 upper size or exceeds it by one; every lower value ≤ every upper value. This
 integer-only median uses `Fraction` to avoid float precision loss/overflow for
 large integer totals; convert at the presentation boundary if floats are wanted.
@@ -324,16 +324,16 @@ large integer totals; convert at the presentation boundary if floats are wanted.
 ...     def __init__(self):
 ...         self.lower, self.upper = [], []
 ...     def add(self, value):
-...         heapq.heappush(self.lower, -value)
-...         heapq.heappush(self.upper, -heapq.heappop(self.lower))
+...         heapq.heappush_max(self.lower, value)
+...         heapq.heappush(self.upper, heapq.heappop_max(self.lower))
 ...         if len(self.upper) > len(self.lower):
-...             heapq.heappush(self.lower, -heapq.heappop(self.upper))
+...             heapq.heappush_max(self.lower, heapq.heappop(self.upper))
 ...     def median(self):
 ...         if not self.lower:
 ...             return None
 ...         if len(self.lower) > len(self.upper):
-...             return Fraction(-self.lower[0])
-...         return Fraction(-self.lower[0] + self.upper[0], 2)
+...             return Fraction(self.lower[0])
+...         return Fraction(self.lower[0] + self.upper[0], 2)
 >>> stream = RunningMedian()
 >>> assert stream.median() is None
 >>> for value, expected in [(5, 5), (1, 3), (1, 1), (9, 3)]:
@@ -440,6 +440,6 @@ already guaranteed, but neither validates those assumptions. Sign-marking
 emits an extra occurrence for every repetition after the first; “each duplicate
 once” therefore requires at-most-twice multiplicity or explicit deduplication.
 
-Semantics: [bisect](https://docs.python.org/3.11/library/bisect.html),
-[itertools](https://docs.python.org/3.11/library/itertools.html),
-[fractions](https://docs.python.org/3.11/library/fractions.html).
+Semantics: [bisect](https://docs.python.org/3.15/library/bisect.html),
+[itertools](https://docs.python.org/3.15/library/itertools.html),
+[fractions](https://docs.python.org/3.15/library/fractions.html).
