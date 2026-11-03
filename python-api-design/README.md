@@ -45,7 +45,7 @@ is optional and is not performed by the skill itself.
 | [SKILL.md](SKILL.md) | Routing, consumer-contract workflow, high-risk caveats, migration/evidence guard |
 | [Evolution and public surface](references/evolution.md) | Consumer-directed compatibility, public exports, default migration with a 3.15 sentinel, deprecation, HTTP input/output schemas, generated-client and route review |
 | [Checker operations](references/checker-operations.md) | Scope and toolchain, untyped-code coverage, strictness migration, suppressions, installed `py.typed` and positive/negative consumer checks |
-| [Typing contracts](references/typing-contracts.md) | Types versus runtime checks, validated byte-range value, TypedDict parsing, protocol presence limits, generics, variance, overloads, optional Pydantic boundaries and version/introspection gates |
+| [Typing contracts](references/typing-contracts.md) | Types versus runtime checks, TypeIs truthfulness, PEP 695 runtime alias changes, validated byte-range value, TypedDict parsing, generics, optional Pydantic boundaries and version/introspection gates |
 | [Creation](references/creational.md) | Singleton, factory method, abstract factory, builder, prototype, object pool; validated options, real text encoders, shallow/deep alias behavior |
 | [Composition](references/structural.md) | Adapter, bridge, composite, decorator, facade, flyweight, proxy; UTF-8 adapter, ParamSpec decorator, real gzip/JSON facade |
 | [Behavior](references/behavioral.md) | All ten source behavioral patterns plus context-manager/coroutine decisions; strategies, chain, state transitions, command/memento undo, observer cleanup, AST visitor, restoration on error |
@@ -217,3 +217,23 @@ First-party correction references, also linked near their guidance:
 They support version-sensitive corrections; use local guidance offline.
 Upstream material is MIT-licensed; the exact original notice is in
 [LICENSE.upstream](LICENSE.upstream).
+
+### Modern-Python typing corrections (2026-11-03)
+
+The supplied release review led to two additional checks in
+[typing contracts](references/typing-contracts.md):
+
+- `TypeIs` must be extensionally true on both branches (iff, not merely a
+  successful subset test), including empty and false-like domain values;
+  check the branch-sensitive static contract separately from runtime examples.
+- A class-alias assignment cannot always be replaced by PEP 695 `type`
+  syntax: the resulting `TypeAliasType` is not a class for
+  `isinstance`/`issubclass` calls. Review runtime consumers and unsafe Ruff
+  fixes rather than performing a blanket rewrite.
+
+`annotationlib` formats also remain executable/untrusted introspection
+boundaries, not an execution-free way to parse arbitrary annotations.
+References: [typing narrowing guidance](https://typing.python.org/en/latest/guides/type_narrowing.html),
+[Ruff alias fix safety](https://docs.astral.sh/ruff/rules/non-pep695-type-alias/),
+and [annotationlib](https://docs.python.org/3.15/library/annotationlib.html).
+Existing reported test counts refer to the earlier bundle until rerun.

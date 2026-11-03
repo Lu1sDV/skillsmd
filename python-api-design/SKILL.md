@@ -66,6 +66,9 @@ Use Python 3.15 for new projects; preserve an existing project's declared minimu
 - **Wrappers can bypass contracts.** `__getattr__` does not forward implicit special
   methods. Review validation/access checks, authorization-aware cache keys, and
   resource lifetime; retries of non-idempotent effects can duplicate work.
+- **Narrowing needs a true predicate.** `TypeIs[T]` must accept exactly the
+  input values in `T` to narrow both branches; test positive and negative cases.
+  Migrating a runtime alias to a PEP 695 `type` statement changes its object kind.
 - **Annotations are versioned and executable.** Python 3.14+ defers them by default;
   3.11–3.13 does not. Introspection can execute expressions. Preserve the project's
   minimum version; consult the typing reference before changing syntax/evaluation.
