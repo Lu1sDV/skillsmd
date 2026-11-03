@@ -1,7 +1,8 @@
 # python-stdlib
 
 Python standard-library selection and boundary contracts: iteration/caching,
-files/time, serialization/text, records, cleanup, logging and child processes.
+files/time, serialization/text, AST source analysis, records, cleanup,
+logging and child processes.
 The baseline is **CPython 3.15.2**, the latest stable release checked on
 **2026-11-03**; refresh that fact against Python.org before a later revision.
 
@@ -23,6 +24,7 @@ includes all required references and attribution; no sibling skill is required.
 - “Review our JSON/CSV import for duplicate fields, Unicode, NaN and data loss.”
 - “Check this file/time handling for missing-versus-invalid data and timezone bugs.”
 - “Make this subprocess wrapper preserve failures and own its child lifecycle.”
+- “Review this AST analyzer for Python 3.15 syntax and constructor compatibility.”
 
 ## Reference index
 
@@ -33,6 +35,7 @@ includes all required references and attribution; no sibling skill is required.
 | [Files and time](references/files-time.md) | Paths, temporary-file ownership, atomic visibility, DST gaps/folds and calendar intervals |
 | [Serialization and text](references/serialization-text.md) | JSON, CSV, TOML, pickle trust, Unicode regex, formatting/diffs |
 | [Records and processes](references/records-processes.md) | Dataclasses/enums, contextlib, SQLite transaction/closing boundaries, logging, CLI dispatch and subprocesses |
+| [AST and source analysis](references/ast-source-analysis.md) | Parse without imports, 3.15 constructor fields, source fidelity, scanner semantic/version gates |
 | [Runtime compatibility](references/runtime-compatibility.md) | Current stable baseline, removed APIs, UTF-8 defaults and module availability |
 | [LICENSE.upstream](LICENSE.upstream) | Preserved upstream MIT notice |
 
@@ -81,7 +84,7 @@ pinned at Python-content commit `0b88a786ef09681717a805d9f7e0b195ab610f6c`:
 
 ### Consolidation and correction decisions
 
-- Merge the two stdlib chapters into four on-demand references with contents lists.
+- Merge the two stdlib chapters into topical on-demand references with contents lists.
   Keep only routing/workflow/essential guardrails in the entrypoint, not a duplicate
   API catalogue. Algorithms and public type design remain separate skills.
 - Replace list-key memoization with explicit hashability/lifetime guidance;
@@ -126,3 +129,20 @@ add only the missing dispatch/security distinctions. Do not import broad module
 catalogues, version-feature inventories or framework-specific recipes. The new
 runtime reference selects actual migration failure points and routes language,
 typing and concurrency details to their owning skills.
+
+### Modern-Python stdlib gaps (2026-11-03)
+
+The supplied 3.13–3.15 review was used as a candidate list, then the selected
+rules were checked against the [3.15 pathlib](https://docs.python.org/3.15/library/pathlib.html)
+and [AST](https://docs.python.org/3.15/library/ast.html) documentation. Added:
+
+- A distinction between `Path.exists()` / type predicates that can suppress
+  inaccessible-path errors, error-preserving `stat()` or `lstat()`, and cached
+  `Path.info` observations; absence of findings is not traversal completion.
+- A directly routed AST guide for source-only scanning, required 3.15
+  constructor fields, optimized-tree hazards and separate grammar, symbol,
+  semantic-model and data-flow compatibility gates.
+
+The AST examples require Python 3.15 for their constructor rejection and
+`ast.compare` checks. Existing doctest run counts are historical until
+reverified on the updated bundle.
