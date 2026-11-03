@@ -22,12 +22,16 @@ explicitly. Keep raw artifacts and commands with the project when appropriate.
 - CPU quota/affinity, memory limits, process/worker/native-thread settings.
 - Exact setup, profiling and unprofiled benchmark commands; raw result/profile
   locations and collection limits.
+- Comparison design: warm-up/reset policy, run order and independent units;
+  A/A noise check or reason it was unnecessary, held-back workload when tuning.
 
 ## Evidence and change
 
 - Bottleneck: supporting samples, call counts, allocation stacks, spans or plans.
 - Hypothesis: mechanism, affected fraction, tradeoff, falsifying result and why the
   change is proportionate.
+- Scope: covered/missing workers, native frames, capture perturbation and any
+  resource counts needed to explain waiting or long-lived retention.
 - Correctness: existing tests and focused semantic cases; numerical range/tolerance
   justification, concurrency failure/cleanup checks, and unavailable validation.
 
