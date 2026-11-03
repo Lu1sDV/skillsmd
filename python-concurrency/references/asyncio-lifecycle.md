@@ -89,7 +89,7 @@ leave unrelated failures visible. `KeyboardInterrupt` and `SystemExit` have
 special re-raise behavior after children finish. A child that ends by ordinary
 cancellation alone does not trigger the same sibling-failure policy.
 
-## TaskGroup.cancel: deliberate early exit on 3.15
+## TaskGroup cancel: deliberate early exit on 3.15
 
 Python 3.15 adds `TaskGroup.cancel()` to end a group's lifetime *without*
 inventing an exception-raising terminator task. It requests `cancel()` on
