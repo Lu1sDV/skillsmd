@@ -52,8 +52,34 @@ context display, not the new exception's traceback; use it only when hiding
 irrelevant implementation detail intentionally. Add custom exception types when
 callers actually need to distinguish them, not an obligatory hierarchy per function.
 Do not put secrets in error messages or log the same failure at every layer.
+`error.add_note(...)` enriches a rendered traceback without replacing the cause;
+notes can enter logs too, so apply the same redaction policy.
 Assertions may disappear with `python -O`; never use them to validate untrusted
 input or enforce required runtime behavior.
+
+Exception matching follows the raised object's type hierarchy, not `__cause__`.
+An outer `RuntimeError` raised from `ValueError` is not a `ValueError`; inspect
+an explicitly documented cause only when the adapter's contract calls for it.
+The target of `except ... as error` is deleted when that handler exits, even if
+the name previously existed. Store needed diagnostic data under another name;
+retaining the exception also retains its traceback and potentially local objects.
+`asyncio.CancelledError` inherits from `BaseException`; do cleanup and propagate
+cancellation rather than turning it into an ordinary successful result.
+
+```pycon
+>>> error = "old binding"
+>>> try:
+...     try:
+...         raise ValueError("invalid record")
+...     except ValueError as cause:
+...         raise RuntimeError("load failed") from cause
+... except RuntimeError as error:
+...     diagnosis = (isinstance(error, ValueError),
+...                  isinstance(error.__cause__, ValueError))
+>>> diagnosis, "error" in locals()
+((False, True), False)
+
+```
 
 EAFP is useful when a precheck races (e.g. existence then opening a file), but is
 not a universal preference. Cheap pure validation can prevent harmful partial
@@ -128,7 +154,9 @@ ownership and may return `None`; use only when the relationship is intentionally
 non-owning. Reference counts, exact collection timing, and object sizes are
 implementation/build dependent; measure rather than asserting fixed counts.
 
-Sources: [errors tutorial](https://docs.python.org/3.14/tutorial/errors.html),
-[with/try semantics](https://docs.python.org/3.14/reference/compound_stmts.html),
-[contextlib](https://docs.python.org/3.14/library/contextlib.html),
-[data model](https://docs.python.org/3.14/reference/datamodel.html).
+Sources: [errors tutorial](https://docs.python.org/3.15/tutorial/errors.html),
+[with/try semantics](https://docs.python.org/3.15/reference/compound_stmts.html),
+[exception causes and notes](https://docs.python.org/3.15/library/exceptions.html),
+[asyncio exceptions](https://docs.python.org/3.15/library/asyncio-exceptions.html),
+[contextlib](https://docs.python.org/3.15/library/contextlib.html),
+[data model](https://docs.python.org/3.15/reference/datamodel.html).
