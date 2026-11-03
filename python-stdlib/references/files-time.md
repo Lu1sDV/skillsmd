@@ -3,6 +3,7 @@
 ## Contents
 
 - [File operations and missing-versus-invalid data](#file-operations-are-not-existence-predicates)
+- [Temporary-file ownership](#temporary-files-and-publication)
 - [Copy, move, archive and deletion](#copy-move-archive-and-deletion-contracts)
 - [Timestamps, durations and calendars](#timestamps-durations-and-calendars)
 
@@ -60,6 +61,27 @@ endings when the parser owns that policy. Do not use `.strip()` to remove a line
 terminator when leading/trailing spaces are payload. A single extremely long line
 can defeat an otherwise streaming memory budget; use bounded reads if required.
 
+## Temporary files and publication
+
+| Need | API / ownership |
+|---|---|
+| Private scratch stream | `TemporaryFile`; do not assume a usable filesystem name. |
+| Scratch directory tree | `TemporaryDirectory`; close owned child handles before cleanup. |
+| File another program reopens by path | `NamedTemporaryFile(delete_on_close=False)` inside `with`; close extra handles before context exit, especially on Windows. |
+| Explicit publication/cleanup control | `mkstemp(dir=destination.parent)` returns an owned descriptor and path; close and unlink them on every non-publication path. |
+
+Use secure creation APIs, not `mktemp` or a guessed unique pathname. `mkstemp`
+creates a file accessible only to the creating user where the platform supports
+that permission model; decide publication permissions and metadata explicitly.
+`delete=False` transfers unlink responsibility to the caller. Context managers do
+not promise cleanup after a crash or `SIGKILL`.
+
+For replacement, stage on the destination filesystem, finish writing, close any
+handles that would block replacement, then call `os.replace`. An atomic rename
+does not preserve the old file's permissions or promise persistence after power
+loss. Keep file/directory synchronization and concurrent-writer policy explicit;
+do not add a cross-device copy fallback while still claiming atomic visibility.
+
 ## Copy, move, archive and deletion contracts
 
 - `copyfile` copies content; `copy` also preserves permission mode; `copy2` attempts
@@ -89,6 +111,7 @@ can defeat an otherwise streaming memory budget; use bounded reads if required.
 |---|---|
 | Which instant? | Aware `datetime`; explicit UTC at interchange |
 | Which local calendar date? | `date` plus the applicable business/time-zone policy |
+| Recurring local appointment? | Local date/time plus IANA zone and gap/fold policy; resolve each occurrence afresh |
 | Elapsed runtime or deadline? | `time.monotonic` or `time.perf_counter` differences |
 | CPU used by this process? | `time.process_time` differences, excluding sleep |
 | Human display in an IANA zone? | `zoneinfo.ZoneInfo`, with installed zone data |
@@ -98,6 +121,8 @@ attribute of the imported `datetime` class. For older consumers use
 `timezone.utc`. `datetime.fromtimestamp(value, UTC)` avoids implicit local time.
 `fromisoformat` parses supported ISO forms, not every application's timestamp
 contract; explicitly reject a missing offset if a timestamp must be aware.
+`utcnow()` and `utcfromtimestamp()` are deprecated since 3.12 and return naive
+values; use `datetime.now(UTC)` and `datetime.fromtimestamp(value, UTC)`.
 
 `replace(tzinfo=zone)` attaches an interpretation to wall-clock fields without
 conversion. `astimezone(zone)` converts an existing instant. Naive values have no
@@ -131,6 +156,45 @@ For elapsed time between instants, convert to UTC before subtracting; subtractio
 of datetimes sharing the same tzinfo uses wall-time arithmetic. Adding one local
 calendar day is not necessarily adding 24 elapsed hours.
 
+Resolve each local wall time by trying both `fold` values, converting to UTC and
+round-tripping back to the same wall fields. Deduplicate equal UTC instants:
+zero candidates is a gap, one is ordinary, two is ambiguous. Reject or select
+according to the caller's policy; `fold=1` alone does not validate existence.
+Compare UTC instants for timeline identity: two fold variants with the same zone
+object can compare equal despite representing different instants.
+
+For a local-day query, resolve the start of the date and the start of the next
+date separately, then use the half-open UTC interval `[start, end)` if that is the
+contract. Do not compute the end as `start_utc + timedelta(hours=24)`. Midnight can
+itself be ambiguous or nonexistent in some zones; the resolver's policy still
+applies. Generate civil recurrences in local calendar space and resolve each date.
+
+The following transition checks require the system IANA database or `tzdata`.
+They use fixed dates, not the machine's clock or local timezone.
+
+```pycon
+>>> from zoneinfo import ZoneInfo
+>>> def wall_instants(wall: datetime, zone) -> list[datetime]:
+...     if wall.tzinfo is not None:
+...         raise ValueError("expected naive local wall fields")
+...     candidates = set()
+...     for fold in (0, 1):
+...         instant = wall.replace(tzinfo=zone, fold=fold).astimezone(UTC)
+...         if instant.astimezone(zone).replace(tzinfo=None) == wall:
+...             candidates.add(instant)
+...     return sorted(candidates)
+>>> ny = ZoneInfo("America/New_York")
+>>> assert wall_instants(datetime(2025, 3, 9, 2, 30), ny) == []
+>>> repeated = wall_instants(datetime(2025, 11, 2, 1, 30), ny)
+>>> assert len(repeated) == 2 and repeated[1] - repeated[0] == timedelta(hours=1)
+>>> assert len(wall_instants(datetime(2025, 1, 15, 12), ny)) == 1
+>>> start, = wall_instants(datetime(2025, 3, 9), ny)
+>>> end, = wall_instants(datetime(2025, 3, 10), ny)
+>>> assert end - start == timedelta(hours=23)
+>>> assert start <= start < end and not start <= end < end
+
+```
+
 A business-day function needs a signed-day policy, inclusive/exclusive convention,
 weekend calendar, and holidays represented as dates; build the holiday set once,
 not on every loop. Do not silently return the input for unsupported negative days.
@@ -138,10 +202,12 @@ not on every loop. Do not silently return the input for unsupported negative day
 
 ## Authorities
 
-[pathlib](https://docs.python.org/3.14/library/pathlib.html),
-[shutil](https://docs.python.org/3.14/library/shutil.html),
-[os.replace](https://docs.python.org/3.14/library/os.html#os.replace),
-[tar extraction filters](https://docs.python.org/3.14/library/tarfile.html#tarfile-extraction-filter),
-[datetime](https://docs.python.org/3.14/library/datetime.html),
-[zoneinfo](https://docs.python.org/3.14/library/zoneinfo.html),
-[time](https://docs.python.org/3.14/library/time.html).
+[pathlib](https://docs.python.org/3.15/library/pathlib.html),
+[shutil](https://docs.python.org/3.15/library/shutil.html),
+[os.replace](https://docs.python.org/3.15/library/os.html#os.replace),
+[tempfile](https://docs.python.org/3.15/library/tempfile.html),
+[tar extraction filters](https://docs.python.org/3.15/library/tarfile.html#tarfile-extraction-filter),
+[datetime](https://docs.python.org/3.15/library/datetime.html),
+[zoneinfo](https://docs.python.org/3.15/library/zoneinfo.html),
+[fold and gap rules](https://peps.python.org/pep-0495/),
+[time](https://docs.python.org/3.15/library/time.html).
