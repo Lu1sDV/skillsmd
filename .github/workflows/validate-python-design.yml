@@ -1,0 +1,57 @@
+name: Validate Python Design Skills
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'python-api-design/**'
+      - 'python-system-design/**'
+      - '.github/workflows/validate-python-design.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'python-api-design/**'
+      - 'python-system-design/**'
+      - '.github/workflows/validate-python-design.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.15'
+          check-latest: true
+      - name: Exercise standalone bundles on the supported baseline
+        run: |
+          python - <<'PY'
+          import doctest
+          import os
+          from pathlib import Path
+          import shutil
+          import sys
+          import tempfile
+
+          source = Path.cwd()
+          failures = 0
+          print(sys.version)
+          with tempfile.TemporaryDirectory() as temporary:
+              os.chdir(temporary)
+              for name in ('python-api-design', 'python-system-design'):
+                  bundle = Path(temporary) / name
+                  shutil.copytree(source / name, bundle)
+                  attempted = failed = 0
+                  for document in [bundle / 'SKILL.md', *sorted((bundle / 'references').glob('*.md'))]:
+                      result = doctest.testfile(str(document), module_relative=False)
+                      attempted += result.attempted
+                      failed += result.failed
+                  print(f'{name}: {attempted} checks, {failed} failures')
+                  failures += failed
+              os.chdir(source)
+          raise SystemExit(bool(failures))
+          PY

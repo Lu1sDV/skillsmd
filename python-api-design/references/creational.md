@@ -113,6 +113,33 @@ entry point; import-side-effect discovery creates order/cycle surprises. A close
 selection can remain an `if` or small mapping. A plain dict is not a substitute for
 an API requiring a `.set` method or TTL just because both are storage-shaped.
 
+Keep registry lookup and factory invocation in separate failure scopes: a registered
+constructor can itself raise `KeyError` for missing configuration. Do not turn
+that into a misleading "unknown product" result.
+
+```pycon
+>>> from collections.abc import Callable
+>>> def needs_config() -> str:
+...     return {"region": "eu"}["endpoint"]
+>>> factories: dict[str, Callable[[], str]] = {"ready": lambda: "ready", "configured": needs_config}
+>>> def make(name: str) -> str:
+...     try:
+...         factory = factories[name]
+...     except KeyError:
+...         raise ValueError("unknown product") from None
+...     return factory()
+>>> assert make("ready") == "ready"
+>>> make("missing")
+Traceback (most recent call last):
+...
+ValueError: unknown product
+>>> make("configured")
+Traceback (most recent call last):
+...
+KeyError: 'endpoint'
+
+```
+
 ## Prototype and immutability: name the identity graph
 
 Assignment aliases an object. A shallow copy duplicates the outer container but
@@ -151,8 +178,8 @@ If implementing custom `__deepcopy__`, allocate and put the clone in `memo` **be
 recursing into a field that might point back to the original. Pass the same memo to
 nested `deepcopy` calls. Define which resource handles remain shared; do not promise
 blanket independence. Prefer explicit reconstruction if generic copying hides the
-ownership rules. `copy.replace` exists only on 3.13+; use `dataclasses.replace` on the
-3.11 baseline.
+ownership rules. `copy.replace` is available on 3.13+; use `dataclasses.replace`
+when supporting older Python or when the dataclass-specific operation is clearer.
 
 ## Singleton, lazy values, and object pools
 
@@ -166,7 +193,9 @@ ownership rules. `copy.replace` exists only on 3.13+; use `dataclasses.replace` 
 - `cached_property` requires an instance dictionary and allows overwriting/deleting
   its cached attribute. On 3.12+ its old internal lock is gone; concurrent access may
   run the getter more than once. It is unsuitable as an exactly-once acquisition or
-  cleanup policy. `lru_cache` coherence likewise does not guarantee single-flight.
+  cleanup policy. `functools.cache` and `lru_cache` keep the cache coherent but
+  may compute the same key multiple times during concurrent misses. Neither
+  guarantees single-flight construction or exactly-once resource acquisition.
 - A pool is bounded ownership, not just a queue: specify acquisition deadline,
   maximum resources including checked-out ones, reset/rollback, health checking,
   broken-resource disposal, and close/shutdown behavior. Use the driver/executor's
@@ -177,6 +206,6 @@ ownership rules. `copy.replace` exists only on 3.13+; use `dataclasses.replace` 
   `Queue(maxsize=0)` is unbounded, not a zero-capacity pool. Use monotonic deadlines.
   Concurrency/lifetime design can hand off to python-concurrency when installed.
 
-First-party references: [dataclasses](https://docs.python.org/3.14/library/dataclasses.html),
-[copy](https://docs.python.org/3.14/library/copy.html), and
-[functools](https://docs.python.org/3.14/library/functools.html).
+First-party references: [dataclasses](https://docs.python.org/3.15/library/dataclasses.html),
+[copy](https://docs.python.org/3.15/library/copy.html), and
+[functools](https://docs.python.org/3.15/library/functools.html).

@@ -5,6 +5,7 @@
 - [Validated value example](#a-validated-value-not-a-validating-annotation)
 - [Structural contracts](#structural-contracts-not-structural-proof)
 - [Generics and narrowing](#generics-preserve-relationships-not-wishful-types)
+- [Validation-library contracts](#validation-library-contracts-when-pydantic-is-already-used)
 - [Version and introspection gates](#version-and-introspection-gates)
 - [Checker workflow](#checker-workflow-and-compatibility)
 
@@ -82,6 +83,12 @@ from error`, without catching arbitrary programming errors. Numeric limits, acce
 unknown fields, normalization, and schema evolution are policy, not typing syntax.
 `cast(UserSpec, value)` would perform none of these checks. Avoid `isinstance(x,
 UserSpec)` or `isinstance(x, list[int])`; neither is a supported shape-validation API.
+
+On Python 3.15, `TypedDict(..., closed=True)` can forbid extra keys in the static
+contract, while `extra_items=T` describes additional string keys of type `T`;
+these options are mutually exclusive. They do not validate a decoded dictionary.
+Keep the parser's unknown-field policy explicit and verify checker support before
+replacing an established compatibility representation.
 
 ## A validated value, not a validating annotation
 
@@ -212,27 +219,69 @@ narrowing can invalidate assumptions. `assert_type` is a checker assertion and a
 runtime identity operation; `assert_never` (3.11+) also raises if reached at runtime.
 `Never` and `NoReturn` represent the same bottom type, not different precision tiers.
 
+## Validation-library contracts when Pydantic is already used
+
+Use a validation library where parsing, coercion or serialization is a real
+boundary requirement. Do not introduce it merely to annotate an internal record;
+ordinary classes/dataclasses remain useful. Conversely, do not ban internal
+validation when an actual invariant or untrusted producer requires it. A static
+checker and a Pydantic model establish different guarantees.
+
+For **Pydantic v2**, inspect the project's pinned version and model configuration:
+
+| Concern | Contract to establish |
+|---|---|
+| Coercion and extra data | Decide which conversions and unknown keys are accepted; strictness and `extra` policies are deliberate API choices. |
+| `Field` metadata | Put `default`, `default_factory` and constructor-facing `alias` in assignment form when the checker must synthesize the constructor. |
+| Union metadata | Attach field-wide metadata to the whole field type: `Annotated[int \| None, Field(deprecated=True)]`, not only to the `int` branch. |
+| Validation order | Prefer built-in constraints for ordinary bounds. After validators receive already parsed values; before validators must handle raw input, potentially any object. |
+| Reuse versus class policy | `Annotated[..., AfterValidator(...)]` makes a reusable validated type; decorator/model validators also suit multiple fields or cross-field rules. Neither style is universally correct. |
+| Validation bypass | `model_construct()` skips validation. Defaults and later assignment need their own validation policy; construction does not guarantee all future mutations are checked. |
+| Serialization | Nested model fields normally serialize according to their declared type, omitting subclass-only fields. Explicit polymorphic/duck serialization changes that contract and can expose secrets. |
+
+Test accepted and rejected raw inputs, normalized values, and the actual serialized
+payload. If omission differs from explicit null in a patch request, preserve field
+presence (for example, a suitable `exclude_unset=True` operation) rather than
+equating every default/`None` with absence. See [Evolution](evolution.md) for
+input/output schemas and generated-client compatibility.
+
+Do not mechanically remove future annotations or add runtime `isinstance` failures
+to satisfy a typing-only change. Pydantic supports forward annotations; names must
+be available in the resolution context. Use explicit named recursive aliases
+(`type` on 3.12+, or a permitted `TypeAliasType` backport) where its schema resolver
+needs them, and test the project's framework/checker combination.
+
+Configuration is external input too: parse it at the application boundary and
+inject validated settings or narrower values into consumers. Importing a reusable
+module should not load all environment-dependent settings or call `sys.exit`.
+Detailed source precedence, secret-file handling and application startup ownership
+belong to **python-system-design** when that optional skill is installed.
+
 ## Version and introspection gates
+
+Use stable Python 3.15 for new projects; retain an existing project's supported
+minimum and its matching checker/dependency support.
 
 | Python | Stdlib/syntax additions relevant here |
 |---|---|
 | 3.9 | Builtin generics such as `list[int]`; `collections.abc` generics |
 | 3.10 | `X | Y`, `TypeAlias`, `ParamSpec`, `Concatenate`, `TypeGuard` |
-| 3.11 baseline | `Self`, `Never`, `Required`, `NotRequired`, `assert_type`, `assert_never` |
+| 3.11 | `Self`, `Never`, `Required`, `NotRequired`, `assert_type`, `assert_never` |
 | 3.12 | `type Alias = ...`, `class Box[T]`, `def first[T](...)`; `typing.override`; runtime protocol changes |
 | 3.13 | `typing.ReadOnly` for TypedDict keys; `TypeIs`; type-parameter defaults; nesting `ClassVar`/`Final` |
 | 3.14 | Default deferred annotations; `annotationlib` |
+| 3.15 current baseline | Builtin `sentinel` and `frozendict`; `typing.TypeForm`; `TypedDict` `closed`/`extra_items` |
 
 Before 3.14, ordinary function/class annotations are eager unless quoted or using
 `from __future__ import annotations`. Quote the **whole** forward-reference
-expression (`"Node | None"`) on the 3.11 baseline, not `"Node" | None`. The future
-import stores strings, including in 3.14; it is not identical to 3.14 default
+expression (`"Node | None"`) on older supported Python, not `"Node" | None`. The future
+import stores strings, including in 3.14–3.15; it is not identical to the default
 lazy evaluation. Local variable annotations have different evaluation/storage
 rules; do not infer runtime schema presence from every source annotation.
 
 For trusted objects, use `typing.get_type_hints(obj, include_extras=True)` when
 resolved typing forms and metadata matter; it may raise on unavailable names.
-`TYPE_CHECKING` imports are not made available at runtime by magic. On 3.14 use
+`TYPE_CHECKING` imports are not made available at runtime by magic. On 3.14+ use
 `annotationlib.get_annotations` with `Format.VALUE`, `FORWARDREF`, or `STRING`
 according to whether resolution, unresolved references, or display is needed.
 These formats are not a sandbox: annotation introspection may execute arbitrary
@@ -244,22 +293,30 @@ runtime sharing rules. `ReadOnly[list[T]]` prevents assigning that TypedDict key
 in checked code but not mutating its list. `Annotated[T, metadata]` carries metadata;
 only a framework explicitly consuming it can add validation behavior.
 
+`TypeForm[T]` (3.15+) describes a type expression accepted by a runtime API, such
+as a union or parameterized generic; `type[T]` describes a class object instead.
+Neither `TypeForm` nor a cast validates a value against that expression. Do not
+invent a generic `decode`/`isinstance` implementation without an actual validator.
+
 ## Checker workflow and compatibility
 
-Annotate public boundaries and meaningful relationships first. Keep `Any` at
-untyped integration edges; use typed adapters to stop its propagation. Do not add
-blanket ignores or `--ignore-missing-imports` to make a checker look green. Narrow
-an unavoidable suppression to the diagnostic and document why the evidence holds.
+Keep `Any` at untyped integration edges; use typed adapters to limit propagation.
+For a value of unknown type, `object` requires narrowing before use. Document the
+evidence behind a necessary cast, which returns its argument unchanged. Preserve
+real validation at trust boundaries, while keeping a typing-only refactor free of
+new observable failures. Read [Checker operations](checker-operations.md) for
+coverage, strictness migration, diagnostics and downstream `py.typed` verification.
 
-Checker recipe, **not a doctest**: with the consuming project's pinned mypy already
-available, run `python -m mypy --python-version 3.11 --strict path/to/module.py`;
-use that project's configured target version instead when different. Alternatively
-use its configured Pyright. Keep a valid protocol consumer and an intentionally
-invalid signature/type assignment as separate checker cases with expected errors.
-Doctest alone cannot prove either result. Newer syntax cannot be backported by a
-future import; `typing_extensions` is optional only if the project already permits
-it, and checker support must also match. Do not install tools as a skill side effect.
+Newer syntax cannot be backported by a future import. Use `typing_extensions`
+only when the project permits it and the checker supports the feature. Keep
+positive and intentionally rejected consumer cases separate from runtime examples.
 
-First-party references: [typing](https://docs.python.org/3.14/library/typing.html),
-[ABCs](https://docs.python.org/3.14/library/abc.html), and
-[annotationlib](https://docs.python.org/3.14/library/annotationlib.html).
+First-party references: [typing](https://docs.python.org/3.15/library/typing.html),
+[ABCs](https://docs.python.org/3.15/library/abc.html),
+[annotationlib](https://docs.python.org/3.15/library/annotationlib.html),
+[TypedDict specification](https://typing.python.org/en/latest/spec/typeddict.html),
+[Pydantic fields](https://docs.pydantic.dev/latest/concepts/fields/),
+[validators](https://docs.pydantic.dev/latest/concepts/validators/),
+[models](https://docs.pydantic.dev/latest/concepts/models/),
+[serialization](https://docs.pydantic.dev/latest/concepts/serialization/), and
+[forward annotations](https://docs.pydantic.dev/latest/concepts/forward_annotations/).

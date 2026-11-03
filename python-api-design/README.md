@@ -1,6 +1,7 @@
 # python-api-design
 
-A standalone Python API/design skill: static typing and runtime validation,
+A standalone Python API/design skill: public compatibility, checker operations,
+static typing and runtime validation,
 SOLID, creation/composition/collaboration decisions, and class mechanics that can
 break consumer contracts. Functions, dataclasses, small adapters and explicit
 composition precede abstract factories or repository layers. No sibling skill,
@@ -11,6 +12,7 @@ third-party package, online source, or framework is needed to use the bundle.
 - [Reference index](#reference-index)
 - [Commands and version limits](#runnable-examples-and-verification-limits)
 - [Design decisions](#consolidation-and-correction-decisions)
+- [Selective community integration](#selective-community-integration-2026-11-03)
 - [Source map and attribution](#pinned-source-map-and-attribution)
 
 ## Install from a checkout
@@ -33,20 +35,25 @@ is optional and is not performed by the skill itself.
 - “Replace this factory/repository hierarchy with explicit composition where safe.”
 - “Design undo/redo and observer delivery with clear failure and lifetime semantics.”
 - “Explain why this mixin, descriptor, or frozen dataclass violates the public contract.”
+- “Can we change this default or response field without breaking current clients?”
+- “Make our type-checking gate cover public consumers and the installed package.”
 
 ## Reference index
 
 | File | Local coverage and executable examples |
 |---|---|
 | [SKILL.md](SKILL.md) | Routing, consumer-contract workflow, high-risk caveats, migration/evidence guard |
-| [Typing contracts](references/typing-contracts.md) | Types versus runtime checks, validated byte-range value, TypedDict parsing, protocol presence limits, generic relationships, variance, overloads, version/introspection/checker gates |
+| [Evolution and public surface](references/evolution.md) | Consumer-directed compatibility, public exports, default migration with a 3.15 sentinel, deprecation, HTTP input/output schemas, generated-client and route review |
+| [Checker operations](references/checker-operations.md) | Scope and toolchain, untyped-code coverage, strictness migration, suppressions, installed `py.typed` and positive/negative consumer checks |
+| [Typing contracts](references/typing-contracts.md) | Types versus runtime checks, validated byte-range value, TypedDict parsing, protocol presence limits, generics, variance, overloads, optional Pydantic boundaries and version/introspection gates |
 | [Creation](references/creational.md) | Singleton, factory method, abstract factory, builder, prototype, object pool; validated options, real text encoders, shallow/deep alias behavior |
 | [Composition](references/structural.md) | Adapter, bridge, composite, decorator, facade, flyweight, proxy; UTF-8 adapter, ParamSpec decorator, real gzip/JSON facade |
 | [Behavior](references/behavioral.md) | All ten source behavioral patterns plus context-manager/coroutine decisions; strategies, chain, state transitions, command/memento undo, observer cleanup, AST visitor, restoration on error |
-| [Class mechanics](references/class-mechanics.md) | Every SOLID principle, state sharing, substitutability, C3/cooperative super, descriptors/properties, slots, subclass hooks/metaclasses; concrete diamond and independent descriptor state |
+| [Class mechanics](references/class-mechanics.md) | SOLID, state sharing, deliberate dataclass policies, secret representation, operator fallback, substitutability, C3/cooperative super, descriptors, subclass hooks and metaclasses |
 
-Five references deliberately separate static typing and class mechanics from the
-three pattern families. This keeps runtime validation, MRO, and descriptor traps
+Seven references separate compatibility, checker operations, static typing and
+class mechanics from the three existing pattern families. This keeps runtime
+validation, MRO and descriptor traps
 available without loading the whole pattern catalogue. Detailed concurrent runtime
 implementation, deployment/DB transactions, data structures, everyday idioms, stdlib
 catalogues, and testing methodology can hand off by name to the corresponding
@@ -57,31 +64,42 @@ optional Python skills; the local examples and design guidance do not depend on 
 From this bundle directory:
 
 ```sh
-python3 -m doctest SKILL.md references/*.md
+python3.15 -m doctest SKILL.md references/*.md
 ```
 
-All `pycon` fences are stdlib-only, deterministic, local executable examples targeting
-Python **3.11+**. Assertions check output, rejection, alias isolation, transition
+Guidance and new-project examples target stable **Python 3.15**. The
+[official downloads page](https://www.python.org/downloads/) listed **3.15.2** as
+the latest stable release when checked on **2026-11-03**. Preserve an existing
+project's declared Python minimum; do not raise it merely to copy an example.
+
+All `pycon` fences are stdlib-only, deterministic, local executable examples.
+The evolution example uses the 3.15 builtin `sentinel`; older examples retain
+compatible spellings where a rewrite would add no clarity. Assertions check
+output, rejection, alias isolation, transition
 failure, history behavior, callback cleanup and restoration. Assertions in examples
 are tests, not production input validation. No external service, installation, or
 network is exercised. Each executable fence supplies its own imports/helpers.
 
-These commands are reproducible check instructions, **not a claim of a passing run**.
-Implementation did not run checks; integration owns execution. The available runtime
-is CPython 3.14.8, not evidence of Python 3.11–3.13 or another interpreter being
-executed. Doctest does not perform static checking, discover missing overload
-coverage, prove protocol substitutability, or establish thread safety/security.
+On 2026-11-03 the bundle's runtime doctests passed with **CPython 3.15.2**.
+The evolution sentinel example also passed a focused **mypy 2.4.1**, strict,
+Python-3.15-target check: its accepted consumer retained `tuple[str, ...]`, while
+integer-list and string-`sort` consumers produced the intended `list-item` and
+`arg-type` diagnostics. Omitted and explicit defaults were checked separately,
+including one caller-attributed `DeprecationWarning` for omission.
 
-Use the consuming project's actual Python minimum and pinned checker/configuration.
-The optional checker recipe in the typing reference requires an already available
-mypy or Pyright; mypy is absent in the implementation environment. Static examples
-and expected rejection cases have not been checker-verified. Dynamic descriptor
-examples intentionally illustrate runtime semantics, not a fully overloaded generic
-descriptor typing API. No global checker installation is required or recommended.
+This is not a claim that every code fragment was statically checked or that other
+Python versions/interpreters were executed. Doctests do not discover missing
+overload coverage, prove substitutability, or establish thread safety/security.
+Dynamic descriptor examples illustrate runtime semantics, not a fully overloaded
+generic descriptor API. Pydantic/FastAPI notes were checked against primary docs;
+no framework integration or generated SDK was exercised by these stdlib tests.
+Use the consumer's pinned checker/configuration; no global checker installation is
+required by the skill.
 
-Newer features are explanatory, not baseline example requirements: Python 3.12 adds
+Version gates remain useful for existing projects: Python 3.12 adds
 `type`/type-parameter syntax and `typing.override`; 3.13 adds `ReadOnly`, `TypeIs`,
-and type-parameter defaults; 3.14 adds default deferred annotations and `annotationlib`.
+and type-parameter defaults; 3.14 adds default deferred annotations and `annotationlib`;
+3.15 adds `sentinel`, `frozendict`, `TypeForm` and closed/extra-item TypedDict contracts.
 Future annotations do not backport newer syntax. Runtime protocol lookup changes
 in 3.12, and `cached_property` no longer carries its former lock from 3.12 onward.
 The reference records these limits instead of extrapolating one runtime's results.
@@ -134,6 +152,43 @@ The reference records these limits instead of extrapolating one runtime's result
   per instance. `__set_name__` is not called automatically on later assignment;
   metaclass class creation and instance construction are different phases.
 
+## Selective community integration (2026-11-03)
+
+The supplied candidate review was a discovery map, not verification. Relevant
+source files were read directly; retained runtime/library claims were checked
+against the primary references linked in the destination. The table pins the
+inspected sources. The new guidance and examples are an independent synthesis;
+community scripts and framework templates were neither executed nor vendored.
+
+| Candidate source at inspected revision | Decision and destination |
+|---|---|
+| [wdm0006 API design](https://github.com/wdm0006/python-skills/blob/456ad29b98671a310dcb56165c6f0d7c63ca2c19/skills/python/api-design/SKILL.md) and [evolution](https://github.com/wdm0006/python-skills/blob/456ad29b98671a310dcb56165c6f0d7c63ca2c19/skills/python/api-design/EVOLUTION.md) | **Adapt** public-import checks, omitted/default transitions and honest result completeness into `evolution.md`. Reject universally safe additive fields, appended NamedTuple safety, exhaustive `__all__` guarantees and mandatory major-version policy. |
+| [PostHog dataclasses](https://github.com/PostHog/posthog/blob/b8095bf610dfadb1fb5b10193d34d2fafcc7468a/.agents/skills/writing-dataclasses/SKILL.md) | **Adapt** constructor/layout/representation choices into class mechanics. Keep NamedTuple when tuple behavior is intended; freezing neither deeply freezes values nor guarantees successful hashing. No project-specific decorator or numeric tuple threshold. |
+| [Polar API surface](https://github.com/polarsource/polar/blob/62fe70c438c17e45065542b1944743f722702381/.agents/skills/api-surface-review/SKILL.md) | **Adapt** server/schema/client review into evolution. Correct input versus output defaults; treat schema hiding as a contract change. Reject mandatory Int32, universal union names, status-per-error and unfiltered-list policies. |
+| [Paldom typing operations](https://github.com/paldom/python-skills/blob/70aa0cf9926285dbef6ac39bc36990ece230cd09/skills/python-typing/SKILL.md) | **Adapt** pinned tooling, coverage, gradual strictness and artifact checks. Correct mypy per-module override support and missing-marker consequences. Omit checker popularity rankings, stale version pins and blanket error suppression. |
+| [Pydantic guidance](https://github.com/pydantic/pydantic/blob/77fad186682d0c22cad713e34ca9b8b830362ed0/.agents/skills/pydantic/SKILL.md) | **Adapt** field metadata, validation and declared-type serialization into typing contracts. Do not ban future annotations, decorator validators or internal models categorically. Keep dependency-specific behavior optional. |
+| [Google ADK typing](https://github.com/google/adk-python/blob/766275863d1e80489344f0fbe5b4bfa3b933a9a9/.agents/skills/adk-style/references/typing.md) | **Adapt** justified casts/suppressions and behavior-preserving typing changes; retain real boundary validation. Do not adopt house import/visibility rules or annotations-everywhere churn. |
+| [SD.Next API review](https://github.com/vladmandic/sdnext/blob/6657d06112ed8e924e93eed099af44ea8d892417/.github/skills/check-api/SKILL.md) | **Adopt** the need to follow delegated route registration and distinguish runtime schema inspection from static review. No application-specific route inventory. |
+| [wispbit operator rule](https://github.com/wispbit-ai/skills/blob/8b2c7d0ceca0204634dd308970629c4cd4a5a05f/skills/python-expert-best-practices-code-review/rules/operators-return-notimplemented.md) | **Adapt** operator fallback into class mechanics. Reject the claim that every augmented operator must mutate and return `self`. |
+| [nathan-gage review index](https://github.com/nathan-gage/python-skills/blob/c5b961b32447e1be7dedea45ef166e74bb987f77/skills/python-best-practices/SKILL.md) and [pprm11 idioms](https://github.com/pprm11/persona/blob/32cb10ee314cab6ba6ba61490a0e32dcd6c29f90/skills/python-idioms/SKILL.md) | **Adapt** evidence before a finding and independent test expectations into the workflow. The 75-rule catalogue and general test methodology are not imported. |
+| [pproenca's Python design-pattern kit](https://github.com/pproenca/dot-skills/blob/cf93c57cac89d6fc3e4194686000411567f5caf3/skills/.experimental/implementation-design-patterns-python/SKILL.md) ([gotchas](https://github.com/pproenca/dot-skills/blob/cf93c57cac89d6fc3e4194686000411567f5caf3/skills/.experimental/implementation-design-patterns-python/gotchas.md)) | **Adapt narrowly:** problem-shape activation cues; distinguish factory lookup failures from constructor failures; explicit traversal order, visitor expansion cost and concurrent-cache limits. **Do not import** the overlapping 22-pattern catalogue or examples that overpromise singleton creation, deferred undo, observer unsubscribe behavior or flyweight memory savings. No community code vendored. |
+
+Other proposal clusters were screened by scope and overlap rather than treated
+as automatically approved additions:
+
+| Proposal cluster | Decision |
+|---|---|
+| New `configuration.md` | **Reject duplication.** Keep one API injection/boundary note; startup sources, secrets and precedence belong to system design. |
+| FastAPI/Django/SQLModel/CLI/agent templates and framework release anecdotes | **Defer.** Preserve general contract checks and the few verified Pydantic/FastAPI schema nuances above. No extra framework catalogue, preferred stack, or unverified HEAD-only feature recipes. |
+| Database migration guide | **Route to system design.** Database locks, expand/contract rollout and transaction ownership need their own consequential boundary evidence. |
+| Refactor playbook, architecture-score matrix and constructor-size thresholds | **Reject expansion.** Existing consumer/invariant decisions cover the need; fixed sizes and mandatory interview rounds do not establish a defect. |
+| Error envelopes, exception groups, cancellation and everyday hygiene | **Keep existing ownership.** Preserve public error/completeness contracts here; general error/resource mechanics remain with python-idiomatic/concurrency. |
+| Pagination/testing workflow catalogues | **Adapt narrowly.** Keep stable order, continuation validation and independent consumer expectations; avoid database/test infrastructure templates. |
+
+Unretained claims about framework versions, security advisories or particular
+community defects are not independently certified by this table. They are not
+required to use the skill and were not promoted into its instructions.
+
 ## Pinned source map and attribution
 
 Original synthesis adapted from StructWeave-Algorithms, Python-content revision
@@ -152,13 +207,13 @@ chapters. Upstream is source material, not the authority for corrected claims.
 | [14 Traps: class/API selections](https://github.com/nirajkvinit/StructWeave-Algorithms/blob/0b88a786ef09681717a805d9f7e0b195ab610f6c/languages/python/14-interview-trap-questions.md) | Copying, class/instance state, MRO, descriptors, metaclasses |
 
 First-party correction references, also linked near their guidance:
-[typing](https://docs.python.org/3.14/library/typing.html),
-[ABCs](https://docs.python.org/3.14/library/abc.html),
-[annotationlib](https://docs.python.org/3.14/library/annotationlib.html),
-[dataclasses](https://docs.python.org/3.14/library/dataclasses.html),
-[copy](https://docs.python.org/3.14/library/copy.html),
-[functools](https://docs.python.org/3.14/library/functools.html), and the
-[descriptor guide](https://docs.python.org/3.14/howto/descriptor.html).
+[typing](https://docs.python.org/3.15/library/typing.html),
+[ABCs](https://docs.python.org/3.15/library/abc.html),
+[annotationlib](https://docs.python.org/3.15/library/annotationlib.html),
+[dataclasses](https://docs.python.org/3.15/library/dataclasses.html),
+[copy](https://docs.python.org/3.15/library/copy.html),
+[functools](https://docs.python.org/3.15/library/functools.html), and the
+[descriptor guide](https://docs.python.org/3.15/howto/descriptor.html).
 They support version-sensitive corrections; use local guidance offline.
 Upstream material is MIT-licensed; the exact original notice is in
 [LICENSE.upstream](LICENSE.upstream).

@@ -251,6 +251,12 @@ iterator silently. For resource-backed generators, delayed iteration delays I/O
 and errors; early termination must still close the resource, typically using a
 caller-owned `with` scope rather than relying on garbage collection.
 
+Iteration order is part of a public contract: specify depth-first/preorder,
+breadth-first, insertion, sorted or other order where observable. If callers
+need multiple orders, expose named iteration operations instead of changing
+`__iter__` silently; test order, exhaustion and early-close behavior, not just
+set equality. Do not promise stable traversal under concurrent mutation.
+
 Pagination must continue through an empty page when its next cursor is present;
 `if not page.items: stop` is not a sufficient end condition. Require advancing
 cursors or bounded/repeated-cursor detection, use `deque` rather than `pop(0)` for
@@ -275,6 +281,12 @@ children that still need traversal.
 >>> assert visitor.names == ["left", "right", "left"]
 
 ```
+
+Visitor-style external operations fit a relatively stable set of element types
+with growing operations. Adding a new node type then requires checking every
+relevant visitor and fallback; generic dispatch can silently omit special
+handling. If element types change frequently but operations are few, methods
+on the elements or an explicit `match` may be simpler.
 
 `singledispatch` is **single** dispatch on the first argument's runtime class, not
 multiple dispatch or dispatch on `list[int]`'s element type. Registered functions
@@ -325,6 +337,6 @@ commit/rollback failure, not treat `with` as proof that commit succeeded. Multi-
 acquisition needs cleanup for earlier resources if later acquisition fails;
 `contextlib.ExitStack` is the stdlib tool. No custom lifecycle framework is required.
 
-First-party references: [AST visitors](https://docs.python.org/3.14/library/ast.html#ast.NodeVisitor),
-[functools](https://docs.python.org/3.14/library/functools.html), and
-[contextlib](https://docs.python.org/3.14/library/contextlib.html).
+First-party references: [AST visitors](https://docs.python.org/3.15/library/ast.html#ast.NodeVisitor),
+[functools](https://docs.python.org/3.15/library/functools.html), and
+[contextlib](https://docs.python.org/3.15/library/contextlib.html).

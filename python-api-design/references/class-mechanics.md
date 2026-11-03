@@ -2,7 +2,9 @@
 
 - [SOLID decisions](#solid-without-five-new-layers)
 - [State and public boundaries](#state-and-public-boundaries)
+- [Dataclass choices](#choose-dataclass-policies-explicitly)
 - [Substitutability](#inheritance-must-preserve-consumer-contracts)
+- [Operator fallback](#preserve-the-operator-protocol)
 - [Cooperative MRO](#super-follows-the-mro-not-the-lexical-parent)
 - [Properties and descriptors](#properties-before-custom-descriptors)
 - [Hooks and metaclasses](#hooks-before-metaclasses)
@@ -45,6 +47,59 @@ has a partial-failure problem; rearranging classes does not make it transactiona
   the domain contract. Equal hashable values must have equal stable hashes. Avoid
   mutable equality-bearing dict keys and `unsafe_hash` as a workaround.
 
+## Choose dataclass policies explicitly
+
+Use named fields when positional values are easily confused or a fixed record
+crosses boundaries. Prefer keyword-only construction when argument order is
+ambiguous; matching types alone cannot detect swapped values. `NamedTuple` remains
+appropriate when tuple indexing, unpacking and tuple equality are part of the
+intended contract. It does not solve positional ambiguity, and replacing an
+existing tuple with a dataclass is an API migration.
+
+| Choice | Benefit | Boundary to review |
+|---|---|---|
+| `kw_only=True` | Makes callers name fields | Breaks existing positional construction; these fields are excluded from generated `__match_args__` |
+| `frozen=True` | Prevents ordinary attribute rebinding | Nested mutable values remain mutable; generated hashing can fail on unhashable fields |
+| `slots=True` | Restricts default instance layout | A slots-only instance lacks `__dict__`; `cached_property`, dynamic attributes, weak references and inheritance need review |
+| `field(repr=False)` | Omits a field from the generated representation | Does not redact `asdict`, explicit logging, serialization or custom representations |
+| `replace(value, field=...)` | Reconstructs a modified value through initialization | Shallow references remain shared; `__post_init__` runs again and `init=False` fields are not copied |
+
+Establish cross-field invariants during construction. A generated dataclass
+initializer does not validate annotated types. Preserve narrower internal
+requirements instead of passing a broad wire record into every helper and adding
+guards merely to recover information the old signature already expressed.
+
+```pycon
+>>> from dataclasses import asdict, dataclass, field, replace
+>>> @dataclass(frozen=True, kw_only=True, slots=True)
+... class ExportOptions:
+...     limit: int
+...     token: str = field(repr=False)
+...     def __post_init__(self) -> None:
+...         if type(self.limit) is not int or self.limit <= 0:
+...             raise ValueError("limit must be a positive integer")
+>>> options = ExportOptions(limit=20, token="example-only")
+>>> assert repr(options) == "ExportOptions(limit=20)"
+>>> assert asdict(options)["token"] == "example-only"  # This is not redacted.
+>>> updated = replace(options, limit=5)
+>>> assert (options.limit, updated.limit) == (20, 5)
+>>> replace(options, limit=0)
+Traceback (most recent call last):
+...
+ValueError: limit must be a positive integer
+
+```
+
+Use allowlisted log fields instead of dumping a secret-bearing object. A frozen
+dataclass cannot switch to a non-frozen dataclass subclass or vice versa. For a
+weak-referenceable slots-only dataclass use `weakref_slot=True` with `slots=True`
+(3.11+), and review base layouts before changing a public class's slots.
+
+On Python 3.15, `frozendict` can represent an immutable mapping snapshot; it is
+shallow, is not a `dict` subclass, and is hashable only when its contents are
+hashable. Accept `Mapping` where the consumer needs read access and preserve the
+project's version floor. Do not confuse a live read-only proxy with a snapshot.
+
 ## Inheritance must preserve consumer contracts
 
 An override may accept broader inputs or return narrower outputs, but cannot
@@ -57,6 +112,21 @@ Use inheritance for a genuine substitutable abstraction or a controlled framewor
 extension point. Compose independently varying policies rather than creating a
 subclass for every combination. Mixins should have small documented requirements;
 do not hide connection acquisition, global registration, or mutable state in them.
+
+## Preserve the operator protocol
+
+Return `NotImplemented` from binary numeric or rich-comparison methods when the
+operand pair is unsupported, allowing Python's reflected-operation or other
+fallback. It is a return value, not `NotImplementedError`. Return `False` for a
+supported comparison that is false, and raise appropriate errors for invalid
+values within a supported operation. Unsupported ordering ultimately raises;
+equality has its own identity fallback.
+
+An augmented operation such as `__iadd__` returns the resulting value; that may
+be `self`, a new object, or `NotImplemented` to request normal fallback. Do not
+require mutation or `return self` universally. Specify aliasing and accepted
+operands for `+` and `+=` deliberately. On Python 3.14+, evaluating
+`bool(NotImplemented)` raises `TypeError`; never use it as a truthy success flag.
 
 ## `super` follows the MRO, not the lexical parent
 
@@ -176,6 +246,7 @@ class's `__new__` and then `__init__`. Do not confuse these phases or attempt
 per-instance validation only in a class-definition hook. ABC abstractness blocks
 instance construction, not class definition or signature-incompatible overrides.
 
-First-party references: [descriptor guide](https://docs.python.org/3.14/howto/descriptor.html),
-[dataclasses](https://docs.python.org/3.14/library/dataclasses.html), and
-[Python data model](https://docs.python.org/3.14/reference/datamodel.html).
+First-party references: [descriptor guide](https://docs.python.org/3.15/howto/descriptor.html),
+[dataclasses](https://docs.python.org/3.15/library/dataclasses.html),
+[Python data model](https://docs.python.org/3.15/reference/datamodel.html), and
+[frozen dictionaries](https://docs.python.org/3.15/builtins/stdtypes.html#frozen-dictionaries).

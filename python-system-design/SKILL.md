@@ -3,7 +3,7 @@ name: python-system-design
 description: >
   Use when structuring Python packages or modular monoliths, choosing Django,
   Flask, FastAPI, WSGI or ASGI, or designing durable jobs, database transaction
-  ownership, startup configuration, secrets and deployment boundaries.
+  ownership, startup configuration, secrets, containers and operational boundaries.
 ---
 
 # Python System Design
@@ -15,6 +15,7 @@ description: >
 | Package layout, dependency direction, installation or service split | Keep a cohesive package/modular monolith; test the installed wheel. [Packages and boundaries](references/packages-boundaries.md) |
 | Framework/runtime, resource lifetime or background work | Reuse the supported framework; choose task lifetime before tooling. [Web and jobs](references/web-jobs.md) |
 | Transactions, configuration or trust boundaries | One transaction owner per use case; parse settings at startup. [Persistence and configuration](references/persistence-config.md) |
+| Container builds, health, shutdown or telemetry | Verify the deployed artifact and its failure behavior. [Deployment and operations](references/deployment-operations.md) |
 
 Load the relevant reference before designing its boundary. All guidance is local;
 external sources and sibling skills are not installation prerequisites.
@@ -33,8 +34,9 @@ external sources and sibling skills are not installation prerequisites.
    Adapters translate transport input/errors; shared rules need no web imports.
    Split services only for a real ownership, isolation or scaling boundary.
 4. **Assign resource lifetimes.** Settings belong to startup, clients/pools to
-   workers, sessions/transactions to operations. Pair acquisition with cleanup,
-   including partial startup failure and shutdown. Deferred work receives stable
+   workers, sessions/transactions to operations. Name the owner and last use; pair
+   acquisition with cleanup on success, exception and cancellation, including
+   partial startup failure and shutdown. Deferred work receives stable
    identifiers and opens its own resources, not request-owned sessions or handles.
 5. **Exercise and migrate the real boundary.** Use an installed artifact outside
    the checkout, the production database for transaction claims and real workers
@@ -83,6 +85,7 @@ backpressure and thread/process implementation, **python-tdd** for test workflow
 and **python-stdlib** for general I/O and serialization details, when installed.
 None is required to use this bundle.
 
-Examples target Python 3.11+ with the runtime qualifications in [README](README.md).
+New-project guidance targets stable Python 3.15; preserve existing supported
+minimums. Version qualifications and verification dates are in [README](README.md).
 Source mapping, adaptation decisions and installation are there; retain the
 [upstream MIT license](LICENSE.upstream) with the bundle.

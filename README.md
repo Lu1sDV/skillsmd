@@ -60,11 +60,11 @@ git submodule update --init --recursive
 | [python-idiomatic](python-idiomatic/) | Everyday Python — object semantics, iteration, decorators, exceptions, imports, environments and tooling |
 | [python-algorithms](python-algorithms/) | Collection selection and all 17 Python algorithm patterns with invariants, complexity and boundary cases |
 | [python-stdlib](python-stdlib/) | Standard-library APIs — iterators/caching, files/time, serialization/regex, records, cleanup, logging and subprocesses |
-| [python-api-design](python-api-design/) | Python-native API design — typing, protocols, SOLID, consolidated design patterns, descriptors and class contracts |
+| [python-api-design](python-api-design/) | Python API contracts — compatibility, type-checker coverage, typing, dataclasses, composition and class mechanics |
 | [python-concurrency](python-concurrency/) | Threads, processes, asyncio, cancellation, backpressure, shutdown, free threading and interpreter isolation |
 | [python-performance](python-performance/) | Profiling, fair benchmarks and measured optimization — CPU, memory, algorithms, concurrency, I/O, databases and numerical workloads; concise workflow with topic references |
 | [python-tdd](python-tdd/) | Test-first Python — red-green-refactor, pytest/unittest, fixtures/doubles, properties, real boundaries and test CI |
-| [python-system-design](python-system-design/) | Python application architecture — packages, WSGI/ASGI, frameworks, background jobs, transactions and configuration |
+| [python-system-design](python-system-design/) | Python application architecture — packages/workspaces, durable jobs, transactions, configuration, deployment and operations |
 | [python-exploitation](python-exploitation/) | Offensive Python & CTF — pyjail/sandbox escape, builtins recovery, import/char blacklist bypass, pickle/marshal RCE, Jinja2/RestrictedPython SSTI, PEP 578 audit-hook bypass, bytecode crafting, 3.8–3.13 internals |
 | [security-fix-oracle](security-fix-oracle/) | Mine a repo's git history into a labeled, leakage-free security-fix dataset — Haiku/Sonnet triage, merge-safe diff fetch, gold/weak tiers, CVSS 3.1 (LLM vector + procedural score), SZZ vulnerability-introducer attribution + skill-gap; runnable harness included |
 | [skill-smell-checker](skill-smell-checker/) | Audit all 26 SKILL.md smells from arXiv:2607.01456 — 5 deterministic harness checks plus 21 evidence-backed semantic checks |
@@ -236,9 +236,10 @@ discovers `SKILL.md` files automatically; no hand-maintained manifest is added.
 ### Authoring review
 
 Reviewed against [Anthropic's skill authoring guidance](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices).
-Entrypoints now contain routing, workflows and essential guards; detailed examples
-and API catalogues load on demand. All 26 references remain directly reachable from
-their skill, with contents lists for navigation.
+The initial concision review kept routing, workflows and essential guards in the
+entrypoints; detailed examples and API catalogues load on demand. Its 26 references
+were directly reachable from their skills. The later API/system-design refresh
+below adds three focused references and preserves direct routing.
 
 | Measure | Before review | After review | Reduction |
 |---|---:|---:|---:|
@@ -264,6 +265,26 @@ Verified on 2026-10-23 with CPython 3.14.8 after the concision review:
   These probes do not establish Haiku/Sonnet/Opus cross-model effectiveness.
 - Older Python versions, Windows, free-threaded builds, optional frameworks/brokers,
   static-checker acceptance and production deployment remain unverified.
+
+### API and system-design refresh
+
+On **2026-11-03**, [python-api-design](python-api-design/) and
+[python-system-design](python-system-design/) were selectively refreshed against
+community proposals and primary documentation. New-project guidance targets
+stable **Python 3.15**, checked against [CPython 3.15.2](https://www.python.org/downloads/release/python-3152/);
+existing projects retain their declared version floor until an explicit migration.
+
+The API router is 81 lines with seven references; the system router is 91 lines
+with four references. The additions are API evolution, checker operations, and
+deployment/operations. Each bundle's README records what was adopted, corrected,
+declined and verified, without importing framework scaffolds or duplicate guides.
+
+Standalone copies passed **178 API and 15 system doctest checks** on CPython
+3.15.2. The default-migration example also passed focused positive/negative mypy
+2.4.1 checks. These results do not establish live broker, database-server,
+container, framework or generated-client behavior. A scoped
+[CI workflow](.github/workflows/validate-python-design.yml) reruns both bundles'
+stdlib examples outside the checkout on the latest Python 3.15 patch release.
 
 ## Rust skill suite
 

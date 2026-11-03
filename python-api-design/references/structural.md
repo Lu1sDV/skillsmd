@@ -180,6 +180,6 @@ Implicit special-method lookup for `len(proxy)`, iteration, arithmetic, and cont
 management normally goes through the proxy's **type**, not a forwarded instance
 attribute. Implement only the intended special methods and their contracts.
 
-First-party references: [functools](https://docs.python.org/3.14/library/functools.html),
-[io](https://docs.python.org/3.14/library/io.html), and
-[special method lookup](https://docs.python.org/3.14/reference/datamodel.html#special-method-lookup).
+First-party references: [functools](https://docs.python.org/3.15/library/functools.html),
+[io](https://docs.python.org/3.15/library/io.html), and
+[special method lookup](https://docs.python.org/3.15/reference/datamodel.html#special-method-lookup).
