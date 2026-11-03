@@ -23,6 +23,9 @@ description: >
 | SOLID, mutable class state, inheritance, MRO, descriptors | Consumer contracts and composition before mixins — [Class mechanics](references/class-mechanics.md) |
 
 Load only the relevant reference. Pattern names do not require classes or frameworks.
+Recognize unnamed pattern-shaped problems: constructor variants, parallel
+subclasses, repeated mode dispatch, undo/history, event subscribers or tree
+traversal. These are review cues, not automatic reasons for more layers.
 Use Python 3.15 for new projects; preserve an existing project's declared minimum.
 
 ## Workflow
