@@ -9,6 +9,10 @@ description: >
 
 # Python Performance
 
+Target **CPython 3.15**; latest stable patch verified **3.15.2 on 2026-11-03**.
+Use version-matched documentation and compatible tools. Treat a consuming project's
+older declared support as a compatibility constraint; do not silently upgrade it.
+
 ## Workflow
 
 1. **Define the contract.** Inspect the project, tests and telemetry. Set a primary
@@ -42,7 +46,7 @@ Load only the relevant reference or section; do not read the whole bundle by def
 
 | Task | Reference |
 |---|---|
-| Locate CPU, wall-time, native or allocation hotspots | [Profiling](references/profiling.md) |
+| Locate CPU, wall-time, native, allocation or slow-test-suite hotspots | [Profiling](references/profiling.md) |
 | Establish a speedup, service-load result or regression gate | [Benchmarking](references/benchmarking.md) |
 | Reduce repeated work; choose containers, iteration or representations | [Algorithms and Python](references/algorithms-and-python.md) |
 | Diagnose peaks, retention, caches or GC | [Memory and caching](references/memory-and-caching.md) |
