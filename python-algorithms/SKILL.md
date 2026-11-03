@@ -4,11 +4,16 @@ description: >
   Use when choosing Python collections or implementing and reviewing two pointers,
   sliding windows, binary search, prefix sums, monotonic stacks, hash-map patterns,
   two heaps, merge intervals, cyclic sort, BFS/DFS, backtracking, dynamic programming,
-  greedy algorithms, topological sort, union-find, tries, or bit manipulation.
+  greedy algorithms, topological sort, union-find, tries, bit manipulation,
+  string search, order statistics, or dynamic range indexes.
   Covers invariants, complexity, mutation, duplicates, cycles, and boundary cases.
 ---
 
 # Python Algorithms
+
+Target **CPython 3.15**; latest stable patch verified **3.15.2 on 2026-11-03**.
+Treat a consuming project's older declared support as a compatibility constraint;
+report it before introducing baseline-only APIs or changing its support policy.
 
 ## Route by invariant
 
@@ -16,10 +21,11 @@ description: >
 |---|---|
 | Container choice, lists/trees/graphs, copying, ordering, real costs | [Collections and contracts](references/collections-and-contracts.md) |
 | 1 two pointers; 2 sliding window; 3 binary search; 4 prefix sum; 5 monotonic stack; 6 hash maps; 7 two heaps; 8 merge intervals; 9 cyclic sort | [Sequence patterns](references/sequence-patterns.md) |
-| 10 BFS/DFS; 14 topological sort; 15 union-find; 16 trie | [Graph and index patterns](references/graph-and-index-patterns.md) |
+| 10 BFS/DFS and 0–1 BFS; 14 topological sort; 15 union-find; 16 trie; range indexes | [Graph and index patterns](references/graph-and-index-patterns.md) |
 | 11 backtracking; 12 dynamic programming; 13 greedy; 17 bit manipulation | [Search and optimization](references/search-and-optimization.md) |
+| 18 string search and palindrome radii; 19 selection and streaming top-k | [String search and selection](references/string-search-and-selection.md) |
 
-Load only the needed guide; all 17 families, implementations and cost caveats
+Load only the needed guide; the original 17 families and targeted extensions
 ship locally. Prefer built-in containers and stdlib helpers over custom structures
 unless link identity or another problem-specific operation requires them.
 
@@ -36,10 +42,10 @@ unless link identity or another problem-specific operation requires them.
    unit-cost arithmetic assumptions must be stated.
 4. Keep mutation explicit: sorting, heapifying, cyclic placement and link reversal
    change input. Validate domains before destructive indexing; shallow copies
-   retain children. Track pending, complete and blocked items for multi-file work.
+   retain children.
 5. Check relevant empty/singleton, all-equal, signed, duplicate, Unicode, no-solution,
    cycle/disconnected and invalid-domain cases. Compare optimized results with a
-   bounded simple oracle where practical; preserve the consumer's Python versions.
+   bounded simple oracle where practical; include the actual consuming runtime.
 
 ## High-risk gotchas
 
@@ -67,7 +73,7 @@ unless link identity or another problem-specific operation requires them.
 Report preconditions, mutation/copy behavior, invariant/termination, output/failure
 semantics and full time/space costs. Include executed checks and remaining gaps;
 do not silently skip required checks or present proposed commands as passing.
-Examples target Python 3.11+, stdlib only; commands are in [README](README.md#run-the-executable-examples).
+Examples target Python 3.15, stdlib only; commands are in [README](README.md#run-the-executable-examples).
 
 Optional installed-skill handoffs: **python-idiomatic** for language/error/import
 issues, **python-stdlib** for general library APIs, **python-api-design** for public
