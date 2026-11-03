@@ -7,12 +7,17 @@
 - [Sample running and asynchronous work](#sample-running-and-asynchronous-work)
 - [Escalate to system and native evidence](#escalate-to-system-and-native-evidence)
 - [Investigate lines and memory](#investigate-lines-and-memory)
+- [Diagnose a slow test suite](#diagnose-a-slow-test-suite)
 - [Turn evidence into a hypothesis](#turn-evidence-into-a-hypothesis)
 
 Confirm interpreter/build, platform and installed tool version; replace example workloads/PIDs. Profile a specific question; validate changes with an unprofiled benchmark.
 
-For live services, use an authorized, bounded capture; record collection overhead
-and monitor its effect.
+For live services, use an authorized, bounded capture. Set duration, sampling rate,
+thread/child scope, output-size budget and stop conditions; monitor latency/errors
+and collector CPU/memory. Avoid locals/heap contents unless the question requires
+them; handle captures under the application's data-retention policy. External
+sampling still consumes machine resources. Measure overhead on representative
+work when it matters, rather than transferring a published percentage.
 
 ## Select the smallest useful profiler
 
@@ -24,20 +29,20 @@ hide one saturated thread. Correlate workload and system metrics.
 | --- | --- | --- |
 | Python 3.15 elapsed/CPU concentration? | [`profiling.sampling`](https://docs.python.org/3.15/library/profiling.sampling.html) | Select wall/CPU mode and thread scope; sampling estimates, not exact counts. |
 | Existing compatible CPython process? | [`py-spy`](https://github.com/benfred/py-spy) | External samples; attach permissions, interpreter/native support vary. |
-| Functions and call paths? | [cProfile](https://docs.python.org/3.14/library/profile.html) / [3.15 profiling.tracing](https://docs.python.org/3.15/library/profiling.tracing.html) | Instrumentation perturbs execution; exact counts do not ensure unbiased timing. |
+| Functions and call paths? | [profiling.tracing / compatible cProfile](https://docs.python.org/3.15/library/profiling.tracing.html) | Instrumentation perturbs execution; exact counts do not ensure unbiased timing. |
 | Statements in a known hot function? | [line_profiler](https://kernprof.readthedocs.io/en/latest/) | Instrument suspects only; concurrency/async may produce unexpected results. |
 | Python/native time, allocations or copying by line? | [Scalene](https://github.com/plasma-umass/scalene) | Select needed modes; verify installed CLI and validate estimates. |
-| Retained/peak Python allocations? | [tracemalloc](https://docs.python.org/3.14/library/tracemalloc.html) | Start early; distinguish snapshots from peaks. |
+| Retained/peak Python allocations? | [tracemalloc](https://docs.python.org/3.15/library/tracemalloc.html) | Start early; distinguish snapshots from peaks. |
 | Allocation sites, including native extensions? | [Memray](https://bloomberg.github.io/memray/run.html) | Allocation traces differ from RSS; native stacks/Python-object tracing add cost. |
 
 Capture a representative broad profile, then narrow unresolved questions. Avoid simultaneous heavyweight profilers; include every contributing worker/task. Preserve functioning `memory_profiler` workflows where appropriate, but choose supported tools for new investigations: it is [no longer actively maintained](https://github.com/pythonprofilers/memory_profiler).
 
 ## Interpret deterministic function profiles
 
-Use the broadly compatible command:
+Use the 3.15 tracing profiler (`cProfile` remains a compatible alias):
 
 ```bash
-python -m cProfile -o workload.prof workload.py
+python -m profiling.tracing -o workload.prof workload.py
 python -m pstats workload.prof
 ```
 
@@ -62,6 +67,13 @@ Use cumulative time (`cumtime`, includes subcalls) for expensive paths, then sel
 
 Compare implementations unprofiled: per-event overhead can bias Python/native comparisons. Investigate expensive native calls with native profiling before rewriting Python lines.
 
+Use call counts and callers to locate repeated fan-out, such as one query or parse
+per row. A large cumulative-time row with little self time is a coordinator, not
+automatically an inefficient function. Blocking frames (`recv`, `poll`, pool/lock
+waits) suggest a waiting hypothesis; verify with wall/CPU measurements and spans.
+GC performs work and is not inherently a wait. A flat CPU profile may reflect
+missing native/worker coverage or coarse sampling, so it does not prove I/O.
+
 ## Sample running and asynchronous work
 
 On Python 3.15, compare CPU activity with elapsed waits:
@@ -71,13 +83,14 @@ python -m profiling.sampling run --mode=cpu --flamegraph -o cpu.html workload.py
 python -m profiling.sampling run --mode=wall --flamegraph -o wall.html workload.py
 ```
 
-Match profiler/target minor versions and free-threaded/GIL builds. Choose `--all-threads` when needed. Treat `--native` as native boundaries, not full C/C++ stacks. Consider `--async-aware` for asyncio; never combine it with CPU/GIL modes, `--all-threads` or `--native`. Check installed help for advanced flags.
+Match profiler/target minor versions and free-threaded/GIL builds. Choose `--all-threads` when needed. Treat `--native` as native boundaries, not full C/C++ stacks. Consider `--async-aware` for asyncio; it is incompatible with CPU/GIL/exception modes, `--all-threads`, `--native` and `--no-gc`. Check installed help for advanced flags.
 
 For supported CPython runtimes or native stacks, use py-spy with an authorized PID:
 
 ```bash
 py-spy record -o cpu.svg -- python workload.py
 py-spy record -o service.svg --pid 12345
+py-spy dump --pid 12345
 ```
 
 - `--subprocesses`: include child Python processes.
@@ -92,7 +105,7 @@ Do not promise zero perturbation or change machine security policy to attach. Re
 
 When Python profiles cannot explain CPU time, correlate native stacks with CPU utilization, context switches, page faults, I/O and throttling. Check symbols/child coverage before interpreting missing frames. Trace lock/pool/queue waits; do not classify every wall-time gap as network I/O.
 
-On supported Linux architectures/builds, CPython 3.12+ exposes Python functions to `perf`. Check `sysconfig.get_config_var("HAVE_PERF_TRAMPOLINE")` and unwinding requirements. Follow the [official walkthrough](https://docs.python.org/3.14/howto/perf_profiling.html) for frame pointers, DWARF and alternative support modes. Use `-X perf` only diagnostically, with bounded sampling and existing permissions; rebenchmark uninstrumented.
+On supported Linux architectures/builds, CPython 3.12+ exposes Python functions to `perf`. Check `sysconfig.get_config_var("HAVE_PERF_TRAMPOLINE")` and unwinding requirements. Follow the [official walkthrough](https://docs.python.org/3.15/howto/perf_profiling.html) for frame pointers, DWARF and alternative support modes. Use `-X perf` only diagnostically, with bounded sampling and existing permissions; rebenchmark uninstrumented.
 
 ## Investigate lines and memory
 
@@ -114,6 +127,31 @@ Use `--native` for native frames; ordinary mode still captures native allocation
 Read Memray's default flame graph as allocations live at recorded heap peak. Treat its leak view as allocations still allocated at tracking end, including intentional retention. Choose temporary-allocation/temporal views for those distinct questions. [Report modes](https://bloomberg.github.io/memray/flamegraph.html)
 
 Report allocation volume, peak live heap, retained heap and RSS separately. RSS may lag frees through allocator retention, differ through shared/swapped pages, or rise only upon touching lazily allocated pages. An RSS plateau alone does not prove a Python-object leak. [Memory overview](https://bloomberg.github.io/memray/memory.html)
+
+## Diagnose a slow test suite
+
+Read the project's test command, `addopts`, enabled plugins and CI invocation.
+Record collected/executed test IDs and passed/failed/skipped counts before changing
+runner settings. Use `pytest --trace-config` to inspect active plugins; inspect
+`--durations=20` for setup/call/teardown costs, then `--collect-only` and
+`--setup-show` for the implicated imports and fixtures. The top 20 durations do
+not account for every test, and parallel worker durations do not sum to wall time.
+[pytest commands](https://docs.pytest.org/en/stable/how-to/usage.html),
+[plugin discovery](https://docs.pytest.org/en/stable/how-to/plugins.html)
+
+For attribution, append `-n 0` **only if pytest-xdist is installed**; otherwise
+the flag is invalid. Measure the normal parallel invocation separately, because
+serial profiling removes contention and scheduling effects. Profile one specific
+slow test or fixture after locating it, including subprocesses when they do the
+work. [xdist controls](https://pytest-xdist.readthedocs.io/en/stable/distribution.html)
+
+Compare coverage-enabled and disabled runs only to quantify diagnostic overhead;
+use pytest-cov's `--no-cov` when available. Preserve required CI coverage and tests.
+Do not infer a universal coverage tax, discard every first run, weaken password
+hashing globally, or widen mutable fixture scope without checking isolation.
+Report cold and warm behavior appropriate to the real invocation; remeasure each
+accepted change and confirm the same required checks execute.
+[pytest-cov options](https://pytest-cov.readthedocs.io/en/latest/config.html)
 
 ## Turn evidence into a hypothesis
 
