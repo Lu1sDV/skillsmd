@@ -3,7 +3,9 @@
 A self-contained skill for choosing Python concurrency mechanisms and making
 worker ownership, bounded admission, failure, cancellation, and shutdown explicit.
 It covers threads/processes/executors, asyncio structured lifetime, and CPython
-3.14 free-threading and interpreter semantics without requiring sibling skills.
+3.15 free-threading and interpreter semantics without requiring sibling skills.
+The baseline is **CPython 3.15.2**, the latest stable release verified on
+**2026-11-03**. Refresh that fact against Python.org before a later revision.
 
 ## Install
 
@@ -24,7 +26,7 @@ instructions, not runtime dependencies; no package or framework is installed.
 - "Review this TaskGroup for cancellation, partial effects, and worker cleanup."
 - "Bound this queue without leaving an unbounded backlog of waiting tasks."
 - "Explain why cancelling to_thread did not stop my blocking operation."
-- "Make this worker pool portable to Python 3.14 forkserver and interpreter isolation."
+- "Make this worker pool portable to current forkserver and interpreter isolation."
 
 ## Reference index
 
@@ -32,8 +34,8 @@ instructions, not runtime dependencies; no package or framework is installed.
 |---|---|
 | [SKILL.md](SKILL.md) | Mechanism routing, contract workflow, high-risk pitfalls, completion evidence |
 | [Execution and coordination](references/execution-and-coordination.md) | Threads, synchronization, bounded queues, rate limiting, executors, process ownership/smoke recipe, deadlock diagnosis |
-| [Async lifecycle](references/asyncio-lifecycle.md) | TaskGroup failure, deadlines, cancellation, backpressure, queue accounting, thread bridging, shutdown |
-| [Runtime versions](references/runtime-versions.md) | Version gates, GIL probes, free-threaded builds, start methods, 3.14 interpreters/context flags |
+| [Async lifecycle](references/asyncio-lifecycle.md) | Task/stream ownership, cancellation, backpressure, thread bridging, AnyIO/Trio boundaries, diagnostics |
+| [Runtime versions](references/runtime-versions.md) | 3.15 baseline, GIL/build probes, start methods, interpreter transfers, context flags and migration notes |
 
 ## Runnable examples and limits
 
@@ -51,12 +53,13 @@ python3 -m doctest python-concurrency/references/*.md
 
 These commands are verification instructions, not a claim of passing checks.
 Run in an ordinary Python process, not an already-running notebook event loop.
-All `pycon` fences are dependency-free and use Python 3.11+ except the explicitly
-guarded interpreter check, which executes only on CPython 3.14+. The examples
+All `pycon` fences use the CPython 3.15 baseline and no third-party dependencies.
+The interpreter check runs only on CPython. The examples
 exercise sibling failure/cleanup, zero-budget cancellation cleanup,
 queue ordering/accounting/backpressure and error paths,
 thread invariant protection, monotonic rate-limit boundaries, and the continued
-lifetime of a thread after its asyncio awaiter is cancelled. They use local
+lifetime of a thread after its asyncio awaiter is cancelled, and deterministic
+async-generator closure on early exit. They use local
 primitives and bounded work, not a network service or arbitrary sleeps.
 
 Thread/queue five-second deadlines are watchdogs, not latency assertions.
@@ -82,12 +85,13 @@ startup/shutdown timeout. The recipe checks empty/successful mapping and worker
 exception propagation; it does not benchmark speedup or all shutdown failures.
 
 The [runtime reference](references/runtime-versions.md) also has an optional
-`InterpreterPoolExecutor` recipe requiring CPython 3.14+, separately from its
+`InterpreterPoolExecutor` recipe targeting CPython 3.15, separately from its
 guarded direct-interpreter doctest. A normal GIL-enabled run does not validate a
 free-threaded deployment, extension compatibility, native thread safety, or
 multi-core gains. Re-run the relevant checks on the actual build/dependencies.
 Multiprocessing is unavailable on Android/iOS/WASI; interpreter/executor APIs
-are unavailable on WASI. Preserve a consuming project's supported version floor.
+are unavailable on WASI. An older consuming project's support floor remains a
+compatibility constraint, not this skill's default baseline.
 
 ## Source map and decisions
 
@@ -132,7 +136,8 @@ meaningful TaskGroup behavior instead.
    the source's nonexistent `.run()`. Interpreters need threads for parallelism,
    compatible extensions, and explicit destruction. They are not a security
    sandbox for the source's proposed untrusted-code use case.
-   The isolated CPython 3.14.8 smoke exposed `prepare_main(list)` rejection:
+   The isolated CPython 3.14.8 smoke exposed `prepare_main(list)` rejection,
+   reproduced on CPython 3.15.2 during the 2026-11-03 refresh:
    it requires shareable values, unlike `call`'s broader transfer support.
    The corrected example explicitly transfers JSON text and verifies that
    mutation of the decoded list does not alter the caller's original.
@@ -149,3 +154,24 @@ Sensitive claims were checked against the Python documentation linked beside
 each reference. Those links are supporting sources, not dependencies required
 to use the installed skill. The original upstream MIT license is preserved
 verbatim in [LICENSE.upstream](LICENSE.upstream).
+
+### Community curation, 2026-11-03
+
+The supplied candidate list is a discovery aid, not a verdict. The following
+sources were inspected directly; their ideas were rewritten and checked against
+the current primary contracts linked in the references. These mutable links are
+retrieval provenance, not immutable commit pins. The original suite coverage and
+examples remain intact.
+
+| Inspected source | Integration decision |
+|---|---|
+| [nathan-gage async practices](https://github.com/nathan-gage/python-skills/blob/main/skills/python-async-best-practices/SKILL.md), including its generator-cleanup and cancellation rules | Add owned generator closure, weak task references and cancellation-result classification; keep strong references separate from failure observation. |
+| [agentmemoir subprocess/concurrency](https://github.com/agentmemoir/skills/blob/main/skills/code/python-subprocess-and-concurrency/SKILL.md) | Add current executor defaults and broken-pool recovery policy. Correct the claim that usable CPU count necessarily captures every container quota; do not copy its whole-process-tree kill guarantee. |
+| [Trio/AnyIO migrator](https://github.com/MuhammadHusnainAli/vector-agentic-skills/blob/main/skills/programming/python/python-trio-anyio-migrator/SKILL.md) | Add a compact cancellation/ownership comparison. Keep migration conditional on actual portability/runtime needs; no AST rewriter or API catalogue. |
+| [bellanda AnyIO concurrency](https://github.com/bellanda/agents-template/blob/main/.claude/skills/anyio-concurrency/SKILL.md) | Adapt capacity-limiter and stream-end ownership. Reject blanket mandates to replace asyncio or ban gather; existing contracts determine the choice. |
+
+Validate new runtime observations before generalizing them. The entrypoint stays
+focused on choosing a model and proving ownership; external-command lifecycle
+details live in **python-stdlib**, framework request-loop rules in **python-system-design**,
+and performance claims require measurement. No universal speedup, worker count,
+mandatory third-party runtime or copied “best practice” checklist is added.
