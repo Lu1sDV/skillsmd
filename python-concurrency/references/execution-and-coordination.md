@@ -39,6 +39,13 @@ been yielded; process-pool `chunksize` additionally controls batching. It is not
 a byte limit or a limit on results the caller chooses to accumulate. For older
 supported runtimes, use a bounded submission window or explicit work queue.
 
+A manual submission window also needs a final drain after its input is exhausted.
+Otherwise a short input can leave every result, including failures, unobserved;
+executor context-manager exit waits but does not retrieve those results. Specify
+what happens on input failure, job failure, or early consumer exit: stop admission,
+cancel work that has not started where appropriate, and let the owner observe
+remaining outcomes under the chosen failure policy.
+
 ### Size the pool against its real bottleneck
 
 The current defaults are starting points, not throughput targets:
@@ -84,6 +91,13 @@ Daemon workers may stop without resource cleanup. Use `try/finally` to signal a
 stop event even when the owning scope fails, and make blocking operations
 interruptible with their own API deadlines. Python does not provide a safe
 general-purpose way to forcibly stop a running thread.
+
+`Thread.join(timeout=...)` returns `None` both on completion and on timeout; check
+`is_alive()` afterward before reporting shutdown complete or releasing resources
+that the worker still uses. A persistent worker polling `Queue.get(timeout=...)`
+to recheck a stop flag must handle the expected `queue.Empty` wakeup. Do not apply
+that retry rule to a watchdog whose timeout deliberately means the operation
+failed. State whether shutdown drains accepted work or abandons the backlog.
 
 ### A lock protects a multi-field transaction
 
@@ -243,7 +257,9 @@ fairness/starvation policy and tests simply because reads are frequent.
   according to ownership. Inspect process exit codes and worker errors.
 - Forced process termination can skip `finally`, lose effects, or corrupt queues
   and leave locks held. Escalation is not graceful cancellation. Python 3.14's
-  pool `terminate_workers()` / `kill_workers()` act on the entire pool.
+  pool `terminate_workers()` / `kill_workers()` act on the entire pool. After
+  escalating an owned raw `Process` to `kill()` or `terminate()`, still join/reap
+  it and inspect its exit status; sending the stop request is not completion.
 
 ### Optional real-process smoke recipe
 
@@ -291,10 +307,20 @@ lock held across a callback or I/O; process join versus undrained queue. Collect
 thread stacks with `faulthandler`, name tasks/threads, and inspect queue depth
 and unfinished work. Do not hide a cycle by adding sleeps or more workers.
 
+Use non-terminating diagnostics by default: `faulthandler.dump_traceback()` or
+an application-owned `dump_traceback_later(..., exit=False)` watchdog. Keep its
+output descriptor open and cancel the watchdog when that diagnostic scope ends.
+Do not overwrite an application's existing process-wide watchdog from a helper.
+`exit=True` calls `_exit(1)` after the dump, skipping normal cleanup; `SIGABRT`
+is also a fatal signal, not a passive stack request. Use such escalation only
+when intentionally terminating the process. Treat dumps and profiler locals as
+potentially sensitive evidence, with an explicit collection and retention scope.
+
 ## First-party contracts
 
 - [Threading: locks, conditions, events, and shutdown](https://docs.python.org/3.15/library/threading.html)
 - [Thread-safe queues and task accounting](https://docs.python.org/3.15/library/queue.html)
+- [Fault-handler watchdogs, descriptor lifetime, and immediate exit](https://docs.python.org/3.15/library/faulthandler.html#dumping-the-tracebacks-after-a-timeout)
 - [Executors: map buffering, errors, cancellation, and deadlocks](https://docs.python.org/3.15/library/concurrent.futures.html)
 - [Usable logical CPUs and CPU-count overrides](https://docs.python.org/3.15/library/os.html#os.process_cpu_count)
 - [Multiprocessing: contexts, IPC, shared state, and programming guidelines](https://docs.python.org/3.15/library/multiprocessing.html)
