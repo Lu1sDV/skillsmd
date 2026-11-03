@@ -279,7 +279,7 @@ with four references. The additions are API evolution, checker operations, and
 deployment/operations. Each bundle's README records what was adopted, corrected,
 declined and verified, without importing framework scaffolds or duplicate guides.
 
-Standalone copies passed **171 API and 15 system doctest checks** on CPython
+Standalone copies passed **178 API and 15 system doctest checks** on CPython
 3.15.2. The default-migration example also passed focused positive/negative mypy
 2.4.1 checks. These results do not establish live broker, database-server,
 container, framework or generated-client behavior. A scoped
