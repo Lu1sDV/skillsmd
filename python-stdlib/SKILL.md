@@ -16,9 +16,11 @@ description: >
 | Paths, text encoding, copying/deleting files, archives, UTC and durations | [Files and time](references/files-time.md) |
 | JSON/CSV/TOML, Unicode regex, text transformations and diffs | [Serialization and text](references/serialization-text.md) |
 | Dataclasses/enums, resource lifetimes, logging, environment and child processes | [Records and processes](references/records-processes.md) |
+| Runtime migration, removed APIs or missing stdlib modules | [Runtime compatibility](references/runtime-compatibility.md) |
 
 Load only the relevant reference. Each is bundled locally; sibling skills are
-optional. Runnable examples use Python 3.11+; newer APIs have explicit gates.
+optional. Target **CPython 3.15.2** (stable baseline checked 2026-11-03); recheck
+Python.org on a future refresh. Older project support is a separate constraint.
 
 ## Workflow
 
