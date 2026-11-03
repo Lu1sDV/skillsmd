@@ -73,7 +73,11 @@ owns schema changes and verify recovery before destructive contraction.
 Create clients/pools and telemetry in the process that owns them; do not inherit
 open database connections or background exporter threads across a worker fork.
 Keep import-time registration required by a framework explicit and eager even
-when the application uses optional lazy imports. For worker telemetry, use the
+when the application uses optional lazy imports. Audit `.pth` and 3.15 `.start`
+startup hooks in the *installed* runtime; distinguish their interpreter-wide
+side effects from a framework's deliberate worker initialization. See
+[Startup hooks](packages-boundaries.md#startup-hooks-and-lockfile-interchange).
+For worker telemetry, use the
 framework's documented process initialization hooks.
 
 Define trusted proxy peers/networks and the actual forwarding topology. Ignore

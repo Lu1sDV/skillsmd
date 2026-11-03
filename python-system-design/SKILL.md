@@ -3,7 +3,8 @@ name: python-system-design
 description: >
   Use when structuring Python packages or modular monoliths, choosing Django,
   Flask, FastAPI, WSGI or ASGI, or designing durable jobs, database transaction
-  ownership, startup configuration, secrets, containers and operational boundaries.
+  ownership, startup configuration/hooks, secrets, containers and operational
+  boundaries.
 ---
 
 # Python System Design
@@ -12,7 +13,7 @@ description: >
 
 | Decision | Default and reference |
 |---|---|
-| Package layout, dependency direction, installation or service split | Keep a cohesive package/modular monolith; test the installed wheel. [Packages and boundaries](references/packages-boundaries.md) |
+| Package layout, dependency direction, installation/startup hooks or service split | Keep a cohesive package/modular monolith; test the installed wheel. [Packages and boundaries](references/packages-boundaries.md) |
 | Framework/runtime, resource lifetime or background work | Reuse the supported framework; choose task lifetime before tooling. [Web and jobs](references/web-jobs.md) |
 | Transactions, configuration or trust boundaries | One transaction owner per use case; parse settings at startup. [Persistence and configuration](references/persistence-config.md) |
 | Container builds, health, shutdown or telemetry | Verify the deployed artifact and its failure behavior. [Deployment and operations](references/deployment-operations.md) |
@@ -59,6 +60,9 @@ external sources and sibling skills are not installation prerequisites.
 - **Worker processes multiply resources.** Budget pools across replicas and
   workers. ASGI neither makes blocking drivers nonblocking nor guarantees CPU
   parallelism; match the server, middleware and drivers to the execution model.
+- **Site startup can execute code.** Installed `.start` hooks (3.15+) and
+  executable `.pth` lines can run during interpreter initialization; audit the
+  actual environment before treating a plain import or scanner as inert.
 - **Types are not trust-boundary validation.** Validate and authorize requests,
   settings, broker messages and remote responses. Do not use `assert` for
   production validation, accept untrusted pickle or leak secrets through logs.

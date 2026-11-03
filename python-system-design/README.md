@@ -28,7 +28,7 @@ server. Optional handoffs name other skills only when installed.
 - “Choose WSGI or ASGI for our existing drivers, middleware and streaming requirements.”
 - “Decide which after-response tasks need a durable queue and an idempotency contract.”
 - “Fix this unit of work so a later database failure rolls back the earlier writes.”
-- “Review startup configuration, secret handling and installed-wheel test boundaries.”
+- “Review startup configuration, `.pth`/`.start` hooks, secret handling and installed-wheel test boundaries.”
 - “Check this uv workspace and container build for undeclared dependencies and missing artifacts.”
 - “Design readiness, shutdown and bounded telemetry for this web/worker deployment.”
 
@@ -37,7 +37,7 @@ server. Optional handoffs name other skills only when installed.
 | File | Scope |
 |---|---|
 | [SKILL.md](SKILL.md) | Quick routing, workflow, high-risk gotchas and completion/evidence contract |
-| [Packages and boundaries](references/packages-boundaries.md) | Import contracts, package/workspace choices, metadata/groups/backends, artifacts, namespace packages and service extraction |
+| [Packages and boundaries](references/packages-boundaries.md) | Import contracts, package/workspace choices, metadata/groups/backends, `.pth`/`.start` startup execution, lockfile interchange, artifacts and service extraction |
 | [Web and jobs](references/web-jobs.md) | Frameworks, WSGI/ASGI, resource lifetime, transient/durable jobs, outbox, retry budgets and Celery broker/pool qualifications |
 | [Persistence and configuration](references/persistence-config.md) | Transaction/savepoint ownership, database waiting, migrations, SQLite rollback, settings sources and trust boundaries |
 | [Deployment and operations](references/deployment-operations.md) | Container install boundaries, release/process lifecycle, probes/drain, bounded metrics, trace propagation and deployed-artifact evidence |
@@ -161,3 +161,21 @@ FastAPI, SQLAlchemy 2.x, PostgreSQL, Docker, Kubernetes, OpenTelemetry and the q
 maintainers. These sources qualify/correct
 upstream teaching examples; they are not execution evidence for this bundle.
 Upstream material is MIT-licensed; retain the exact [LICENSE.upstream](LICENSE.upstream).
+
+### Modern-Python startup and reproducibility refresh (2026-11-03)
+
+The supplied modern-Python review identified a useful missing deployment
+boundary: Python 3.15 `.start` startup entry points, their interaction with
+deprecated executable `.pth` lines, and import-time behavior before a command
+even runs. The new [startup section](references/packages-boundaries.md#startup-hooks-and-lockfile-interchange)
+covers actual environment inspection, matching-file handling and safe scope
+limits; it does not prescribe importing untrusted packages for a scan.
+
+The same section distinguishes uv's native `uv.lock` from the standardized
+PEP 751 `pylock.toml` interchange format; `--locked` from `--frozen`;
+development groups from published extras; and preview CycloneDX export from
+a mature universal SBOM requirement. These were checked against
+[site](https://docs.python.org/3.15/library/site.html),
+[PyPA PEP 751](https://peps.python.org/pep-0751/) and
+[uv documentation](https://docs.astral.sh/uv/concepts/projects/sync/).
+No tool migration is required merely by installing this skill.
