@@ -249,9 +249,88 @@ Unique examples were moved intact; only the duplicate mutable-default example an
 generic return-42 TaskGroup example were removed. Descriptions retain the repository's
 required `Use when` opening rather than adopting the guide's third-person preference.
 
+### Stable Python baseline and community curation
+
+The 2026-11-03 revision targets **CPython 3.15**, with **3.15.2** verified as the
+latest final release on the [Python release page](https://www.python.org/downloads/release/python-3152/).
+It covers `python-idiomatic`, `python-tdd`, `python-concurrency`, `python-stdlib`,
+`python-performance`, and `python-algorithms`. Use the current stable baseline for
+new examples; preserve an existing application's declared compatibility contract
+when applying the guidance. At the next refresh, verify the latest final release
+and its versioned documentation before changing the baseline.
+
+The supplied community audit served as a candidate list. Selected source files
+were read and their useful claims checked against primary documentation and
+focused runtime evidence. Each bundle's README or source reference records the
+consulted sources and adoption decisions; mutable source URLs are not presented
+as verified commit pins. Existing upstream attribution is retained.
+
+| Skill | Selected improvements |
+|---|---|
+| [python-idiomatic](python-idiomatic/) | Unicode comparison contracts, iterator consumption, exception lifetime, import effects, linter enforcement, and relevant 3.15 changes |
+| [python-tdd](python-tdd/) | Falsifiable properties and counterexample triage, false-green checks, scoped mutation, measured flake diagnosis, and real transaction effects |
+| [python-concurrency](python-concurrency/) | Owned async-generator cleanup, task/cancellation state, bounded executors, AnyIO/Trio distinctions, and current interpreter/build contracts |
+| [python-stdlib](python-stdlib/) | Runtime removals, civil-time boundaries, temporary publication, CSV distinctions, SQLite ownership, and subprocess lifecycle |
+| [python-performance](python-performance/) | Profile interpretation, bounded capture, A/A calibration, representative comparisons, test-suite diagnosis, and non-heap resource leaks |
+| [python-algorithms](python-algorithms/) | DP cache/state budgets, bounded bitset reachability, 0–1 BFS, ordered-query choices, string-search selection, and streaming top-k |
+
+Retain language/library requirements as requirements. Express workload-dependent
+guidance as a decision with preconditions and a check. Treat style and tool choices
+as repository conventions unless a concrete correctness consequence applies.
+This excludes blanket bans on valid constructs, universal library migrations,
+fixed profiler-overhead percentages and machine-independent iteration budgets.
+
+The six entrypoints remain **70–83 lines**, with **3,126 body words combined**
+(2,946 before this revision). Detailed guidance lives in **30 directly routed
+references**. Two new references cover stdlib runtime migration and string search/
+selection; the original seventeen algorithm families remain represented.
+
 ### Python suite verification
 
-Verified on 2026-10-23 with CPython 3.14.8 after the concision review:
+#### 2026-11-03 community curation
+
+Executed on **CPython 3.15.2**, ordinary GIL-enabled Linux x86-64:
+
+| Bundle | Passing executable documentation examples |
+|---|---:|
+| python-idiomatic | 92 |
+| python-tdd | 40 |
+| python-concurrency | 52 |
+| python-stdlib | 121 |
+| python-algorithms | 279 |
+| **Total** | **584** |
+
+- Ran the examples from isolated copies of the bundles. All six bundles passed
+  the skill-creator validator, repository frontmatter conventions, the five
+  deterministic skill-smell checks and local file/anchor checks. Existing
+  upstream notices were verified unchanged.
+- Eight complete pytest/Hypothesis recipe tests and one contradictory-assumption
+  control passed with **pytest 9.2.0** and **Hypothesis 6.170.14**. The threshold
+  mutation failed at its intended assertion; restoring it passed all 17 checks.
+- Algorithm implementations matched independent bounded oracles in **9,814
+  comparisons**: subset sums, 0–1 shortest paths, streaming top-k and running
+  medians. This verifies the exercised input domain, not arbitrary inputs.
+- The performance environment helper and tracing/sampling command-line interfaces
+  passed their focused checks. These checks do not establish an optimization gain.
+- Spawn process-pool and interpreter-executor smoke checks passed. The explicit
+  forkserver smoke was blocked by sandbox permissions for its AF_UNIX listener;
+  it is not recorded as passing. Windows, free-threaded execution, optional
+  framework/numerical stacks and production profiling were not runtime-validated.
+- Version-sensitive examples include actual DST gap/fold/day-length cases,
+  SQLite rollback/closing and async-generator closure. The interpreter-transfer
+  reference records a documentation/runtime discrepancy observed on this exact
+  build instead of promising an unverified transfer contract.
+- Three fresh-context exercises used the revised skills: Unicode adjacent-run
+  grouping with test-first evidence (**18 tests**), owned async-generator cleanup
+  and civil-day intervals (**31 tests**), and streaming top-k with independent
+  oracles and a fair comparison (**11 test methods**). The performance exercise
+  rejected unmatched timings and reported workload-specific regressions instead
+  of claiming a universal speedup. Temporary exercise implementations remain
+  outside the skill bundles.
+
+#### Earlier concision review
+
+Verified on 2026-10-23 with CPython 3.14.8:
 
 - Two independent final reviews covered all seven bundles; no actionable findings
   remain. All entrypoints passed YAML and the five static skill-smell checks.
