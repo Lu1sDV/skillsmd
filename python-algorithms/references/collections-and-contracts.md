@@ -24,6 +24,7 @@ bounded-cost element operations, not a Python-language performance guarantee.
 | Queue, both-ended worklist | `collections.deque` | O(1) endpoint operations, middle indexing O(n); `maxlen` silently evicts from opposite end on append |
 | Repeated minimum, top-k | `heapq` on a list | `heapify` O(n); push/pop O(log n) heap adjustments (list growth amortized); root O(1); arbitrary search/delete O(n) |
 | Sorted range boundaries | Sorted list + `bisect` | O(log n) comparisons for search, O(n) insertion; sort first |
+| Mutable sorted-key rank/range queries | Sorted list + `bisect` for modest updates; justified ordered index otherwise | `dict` preserves insertion order, not sorted-key order; stdlib has no general balanced ordered map |
 | Reorderable eviction cache | `OrderedDict` | `move_to_end`, `popitem(last=False)`; use `lru_cache` for bounded pure-function memoization instead |
 | Text | `str` | Immutable code-point sequence; slices/builds allocate; use `''.join(parts)` for predictable linear assembly in total output length |
 
@@ -39,6 +40,15 @@ Tuple/list choices are about the contract, not “heterogeneous vs homogeneous�
 requirements. `dict.popitem()` is LIFO, not arbitrary, on the targeted versions;
 set pop is arbitrary. `d.keys()/items()/values()` are live views, not snapshots.
 Avoid changing a container's size while traversing it.
+
+Choose keys that retain exactly the information the future computation needs.
+`frozenset` discards order **and multiplicity**: it is invalid for ordered paths
+or multisets. A tuple of counts or sorted `(value, count)` pairs may encode a
+multiset instead. Equal numeric keys such as `True`, `1` and `1.0` can share an
+entry; tag types when the domain must distinguish them. Hashing/equality must
+remain stable while a key is stored; immutability of the outer tuple alone is
+insufficient. Never persist `hash(str_or_bytes)` as a stable identifier.
+[Hash/equality semantics](https://docs.python.org/3.15/reference/datamodel.html#object.__hash__)
 
 ## Copies, aliasing, duplicates and empty inputs
 
@@ -95,10 +105,10 @@ special cases for k≤1 or k≥u, and O(u log u) for all results.
 
 ## Heaps: ordering is a contract
 
-Python 3.11 examples use a min-heap; negate numeric priorities for a max-heap.
-Public `_max` APIs exist starting in Python 3.14, so “Python only has min-heaps”
-is no longer generally true. Do not negate arbitrary records. Ties need a unique
-counter before a nonorderable payload.
+Use min-heap APIs for smallest-first work and public `heapify_max`, `heappush_max`
+and `heappop_max` for largest-first work on the 3.15 baseline. The max-heap APIs
+were added in 3.14; negation is an older-runtime numeric technique, not a general
+record-ordering policy. Ties need a unique counter before a nonorderable payload.
 
 ```pycon
 >>> import heapq
@@ -127,6 +137,13 @@ state for k active streams, not an arbitrary-input sort. Top-k selection is
 usually O(n log k) for small positive k; k=1 and k near n take different paths.
 For kth-largest, require `1 <= k <= n`; the root of a size-k min-heap is the kth
 largest including duplicates, not the kth distinct value.
+
+For updated priorities, invalidate an old entry and push a new one, pruning
+stale entries on pop. Track live identity/version separately from priority and
+budget physical stale storage; compact when it would otherwise grow without
+bound. Use the stdlib priority-queue recipe as the starting contract, not an
+assumption that arbitrary deletion is O(log n).
+[Priority-queue notes](https://docs.python.org/3.15/library/heapq.html#priority-queue-implementation-notes)
 
 ## Custom linked lists: identity, not value equality
 
@@ -243,7 +260,7 @@ iterator consumption. `groupby` groups adjacent equal keys only; sort by the
 same key first when global grouping is needed. Combinatorial iterators pool
 finite input and still produce combinatorial output; `cycle` retains seen items.
 
-Semantics: [built-in types](https://docs.python.org/3.11/library/stdtypes.html),
-[collections](https://docs.python.org/3.11/library/collections.html),
-[heapq](https://docs.python.org/3/library/heapq.html),
-[sorting](https://docs.python.org/3.11/howto/sorting.html).
+Semantics: [built-in types](https://docs.python.org/3.15/library/stdtypes.html),
+[collections](https://docs.python.org/3.15/library/collections.html),
+[heapq](https://docs.python.org/3.15/library/heapq.html),
+[sorting](https://docs.python.org/3.15/howto/sorting.html).
