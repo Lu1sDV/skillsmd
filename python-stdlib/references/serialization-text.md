@@ -87,6 +87,17 @@ newlines: quoted fields can contain both. Check headers, duplicate column names,
 missing and surplus fields before assigning domain meaning. `DictReader` does not
 make those decisions for you. Check input size and `csv.field_size_limit` as needed.
 
+Declare the delimiter/dialect with the producer; `Sniffer` is only a heuristic.
+If UTF-8 input permits a BOM, `encoding="utf-8-sig"` removes the initial signature
+and also reads ordinary UTF-8. Choose BOM emission for the receiving system's
+contract, not for every CSV file. Preserve leading zeros as text at the schema
+boundary; quoting alone does not control a spreadsheet's type inference.
+
+Default `csv.reader` maps quoted and unquoted empty fields to the same empty
+string. Use `QUOTE_NOTNULL` only when both sides agree to distinguish an unquoted
+empty field (`None`) from a quoted empty string. A normal terminal newline is not
+an extra record; blindly stripping input can destroy significant content.
+
 CSV quoting is not protection against spreadsheet formula execution. If the
 consumer is a spreadsheet, define an explicit formula-cell policy; do not silently
 rewrite values in a generic interchange file.
@@ -101,6 +112,11 @@ rewrite values in a generic interchange file.
 >>> _ = stream.seek(0)
 >>> rows = list(csv.DictReader(stream))
 >>> assert rows == [{"name": "Lee, Ada", "note": "line one\nline two"}]
+>>> assert list(csv.reader(StringIO('a,,""\n'))) == [["a", "", ""]]
+>>> assert list(csv.reader(StringIO('a,,""\n'), quoting=csv.QUOTE_NOTNULL)) == [["a", None, ""]]
+>>> assert list(csv.reader(StringIO("a,b\n"))) == [["a", "b"]]
+>>> assert list(csv.reader(StringIO("a,b\n\n"))) == [["a", "b"], []]
+>>> assert b"\xef\xbb\xbfname,id\n".decode("utf-8-sig").startswith("name,")
 
 ```
 
@@ -130,6 +146,12 @@ pickle does not normally serialize lambdas or nested functions by value; functio
 are referenced by importable qualified names. Compatibility depends on available
 classes/modules and protocol versions. Never replace a validation failure with
 unpickling as a fallback.
+
+`shelve` uses pickle by default and inherits that trust requirement. Its writeback
+cache can retain every accessed value and increase close-time work; concurrent
+read/write use is unsupported. `dbm` is backend-dependent key/value storage, not
+a portable replacement for SQLite transactions; inspect the selected backend and
+its file format before moving databases between environments.
 
 ## Regex and ordinary text
 
@@ -172,10 +194,13 @@ not edit-distance guarantees, identity checks, or safe automatic identifier repa
 
 ## Authorities
 
-[JSON defaults and compliance](https://docs.python.org/3.14/library/json.html#standard-compliance-and-interoperability),
-[pickle security and supported objects](https://docs.python.org/3.14/library/pickle.html),
-[csv](https://docs.python.org/3.14/library/csv.html),
-[tomllib](https://docs.python.org/3.14/library/tomllib.html),
-[re](https://docs.python.org/3.14/library/re.html),
-[textwrap](https://docs.python.org/3.14/library/textwrap.html),
-[difflib](https://docs.python.org/3.14/library/difflib.html).
+[JSON defaults and compliance](https://docs.python.org/3.15/library/json.html#standard-compliance-and-interoperability),
+[pickle security and supported objects](https://docs.python.org/3.15/library/pickle.html),
+[csv](https://docs.python.org/3.15/library/csv.html),
+[UTF-8 signature codec](https://docs.python.org/3.15/library/codecs.html#module-encodings.utf_8_sig),
+[shelve](https://docs.python.org/3.15/library/shelve.html),
+[dbm](https://docs.python.org/3.15/library/dbm.html),
+[tomllib](https://docs.python.org/3.15/library/tomllib.html),
+[re](https://docs.python.org/3.15/library/re.html),
+[textwrap](https://docs.python.org/3.15/library/textwrap.html),
+[difflib](https://docs.python.org/3.15/library/difflib.html).
