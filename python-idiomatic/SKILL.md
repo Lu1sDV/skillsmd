@@ -9,6 +9,10 @@ description: >
 
 # Python Idiomatic
 
+Target Python **3.15**, checked against **3.15.2 on 2026-11-03**. Recheck the
+stable release when updating this guide; preserve an existing project's explicit
+compatibility contract when applying it.
+
 ## Route by symptom
 
 | Task | Load |
@@ -35,8 +39,10 @@ are separate tasks.
    observable contracts, not cosmetic choices.
 4. Update affected callers together. For multi-file work, track pending, complete
    and blocked changes/checks.
-5. Select checks under repository policy: repeated calls, passed empty containers,
-   alias independence, one-shot streams, malformed input and cleanup on failure
+5. Separate observable defects from style preferences; explain a concrete failure
+   or cite the repository rule. Select checks under repository policy: repeated
+   calls, passed empty containers, alias independence, one-shot streams,
+   malformed input and cleanup on failure
    as relevant. Preserve the supported runtime instead of adopting local syntax
    or replacing tools by habit.
 
@@ -55,8 +61,8 @@ are separate tasks.
 - Context-manager exit behavior is resource-specific. Decorators must preserve
   arguments, results, exceptions and sync/async/generator execution models.
 - Check [version gates](references/workflow-versions.md#version-gates-preserve-the-declared-minimum)
-  before adopting syntax or introspection changes. Bundle examples target Python
-  3.11+ and stdlib only; newer features are labelled recipes, not baseline checks.
+  before changing imports, encodings or introspection. The guide and stdlib
+  examples target Python 3.15; third-party tools need separate compatibility checks.
 
 ## Completion and evidence
 

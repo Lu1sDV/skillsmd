@@ -10,6 +10,10 @@
 
 ## Keep version, build, and active mode separate
 
+Baseline: **CPython 3.15.2**, verified against Python.org on **2026-11-03**.
+Use current stable documentation at refresh time; version introduction dates below
+are migration information, not a recommendation to target an older release.
+
 | Version | Relevant change | Do not infer |
 |---|---|---|
 | 3.9 | `asyncio.to_thread()` | Cancelling its awaiter stops a running thread |
@@ -19,10 +23,12 @@
 | 3.14 | Free threading officially supported but optional; Python-level multiple-interpreter APIs; `InterpreterPoolExecutor` | Ordinary CPython becomes free-threaded by default |
 | 3.14 | `Thread(context=...)`, context inheritance flags, `Executor.map(buffersize=...)` | All builds share context defaults or an executor submission bound |
 | 3.14 | Multiprocessing defaults change away from fork; pool terminate/kill helpers | Fork is still the default on Linux, or forced termination runs cleanup |
+| 3.15 | `sys.abi_info.free_threaded` exposes build capability | Build capability means the GIL is currently disabled |
+| 3.15 | TaskGroup can re-raise a body `GeneratorExit` when no child has a reportable error | Every base exception has the same grouping policy |
+| 3.15.1 | Spawn fallback when forkserver has no writable temporary directory | The default start method is identical on every deployment |
 
-Preserve the consuming project's supported versions. Examples in the other
-references use Python 3.11+; the interpreter example below is guarded and executes
-only on CPython 3.14+. These APIs may be unavailable on restricted
+These examples target the stable baseline. Preserve an existing consuming
+project's support policy when applying them. These APIs may be unavailable on restricted
 platforms: multiprocessing is unavailable on Android/iOS/WASI, and the documented
 interpreter/executor APIs are unavailable on WASI.
 
@@ -33,6 +39,8 @@ from experimental to officially supported, **still optional**, status. A `t`
 suffix is a common executable naming convention, not a reliable feature probe.
 
 - `sysconfig.get_config_var("Py_GIL_DISABLED") == 1` detects build support.
+- On the 3.15 baseline, prefer public `sys.abi_info.free_threaded` for that build
+  capability; the sysconfig query remains useful on older CPython versions.
 - CPython's `sys._is_gil_enabled()` (3.13+) reports current GIL state.
 - A free-threaded build can run with the GIL enabled through `PYTHON_GIL` or
   `-X gil`. Importing an extension that is not marked free-threading-compatible
@@ -41,13 +49,12 @@ suffix is a common executable naming convention, not a reliable feature probe.
   Python implementation provides it. Do not use a version string to conclude
   the active runtime has no GIL.
 
-This Python 3.11+-compatible probe has no fixed version/build-dependent output.
+This 3.15 probe has no fixed build-dependent output.
 An absent GIL probe means unknown here, not disabled.
 
 ```pycon
 >>> import sys
->>> import sysconfig
->>> supports_free_threading = sysconfig.get_config_var("Py_GIL_DISABLED") == 1
+>>> supports_free_threading = sys.abi_info.free_threaded
 >>> probe = getattr(sys, "_is_gil_enabled", None)
 >>> gil_enabled = probe() if probe is not None else None
 >>> assert isinstance(supports_free_threading, bool)
@@ -71,10 +78,10 @@ alone does not demonstrate that the application's dependencies support it.
 ## Multiprocessing defaults: inspect rather than assume
 
 - Windows uses **spawn**. macOS has used **spawn** by default since Python 3.8.
-- Python 3.14 uses **forkserver** on supported non-macOS POSIX platforms such as
-  Linux; **fork is no longer the default on any platform**. Python 3.14.9 adds a
-  documented fallback to spawn if no writable temporary directory is available.
-  Earlier 3.14 patch releases can instead fail to start the fork server there.
+- Python 3.14+ uses **forkserver** on supported non-macOS POSIX platforms such as
+  Linux; **fork is no longer the default on any platform**. Python 3.15.1 adds a
+  documented fallback to spawn if no writable temporary directory is available
+  (also backported to 3.14.9). Earlier patches can fail to start forkserver there.
 - Earlier common Linux/POSIX Python releases defaulted to fork. Spawn/forkserver
   therefore expose hidden assumptions about inherited globals and non-picklable
   worker functions during upgrades, not only on Windows.
@@ -99,12 +106,13 @@ copied, often with pickle; supported immutable objects can be transferred more
 efficiently. Dedicated cross-interpreter queues and supported shared buffers
 have explicit sharing contracts and still need synchronization/lifetime design.
 
-Transfer support is API-specific. On CPython 3.14.8, `prepare_main` requires
-shareable values and rejects a list with `NotShareableError`; do not infer that
-it has the same pickle fallback as `call` or `InterpreterPoolExecutor`. Pass
-supported immutable values, or explicitly encode a trusted message as below.
-Check the deployed runtime rather than relying on a newer documentation page's
-general statement that most objects are copied with pickle.
+Transfer support is API-specific. The `/3.15/` documentation describes copying
+most `prepare_main` values via pickle, but the tested CPython **3.15.2** Linux build
+still raises `NotShareableError` for `prepare_main(items=[1, 2])` (2026-11-03).
+The explicit JSON-text transfer and `call(sum, [4, 5])` below both pass on that
+build. Keep this distinction until a deployed-runtime probe establishes broader
+support; a documentation statement does not change an installed API's behavior.
+Encoding trusted message data also makes the schema and copy boundary visible.
 
 Creating an interpreter alone provides **no concurrency**. `Interpreter.exec()`
 and `Interpreter.call()` run in the current OS thread and block until complete.
@@ -113,14 +121,14 @@ The upstream `.run(...)` examples are replaced with the actual 3.14 `.exec(...)`
 and `.call(...)` API. Close owned interpreters in `finally`, after any work using
 them has finished; do not depend on finalizers.
 
-This guarded check exercises explicit JSON message transfer, retained interpreter
-state, returned values, and deterministic destruction on CPython 3.14+. It creates
+This check exercises explicit JSON message transfer, retained interpreter
+state, returned values, and deterministic destruction on CPython 3.15. It creates
 no child process and does not demonstrate multi-core speedup. The caller's list
 remains unchanged after the receiving interpreter mutates its decoded copy.
 
 ```pycon
 >>> import sys
->>> if sys.implementation.name == "cpython" and sys.version_info >= (3, 14):
+>>> if sys.implementation.name == "cpython":
 ...     from concurrent import interpreters
 ...     import json
 ...     original = [1, 2]
@@ -143,7 +151,7 @@ small explicit messages. Initializers/imports run separately in each interpreter
 Check every relevant extension's multi-interpreter support, separately from its
 free-threading support. These are different compatibility obligations.
 
-Optional Python 3.14+ recipe, **not included in doctest execution**:
+Optional CPython 3.15 recipe, **not included in doctest execution**:
 
 ```python
 from concurrent.futures import InterpreterPoolExecutor
@@ -180,15 +188,23 @@ Thread default. Direct `run_in_executor()` calls do not automatically provide
 the same copy behavior. Request context is not shared mutable application state
 and not a guarantee of durable background work.
 
+The asyncio policy system was deprecated in 3.14 and is scheduled for removal in
+**3.16**, not 3.15. Select a loop through `asyncio.run(..., loop_factory=...)` or
+`Runner(loop_factory=...)` when the application needs a custom implementation;
+preserve a host framework's loop ownership.
+
 ## First-party contracts
 
-- [Python free-threading how-to: build/state probes, thread safety, contexts, limitations](https://docs.python.org/3.14/howto/free-threading-python.html)
-- [3.14 free threading is supported but optional](https://docs.python.org/3.14/whatsnew/3.14.html#free-threaded-python-is-officially-supported)
-- [Multiprocessing contexts/start methods and patch-level changes](https://docs.python.org/3.14/library/multiprocessing.html#contexts-and-start-methods)
-- [Interpreter isolation, calls, queues, and security warning](https://docs.python.org/3.14/library/concurrent.interpreters.html)
-- [InterpreterPoolExecutor and map buffering](https://docs.python.org/3.14/library/concurrent.futures.html#interpreterpoolexecutor)
-- [Thread context argument and defaults](https://docs.python.org/3.14/library/threading.html#threading.Thread)
-- [Context entry restriction](https://docs.python.org/3.14/library/contextvars.html#contextvars.Context)
+- [Python free-threading how-to: build/state probes, thread safety, contexts, limitations](https://docs.python.org/3.15/howto/free-threading-python.html)
+- [Python 3.15 ABI build information](https://docs.python.org/3.15/library/sys.html#sys.abi_info)
+- [3.14 free threading is supported but optional](https://docs.python.org/3.15/whatsnew/3.14.html#free-threaded-python-is-officially-supported)
+- [Multiprocessing contexts/start methods and patch-level changes](https://docs.python.org/3.15/library/multiprocessing.html#contexts-and-start-methods)
+- [Interpreter isolation, calls, queues, and security warning](https://docs.python.org/3.15/library/concurrent.interpreters.html)
+- [InterpreterPoolExecutor and map buffering](https://docs.python.org/3.15/library/concurrent.futures.html#interpreterpoolexecutor)
+- [Thread context argument and defaults](https://docs.python.org/3.15/library/threading.html#threading.Thread)
+- [Context entry restriction](https://docs.python.org/3.15/library/contextvars.html#contextvars.Context)
+- [Asyncio policy deprecation and loop factories](https://docs.python.org/3.15/library/asyncio-policy.html)
+- [Current stable release](https://www.python.org/downloads/release/python-3152/)
 
-The `/3.14/` documentation tracks patch releases. Apply the actual deployed
+The `/3.15/` documentation tracks patch releases. Apply the actual deployed
 patch's behavior; reading newer docs does not upgrade a runtime.

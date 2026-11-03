@@ -1,6 +1,7 @@
 # python-idiomatic
 
-Task-oriented Python language semantics, readable iteration, decorators,
+Python **3.15** language semantics (stable **3.15.2**, checked **2026-11-03**),
+readable iteration, decorators,
 exceptions/resource ownership, imports, and day-to-day tooling. Self-contained:
 no sibling skill installation or upstream checkout is needed to use it.
 
@@ -20,7 +21,7 @@ cp -r python-idiomatic ~/.claude/skills/
 - “Review this generator pipeline for exhaustion and resource lifetime bugs.”
 - “Make this decorator preserve arguments, results, metadata, and exceptions.”
 - “Fix this import cycle without adding a module cache or sys.path hack.”
-- “Check these Python 3.14 examples against our Python 3.10 minimum.”
+- “Review our Python 3.15 migration for deferred imports and Unicode assumptions.”
 
 ## Reference index
 
@@ -40,15 +41,17 @@ From this bundle directory:
 python3 -m doctest references/*.md
 ```
 
-`pycon` examples are standard-library-only, deterministic, and intended for Python
-3.11+. They include assertions/expected outcomes for aliasing, empty arguments,
+`pycon` examples are standard-library-only, deterministic, and target Python
+3.15. They include assertions/expected outcomes for aliasing, empty arguments,
 iterator exhaustion/misalignment, rejected values, and cleanup after failure.
-No checks were run during authoring; integrated validation is owned by the parent.
+On 2026-11-03, all **92 doctest checks passed** on CPython **3.15.2**,
+GIL-enabled Linux x86_64. This includes the new sentinel, Unicode, iterator
+consumption and exception-binding examples.
 The command tests examples, not every prose claim, every supported Python version,
 OS behavior, free-threaded build, optional tool, or real application integration.
 Shell/tool recipes need their named environment/tools and are not doctests.
-Python 3.11–3.14 features are explicitly gated; no newer syntax is parsed by the
-3.11 examples. Remote process debugging requires platform/permission support and
+Migration-sensitive 3.12–3.15 features are explicitly gated; new work uses 3.15
+while an existing consumer’s explicit compatibility floor remains a constraint. Remote process debugging requires platform/permission support and
 authorized targets. No network, filesystem fixture, third-party package, or
 special runtime is required by the doctests.
 
@@ -106,3 +109,32 @@ MIT notice is retained verbatim in [LICENSE.upstream](LICENSE.upstream).
 References include first-party Python documentation links for semantic and
 version-sensitive details; links are supporting citations, not required reading
 or network dependencies at skill use time.
+
+
+### Community curation, 2026-11-03
+
+The supplied list is a discovery aid. The following community files were read;
+ideas were rewritten against the first-party sources linked beside the guidance,
+not imported wholesale. These links identify the reviewed locations, not immutable
+commit pins. The original StructWeave notice above remains intact.
+
+| Reviewed source | Decision and boundary |
+|---|---|
+| [narenaryan: Unicode](https://github.com/narenaryan/agent-skills/blob/main/skills/python/python-unicode-gotchas/SKILL.md) | Adapt canonical/caseless matching and regex classes. Correct claims that casefold leaves `ß`/`ss` or `ﬁ`/`fi` unequal; normalization alone does not count graphemes. Treat UTF-8 as the 3.15 default with an explicit opt-out, not an unconditional process invariant. |
+| [mathias-mrsn: iterators](https://github.com/mathias-mrsn/skills/blob/HEAD/skills/technical/python/python-iterators-generators/SKILL.md) | Add consumed lookahead, skipped `islice` values, the rejected `takewhile` element, and the eager leftmost generator iterable. Keep bounded executable examples; omit the general generator-scheduler catalogue. |
+| [claude-dev-suite: review](https://github.com/claude-dev-suite/claude-dev-suite/blob/HEAD/skills/review/python/SKILL.md) | Inspect actual tool configuration and review semantic gaps. Reject the inference that no explicit `from` loses all exception context, or that a clean linter certifies dynamic behavior. |
+| [acolomba: Google-style review](https://github.com/acolomba/blackvuesync/blob/HEAD/skills/python-google-style-review/SKILL.md) | Adapt narrow justified suppressions and definition-time defaults. Keep `staticmethod`, relative imports and cycle severity as contextual choices; do not copy that repository’s bans or tool stack. |
+
+Additional suggestions were checked directly against Python/Ruff documentation:
+`except ... as` target deletion, exception type versus cause, `add_note` hygiene,
+parent-package initialization, TC004, and the F811 dummy-variable exception.
+Existing correct `groupby` guidance stays conditional: sorting changes run-based
+semantics and is appropriate only for global grouping. The 3.15 review also adds
+lazy-import timing, the named sentinel, and frozen-mapping boundaries because
+these change decisions already within this skill’s scope. TypeIs and free-threading
+remain short version gates or handoffs, not duplicated typing/concurrency guides.
+
+Requirements describe observable behavior; recommendations state their conditions.
+No fixed JIT gains, universal string-concatenation cost, mandatory formatter change,
+or complete historical feature table was accepted. Recheck the stable release
+and affected tool behavior when updating this bundle.

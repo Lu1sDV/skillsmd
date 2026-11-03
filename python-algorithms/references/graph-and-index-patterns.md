@@ -4,9 +4,11 @@
 
 - [10. BFS / DFS](#10-bfs--dfs)
 - [Grids, trees and cloning](#grids-trees-and-cloning)
+- [0–1 weighted shortest paths](#01-weighted-shortest-paths)
 - [14. Topological sort](#14-topological-sort)
 - [15. Union-find / disjoint sets](#15-union-find--disjoint-sets)
 - [16. Trie / prefix tree](#16-trie--prefix-tree)
+- [Dynamic range and rank queries](#dynamic-range-and-rank-queries)
 
 Choose representation and direction first. Examples use adjacency lists indexed
 by integer vertices `0..V-1`; invalid negative IDs must not become valid Python
@@ -113,6 +115,61 @@ graph contract.
   edges; equal node values do not imply equal node identities. O(V+E) total
   time/output storage plus O(V) map/queue state; payload deep-copy policy is
   separate from cloning topology.
+
+### 0–1 weighted shortest paths
+
+For edges whose weights are **only 0 or 1**, use a deque with relaxation: push
+zero-cost improvements to the front and unit-cost improvements to the back.
+First discovery is not necessarily optimal, so the unweighted visited-on-enqueue
+rule cannot be reused. Store the proposed distance with each queue entry and
+discard stale entries; strict improvement also terminates zero-cost cycles.
+
+```pycon
+>>> from collections import deque
+>>> def zero_one_distances(graph, start):
+...     n = len(graph)
+...     if type(start) is not int or not 0 <= start < n:
+...         raise ValueError('invalid source')
+...     for edges in graph:
+...         for neighbor, weight in edges:
+...             if type(neighbor) is not int or not 0 <= neighbor < n:
+...                 raise ValueError('invalid vertex')
+...             if type(weight) is not int or weight not in (0, 1):
+...                 raise ValueError('weights must be 0 or 1')
+...     distance = [None] * n
+...     distance[start] = 0
+...     pending = deque([(start, 0)])
+...     while pending:
+...         vertex, current = pending.popleft()
+...         if distance[vertex] != current:
+...             continue
+...         for neighbor, weight in graph[vertex]:
+...             candidate = current + weight
+...             if distance[neighbor] is None or candidate < distance[neighbor]:
+...                 distance[neighbor] = candidate
+...                 entry = (neighbor, candidate)
+...                 if weight == 0:
+...                     pending.appendleft(entry)
+...                 else:
+...                     pending.append(entry)
+...     return distance
+>>> graph = [[(1, 1), (2, 0)], [], [(1, 0)], []]
+>>> assert zero_one_distances(graph, 0) == [0, 0, 0, None]
+>>> assert zero_one_distances([[(0, 0)]], 0) == [0]
+>>> zero_one_distances([[(0, 2)]], 0)
+Traceback (most recent call last):
+...
+ValueError: weights must be 0 or 1
+
+```
+
+Among current entries the deque processes the smallest tentative distance first;
+new distances differ by at most one. Thus a processed nonstale distance is final,
+as in Dijkstra, while deque operations replace heap operations. Total O(V+E)
+time including validation, with O(V+E) conservative auxiliary/output storage.
+The adjacency sequences must be reusable, not exhausted edge generators.
+Compare with a simple shortest-path oracle on small graphs, including zero-cost
+cycles, parallel edges and unreachable vertices.
 
 ## 14. Topological sort
 
@@ -233,6 +290,10 @@ Kruskal sorts weighted undirected edges, accepts only successful unions and
 requires V−1 accepted edges for a connected spanning tree; otherwise it yields
 a spanning forest, not a complete MST. Edge sorting usually dominates.
 
+If adapting to union by **rank**, rank is a balancing upper bound, not the current
+height after path compression; do not recompute it downward during compression.
+Do not mix rank and component-size semantics when answering size queries.
+
 ## 16. Trie / prefix tree
 
 A terminal marker distinguishes complete words from prefixes; store it separately
@@ -295,5 +356,29 @@ explicitly and sort if deterministic order matters. Maximum word length bounds
 path depth; trie pruning helps in practice but does not remove worst-case
 exponential path enumeration.
 
-First-party container semantics: [deque](https://docs.python.org/3.11/library/collections.html#collections.deque),
-[hashable objects](https://docs.python.org/3.11/glossary.html#term-hashable).
+## Dynamic range and rank queries
+
+Choose from the actual update/query mix; offline sorting plus a sweep can avoid
+an online tree entirely. A stdlib sorted list and `bisect` is a useful fallback
+for modest update volume, with O(log n) boundary search but O(n) insertion/deletion.
+An insertion-ordered `dict` is not a sorted-key rank index.
+
+| Required operations | Candidate and invariant |
+|---|---|
+| Static range sums | Prefix sums; mutations invalidate the snapshot |
+| Point additions and prefix/range sums on indexed keys | Fenwick tree; O(log n) updates/prefix queries, O(n) storage; subtract prefixes for ranges |
+| Associative range aggregates such as min/max/gcd | Segment tree; define combine operation and identity, preserve operand order when noncommutative |
+| Range updates as well as queries | A compatible lazy-propagation scheme; prove how tags compose and update aggregates |
+| Dynamic rank / kth by occurrence | Coordinate-compressed frequency tree when keys are known; counts stay nonnegative for prefix-order selection |
+
+Compression preserves key order, not numeric distance; record the sorted key map
+and budget its build cost. New keys outside a fixed compression need rebuilding
+or an appropriate dynamic ordered structure. Do not claim a generic Fenwick tree
+handles arbitrary min/max updates: such variants require additional restrictions.
+Prefer an established dependency when its supported operations and measured scale
+justify it; no library is mandated by this guide.
+[Fenwick's original structure](https://doi.org/10.1002/spe.4380240306),
+[bisect costs](https://docs.python.org/3.15/library/bisect.html#performance-notes)
+
+First-party container semantics: [deque](https://docs.python.org/3.15/library/collections.html#collections.deque),
+[hashable objects](https://docs.python.org/3.15/glossary.html#term-hashable).

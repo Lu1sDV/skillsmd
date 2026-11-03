@@ -33,11 +33,32 @@ timeout stops waiting, **not the work**. `Future.cancel()` cannot cancel an
 already-running call. `shutdown(cancel_futures=True)` cancels work that has not
 started, not running work; a context manager waits for its workers.
 
-Bounded worker count does not bound submissions. On 3.11–3.13, use a bounded
-submission window or explicit bounded work queue for large input. Python 3.14
-adds `map(..., buffersize=N)` to bound submitted work whose results have not
+Bounded worker count does not bound submissions. Use `map(..., buffersize=N)`
+(introduced in 3.14) to bound submitted work whose results have not
 been yielded; process-pool `chunksize` additionally controls batching. It is not
-a byte limit or a limit on results the caller chooses to accumulate.
+a byte limit or a limit on results the caller chooses to accumulate. For older
+supported runtimes, use a bounded submission window or explicit work queue.
+
+### Size the pool against its real bottleneck
+
+The current defaults are starting points, not throughput targets:
+
+| Executor | Default `max_workers` | Additional constraint |
+|---|---|---|
+| `ThreadPoolExecutor` | `min(32, (os.process_cpu_count() or 1) + 4)` | Match downstream connection limits and memory; CPU count does not model I/O latency. |
+| `ProcessPoolExecutor` | `os.process_cpu_count()` with implementation fallback when unknown | Windows permits at most 61 workers. |
+| `InterpreterPoolExecutor` | Inherits the thread-pool default | Measure interpreter initialization and serialization; do not assume the default is right for CPU work. |
+
+`os.process_cpu_count()` reports usable logical CPUs for the calling thread and
+can reflect affinity or an explicit Python CPU-count override. It does **not**
+promise to model every container CPU-time quota. Include deployment limits,
+resident memory, native-library threads and external quotas in sizing; bound
+outstanding work separately.
+
+Distinguish a job exception from `BrokenExecutor` and its pool-specific subclasses.
+A broken pool is unusable: stop submissions, observe outstanding futures and
+dispose of it. Recreate at the owning boundary only under a deliberate recovery
+policy; replaying jobs with unknown side effects is not automatically safe.
 
 ## Thread ownership and synchronization
 
@@ -153,7 +174,7 @@ process serialization, use a value/tag sentinel, not `object()` identity.
 If arbitrary consumers can die while production continues, combine bounded
 put/get deadlines with supervision; `queue.join()` cannot diagnose dead workers.
 Python 3.13+ queue shutdown is an alternative to sentinels, not a requirement
-for these Python 3.11-compatible examples.
+for the sentinel-based protocol above.
 
 ### Time-based limiting is different from a semaphore
 
@@ -230,7 +251,7 @@ fairness/starvation policy and tests simply because reads are frequent.
 `/tmp/python-concurrency-process-smoke.py` in a normal writable environment.
 Run `python3 /tmp/python-concurrency-process-smoke.py spawn`; on a host supporting
 forkserver, also run `python3 /tmp/python-concurrency-process-smoke.py forkserver`.
-It requires Python 3.11+, local process creation, and an importable script path.
+It targets CPython 3.15, local process creation, and an importable script path.
 A surrounding CI/process timeout should also cover startup and shutdown; the
 future timeout alone does not bound executor context-manager shutdown.
 
@@ -272,8 +293,9 @@ and unfinished work. Do not hide a cycle by adding sleeps or more workers.
 
 ## First-party contracts
 
-- [Threading: locks, conditions, events, and shutdown](https://docs.python.org/3.14/library/threading.html)
-- [Thread-safe queues and task accounting](https://docs.python.org/3.14/library/queue.html)
-- [Executors: map buffering, errors, cancellation, and deadlocks](https://docs.python.org/3.14/library/concurrent.futures.html)
-- [Multiprocessing: contexts, IPC, shared state, and programming guidelines](https://docs.python.org/3.14/library/multiprocessing.html)
-- [GIL mutation FAQ](https://docs.python.org/3.14/faq/library.html#what-kinds-of-global-value-mutation-are-thread-safe) describes CPython details, not a portable application transaction guarantee.
+- [Threading: locks, conditions, events, and shutdown](https://docs.python.org/3.15/library/threading.html)
+- [Thread-safe queues and task accounting](https://docs.python.org/3.15/library/queue.html)
+- [Executors: map buffering, errors, cancellation, and deadlocks](https://docs.python.org/3.15/library/concurrent.futures.html)
+- [Usable logical CPUs and CPU-count overrides](https://docs.python.org/3.15/library/os.html#os.process_cpu_count)
+- [Multiprocessing: contexts, IPC, shared state, and programming guidelines](https://docs.python.org/3.15/library/multiprocessing.html)
+- [GIL mutation FAQ](https://docs.python.org/3.15/faq/library.html#what-kinds-of-global-value-mutation-are-thread-safe) describes CPython details, not a portable application transaction guarantee.

@@ -37,8 +37,10 @@ Packaging, `src` layout, build backends, entry points, and deployment are option
 
 ## Imports are executable code
 
-An import executes module top-level code on initial load and caches the module
-in `sys.modules`. Avoid network calls, file writes, CLI parsing, and expensive
+An eager import executes module top-level code on initial load and caches the
+module in `sys.modules`. Importing a submodule also initializes its parent
+packages; inspect their `__init__.py` reexports when an apparently small import
+pulls in a large dependency graph. Avoid network calls, file writes, CLI parsing, and expensive
 setup on import. Guard script execution with `if __name__ == '__main__':` and use
 `python -m package.module` when package-relative imports matter. Do not name your
 file `json.py`, `typing.py`, or another dependency's module name. Inspect
@@ -50,13 +52,24 @@ local imports according to existing tooling, and avoid `sys.path` hacks.
 binds the current object; later rebinding `module.name` doesn't update that local
 binding. Imported mutable objects can still be shared.
 
-For a cycle, inspect the dependency graph and move genuinely shared definitions
+Treat a cycle as an architectural investigation, not proof of a runtime bug.
+Identify the partially initialized names or initialization effects before reporting
+impact. Inspect the dependency graph and move genuinely shared definitions
 to an appropriate lower-level module, or move orchestration out of mutually
 importing models. A function-local import can defer a genuinely optional/expensive
 dependency; ordinary import caching already exists, so do not build a second
 module-global cache. Defer only for a reason: failures otherwise move from startup
 to an arbitrary later call. `TYPE_CHECKING` imports are absent at runtime;
 quoted/deferred annotations can still fail when introspection resolves them.
+Ruff `TC004` detects some runtime uses hidden in `TYPE_CHECKING`; a clean lint
+run does not establish that a framework can resolve annotations dynamically.
+
+On 3.15, `lazy import` / `lazy from` defer module loading until first use. They
+are module-scope constructs, disallowed inside functions/classes and
+`try`/`except`/`finally` blocks. Failures move to first use and registration side
+effects may not run at startup. Use laziness only after checking those contracts;
+keep eager guarded imports for optional-dependency detection. Module `__getattr__`
+(PEP 562) can serve deliberate lazy public exports, but is not a blanket cycle fix.
 
 ## Formatting and static analysis
 
@@ -64,8 +77,10 @@ Reuse repository tools and pinned versions. Ruff covers many lint and import
 sorting rules, not every Pylint/Flake8 plugin or type check. Choose one formatter
 (Ruff format or Black) rather than alternating both. Ruff's `I` rules can replace
 isort for supported configurations; retain isort where the project requires it.
-Mypy/Pyright check static contracts, not runtime input validity. Set their Python
-target to the minimum supported version rather than the newest local Python.
+Mypy/Pyright check static contracts, not runtime input validity. Align interpreter,
+`requires-python`, formatter/linter targets, type checker and CI. For new code
+under this guide use 3.15; for an existing compatibility contract, target its
+declared minimum and confirm the pinned tools support that target.
 
 Recipes, requiring the named tools already installed in the selected environment:
 
@@ -76,9 +91,19 @@ python -m mypy src/
 ```
 
 Use `--fix`/format-writing commands only when intended, and inspect semantic
-changes rather than treating tool suggestions as authority. Never disable broad
-rule sets merely to hide a specific bug. Testing frameworks, fixtures, coverage,
-and test CI are optional **python-tdd** handoffs.
+changes rather than treating tool suggestions as authority. Review what the
+configured tools cannot establish: ownership, error policy, input-domain intent,
+side effects and lifetime. Prefer a code-specific suppression plus a reason that
+holds for that line; do not disable broad rule sets to hide a specific bug.
+
+When changing enforcement, inspect effective settings and probe the actual
+command in a disposable checkout with one intentional violation in the relevant
+path. Confirm it is detected, then restore it and rerun. Ruff `F811` ignores
+names matching `lint.dummy-variable-rgx`, so a permissive pattern can hide unused
+redefinitions; rule selection alone is insufficient evidence. Keep ordinary
+review focused on consequences, not blanket bans on `staticmethod`, relative
+imports, comprehensions, or other valid constructs. Testing frameworks, fixtures,
+coverage, and test CI are optional **python-tdd** handoffs.
 
 ## Debug and measure the actual workload
 
@@ -100,22 +125,35 @@ and test CI are optional **python-tdd** handoffs.
 
 ## Version gates: preserve the declared minimum
 
-| Feature | Minimum / caveat |
-|---|---|
-| f-strings | 3.6; debug `f'{value=}'` is 3.8 |
-| positional-only `/`, walrus `:=` | 3.8 |
-| built-in generic annotations, dict `|`, `functools.cache` | 3.9 |
-| `match`, union `X | Y` annotations, strict zip, dataclass slots | 3.10 |
-| `ExceptionGroup`, `except*`, `contextlib.chdir` | 3.11 |
-| quote reuse/backslashes/comments in f-string expressions; type parameter/`type` alias syntax | 3.12 |
-| `copy.replace` | 3.13; named tuples, dataclasses, or `__replace__` protocol, not every object |
-| t-strings, deferred annotations, bracketless multi-exception handlers | 3.14 |
+Baseline: **Python 3.15.2**, stable release verified on **2026-11-03**. Recheck
+[Python releases](https://www.python.org/downloads/) when refreshing this bundle;
+use versioned stable docs, not development docs or accepted PEPs as release proof.
+The table explains relevant migration boundaries, not a requirement to use every
+new feature or widen this bundle into a historical feature catalogue.
 
-The doctests in this bundle target Python 3.11+; newer features below are
-prose, not executable examples. Plain `f"{'hello'}"` already works before 3.12;
+| Feature | Introduced / caveat |
+|---|---|
+| quote reuse/backslashes/comments in f-string expressions; type parameter/`type` alias syntax | 3.12 |
+| `copy.replace`; `typing.TypeIs` | 3.13; replace supports named tuples, dataclasses, or `__replace__`, not every object; TypeIs requires a truthful predicate |
+| t-strings, deferred annotations, bracketless multi-exception handlers | 3.14 |
+| UTF-8 mode by default (PEP 686) | 3.15; can be disabled with `-X utf8=0` / `PYTHONUTF8=0` |
+| Explicit lazy imports; unpacking in comprehensions | 3.15; new syntax needs parser/tool support |
+| `sentinel`, `frozendict` built-ins | 3.15; distinct sentinel identity; frozen mappings are not deeply immutable |
+
+The doctests and recipes target Python 3.15. Plain `f"{'hello'}"` already works before 3.12;
 it is reusing the enclosing quote style, backslashes, and related grammar
 restrictions that changed. Avoid newer syntax in code that must parse on older
 interpreters; a runtime `if` cannot protect unsupported syntax from parsing.
+
+Choose explicit file/protocol encodings even with 3.15's UTF-8 default: legacy
+data may use another encoding and the process can opt out. `encoding="locale"`
+is an explicit locale contract, not UTF-8. Normalization changes text semantics
+independently of encoding; consult [Language semantics](language-semantics.md).
+
+Use `frozendict` when immutable mapping structure is the contract; nested values
+can remain mutable, and hashing requires hashable keys and values. It is not a
+`dict` subclass. Accept `collections.abc.Mapping` when the consumer only needs
+the mapping interface, without broadening a deliberately narrower public API.
 
 In 3.14, t-strings return `string.templatelib.Template`, not `str`. Interpolated
 expressions still execute immediately; a template is not automatically SQL-safe
@@ -137,9 +175,14 @@ reasoning; they do not make compound shared-state operations safe. Hand off to
 **python-concurrency**. Compression APIs (including 3.14 Zstandard and build
 availability) belong to **python-stdlib**.
 
-Sources: [venv](https://docs.python.org/3.14/library/venv.html),
-[imports](https://docs.python.org/3.14/reference/import.html),
-[Python 3.12 changes](https://docs.python.org/3.14/whatsnew/3.12.html),
-[Python 3.14 changes](https://docs.python.org/3.14/whatsnew/3.14.html),
-[pdb](https://docs.python.org/3.14/library/pdb.html),
-[profiling](https://docs.python.org/3.14/library/profile.html).
+Sources: [venv](https://docs.python.org/3.15/library/venv.html),
+[imports](https://docs.python.org/3.15/reference/import.html),
+[lazy imports](https://docs.python.org/3.15/reference/simple_stmts.html#lazy-imports),
+[module attribute hooks](https://docs.python.org/3.15/reference/datamodel.html#customizing-module-attribute-access),
+[Python 3.15 changes](https://docs.python.org/3.15/whatsnew/3.15.html),
+[TypeIs](https://docs.python.org/3.15/library/typing.html#typing.TypeIs),
+[frozendict](https://docs.python.org/3.15/builtins/stdtypes.html#frozendict),
+[pdb](https://docs.python.org/3.15/library/pdb.html),
+[profiling](https://docs.python.org/3.15/library/profiling.html),
+[Ruff F811](https://docs.astral.sh/ruff/rules/redefined-while-unused/),
+[Ruff TC004](https://docs.astral.sh/ruff/rules/runtime-import-in-type-checking-block/).

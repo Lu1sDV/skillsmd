@@ -9,6 +9,9 @@ description: >
 
 # Python TDD
 
+Target Python **3.15**, checked against **3.15.2 on 2026-11-03**. Use compatible
+project-pinned runners/plugins; preserve explicit consumer compatibility constraints.
+
 ## Route by decision
 
 | Need | Default / reference |
@@ -28,7 +31,8 @@ description: >
    accepted/rejected inputs, zero/one/many, threshold neighbors, repeated transitions,
    and failure-state preservation as relevant. For multi-consumer changes, track
    each affected path as pending, checked, or blocked.
-3. **Red.** Add a named test through production behavior. Run the focused selector
+3. **Red.** Add a named test through production behavior. Choose inputs that make
+   the defect and correct behavior observably different. Run the focused selector
    and inspect the assertion/promised-exception failure. Setup/import errors and
    zero selected tests are not behavioral red; after creating a missing API,
    establish a behavioral failure. Respect supplied failure evidence rather than
@@ -67,5 +71,5 @@ coverage/mutation scores are signals, not proof.
 This bundle works alone. Optional handoffs: **test-engineering** for system-wide
 strategy, **python-concurrency** for runtime synchronization/cancellation design,
 and **python-api-design** for approved interface redesign. Dependency-free examples
-target Python 3.11+; framework recipes require the project's compatible dependencies.
+target Python 3.15; framework recipes require the project's compatible dependencies.
 See [README](README.md) for commands/decisions and the [upstream license](LICENSE.upstream).

@@ -1,5 +1,14 @@
 # Algorithms and Python
 
+## Contents
+
+- [Reduce work](#reduce-work)
+- [Match structure to access](#match-structure-to-access)
+- [Preserve index semantics](#preserve-index-semantics)
+- [Control construction and iteration](#control-construction-and-iteration)
+- [Avoid repeated parsing and logging](#avoid-repeated-parsing-and-logging)
+- [Keep micro-optimizations conditional](#keep-micro-optimizations-conditional)
+
 ## Reduce work
 
 Measure scaling with input size, distribution, skew and output cardinality. Count
@@ -12,6 +21,9 @@ the numerical domain.
 For a fixed sequential workload, bound a candidate with Amdahl's law:
 `speedup = 1 / ((1 - f) + f / s)` for affected fraction `f` and local speedup `s`.
 Reassess the model for queueing, saturation or changed workload sizes.
+Even eliminating a fraction `f < 1` entirely gives at most `1 / (1 - f)` speedup
+under that model. Use nonoverlapping time attributable to the actual objective;
+CPU sample share is not automatically a request-latency fraction.
 
 ## Match structure to access
 
@@ -25,11 +37,11 @@ Reassess the model for queueing, saturation or changed workload sizes.
 | Expensive ordering keys | `sorted(..., key=...)` | One key evaluation per item; preserve stability and mutation rules |
 | Homogeneous numbers | `array.array` or existing numerical arrays | Range, precision, byte width, conversion and downstream work |
 
-Sources: [CPython dictionaries](https://docs.python.org/3.14/faq/design.html#how-are-dictionaries-implemented-in-cpython),
-[deque](https://docs.python.org/3.14/library/collections.html#collections.deque),
-[heapq](https://docs.python.org/3.14/library/heapq.html),
-[bisect](https://docs.python.org/3.14/library/bisect.html#performance-notes),
-[sorting](https://docs.python.org/3.14/howto/sorting.html).
+Sources: [CPython dictionaries](https://docs.python.org/3.15/faq/design.html#how-are-dictionaries-implemented-in-cpython),
+[deque](https://docs.python.org/3.15/library/collections.html#collections.deque),
+[heapq](https://docs.python.org/3.15/library/heapq.html),
+[bisect](https://docs.python.org/3.15/library/bisect.html#performance-notes),
+[sorting](https://docs.python.org/3.15/howto/sorting.html).
 
 ## Preserve index semantics
 
@@ -48,7 +60,7 @@ aliasing and cost. Maintain/rebuild indexes after mutation. Test duplicates, mis
 keys, empty inputs, ordering and realistic distributions. Include construction unless
 application reuse justifies a separate measurement. Eager indexing can expose errors
 in records a short-circuiting scan never reads; preserve required error timing.
-[Dictionary behavior](https://docs.python.org/3.14/library/stdtypes.html#mapping-types-dict).
+[Dictionary behavior](https://docs.python.org/3.15/library/stdtypes.html#mapping-types-dict-frozendict).
 
 ## Control construction and iteration
 
@@ -58,11 +70,11 @@ in records a short-circuiting scan never reads; preserve required error timing.
 - Consider `chain.from_iterable` for incremental flattening; avoid
   `sum(list_of_lists, [])` and repeated growing concatenation. Use `itertools.batched`
   (3.12+) with measured, bounded batches. `tee` buffers consumer lag; `product` pools
-  inputs. Iterator APIs do not guarantee bounded memory. [itertools](https://docs.python.org/3.14/library/itertools.html)
+  inputs. Iterator APIs do not guarantee bounded memory. [itertools](https://docs.python.org/3.15/library/itertools.html)
 - For text, evaluate `str.join`/`io.StringIO`; for bytes, `bytes.join`, `bytearray`
   or a buffered sink. Stream when consumer semantics permit. Final joins still
   allocate the result; interpreter concatenation optimizations are not portable
-  guarantees. [Sequences](https://docs.python.org/3.14/library/stdtypes.html#common-sequence-operations)
+  guarantees. [Sequences](https://docs.python.org/3.15/library/stdtypes.html#common-sequence-operations)
 - Prefer suitable reductions/library algorithms that remove Python work. A built-in
   need not be implemented in C or beat a better algorithm.
 
@@ -75,7 +87,7 @@ Cache only stable results with ownership/invalidation rules.
 Use equivalent literal operations for literal matching. Account for `re`'s recent
 pattern cache before claiming explicit compilation helps. Test long inputs and near
 misses for backtracking; atomic groups/possessive quantifiers (3.11+) can change
-matches. [re](https://docs.python.org/3.14/library/re.html)
+matches. [re](https://docs.python.org/3.15/library/re.html)
 
 Defer log formatting; guard expensive argument construction:
 
@@ -86,8 +98,8 @@ if logger.isEnabledFor(logging.DEBUG):
 
 F-strings and argument expressions execute before level filtering. For slow handlers,
 evaluate queueing with capacity/shutdown policies; preserve required operational
-records. [Logging optimization](https://docs.python.org/3.14/howto/logging.html#optimization),
-[blocking handlers](https://docs.python.org/3.14/howto/logging-cookbook.html#dealing-with-handlers-that-block).
+records. [Logging optimization](https://docs.python.org/3.15/howto/logging.html#optimization),
+[blocking handlers](https://docs.python.org/3.15/howto/logging-cookbook.html#dealing-with-handlers-that-block).
 
 ## Keep micro-optimizations conditional
 
@@ -95,4 +107,4 @@ Measure `map(lambda ...)`, local aliases, inlining, list preallocation and
 exceptions-versus-checks on the actual hot path. Specialization, callable type,
 distribution and warm-up affect results; require material benefit over readable code.
 `python -O` removes assertions and changes `__debug__`; do not change correctness
-through a benchmark-only mode. [CLI](https://docs.python.org/3.14/using/cmdline.html#cmdoption-O)
+through a benchmark-only mode. [CLI](https://docs.python.org/3.15/using/cmdline.html#cmdoption-O)

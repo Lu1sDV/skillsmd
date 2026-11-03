@@ -28,6 +28,20 @@ paths, check the intended exception and whether a file, row, or in-memory state
 was left unchanged. Do not assume strings should be ASCII-only, or SQL injection
 is prevented by removing words: test the actual specified boundary instead.
 
+Check for false green before adding more cases:
+
+| Weak observation | Strengthen it with |
+|---|---|
+| Correct shape, nonempty output, or no exception | A contract-derived value and the required state/error effect |
+| Equal fixture values make the right and wrong field/path indistinguishable | Distinct values; for a path argument, run from an unrelated cwd |
+| A stub echoes the configured answer | Keep production logic real; capture outgoing arguments and assert the computed result |
+
+When the contract requires a boolean, `result is True` rejects integer `1`;
+`result == True` does not. When equality is the contract, do not add identity or
+exact-type requirements gratuitously. If sensitivity remains uncertain, revert
+the fix or inject a specific plausible defect in a disposable copy and confirm
+the intended assertion fails; supplied behavioral-red evidence need not be repeated.
+
 ## Reproducible boundary: exact free-shipping threshold
 
 Contract: a nonnegative integer subtotal in cents ships free at **10,000 cents
@@ -80,6 +94,20 @@ Use an exact node ID before `-k` substring filters; confirm the selected count.
 `--lf` uses pytest's local failure cache and is convenient feedback, not a full
 CI gate. Both runners need importable tests/application modules; preserve the
 project's package layout. Avoid `sys.path` hacks that conceal a broken install.
+
+Start with the focused command at the repository's usual verbosity; use `-x` to
+stop cascading failures and `-vv` on one node for detail. `-s` disables capture
+when live output is needed; it is not a default debugging requirement and is
+not supported as ordinary forwarding by pytest-xdist. Keep coverage and expensive
+plugins in the intended jobs; don't remove required CI gates just to shorten a
+local command.
+
+For a new test layout, pytest recommends `--import-mode=importlib`; it avoids
+pytest modifying `sys.path` and collisions from duplicate test-module basenames.
+Before changing an
+existing suite, check imports between tests/helpers and verify which installed
+application is under test. `importlib` mode does not install the application or
+guarantee it was imported from the intended environment.
 
 ## pytest recipe: real files, isolated fixtures, parametrized validation
 
@@ -193,3 +221,10 @@ acquisition. Pytest can run many `unittest.TestCase` suites, but direct pytest
 fixture argument injection/parametrization into TestCase methods is not supported
 in the same way as plain pytest functions. Preserve existing runner conventions
 rather than mixing lifecycle models accidentally.
+
+Sources: [pytest integration practices](https://docs.pytest.org/en/stable/explanation/goodpractices.html),
+[import modes](https://docs.pytest.org/en/stable/explanation/pythonpath.html),
+[pytest invocation](https://docs.pytest.org/en/stable/how-to/usage.html),
+[xdist limits](https://pytest-xdist.readthedocs.io/en/stable/),
+[unittest cleanup](https://docs.python.org/3.15/library/unittest.html#unittest.TestCase.addCleanup),
+[bool and numeric equality](https://docs.python.org/3.15/builtins/stdtypes.html#boolean-type-bool).

@@ -66,6 +66,11 @@ bounded-memory replay. `groupby` groups consecutive equal keys, not all equal
 keys; sort with the same key only if global grouping is intended. Consume each
 group before advancing the outer iterator, or retain it as a list.
 
+Inspecting a one-shot stream can consume it: membership and `any` consume through
+the matching element; `islice` consumes skipped elements as well as yielded ones;
+`takewhile` consumes the first rejected element. `iter(generator)` returns the
+same cursor, not a restart. If a caller needs lookahead, retain that item explicitly.
+
 ```pycon
 >>> from itertools import groupby, islice
 >>> [(key, list(group)) for key, group in groupby('aaba')]
@@ -81,11 +86,21 @@ group before advancing the outer iterator, or retain it as a list.
 ...         yield from values
 >>> list(concatenate([1], [], [2, 3]))
 [1, 2, 3]
+>>> from itertools import takewhile
+>>> cursor = iter([1, 2, 0, 3])
+>>> list(takewhile(bool, cursor)), list(cursor)
+([1, 2], [3])
+>>> cursor = iter(range(6))
+>>> list(islice(cursor, 2, 4)), next(cursor)
+([2, 3], 4)
 
 ```
 
 `yield` pauses execution; function-body failures may occur at `next`, not at
-construction. `yield from` delegates iteration (and generator protocol operations).
+construction. A generator expression evaluates its leftmost iterable expression
+and obtains its iterator immediately; element expressions and later clauses stay
+deferred. Validate in an outer ordinary function when rejection must happen at
+call time. `yield from` delegates iteration (and generator protocol operations).
 Use `return` to finish a generator, not an explicit `raise StopIteration` (which
 can become `RuntimeError`). Infinite generators need a bounded consumer.
 Resource-owning generators require explicit lifetime handling; read
@@ -163,7 +178,8 @@ Do not cache time-sensitive, random, side-effecting, generator, or coroutine
 results without a specific semantic design. Cache thread-safety is not a promise
 of one invocation per key under concurrent misses.
 
-Sources: [iteration tutorial](https://docs.python.org/3.14/tutorial/controlflow.html),
-[built-ins](https://docs.python.org/3.14/library/functions.html),
-[functools](https://docs.python.org/3.14/library/functools.html),
-[itertools](https://docs.python.org/3.14/library/itertools.html).
+Sources: [iteration tutorial](https://docs.python.org/3.15/tutorial/controlflow.html),
+[built-ins](https://docs.python.org/3.15/builtins/functions.html),
+[functools](https://docs.python.org/3.15/library/functools.html),
+[itertools](https://docs.python.org/3.15/library/itertools.html),
+[generator expressions](https://docs.python.org/3.15/reference/expressions.html#generator-expressions).

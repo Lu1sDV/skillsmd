@@ -4,6 +4,7 @@
 
 - [Define the measurement contract](#define-the-measurement-contract)
 - [Use a stable harness](#use-a-stable-harness)
+- [Calibrate the comparison and limit tuning](#calibrate-the-comparison-and-limit-tuning)
 - [Use timeit for narrow questions](#use-timeit-for-narrow-questions)
 - [Measure services under load](#measure-services-under-load)
 - [Prevent regressions](#prevent-regressions)
@@ -21,7 +22,7 @@ Before editing, record:
 
 Hold conditions constant; label interpreter/dependency changes as experimental variables. Preserve raw results. Validate output equality or agreed numerical tolerance before accepting timing.
 
-Measure elapsed durations with `time.perf_counter_ns()` differences; measure current-process CPU consumption with `time.process_time_ns()` differences, which exclude sleeping and cannot represent request latency. Nanosecond units do not imply nanosecond resolution; inspect `time.get_clock_info()` when needed. [Python clocks](https://docs.python.org/3.14/library/time.html)
+Measure elapsed durations with `time.perf_counter_ns()` differences; measure current-process CPU consumption with `time.process_time_ns()` differences, which exclude sleeping and cannot represent request latency. Nanosecond units do not imply nanosecond resolution; inspect `time.get_clock_info()` when needed. [Python clocks](https://docs.python.org/3.15/library/time.html)
 
 Use profiles for bottleneck hypotheses and repeatable unprofiled benchmarks for improvement evidence.
 
@@ -64,9 +65,37 @@ Inspect warnings, raw samples, histogram and run order. Treat `compare_to`'s fir
 
 Prefer a dedicated stable runner; record controls for CPU affinity/isolation, power policy and other load. Inspect changes/scope before `pyperf system tune`, which changes host settings; never silently tune a shared host. [System tuning](https://pyperf.readthedocs.io/en/latest/system.html)
 
+## Calibrate the comparison and limit tuning
+
+Before establishing a regression gate or claiming a small gain, run the unchanged
+baseline through both arms of the proposed A/B procedure (A/A). This checks runner
+drift, fixture/state differences and false alarms. A single reassuring A/A result
+does not prove stability; choose repetition and an effect threshold from the
+observed noise and business requirement, not a universal percentage.
+
+Alternate or randomize matched baseline/candidate blocks when drift is plausible.
+Keep cache resets, warm-up and fresh-process policy symmetric. Preserve run order
+and use block-level pairing only when the design actually creates matched pairs;
+do not treat repeated loops within one process as independent machine samples.
+Use the project's justified comparison method and inspect raw distributions.
+[pyperf analysis](https://pyperf.readthedocs.io/en/latest/analyze.html)
+
+Predeclare the workload set, correctness guardrails and a bounded experiment
+budget. Hold back at least one relevant input/distribution when iterative tuning
+could specialize to the benchmark. Report regressions as well as improvements;
+changing fixtures, dropping outputs or weakening tolerances changes the claim.
+Stop when evidence meets the agreed decision or the next experiment cannot answer
+a material uncertainty; do not keep sampling solely to obtain significance.
+
+Compare peak memory for both versions as well as time. Use matching fresh process
+lifetimes for lifetime high-water metrics such as `ru_maxrss`; record platform
+units and child/process scope. Sampling RSS can miss brief peaks, and a reused
+process retains earlier high-water marks. Collect intrusive allocation traces
+separately from timing. [resource usage](https://docs.python.org/3.15/library/resource.html#resource.getrusage)
+
 ## Use timeit for narrow questions
 
-Account for setup exclusion and cyclic GC disabled by default; re-enable GC in setup when workload-relevant. The CLI calibrates repetitions; the convenience Python API defaults to a fixed count unless configured. Inspect repeats: the minimum is a best-case snippet bound, not a service latency percentile. Test production sizes. [`timeit`](https://docs.python.org/3.14/library/timeit.html)
+Account for setup exclusion and cyclic GC disabled by default; re-enable GC in setup when workload-relevant. The CLI calibrates repetitions; the convenience Python API defaults to a fixed count unless configured. Inspect repeats: the minimum is a best-case snippet bound, not a service latency percentile. Test production sizes. [`timeit`](https://docs.python.org/3.15/library/timeit.html)
 
 Prevent these traps:
 

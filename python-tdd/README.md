@@ -1,6 +1,7 @@
 # python-tdd
 
-Standalone Python red-green-refactor: meaningful regression failures, pytest and
+Python **3.15** red-green-refactor (stable **3.15.2**, checked **2026-11-03**):
+meaningful regression failures, pytest and
 unittest mechanics, fixtures, lookup-aware patching, deterministic clocks and
 real local I/O, optional bounded Hypothesis, and coverage/mutation interpretation.
 It is a Python implementation workflow, not a second system-wide test-strategy
@@ -55,7 +56,7 @@ From the bundle directory (checkout or copied installation):
 python3 -m doctest SKILL.md references/*.md
 ```
 
-Requires Python **3.11+**, the standard library, and no optimization flags that
+Targets Python **3.15**; use the standard library and no optimization flags that
 remove test assertions. Examples are deterministic and local: no external
 network, sleeps, shared fixed paths, or persistent user files. Each `pycon` fence
 includes its own imports/helpers; temporary resources are closed/cleaned up.
@@ -77,11 +78,20 @@ HTTP framework. Optional API clients, async pytest suites, coverage, and mutatio
 tools require the target project's compatible dependencies and separate checks.
 No optional package is an implicit requirement of the installed skill.
 
-Python 3.11+ is this bundle's example baseline, not a verified all-version matrix
-or permission to raise a consumer's minimum version. Preserve the target
+Python 3.15 is this bundle's default baseline, not a verified all-version matrix
+or permission to silently raise an existing consumer's minimum version. Preserve the target
 project's supported versions and pinned plugin/runtime compatibility. SQLite
 examples establish SQLite behavior only; in-process HTTP clients do not verify
 socket/TLS/deployment behavior, and mocks do not establish live API compatibility.
+
+Verification on **2026-11-03** used CPython **3.15.2**, GIL-enabled Linux x86_64:
+all **40 doctest checks** and both complete pytest/Hypothesis recipes passed
+(**8 tests**, pytest **9.2.0**, Hypothesis **6.170.14**). A separate bounded control
+confirmed contradictory assumptions raise `Unsatisfiable` (**1 additional test**).
+The disposable `>=` to `>` threshold mutation failed only the exact-threshold
+assertion; restoring `>=` passed all 17 checks in that reference. These checks
+do not validate optional Django, async pytest plugins, xdist, mutation tools,
+Windows or free-threaded behavior.
 
 ## Pinned upstream source map
 
@@ -115,8 +125,35 @@ Python content is pinned at commit
 These support sensitive API/lifecycle claims; the actionable guidance is bundled
 locally and does not require opening them during use.
 
-- [Python unittest: cleanup and async test cases](https://docs.python.org/3.11/library/unittest.html#unittest.TestCase.addCleanup)
-- [Python unittest.mock: lookup and patching](https://docs.python.org/3/library/unittest.mock.html#where-to-patch)
+- [Python unittest: cleanup and async test cases](https://docs.python.org/3.15/library/unittest.html#unittest.TestCase.addCleanup)
+- [Python unittest.mock: lookup and patching](https://docs.python.org/3.15/library/unittest.mock.html#where-to-patch)
 - [pytest fixtures: errors before yield and safe teardown](https://docs.pytest.org/en/stable/how-to/fixtures.html#handling-errors-for-yield-fixture)
 - [Hypothesis API: settings, explicit examples, replay](https://hypothesis.readthedocs.io/en/latest/reference/api.html#hypothesis.settings)
 - [coverage.py: branch measurement and limits](https://coverage.readthedocs.io/en/latest/branch.html)
+
+
+## Community curation, 2026-11-03
+
+The community list supplies candidate ideas, not authority. These files were
+read directly; retained ideas were rewritten and checked against current
+pytest, Hypothesis and Python documentation. Links identify the reviewed
+locations without claiming an unverified immutable revision.
+
+| Reviewed source | Adopted / corrected |
+|---|---|
+| [Trail of Bits: property testing](https://github.com/trailofbits/skills/blob/main/plugins/property-based-testing/skills/property-based-testing/SKILL.md) | Adapt a small contract-to-property table and counterexample triage. Reject an unconditional strength ladder: oracles can share bugs, and round trips or idempotence alone can be weak. Correct the claim that contradictory `assume` calls pass with zero cases: Hypothesis raises a health-check error or `Unsatisfiable`. |
+| [wdm0006: testing strategy](https://github.com/wdm0006/python-skills/blob/HEAD/skills/python/testing-strategy/SKILL.md) | Adapt distinguishable fixtures, actual-boundary assertions and scoped sensitivity checks. Preserve existing red evidence; do not require gratuitous repeated mutation, universal external-I/O mocking, autouse global resets, or an arbitrary coverage percentage. |
+| [dmoka: mutation testing](https://github.com/dmoka/skills/blob/HEAD/skills/mutation-testing/SKILL.md) | Adapt baseline validity, scoped campaigns, the missing-code blind spot and honest survivor classification. Reject automatic quarantine, “two passes proves stable”, fixed universal gates, and mandatory approval/subagent steps unrelated to repository policy. |
+
+Other candidate concepts are retained only where their conditions can be stated
+briefly: `importlib` is the pytest recommendation for new layouts, not a risk-free
+switch for every existing suite; asyncio auto/strict and xdist scheduling depend
+on backend and resource ownership; Django after-commit checks require the relevant
+transaction boundary. Keep PyVista-specific snapshot machinery, framework fixtures,
+performance benchmarking and organization-wide mutation policy outside this bundle.
+
+The property catalogue is deliberately small. Flake work uses comparable runs,
+recorded failures/attempts and a root-cause hypothesis, without promising a fixed
+number of successful retries establishes correctness. Coverage jobs remain an
+explicit project decision; removing all coverage flags from `addopts` is not a
+universal rule.

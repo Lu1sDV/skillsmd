@@ -46,7 +46,11 @@ contracts, not runtime constants.
 
 Defaults are evaluated at definition time, including calls such as `datetime.now()`.
 Use `is None`, not `items or []`, when an explicitly passed empty container must
-be retained. Use `object()` as a private sentinel if `None` is valid data.
+be retained. If `None` is valid data, use a private sentinel and compare with `is`.
+Python 3.15 adds `sentinel("MISSING")` with a readable representation and
+copy-stable identity; an existing private `object()` sentinel remains adequate
+when those capabilities are unnecessary. Sentinels are truthy, so truth testing
+is not an absence check.
 
 ```pycon
 >>> def append_tag(tag, tags=None):
@@ -59,6 +63,10 @@ be retained. Use `object()` as a private sentinel if `None` is valid data.
 True
 >>> append_tag('b'), append_tag('c')
 (['b'], ['c'])
+>>> import copy
+>>> MISSING = sentinel("MISSING")
+>>> copy.deepcopy(MISSING) is MISSING, bool(MISSING)
+(True, True)
 
 ```
 
@@ -122,6 +130,19 @@ characters, not a literal prefix/suffix. `find` returns -1; `index` raises on
 absence. `isdigit()` is Unicode-aware and is not proof `int(text)` will accept it.
 Raw literals still have syntax restrictions (notably an odd trailing backslash).
 
+Decide which text distinctions the domain permits before normalizing. NFC/NFD
+preserve canonical equivalence; NFKC/NFKD additionally collapse compatibility
+distinctions (such as full-width forms). Neither normalization nor `len` performs
+grapheme segmentation, locale-aware collation, or confusable-identifier detection.
+For canonical caseless comparison, normalize, casefold, then normalize again:
+casefold can produce a non-normalized sequence. Keep the original for display
+when the normalized key is only a lookup policy.
+
+In `str` regexes, `\d` matches Unicode decimal digits (category Nd), and `\w`
+matches Unicode alphanumerics plus underscore. In bytes regexes they are ASCII
+classes by default; `re.LOCALE` can change bytes `\w`. Use `re.ASCII` for a text
+protocol that explicitly requires ASCII. `isdigit()` accepts more than `\d`.
+
 ```pycon
 >>> text = 'é'
 >>> len(text), len(text.encode('utf-8'))
@@ -132,6 +153,21 @@ Raw literals still have syntax restrictions (notably an odd trailing backslash).
 ('report', 'nohtyP')
 >>> f'{42:05d}', f'{3.14159:.2f}'
 ('00042', '3.14')
+>>> import re
+>>> import unicodedata
+>>> def caseless_key(value):
+...     decomposed = unicodedata.normalize("NFD", value)
+...     return unicodedata.normalize("NFD", decomposed.casefold())
+>>> 'é' == 'e\u0301', caseless_key('É') == caseless_key('e\u0301')
+(False, True)
+>>> 'Straße'.casefold() == 'STRASSE'.casefold()
+True
+>>> 'ﬁ'.casefold() == 'fi', '²'.isdigit()
+(True, True)
+>>> bool(re.fullmatch(r'\d+', '٢')), re.fullmatch(r'\d+', '²') is None
+(True, True)
+>>> re.fullmatch(r'\d+', '٢', re.ASCII) is None
+True
 
 ```
 
@@ -178,7 +214,8 @@ current object reference, not a deep copy and not a new closure cell.
 
 `__init__` initializes an instance; ordinary methods receive `self`.
 `@classmethod` receives `cls` (useful for alternate constructors), while
-`@staticmethod` binds neither; a module function often suffices. Put per-instance
+`@staticmethod` binds neither; a module function often suffices. This is a design
+choice, not a universal ban on static methods. Put per-instance
 mutable state in `__init__` or a dataclass `field(default_factory=list)`, never a
 shared class list accidentally. Properties can validate assignments; run the same
 validation during construction (e.g. `self.radius = radius`, not bypassing the
@@ -194,7 +231,10 @@ equal, stable hashes: do not hash mutable coordinate fields as upstream does.
 Detailed MRO, descriptors, `__new__`, metaclasses, API typing, and class-pattern
 contracts are optional **python-api-design** handoffs.
 
-Sources: [data model](https://docs.python.org/3.14/reference/datamodel.html),
-[expressions](https://docs.python.org/3.14/reference/expressions.html),
-[execution model](https://docs.python.org/3.14/reference/executionmodel.html),
-[copy](https://docs.python.org/3.14/library/copy.html).
+Sources: [data model](https://docs.python.org/3.15/reference/datamodel.html),
+[expressions](https://docs.python.org/3.15/reference/expressions.html),
+[execution model](https://docs.python.org/3.15/reference/executionmodel.html),
+[copy](https://docs.python.org/3.15/library/copy.html),
+[sentinel](https://docs.python.org/3.15/builtins/functions.html#sentinel),
+[Unicode HOWTO](https://docs.python.org/3.15/howto/unicode.html#comparing-strings),
+[regex classes](https://docs.python.org/3.15/library/re.html#regular-expression-syntax).

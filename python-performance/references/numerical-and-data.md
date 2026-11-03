@@ -2,6 +2,23 @@
 
 Read for measured numerical kernels, dataframe operations, conversions or accelerator work. Check deployed versions before applying version-sensitive guidance.
 
+## Check compatibility before copying recipes
+
+Resolve a Python-3.15-compatible dependency set from maintainer release notes and
+the project lockfile, including extension wheels/ABI and compiler support. Do not
+infer compatibility from a community skill named after a recent package version:
+NumPy 2.4.0's stated Python range was 3.11–3.14. Check the selected patch and current
+release separately. [NumPy 2.4](https://numpy.org/doc/stable/release/2.4.0-notes.html),
+[NumPy 2.5](https://numpy.org/doc/stable/release/2.5.0-notes.html)
+
+For older NumPy recipes crossing 2.4, check removed `np.trapz`/`np.in1d` APIs
+(use `np.trapezoid`/`np.isin`) and removed `interpolation=` (use `method=`). Extract
+a scalar deliberately before converting an array with `ndim > 0`; implicit
+conversion now raises `TypeError`. Assigning `arr.strides` is deprecated, while
+direct `arr.shape` assignment was only pending deprecation in that release.
+Distinguish removal, deprecation and future plans; do not copy all release notes
+into an optimization plan. [2.4 migration details](https://numpy.org/doc/stable/release/2.4.0-notes.html#expired-deprecations)
+
 ## Establish the numerical contract
 
 Record shapes, dtypes, layout/strides, missing values, input ranges, output shape and tolerance. Include production conversion/allocation costs; benchmark realistic sizes to expose setup amortization. Treat overflow behavior, NaNs/infinities, signed zero, reduction order, mutation, aliasing and index alignment as correctness constraints. Verify domain requirements before changing representation.
@@ -45,6 +62,15 @@ Use Numba for narrow numerical hot paths with supported types/operations, not wh
 Separate compilation/first-call latency from repeated runs of already-compiled relevant signatures. Include startup for short-lived deployments; check Python/NumPy/Numba compatibility before runtime upgrades. [Numba five-minute guide](https://numba.readthedocs.io/en/stable/user/5minguide.html)
 
 Use Cython when measured kernels benefit from typed loops/native-library integration and the project supports compilation/distribution. Use annotation to find remaining Python operations. Disable bounds/negative-index checks only with proven valid indices and maintained coverage: invalid accesses can corrupt memory/crash instead of raising Python exceptions. [Cython NumPy tutorial](https://docs.cython.org/en/stable/src/userguide/numpy_tutorial.html)
+
+For an existing CFFI/native boundary, validate shape, dtype/endianness, strides,
+dimension/byte-count overflow, aliasing and writable-output requirements. Keep
+the object returned by `ffi.from_buffer()` alive for the whole native use; a cast
+pointer alone does not retain that exported buffer. Account for calls that retain
+pointers after returning. ISA-specific builds need a deliberate deployment-CPU
+contract or validated dispatch/fallback; a custom kernel is not a default
+replacement for an established numerical library.
+[CFFI buffer lifetime](https://cffi.readthedocs.io/en/stable/ref.html#ffi-buffer-ffi-from-buffer)
 
 Benchmark pandas `eval`/NumExpr on representative complex expressions at meaningful scale; parsing/compilation can outweigh gains for small/simple expressions. Prefer ordinary operations without demonstrated benefit. [pandas enhancing performance](https://pandas.pydata.org/docs/user_guide/enhancingperf.html)
 
