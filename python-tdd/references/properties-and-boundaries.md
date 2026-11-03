@@ -15,6 +15,25 @@ every input with `assume`. Define NaN/infinity, Unicode, integer magnitude, and
 collection limits deliberately. Keep a different oracle or reconstruction step;
 idempotence alone allows a function that always returns a constant.
 
+Choose properties that constrain the actual contract; there is no universal
+strength ranking independent of the domain and oracle:
+
+| Contract shape | Useful property / limitation |
+|---|---|
+| Lossless codec | `decode(encode(x)) == x` on the supported domain; add known external encodings because both sides can share a bug |
+| Optimized implementation | Compare with an independent, simple reference on bounded inputs |
+| Normalizer | Idempotence plus a substantive output condition and named changes it must make |
+| Sort/transform | Ordered output plus preserved elements/multiplicities, not just no crash |
+| Algebraic operation | Identity, commutativity or associativity only when promised; floating-point addition is not generally associative |
+| Stateful API | Independently modeled transitions, invariants, and failure-state preservation |
+
+Do not recreate the production algorithm in the oracle. Also inspect vacuity:
+an `if` whose body never runs or `all(...)` over an accidentally empty result can
+pass without constraining the behavior. Hypothesis `assume(False)` is different:
+it rejects cases and eventually fails with a health check or `Unsatisfiable`,
+not a successful zero-case proof. Put constraints in strategies; use `@composite`
+when later values depend on earlier draws, rather than filtering almost everything.
+
 Requires compatible pytest and Hypothesis versions in the target environment.
 Save this complete recipe as `test_runs.py` in a disposable directory and run
 `python -m pytest -q test_runs.py`. The Python fence is not a Markdown doctest;
@@ -64,6 +83,13 @@ regression. On failure, inspect the shrunk input, add a named example or
 Save versions and any failure reproduction blob if needed. Do not swallow the
 failure or assume a specific exact shrink result.
 
+Triage a counterexample in order: does the stated property match the requirement,
+does the strategy represent the supported domain, is the oracle independent and
+correct, and is state reset between cases? Then diagnose the implementation.
+Do not filter out a valid counterexample merely to recover green. Register/load
+project Hypothesis profiles before test settings are constructed; inspect the
+effective settings of the pinned release instead of assuming its CI defaults.
+
 A function-scoped pytest fixture is not recreated for every Hypothesis example.
 Create/reset mutable state **inside the test body** for each generated case;
 do not suppress the relevant health check while leaking state between inputs.
@@ -102,6 +128,16 @@ not undo commits made earlier by production code. Choose a disposable database
 or a correctly joined outer-transaction fixture supported by the ORM/version;
 do not assume SQLite-in-memory reproduces PostgreSQL isolation or SQL behavior.
 
+After-commit callbacks need explicit observation: a rollback-based test fixture
+may never commit. With a Python-compatible Django release,
+`TestCase.captureOnCommitCallbacks(execute=True)`
+can exercise callbacks; use a real committing transaction test when commit
+ordering/visibility itself is required. Cover rollback not publishing the effect.
+For a migration, check relevant data preservation and backwards migration only
+where reversibility is promised. For an index requirement, use representative
+data and a supported plan assertion that loses the expected behavior without
+the index; a tiny fixture or an exact full-plan snapshot can mislead.
+
 ## Async cancellation: coordinate, do not sleep
 
 Dependency-free example: cancellation must reach the waiting worker and finish
@@ -139,7 +175,10 @@ such as pytest-asyncio and its compatible event-loop/fixture configuration.
 `@pytest.mark.asyncio` does not provide that plugin by itself. Never use removed
 `asyncio.coroutine` as a modern mock recipe. Await the application coroutine;
 assert returned values, exceptions, and cleanup. Keep loops/resources in the
-same intended scope and finish every task, including failure paths. For threads
+same intended scope and finish every task, including failure paths. For
+async-plugin selection, use pytest-asyncio `auto` when asyncio is the only
+backend; retain `strict` with explicit markers/fixtures when plugins/backends
+coexist. These are choices, not universal configuration. For threads
 and processes, use controlled rendezvous and joins, a main guard where spawn
 requires it, and subprocess-level deadlines for deadlocks. Production
 cancellation/backpressure design belongs to optional **python-concurrency**.
@@ -202,11 +241,22 @@ survivors: missing test, equivalent change, unreachable code, or tool limitation
 Do not add a brittle assertion solely to kill an equivalent mutant or claim a
 perfect mutation score proves correctness.
 
+For a mutation campaign, use a passing, sufficiently repeatable selected baseline
+and scope first to changed or critical behavior. Two passes can expose a flake
+but cannot certify stability. Confirm a known, relevant control mutant is killed
+by the intended test before trusting bulk results. Report tool/version, scope,
+mutators, timeouts, skips and survivors; compare scores only on comparable scope.
+Missing code generates no mutants. Do not exclude difficult surviving behavior
+or skip failing tests to improve a score; justified exclusions and accepted risk
+follow the repository's review policy. Tool commands and support for 3.15 must be
+checked against the installed mutation-tool version, not copied from mutmut 2.
+
 ## CI feedback and completion
 
-1. Use the project's pinned/locked environment and supported interpreter matrix,
-   including oldest/newest supported versions and relevant OS boundaries. These
-   docs target Python 3.11+, not a mandate to raise the application's minimum.
+1. Use the project's pinned/locked environment and relevant OS boundaries.
+   Default new work to 3.15; for an existing application, use its supported
+   interpreter matrix and verify an intended 3.15 migration explicitly. This
+   guide does not silently change a consumer's compatibility contract.
 2. Install declared test dependencies explicitly. Upstream's `--cov` CI command
    needs pytest-cov; pytest alone does not provide it. Optional pytest-mock,
    pytest-asyncio, Hypothesis, and framework clients need their own dependencies.
@@ -222,3 +272,13 @@ Do not impose a fixed unit/integration/E2E ratio. Choose tests that observe the
 actual changed contract at a tolerable maintenance/runtime cost. Wider risk
 prioritization, exploratory plans, and organizational test strategy hand off to
 optional **test-engineering**, not a duplicated methodology here.
+
+Sources: [Hypothesis strategies](https://hypothesis.readthedocs.io/en/latest/tutorial/adapting-strategies.html),
+[Hypothesis API and errors](https://hypothesis.readthedocs.io/en/latest/reference/api.html),
+[Hypothesis flakiness](https://hypothesis.readthedocs.io/en/latest/tutorial/flaky.html),
+[Django transactions](https://docs.djangoproject.com/en/stable/topics/db/transactions/),
+[Django/Python compatibility](https://docs.djangoproject.com/en/stable/faq/install/#what-python-version-can-i-use-with-django),
+[query plans and statistics](https://www.postgresql.org/docs/current/using-explain.html),
+[pytest-asyncio modes](https://pytest-asyncio.readthedocs.io/en/stable/concepts.html#test-discovery-modes),
+[coverage branches](https://coverage.readthedocs.io/en/latest/branch.html),
+[mutmut requirements/configuration](https://mutmut.readthedocs.io/en/latest/).
