@@ -5,6 +5,8 @@
 - [11. Backtracking](#11-backtracking)
 - [Adapting the search safely](#adapting-the-search-safely)
 - [12. Dynamic programming](#12-dynamic-programming)
+- [Budget cache and state growth](#budget-cache-and-state-growth)
+- [Subset-sum reachability with an integer bitset](#subset-sum-reachability-with-an-integer-bitset)
 - [Unbounded coin change: ascending capacity](#unbounded-coin-change-ascending-capacity)
 - [0/1 knapsack: descending capacity](#01-knapsack-descending-capacity)
 - [Longest common / increasing subsequences](#longest-common--increasing-subsequences)
@@ -94,6 +96,69 @@ hashable arguments and retains keys/results. Capture a fixed immutable problem
 inside a local cached function instead of passing an unhashable grid/list, and
 do not mutate captured data while cache entries remain valid.
 
+### Budget cache and state growth
+
+Plain `@lru_cache` defaults to **128 entries**. If the recurrence's complexity
+assumes each state is evaluated once, eviction invalidates that assumption and
+may cause extensive recomputation. Use local `@cache`/`@lru_cache(maxsize=None)`
+only after bounding reachable states and retained values, or choose a bottom-up
+table/rolling frontier with a proved lifetime. A bounded cache remains reasonable
+when recomputation is acceptable; “always unbounded” is not a general cache rule.
+[functools](https://docs.python.org/3.15/library/functools.html#functools.lru_cache)
+
+Budget states × transitions **and** bytes/value before allocating. Measure a
+representative transition on the target runtime when feasibility is close; no
+universal Python iterations-per-second rate or fixed `n` ceiling is reliable.
+Memoization cannot remove call-stack limits or compensate for cyclic dependencies.
+
+For interval DP, choose explicit half-open or closed endpoints and fill shorter
+intervals before longer ones; trace the first nontrivial width by hand. If every
+transition needs strict subintervals, increasing width is a valid dependency
+order. A generic row-major double loop is not sufficient. Retain split/predecessor
+information if reconstruction is required.
+
+Use bitmask DP when a bounded selected subset plus a small endpoint/state determines
+the future; include the endpoint and transition factor in the exponential budget.
+For subset problems that split into independent halves, compare meet-in-the-middle
+enumeration and matching with a full `2**n` search; include list/sort/match memory.
+Neither technique inherits a universal safe subset size.
+
+### Subset-sum reachability with an integer bitset
+
+For 0/1 choices of nonnegative integers and a bounded target, bit `j` indicates
+that sum `j` is reachable. Shift the **previous** bitset once per item, then OR;
+the right-hand side is evaluated before assignment, so the item is not reused.
+Mask to the required target and skip larger values before shifting.
+
+```pycon
+>>> def subset_sum_exists(values, target):
+...     if type(target) is not int or target < 0:
+...         raise ValueError('nonnegative integer target required')
+...     reachable, mask = 1, (1 << (target + 1)) - 1
+...     for value in values:
+...         if type(value) is not int or value < 0:
+...             raise ValueError('nonnegative integer values required')
+...         if value <= target:
+...             reachable = (reachable | (reachable << value)) & mask
+...     return bool((reachable >> target) & 1)
+>>> assert subset_sum_exists([], 0)
+>>> assert not subset_sum_exists([3], 6)  # Each input item is usable once.
+>>> assert subset_sum_exists([3, 3], 6)
+>>> assert subset_sum_exists([0, 2, 7], 9)
+>>> assert not subset_sum_exists([10**100], 3)
+>>> subset_sum_exists([-1], 0)
+Traceback (most recent call last):
+...
+ValueError: nonnegative integer values required
+
+```
+
+Bound target at the input boundary: this uses O(target) bits with temporary
+shifted values, and integer operations scale with that width. It answers existence,
+not count or reconstruction; negative inputs require another representation.
+Test against exhaustive subset enumeration on small duplicate/zero-valued cases.
+[Integer operations](https://docs.python.org/3.15/library/stdtypes.html#bitwise-operations-on-integer-types)
+
 ```pycon
 >>> from functools import cache
 >>> def fibonacci(n):
@@ -127,7 +192,8 @@ than unit-cost operation counts. Memoization does not make large recursive n saf
 
 `dp[x]` is minimum coins for x using processed coin denominations; ascending x
 permits using the same denomination again. No solution is `None`, distinct from
-zero coins needed for amount zero. Inputs are read-only.
+zero coins needed for amount zero. Inputs are read-only; `coins` must be a
+reusable sequence because validation precedes processing.
 
 ```pycon
 >>> def fewest_coins(coins, amount):
@@ -398,6 +464,6 @@ Bit subsets enumerate positions (duplicates in input can duplicate output),
 O(n·2^n) operations and output size under bounded masks, not O(n). Use backtracking
 if constraints can prune most choices.
 
-Semantics: [functools.cache](https://docs.python.org/3.11/library/functools.html#functools.cache),
-[itertools combinatorics](https://docs.python.org/3.11/library/itertools.html),
-[integer bit operations](https://docs.python.org/3.11/library/stdtypes.html#bitwise-operations-on-integer-types).
+Semantics: [functools.cache](https://docs.python.org/3.15/library/functools.html#functools.cache),
+[itertools combinatorics](https://docs.python.org/3.15/library/itertools.html),
+[integer bit operations](https://docs.python.org/3.15/library/stdtypes.html#bitwise-operations-on-integer-types).
