@@ -4,6 +4,7 @@
 - [Patch lookup](#patch-where-lookup-happens)
 - [Deterministic clock example](#deterministic-clock-boundary-without-mocking-time-globally)
 - [Fixture lifecycle](#fixture-lifecycle-and-leaked-state)
+- [Flake diagnosis](#diagnose-a-flake-with-comparable-runs)
 
 ## Pick real behavior before a double
 
@@ -145,3 +146,38 @@ For concurrency, await/join work in cleanup, coordinate with events/queues, and
 bound waits so failures terminate. Increasing sleeps/timeouts or serializing
 all tests to hide an ordering bug is not a root-cause fix. A test that passes in
 one schedule cannot prove race freedom.
+
+With pytest-xdist, partition external names/resources by worker and test run;
+`worker_id` alone repeats across runs. `--dist=loadscope` can keep related tests
+on one worker and `worksteal` can balance uneven durations, but neither supplies
+global fixture isolation or repairs ordering dependencies. Use the project's
+compatible xdist version and measure any scheduling change.
+
+## Diagnose a flake with comparable runs
+
+Preserve the failing node/input, seed, versions, worker count, order, OS and logs.
+Run a bounded set of identical attempts and record failures/attempts, not only
+the last pass. Change one suspected cause, then compare under the same conditions;
+zero failures in a small sample does not establish elimination. Check clock/timezone,
+cwd/environment, leaked globals, unjoined work, shared external resources and
+assertions tighter than the promised precision. A pass in isolation can implicate
+pollution from other tests; a serial pass can implicate resource/schedule coupling.
+Neither alone proves the cause.
+
+Retries are a temporary mitigation, not evidence of a fix. Use quarantine only
+under an explicit repository policy with a tracked owner/reason, not as the
+default response to any flaky baseline. Keep a useful deterministic regression
+once the cause is understood and report any residual nondeterminism honestly.
+
+For output/snapshot checks, start capture before the emitting operation, let the
+operation and promised background work finish, then inspect the intended capture
+segment. `capsys.readouterr()` snapshots and clears captured output so far. A
+snapshot update is a proposed behavioral change to inspect, not an automatic
+way to resolve failure; framework-specific visual capture belongs to that framework.
+
+Sources: [unittest.mock lookup](https://docs.python.org/3.15/library/unittest.mock.html#where-to-patch),
+[pytest fixture cleanup](https://docs.pytest.org/en/stable/how-to/fixtures.html#safe-teardowns),
+[pytest flaky tests](https://docs.pytest.org/en/stable/explanation/flaky.html),
+[pytest output capture](https://docs.pytest.org/en/stable/how-to/capture-stdout-stderr.html),
+[xdist scheduling](https://pytest-xdist.readthedocs.io/en/stable/distribution.html),
+[xdist worker identity](https://pytest-xdist.readthedocs.io/en/stable/how-to.html#identifying-the-worker-process-during-a-test).
