@@ -4,6 +4,7 @@
 
 - [Dataclasses and enums](#records-are-not-validators)
 - [Cleanup on failure](#cleanup-must-survive-failure)
+- [SQLite ownership](#sqlite-transactions-and-connection-ownership)
 - [Logging and process-global state](#logging-and-process-global-state)
 - [Child-process lifecycle](#child-process-contract)
 
@@ -92,6 +93,41 @@ acceptable. `suppress(Exception)` is not resource handling. `redirect_stdout`
 changes process-global state and is not an isolation mechanism for concurrent
 code or a child process. Async lifetime/locking belongs to **python-concurrency**.
 
+## SQLite transactions and connection ownership
+
+`with connection:` commits or rolls back an open transaction; it does **not** close
+the connection. Own closing separately. Set `autocommit` deliberately on the 3.15
+baseline: `False` gives PEP 249 transaction behavior, `True` makes the connection
+context manager ineffective for rollback, and the current default remains
+`LEGACY_TRANSACTION_CONTROL`. Do not mistake a future default announcement for
+the installed version's behavior. Bind SQL values with placeholders.
+
+```pycon
+>>> import sqlite3
+>>> from contextlib import closing
+>>> with closing(sqlite3.connect(":memory:", autocommit=False)) as connection:
+...     with connection:
+...         _ = connection.execute("CREATE TABLE jobs (id INTEGER PRIMARY KEY)")
+...     try:
+...         with connection:
+...             _ = connection.execute("INSERT INTO jobs VALUES (?)", (1,))
+...             raise ValueError("abort")
+...     except ValueError:
+...         pass
+...     assert connection.execute("SELECT COUNT(*) FROM jobs").fetchone() == (0,)
+>>> try:
+...     connection.execute("SELECT 1")
+... except sqlite3.ProgrammingError:
+...     pass
+... else:
+...     raise AssertionError("connection remained open")
+
+```
+
+Keep schema migrations, locking, isolation and production database design in the
+application's database workflow; this example verifies transaction rollback and
+resource lifetime only.
+
 ## Logging and process-global state
 
 - Libraries use `logging.getLogger(__name__)`; application entry points configure
@@ -118,6 +154,12 @@ code or a child process. Async lifetime/locking belongs to **python-concurrency*
   machine-readable interface. Use `argparse` rather than ad hoc `sys.argv` parsing
   when options/validation are required.
 
+For an argparse command dispatcher, use `add_subparsers(required=True)` when a
+subcommand is mandatory, set each handler with `subparser.set_defaults(func=...)`,
+then dispatch through the parsed namespace. Parsing succeeds before execution;
+help/error output and exit behavior remain part of the CLI contract. Keep the
+project's existing parser when its requirements exceed argparse's scope.
+
 ## Child-process contract
 
 Prefer `subprocess.run` for a bounded command. Specify a sequence of arguments,
@@ -126,6 +168,10 @@ bytes. An argument sequence does not need shell escaping; it also does not stop
 target-option injection. Use `--` where the target supports it and reject
 unauthorized executables/options. Windows batch files can involve a shell even
 without `shell=True`; do not assume Unix guarantees for `.bat`/`.cmd` files.
+Use `stdin=DEVNULL` for a noninteractive child that should never inherit terminal
+input. Do not put credentials in argv: command displays, diagnostics and process
+inspection may expose them. Use the child API's protected input channel and redact
+exceptions/logs; an environment variable is not automatically a secret store.
 
 This example launches the actual current interpreter and checks a JSON result
 and a failed exit; no network or platform-specific executable is required.
@@ -159,16 +205,33 @@ timeout does not kill the child for you: terminate/kill as the policy requires,
 then drain and reap it. Merely breaking a stdout loop or calling `terminate`
 without `wait`/`communicate` leaves lifecycle work unfinished.
 
+EOF arrives only when every holder of a pipe's write end closes it. A grandchild
+can keep output pipes open after the direct child exits. Distinguish this from
+child-side buffering; changing the parent's buffer does not flush the child's
+output (a Python child may need `-u` or explicit flushing).
+
+When descendants matter on POSIX, launch into an owned session/process group with
+`start_new_session=True` or the appropriate `process_group` argument, rather than
+thread-unsafe `preexec_fn`. Design group termination, bounded draining and reaping
+as one protocol. Waiting for the direct child after SIGTERM does not establish that
+all group members exited; descendants can also create a new session and escape.
+Use the platform/deployment supervisor for stronger descendant containment and
+verify its Windows contract separately. Do not advertise a short `killpg` recipe
+as a portable guarantee of whole-tree cleanup.
+
 An explicit `env` mapping replaces inheritance rather than merging automatically.
 Preserve required system variables deliberately, omit secrets the child does not
 need, and select the executable from a trusted path. A subprocess is not a sandbox.
 
 ## Authorities
 
-[dataclasses](https://docs.python.org/3.14/library/dataclasses.html),
-[enum](https://docs.python.org/3.14/library/enum.html),
-[contextlib](https://docs.python.org/3.14/library/contextlib.html),
-[logging](https://docs.python.org/3.14/library/logging.html),
-[subprocess](https://docs.python.org/3.14/library/subprocess.html),
-[os](https://docs.python.org/3.14/library/os.html),
-[sys](https://docs.python.org/3.14/library/sys.html).
+[dataclasses](https://docs.python.org/3.15/library/dataclasses.html),
+[enum](https://docs.python.org/3.15/library/enum.html),
+[contextlib](https://docs.python.org/3.15/library/contextlib.html),
+[SQLite transactions and closing](https://docs.python.org/3.15/library/sqlite3.html#how-to-use-the-connection-context-manager),
+[argparse subcommands](https://docs.python.org/3.15/library/argparse.html#subcommands),
+[logging](https://docs.python.org/3.15/library/logging.html),
+[subprocess](https://docs.python.org/3.15/library/subprocess.html),
+[os](https://docs.python.org/3.15/library/os.html),
+[Sessions and process groups on Linux/POSIX](https://man7.org/linux/man-pages/man2/setsid.2.html),
+[sys](https://docs.python.org/3.15/library/sys.html).
