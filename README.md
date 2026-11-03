@@ -57,11 +57,11 @@ git submodule update --init --recursive
 | [opengrep-rule-creator](opengrep-rule-creator/) | OpenGrep-first rule authoring — offline rule-writing docs, version-specific compatibility, four complex commented rules, and evidence-based publication gates |
 | [parallel-search](parallel-search/) | Vendored third-party skill (normallygaussian, via clawdbot/skills) — Parallel API web search with ranked, LLM-optimized excerpts |
 | [photon-geocoder](photon-geocoder/) | Geocoding, reverse geocoding, and address autocomplete via Photon/OSM API |
-| [python-idiomatic](python-idiomatic/) | Everyday Python — object semantics, iteration, decorators, exceptions, imports, environments and tooling |
+| [python-idiomatic](python-idiomatic/) | Everyday Python/guidelines — object semantics, `locals()`, iteration, exceptions, imports, environments and tooling |
 | [python-algorithms](python-algorithms/) | Collection selection and all 17 Python algorithm patterns with invariants, complexity and boundary cases |
-| [python-stdlib](python-stdlib/) | Standard-library APIs — iterators/caching, files/time, serialization/regex, records, cleanup, logging and subprocesses |
+| [python-stdlib](python-stdlib/) | Standard-library APIs — iterators/caching, files/time, serialization/regex, AST source analysis, records, cleanup and processes |
 | [python-api-design](python-api-design/) | Python API contracts — compatibility, type-checker coverage, typing, dataclasses, composition and class mechanics |
-| [python-concurrency](python-concurrency/) | Threads, processes, asyncio, cancellation, backpressure, shutdown, free threading and interpreter isolation |
+| [python-concurrency](python-concurrency/) | Threads, processes, asyncio/TaskGroup early exit, cancellation, backpressure, shutdown, free threading and interpreter isolation |
 | [python-performance](python-performance/) | Profiling, fair benchmarks and measured optimization — CPU, memory, algorithms, concurrency, I/O, databases and numerical workloads; concise workflow with topic references |
 | [python-tdd](python-tdd/) | Test-first Python — red-green-refactor, pytest/unittest, fixtures/doubles, properties, real boundaries and test CI |
 | [python-system-design](python-system-design/) | Python application architecture — packages/workspaces, durable jobs, transactions, configuration, deployment and operations |
@@ -364,6 +364,35 @@ Standalone copies passed **178 API and 15 system doctest checks** on CPython
 container, framework or generated-client behavior. A scoped
 [CI workflow](.github/workflows/validate-python-design.yml) reruns both bundles'
 stdlib examples outside the checkout on the latest Python 3.15 patch release.
+
+### Horizontal modern-Python guidance integration — 2026-11-03
+
+The review of Python 3.13–3.15 was integrated **by activation task** into
+existing, independently usable skills; no new chronological "modern Python"
+skill or broad overlapping `python-guidelines` entrypoint was added.
+The inspected repository had no existing `python-guidelines` directory to
+delete or move. General coding, semantics, style and review guidance belongs
+to `python-idiomatic`; specialized typing, concurrency, stdlib, packaging
+and performance procedures remain with their established owners.
+
+Selected, primary-source-checked changes:
+
+| Owner | Changes |
+|---|---|
+| `python-idiomatic` | PEP 667 locals snapshots; first-use lazy-import thread/context and 3.15 compatibility mechanism; corrected `-X disable-remote-debug`; optional performance handoff |
+| `python-concurrency` | Python 3.15 `TaskGroup.cancel()` body/child early-exit and owned cleanup example |
+| `python-stdlib` | Filesystem predicates versus `stat` errors and cached `Path.info`; separately routed AST construction and source-analysis compatibility guide |
+| `python-api-design` | `TypeIs` iff predicate obligations and PEP 695 runtime alias/unsafe-fix distinction |
+| `python-system-design` | Python 3.15 `.start` / deprecated executable `.pth` auditing; native `uv.lock` versus PEP 751 export; locked versus frozen synchronization |
+
+The source report is a discovery aid rather than a release authority.
+Keep the current project's supported interpreter/toolchain instead of
+automatically adopting the newest syntax. The scoped
+[Python examples CI](.github/workflows/validate-python-design.yml) covers
+the five affected skill bundles on Python 3.15 from isolated copies, including
+the new behavior examples. Other runtime/OS/dependency combinations remain
+separate verification obligations. Source and correction details are in each
+skill's own README.
 
 ## Rust skill suite
 

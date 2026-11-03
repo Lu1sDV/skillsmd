@@ -25,7 +25,7 @@ by an ordinary AST.
 
 ```pycon
 >>> import ast
->>> source = "def increment(value: int) -> int:\\n    return value + 1\\n"
+>>> source = "def increment(value: int) -> int:\n    return value + 1\n"
 >>> parsed = ast.parse(source)
 >>> assert isinstance(parsed, ast.Module)
 >>> assert sum(isinstance(n, ast.Return) for n in ast.walk(parsed)) == 1
