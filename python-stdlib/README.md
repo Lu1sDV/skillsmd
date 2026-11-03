@@ -2,6 +2,8 @@
 
 Python standard-library selection and boundary contracts: iteration/caching,
 files/time, serialization/text, records, cleanup, logging and child processes.
+The baseline is **CPython 3.15.2**, the latest stable release checked on
+**2026-11-03**; refresh that fact against Python.org before a later revision.
 
 ## Install
 
@@ -28,9 +30,10 @@ includes all required references and attribution; no sibling skill is required.
 |---|---|
 | [SKILL.md](SKILL.md) | Compact routing, workflow and essential guardrails |
 | [Collections and iteration](references/collections-iteration.md) | Containers, lazy consumption, caches, copying, functional/numeric utilities |
-| [Files and time](references/files-time.md) | Paths, encoding, copies/archives/deletion, timestamps/calendars/durations |
+| [Files and time](references/files-time.md) | Paths, temporary-file ownership, atomic visibility, DST gaps/folds and calendar intervals |
 | [Serialization and text](references/serialization-text.md) | JSON, CSV, TOML, pickle trust, Unicode regex, formatting/diffs |
-| [Records and processes](references/records-processes.md) | Dataclasses/enums, contextlib, logging, environment and subprocesses |
+| [Records and processes](references/records-processes.md) | Dataclasses/enums, contextlib, SQLite transaction/closing boundaries, logging, CLI dispatch and subprocesses |
+| [Runtime compatibility](references/runtime-compatibility.md) | Current stable baseline, removed APIs, UTF-8 defaults and module availability |
 | [LICENSE.upstream](LICENSE.upstream) | Preserved upstream MIT notice |
 
 Algorithm implementation goes to **python-algorithms**; ordinary language/tooling
@@ -53,14 +56,15 @@ python3 -m doctest SKILL.md references/*.md
 ```
 
 The `pycon` fences are complete stdlib examples with meaningful assertions. They
-use temporary files, a real child interpreter, and deterministic data; no network,
-third-party package, timezone database or persistent user-file writes are needed.
-The example baseline is Python 3.11+; run checks on the consumer's actual versions.
-Newer APIs are described with version gates, not assumed available by every example.
+use temporary files, a real child interpreter, SQLite and deterministic data;
+no network or persistent user-file writes are needed. The example baseline is
+CPython 3.15.2. The DST checks require an IANA timezone database supplied by the OS
+or the `tzdata` package, and SQLite must be enabled in the interpreter build.
+Report an absent prerequisite rather than silently skipping those checks.
 
 These commands do not certify platform-specific permissions, symlink-attack
 resistance, archive confinement, crash durability, Windows batch execution,
-process-tree cleanup, or real time-zone transitions. Those need environment-specific
+process-tree cleanup, or every timezone/version rule. Those need environment-specific
 checks when used. No external program, shell or benchmark recipe is silently
 executed by doctest.
 
@@ -101,3 +105,24 @@ pinned at Python-content commit `0b88a786ef09681717a805d9f7e0b195ab610f6c`:
   of upstream speed percentages and “safe by default” generalizations.
 
 Upstream attribution is retained in [LICENSE.upstream](LICENSE.upstream).
+
+### Community curation, 2026-11-03
+
+Inspect promising sources as leads, then verify each proposed rule independently.
+The sources below were directly read; links identify the retrieved mutable files,
+not verified immutable commits. Added examples are original contract checks.
+
+| Inspected source | Integration decision |
+|---|---|
+| [schattenspiegel datetime/zoneinfo](https://github.com/schattenspiegel/skill-foundry-skills/blob/main/skills/datetime-zoneinfo-python/SKILL.md) | Add UTC round-trip resolution, ordinary/gap/fold distinctions, civil recurrences and local-day boundaries; test a 23-hour day instead of assuming 24 hours. |
+| [bedkillerspacex-boop temporary files](https://github.com/bedkillerspacex-boop/codex-skill-library/blob/main/python-tempfile-safe/SKILL.md) | Adapt creation/cleanup and same-filesystem staging. Keep Windows reopen rules, metadata, durability and hostile-path limits explicit; do not copy an unqualified atomic/security recipe. |
+| [modbender CSV](https://github.com/modbender/skill-library-mcp/blob/main/data/csv/SKILL.md) | Adopt BOM/dialect awareness after correction: default Python CSV does not distinguish quoted empties, a final newline creates no extra record, and quoting does not force spreadsheet types. |
+| [reysree sqlite3 guide](https://github.com/reysree/RealPage/blob/main/.claude/skills/sqlite3-guide/SKILL.md) | Correct its claim that the connection context manager closes the connection. Add independent rollback and explicit-close assertions, with deliberate transaction mode. |
+| [agentmemoir subprocess/concurrency](https://github.com/agentmemoir/skills/blob/main/skills/code/python-subprocess-and-concurrency/SKILL.md) | Adopt child input/pipe/process-group questions; reject universal shell bans, platform-independent tree-kill claims and direct-child-only escalation logic. |
+| [Tyler-R-Kendrick Python CLI](https://github.com/Tyler-R-Kendrick/agent-skills/blob/main/skills/python/cli/SKILL.md) | Retain only argparse's subcommand-to-handler pattern; framework recommendations and UI policies stay project choices. |
+
+Existing iteration and cache coverage already addressed many listed candidates;
+add only the missing dispatch/security distinctions. Do not import broad module
+catalogues, version-feature inventories or framework-specific recipes. The new
+runtime reference selects actual migration failure points and routes language,
+typing and concurrency details to their owning skills.
