@@ -151,8 +151,8 @@ If implementing custom `__deepcopy__`, allocate and put the clone in `memo` **be
 recursing into a field that might point back to the original. Pass the same memo to
 nested `deepcopy` calls. Define which resource handles remain shared; do not promise
 blanket independence. Prefer explicit reconstruction if generic copying hides the
-ownership rules. `copy.replace` exists only on 3.13+; use `dataclasses.replace` on the
-3.11 baseline.
+ownership rules. `copy.replace` is available on 3.13+; use `dataclasses.replace`
+when supporting older Python or when the dataclass-specific operation is clearer.
 
 ## Singleton, lazy values, and object pools
 
@@ -177,6 +177,6 @@ ownership rules. `copy.replace` exists only on 3.13+; use `dataclasses.replace` 
   `Queue(maxsize=0)` is unbounded, not a zero-capacity pool. Use monotonic deadlines.
   Concurrency/lifetime design can hand off to python-concurrency when installed.
 
-First-party references: [dataclasses](https://docs.python.org/3.14/library/dataclasses.html),
-[copy](https://docs.python.org/3.14/library/copy.html), and
-[functools](https://docs.python.org/3.14/library/functools.html).
+First-party references: [dataclasses](https://docs.python.org/3.15/library/dataclasses.html),
+[copy](https://docs.python.org/3.15/library/copy.html), and
+[functools](https://docs.python.org/3.15/library/functools.html).

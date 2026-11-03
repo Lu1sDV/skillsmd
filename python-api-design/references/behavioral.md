@@ -325,6 +325,6 @@ commit/rollback failure, not treat `with` as proof that commit succeeded. Multi-
 acquisition needs cleanup for earlier resources if later acquisition fails;
 `contextlib.ExitStack` is the stdlib tool. No custom lifecycle framework is required.
 
-First-party references: [AST visitors](https://docs.python.org/3.14/library/ast.html#ast.NodeVisitor),
-[functools](https://docs.python.org/3.14/library/functools.html), and
-[contextlib](https://docs.python.org/3.14/library/contextlib.html).
+First-party references: [AST visitors](https://docs.python.org/3.15/library/ast.html#ast.NodeVisitor),
+[functools](https://docs.python.org/3.15/library/functools.html), and
+[contextlib](https://docs.python.org/3.15/library/contextlib.html).

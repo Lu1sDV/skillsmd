@@ -7,6 +7,7 @@
 - [Resources and deployment](#resources-and-deployment)
 - [Choose task lifetime before task tooling](#choose-task-lifetime-before-task-tooling)
 - [Durable does not mean exactly once](#durable-does-not-mean-exactly-once)
+- [Celery delivery and worker limits](#celery-delivery-and-worker-limits)
 - [Evidence at the runtime boundary](#evidence-at-the-runtime-boundary)
 
 ## Select the framework, not a benchmark slogan
@@ -68,11 +69,11 @@ loop stops when the view completes, cancelling unfinished spawned tasks. An ASGI
 adapter changes loop lifetime, not job durability. See [Flask async limits](https://flask.palletsprojects.com/en/stable/async-await/).
 
 Django supports WSGI and ASGI; synchronous middleware can require sync adaptation.
-In Django **5.2**, async ORM calls do not provide async transaction blocks: put a
+In Django **6.0**, async ORM calls do not provide async transaction blocks: put a
 transactional operation in one synchronous function and call it via
 `sync_to_async`, preserving thread-sensitive resource ownership. Do not disable
 async safety guards to bypass this. Recheck the consuming Django version before
-assuming this limitation has changed. See [Django 5.2 async support](https://docs.djangoproject.com/en/5.2/topics/async/).
+assuming this limitation has changed. See [Django 6.0 async support](https://docs.djangoproject.com/en/6.0/topics/async/).
 
 ## Resources and deployment
 
@@ -81,7 +82,10 @@ prefer its [lifespan context](https://fastapi.tiangolo.com/advanced/events/).
 Use the real library API: SQLAlchemy async engines have `dispose()`; the source's
 `engine.disconnect()` is not a generic SQLAlchemy engine method. Resource
 acquisition and cleanup should be paired with context managers/`try/finally`,
-including partial startup failure. Do not perform production I/O at import time.
+including partial startup failure. Name the last use: streams and yielded
+iterators can outlive the function that returned them. Test cancellation cleanup
+separately from ordinary exceptions; do not depend on garbage collection or
+finalizers for correctness. Do not perform production I/O at import time.
 
 Each worker process/replica has independent memory and lifespan initialization.
 A mutable global cache is not a shared cache, and startup hooks are not a
@@ -89,18 +93,13 @@ cluster-wide once-only migration mechanism. Pool budget upper bound includes
 replicas × web workers × per-worker pool capacity plus job workers and admin
 connections. Leave database headroom and bound pool wait time.
 
-Use a server compatible with the application interface: WSGI examples include
-Gunicorn/Waitress; ASGI examples include Uvicorn/Hypercorn. Select OS support and
-protocol features from the chosen server's docs. Development reloaders, Flask's
-development server and Django `runserver` are not production deployment plans.
-Put schema migrations in an explicit deployment step, not concurrent worker
-startup. Configure trusted proxies/host validation, TLS termination, request and
-body limits, timeouts and graceful drain according to the chosen framework.
-
-Shutdown must stop intake, give owned work a bounded completion period, then
-cancel/close remaining resources. A forced exit may interrupt it. A client
-disconnect does not imply that database work was rolled back; report unknown
-outcomes and support retry semantics where required.
+Use a server compatible with the application interface and platform; verify its
+protocols rather than inferring them from the framework. Development reloaders,
+Flask's development server and Django `runserver` are not production deployment
+plans. See [deployment and operations](deployment-operations.md) for artifact
+builds, migrations, proxies, health and graceful drain. A client disconnect does
+not imply database rollback; report unknown outcomes and support recovery by a
+stable operation identity where required.
 
 ## Choose task lifetime before task tooling
 
@@ -153,7 +152,10 @@ For required work, specify all of the following:
 4. **Retry policy:** retry known transient failures with bounded backoff/jitter,
    an attempt/age limit and I/O timeouts. Do not endlessly retry invalid input or
    swallow permanent errors into apparent success. Expose terminal failure and
-   a deliberate operator replay path.
+   a deliberate operator replay path. Specify whether a limit counts retries or
+   total attempts, and count nested SDK/client/worker retries against one end-to-end
+   budget. A timeout does not prove the effect failed; retry safety comes from the
+   operation/provider contract, not a universal HTTP-status allowlist.
 5. **Delivery settings:** Celery normally acknowledges before execution.
    `acks_late` shifts acknowledgement later but does not by itself cover every
    worker-loss case; consult `task_reject_on_worker_lost` and broker behavior.
@@ -173,6 +175,35 @@ transaction as the business change, dispatch committed rows later, and mark them
 sent only after publication. A dispatcher crash after publish can duplicate a
 message; consumers still need idempotency. Do not claim atomicity across arbitrary
 remote systems or add an outbox when the effect is explicitly expendable.
+
+## Celery delivery and worker limits
+
+The following qualifies **Celery 5.6** behavior; verify the broker, pool and installed
+release. These are policy choices, not a configuration block to enable wholesale.
+
+| Control | Consequence to verify |
+|---|---|
+| `task_acks_late` (disabled by default) | Early acknowledgement leaves a loss window after acknowledgement and before completion. Late acknowledgement permits redelivery, so effects must tolerate duplicates. Neither setting establishes a universal exactly-once or at-most-once guarantee. |
+| `task_reject_on_worker_lost` (disabled by default) | Late acknowledgement still acknowledges some child-process exits; enabling rejection allows requeue in those cases but can create poison-message loops. |
+| `worker_prefetch_multiplier` (default 4) | A multiplier of 1 with late acknowledgement suits long jobs with little reservation ahead of execution; larger values can improve short-job throughput. Route distinct workloads separately. |
+| Redis `visibility_timeout` (default 3600 seconds) | An unacknowledged job can be delivered again when the timeout expires. Include execution and ETA/countdown waiting; increasing it also delays recovery after forced loss. It is not a universal broker setting. |
+| `task_soft_time_limit` / `task_time_limit` | A supported soft limit permits bounded cleanup; a hard limit forcibly ends execution and cannot promise cleanup. Use I/O deadlines first, and verify pool/platform support. |
+
+Normal task exceptions are normally acknowledged even with late acknowledgement;
+configure application retries deliberately. Celery `max_retries=3` permits the
+initial attempt plus three retries, not three total attempts. Prefetch multiplier
+1 with early acknowledgement can still reserve an extra job per execution slot;
+Celery 5.6's `worker_disable_prefetch` is a Redis-only alternative, not a portable
+way to disable reservations. `gevent` does not implement soft time limits and
+cannot enforce its hard limit while a task blocks. Prefork child recycling can
+bound accumulated leaks (`worker_max_tasks_per_child` / `worker_max_memory_per_child`),
+but is not an immediate per-task memory cap or a repair for a growing queue.
+
+Primary references: [task acknowledgement/retry](https://docs.celeryq.dev/en/stable/userguide/tasks.html),
+[configuration defaults](https://docs.celeryq.dev/en/stable/userguide/configuration.html),
+[prefetch tradeoffs](https://docs.celeryq.dev/en/stable/userguide/optimizing.html),
+[Redis visibility](https://docs.celeryq.dev/en/stable/getting-started/backends-and-brokers/redis.html)
+and [worker limits](https://docs.celeryq.dev/en/stable/userguide/workers.html).
 
 ## Evidence at the runtime boundary
 

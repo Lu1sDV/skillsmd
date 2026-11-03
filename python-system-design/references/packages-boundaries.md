@@ -5,6 +5,7 @@
 - [Choose a shape by coupling, not size](#choose-a-shape-by-coupling-not-size)
 - [Dependency direction and composition](#dependency-direction-and-composition)
 - [Installing the application is a boundary](#installing-the-application-is-a-boundary)
+- [Workspace and distribution boundaries](#workspace-and-distribution-boundaries)
 - [When a service boundary is justified](#when-a-service-boundary-is-justified)
 - [Make tests follow the boundary](#make-tests-follow-the-boundary)
 
@@ -69,6 +70,21 @@ start servers, read mandatory secrets, mutate global logging configuration or
 open network connections on import. Imports should permit tooling and isolated
 unit tests without a live deployment environment.
 
+For modules with distinct owners, document their supported import surfaces and
+which code may write each table. A public module need not be named `gateway.py`,
+and public APIs need not all be re-exported from `__init__.py`. Keep consumers out
+of another module's repositories/ORM internals. Enforce consequential rules with
+focused import contracts or architecture tests, including a known forbidden
+import that proves the check can fail. [Import Linter](https://import-linter.readthedocs.io/en/stable/contract_types/)
+provides forbidden, layers and independence contracts; choose the contract that
+matches the actual dependency graph, not a mandatory layer tree.
+
+Do not remove cross-module foreign keys or create independent migration histories
+solely to resemble future services. A shared database can retain referential
+integrity and one ordered migration graph while modules own their writes. Treat
+data ownership, migrations and transactions as explicit extraction work if a real
+service split becomes necessary.
+
 ## Installing the application is a boundary
 
 The distribution name used by pip may differ from the import package name.
@@ -94,7 +110,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "stockroom-tool"
 version = "0.1.0"
-requires-python = ">=3.11"
+requires-python = ">=3.15"
 dependencies = []
 
 [project.scripts]
@@ -111,6 +127,21 @@ to that same function. Package templates/data explicitly through the selected
 backend and access read-only resources with `importlib.resources`, not paths
 relative to the working directory. Writable state belongs outside the installed
 package in a configured data directory.
+
+Keep backend choice separate from dependency management. `uv build` is a PEP 517
+frontend and can use an existing backend. Current `uv_build` handles pure Python;
+native extensions need a suitable backend such as setuptools, maturin or
+scikit-build-core. VCS-derived versions also need the chosen backend's actual
+support/plugin, not an invented `[tool.uv] version-provider` key. Preserve a
+working backend unless a concrete requirement justifies migration. See [uv's
+backend scope](https://docs.astral.sh/uv/concepts/build-backend/).
+
+Separate runtime dependencies, optional consumer features and development tools.
+PEP 735 `[dependency-groups]` hold local test/lint requirements without publishing
+them as distribution metadata; `[project.optional-dependencies]` publishes
+installable extras. An existing `dev` extra is a supported convention, not an
+automatic runtime dependency or a reason to migrate unrelated tooling. See
+[dependency groups](https://packaging.python.org/en/latest/specifications/dependency-groups/).
 
 Development recipe, run from the consumer project's checkout, not this skill:
 
@@ -129,15 +160,77 @@ Release smoke procedure (optional build tooling, not executed documentation):
 
 1. Build with the existing backend, e.g. `python -m build` when the `build` frontend
    is available. Pin/resolve build tooling under the project's own policy.
-2. Create a fresh environment and install the **exact** resulting wheel with its
+2. Inspect wheel/sdist contents: expected modules, resources, entry points,
+   metadata and `py.typed` when promised; no secrets or unintended build inputs.
+   Build the wheel from the sdist when that is a supported distribution path.
+3. Create a fresh environment and install the **exact** resulting wheel with its
    resolved runtime dependencies, not `-e .` and not an ambiguous `dist/*.whl`.
-3. From a temporary directory outside the checkout, invoke the installed command
+4. From a temporary directory outside the checkout, invoke the installed command
    and import package, verify help/error exit codes and read a packaged resource.
-4. Run the relevant contract tests against that installed artifact. Do not add
+5. Run the relevant contract tests against that installed artifact. Do not add
    `src/` to the path. This catches omitted modules/resources and entry points.
+
+`uv run --isolated --no-project` does not itself remove the checkout from Python's
+import path. Keep the outside-checkout check; `python -I` can additionally ignore
+the current directory, user site and `PYTHON*` environment variables. See
+[Python's isolated mode](https://docs.python.org/3.15/using/cmdline.html#cmdoption-I).
 
 Primary packaging references: [pyproject metadata](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/)
 and [pip editable versus regular installs](https://pip.pypa.io/en/stable/topics/local-project-installs/).
+
+## Workspace and distribution boundaries
+
+One deployable with no separate distribution or reuse usually needs one package.
+Use a workspace for actual independently testable/publishable components, plugins,
+native-extension packages or shared code; a package per feature is not required.
+
+For an existing uv workflow, each member has its own `pyproject.toml`; the workspace
+shares a lockfile and normally an environment. Minimal wiring fragments:
+
+```toml
+# Root pyproject.toml
+[tool.uv.workspace]
+members = ["apps/*", "libs/*"]
+exclude = ["libs/experiments"]
+```
+
+```toml
+# Consumer member's pyproject.toml, alongside its own metadata/build system
+[project]
+name = "stockroom-api"
+version = "0.1.0"
+requires-python = ">=3.15"
+dependencies = ["stockroom-core>=0.1.0"]
+
+[tool.uv.sources]
+stockroom-core = { workspace = true }
+```
+
+Put the source mapping on the consumer or intentionally at the workspace root;
+a member does not source itself. `uv lock` resolves the workspace; `uv sync` and
+`uv run` default to the root, with `--package` selecting a member and
+`--all-packages` including all members. Members are editable by default. Every
+member must declare what it imports: the shared environment can hide dependencies
+installed only for a sibling. Test each release artifact in its own environment.
+
+The effective Python range is the intersection of members' `requires-python`:
+different but overlapping floors are allowed, while lower-version support for an
+individual library needs a separate test environment. Independent environments
+and resolution policies may be clearer as separate projects with path sources.
+Current uv also supports explicit `tool.uv.conflicts` between mutually exclusive
+workspace members; this does **not** let incompatible members install together.
+Check the installed uv version before relying on that feature. See [workspace
+semantics](https://docs.astral.sh/uv/concepts/projects/workspaces/) and [declared
+conflicts](https://docs.astral.sh/uv/concepts/resolution/#conflicting-dependencies).
+
+uv source overrides are development configuration, not published dependency
+metadata. For a package intended for other frontends/index consumers, verify
+`uv build --no-sources` and a clean install from the intended index/wheel set;
+every published dependency must be resolvable there. If several distributions
+share a PEP 420 namespace, omit `__init__.py` only where an implicit namespace is
+intended, assign each distribution distinct subpackage ownership, and verify the
+combined installed artifacts. See [uv build sources](https://docs.astral.sh/uv/concepts/projects/dependencies/#build-dependencies)
+and [PyPA namespace packaging](https://packaging.python.org/en/latest/guides/packaging-namespace-packages/).
 
 ## When a service boundary is justified
 
