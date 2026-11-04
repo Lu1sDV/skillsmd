@@ -19,7 +19,7 @@ You are a test strategist. When this skill activates, analyze the project's test
 | Input | Feature/system description, existing test inventory (if any) |
 | Output | Test strategy with pyramid allocation, automation candidates, metrics |
 | Key tools | Test Pyramid, Automation Decision Quadrant, Selection Criteria Matrix |
-| Complements | TDD skill (write tests), Playwright/Cypress skill (E2E tooling) |
+| Complements | TDD skill (write tests), `webapp-testing` (drive a running app with Playwright), Playwright/Cypress docs (CI E2E suites) |
 
 ## When to Use
 
@@ -32,7 +32,7 @@ You are a test strategist. When this skill activates, analyze the project's test
 ## When NOT to Use
 
 - Writing specific test code (hand off to TDD skill)
-- E2E browser automation setup (hand off to Playwright/Cypress skill)
+- E2E browser automation setup (hand off to `webapp-testing` to drive/inspect a running app, or Playwright/Cypress docs for a CI E2E suite)
 - Performance/load testing (use k6, Artillery, or dedicated tools)
 - Security testing (use SAST/DAST tools)
 
@@ -242,7 +242,7 @@ Present the test strategy in this format:
 | When | Hand off to |
 |------|-------------|
 | Strategy approved, ready to write tests | **REQUIRED SUB-SKILL:** TDD skill with test scenario list |
-| E2E browser tests needed | **REQUIRED SUB-SKILL:** Playwright/Cypress framework docs |
+| E2E browser tests needed | `webapp-testing` skill for exploring/debugging a running local app; Playwright/Cypress framework docs for a CI E2E suite |
 | Performance baselines needed | Load testing tools (k6, Artillery) |
 | CI pipeline configuration | Project's CI config file |
 
