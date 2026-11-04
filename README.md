@@ -18,8 +18,9 @@ snapshots retain their original layout and attribution.
 |------------|----------|---------|
 | [ai-design-skills](ai-design-skills/) | [elayadesign/ai-design-skills](https://github.com/elayadesign/ai-design-skills) | [MIT](ai-design-skills/LICENSE), copyright retained by upstream |
 | [obsidian-skills](obsidian-skills/) — includes [defuddle](obsidian-skills/skills/defuddle/SKILL.md) | [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills) | [MIT](obsidian-skills/LICENSE), copyright retained by upstream |
+| [anthropics-skills](anthropics-skills/) — includes [webapp-testing](anthropics-skills/skills/webapp-testing/SKILL.md) | [anthropics/skills](https://github.com/anthropics/skills) | Per skill; [webapp-testing](anthropics-skills/skills/webapp-testing/LICENSE.txt) is Apache-2.0, copyright retained by upstream |
 
-These collections are maintained upstream, not authored by this repository. Git always records each submodule at a specific commit; `obsidian-skills` also tracks upstream `main` for explicit updates.
+These collections are maintained upstream, not authored by this repository. Git always records each submodule at a specific commit; `obsidian-skills` and `anthropics-skills` also track upstream `main` for explicit updates.
 
 After cloning this repository, fetch its contents with:
 
@@ -27,10 +28,10 @@ After cloning this repository, fetch its contents with:
 git submodule update --init --recursive
 ```
 
-To update `obsidian-skills` to the latest upstream `main`:
+To update `obsidian-skills` or `anthropics-skills` to the latest upstream `main`:
 
 ```bash
-git submodule update --init --remote obsidian-skills
+git submodule update --init --remote obsidian-skills anthropics-skills
 ```
 
 Commit the updated submodule pointer to share that version. Ordinary submodule initialization uses the recorded commit, not the latest branch tip.
@@ -45,6 +46,7 @@ Commit the updated submodule pointer to share that version. Ordinary submodule i
 | [ctfd](ctfd/) | Develop, debug, deploy CTFd platform — plugins, themes, Docker stack, testing |
 | [debate](debate/) | Bounded multi-agent debate for contested 2–4 position decisions — pinned debaters, steelman swap, judge synthesis |
 | [defuddle](obsidian-skills/skills/defuddle/) | Upstream skill via `obsidian-skills` — extract clean Markdown from HTML pages with Defuddle CLI |
+| [webapp-testing](anthropics-skills/skills/webapp-testing/) | Upstream skill via `anthropics-skills` — drive and inspect a running local web app with Playwright (screenshots, DOM, console logs); pairs with test-engineering |
 | [evaluating-enhancing-vulnerability-reasoning](evaluating-enhancing-vulnerability-reasoning/) | DAG-structured vulnerability reasoning (DAGVul) — causal fact/inference/sink graphs instead of linear chain-of-thought |
 | [feature-engineering](feature-engineering/) | Time series feature engineering — calendar features, cyclical encoding, rolling stats, differencing |
 | [fuzzgpt](fuzzgpt/) | History-driven LLM fuzzing (FuzzGPT-derived, arXiv:2304.02014) — mine bug history, auto-label buggy APIs, few-shot/zero-shot/retrieval edge-case generation, crash + differential oracles; target-agnostic, pairs with vuln-research |

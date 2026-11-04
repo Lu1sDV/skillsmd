@@ -5,3 +5,7 @@
 	path = obsidian-skills
 	url = https://github.com/kepano/obsidian-skills.git
 	branch = main
+[submodule "anthropics-skills"]
+	path = anthropics-skills
+	url = https://github.com/anthropics/skills.git
+	branch = main
