@@ -1,0 +1,53 @@
+{
+  "key": "sanitizenodelink-safe-protocol",
+  "symbol": "Gitlab::Utils::SanitizeNodeLink#safe_protocol?",
+  "located": true,
+  "real_file": "gems/gitlab-utils/lib/gitlab/utils/sanitize_node_link.rb:36-45",
+  "guard_summary": "safe_protocol?(scheme) does scheme.strip.downcase.gsub(/[^A-Za-z+.-]+/, '') then returns UNSAFE_PROTOCOLS.none?(scheme) where UNSAFE_PROTOCOLS=%w[data javascript vbscript]. It is a DENYLIST of exactly 3 schemes (not an allowlist): any scheme not collapsing to data/javascript/vbscript is permitted. The gsub strips every char that is not a letter, '+', '.', or '-' (so it removes digits, whitespace, control chars BEFORE comparison), and '+' '.' '-' are PRESERVED inside the scheme. It is reached via permit_url? which first does Addressable::URI.parse(url).normalize and returns false (block) only when scheme normalizes to one of the 3.",
+  "downstream_sink": "lib/banzai/filter/sanitize_link_filter.rb:28 (sanitize_unsafe_links -> permit_url? -> safe_protocol?) gating href/src on rendered markdown; the <a> protocol backstop is intentionally removed at lib/banzai/filter/base_sanitization_filter.rb:62 (allowlist[:protocols].delete('a')), so for <a href> this denylist is the ONLY protocol guard.",
+  "vectors": [
+    {
+      "technique": "Hinted '+'-scheme: RFC3986 scheme allows '+', gsub preserves it, so 'javascript+foo' != 'javascript' and passes the denylist.",
+      "input": "[click](javascript+foo:alert(document.domain))",
+      "why_passes": "gsub keeps '+', producing scheme 'javascript+foo'; UNSAFE_PROTOCOLS.none?('javascript+foo') is true so permit_url? returns true and the <a href> survives (protocol allowlist for 'a' was deleted in base_sanitization_filter.rb:62).",
+      "impact": "NONE in practice: no browser executes 'javascript+foo:' as script. Per WHATWG URL/HTML, only the exact 'javascript:' scheme is a fetch-as-script scheme; 'javascript+foo:' is an unregistered scheme and an anchor click to it is inert (no navigation, no script). So it defeats the GUARD but yields no XSS.",
+      "likelihood": "low",
+      "test_idea": "irb: confirmed permit?('javascript+foo:alert(1)') => PERMIT(safe=\"javascript+foo\"). Browser: create <a href=\"javascript+foo:alert(1)\">x</a>, click it; nothing executes/navigates. Hence guard-bypass without sink impact."
+    },
+    {
+      "technique": "Denylist completeness check for genuinely script-executing href schemes.",
+      "input": "javascript:, data:text/html, vbscript: (all forms)",
+      "why_passes": "These are exactly the 3 denylisted schemes; gsub normalizes case/whitespace/digit-obfuscation back onto them (e.g. 'JaVaScRiPt' -> 'javascript', 'java0script' -> NOT collapsing since digit removal gives 'javascript' -> blocked). Verified: 'JaVaScRiPt:' BLOCK, 'java0script:' -> 'javascript' BLOCK.",
+      "impact": "None - all three executable schemes are blocked. The digit-stripping gsub actually HARDENS against 'java0script:'/'j4avascript:' style obfuscation by collapsing them onto 'javascript'.",
+      "likelihood": "low",
+      "test_idea": "irb table in /tmp/guard.rb: every casing/digit/space variant of the 3 schemes returns BLOCK or RAISE."
+    },
+    {
+      "technique": "Control-char / whitespace / BOM / null prefix before or inside scheme (classic allowlist-vs-browser differential).",
+      "input": "\\tjavascript:alert(1), \\x00javascript:..., \\u0001javascript:..., \\uFEFFjavascript:..., 'java\\tscript:...', 'java script:...'",
+      "why_passes": "Intended bypass: HTML/URL parser strips these but a naive string check would not. HERE IT DOES NOT BYPASS: Addressable::URI.parse raises InvalidURIError ('Invalid scheme format') on any of these BEFORE safe_protocol? is reached; permit_url? rescues InvalidURIError and returns false (link removed) under the default remove_invalid_links: true used by SanitizeLinkFilter.",
+      "impact": "None - link is stripped. Parse-then-check ordering (Addressable strict scheme grammar) defeats the obfuscation, not safe_protocol? itself.",
+      "likelihood": "low",
+      "test_idea": "/tmp/guard2.rb: every control/whitespace/BOM-prefixed variant => RAISE Addressable::URI::InvalidURIError => permit_url? returns false."
+    },
+    {
+      "technique": "Non-denylisted but special schemes (blob:, filesystem:, view-source:, jar:, tel:, mailto:) pass the denylist.",
+      "input": "[x](blob:https://gitlab.com/uuid), [x](filesystem:https://gitlab.com/temporary/a), [x](view-source:http://x), [x](jar:http://x!/)",
+      "why_passes": "None of these collapse to data/javascript/vbscript so safe_protocol? returns true and the href survives (a-protocol backstop deleted).",
+      "impact": "No direct stored XSS from an anchor click: modern browsers do not execute script from an <a href> click to blob:/filesystem:/view-source:/jar: in the gitlab.com origin (view-source: and jar: are non-navigable/blocked from web content; blob:/filesystem: URLs the attacker cannot mint in the victim origin via a static href). At most a benign/dead link. Worth a note as denylist drift but not a viable XSS vector here.",
+      "likelihood": "low",
+      "test_idea": "irb: all four => PERMIT. Then in a browser confirm an <a> click to each does not run script in the page origin."
+    },
+    {
+      "technique": "wiki_link_filter uses remove_invalid_links: false (fail-open on parse error).",
+      "input": "wiki link whose target makes Addressable raise InvalidURIError",
+      "why_passes": "lib/banzai/filter/wiki_link_filter.rb:41 calls remove_unsafe_links(..., remove_invalid_links: false), so an unparseable URL is PERMITTED rather than removed.",
+      "impact": "Low: the value still flows through the main SanitizeLinkFilter (default remove_invalid_links: true) elsewhere in the pipeline, and an InvalidURIError target is not a parseable javascript: URL a browser would execute. No demonstrated executable href; needs the unparseable string to simultaneously be browser-executable, which the cases tested (tab/space/control) are not.",
+      "likelihood": "low",
+      "test_idea": "Render a wiki page with a link target that raises in Addressable; inspect final sanitized HTML to confirm whether any href survives the full pipeline."
+    }
+  ],
+  "best_likelihood": "low",
+  "introduces_vuln": false,
+  "notes": "HINT IS BACKWARDS / NON-EXPLOITABLE. The hint claims '+' preserved in the scheme lets javascript+foo: slip past the allowlist 'while still being treated as javascript: by a browser'. The first half is true (gsub preserves '+', so 'javascript+foo' passes the 3-item DENYLIST - confirmed PERMIT). The second half is FALSE: browsers do NOT treat 'javascript+foo:' as 'javascript:'; per WHATWG only the exact 'javascript:' scheme runs as script, so the surviving href is inert. Net: a guard bypass with no sink impact. Separately, this is a DENYLIST (data/javascript/vbscript), not an allowlist as the hint states. I checked completeness: all three browser-script-executing href schemes are covered; case/digit/whitespace obfuscation is neutralized by gsub+downcase or rejected by Addressable's strict scheme parser (InvalidURIError -> link removed under the default remove_invalid_links:true). The sink is real and the protocol backstop for <a> is deliberately removed (base_sanitization_filter.rb:62), making safe_protocol? the sole href gate - but no tested vector yields an href a browser will execute as script. introduces_vuln=false. Empirical evidence: /tmp/guard.rb and /tmp/guard2.rb run against addressable 2.8.10."
+}
