@@ -1,0 +1,64 @@
+name: Review toolkit pinned harness smoke
+
+on:
+  push:
+    paths:
+      - 'review-toolkit/**'
+      - 'review-code/**'
+      - 'review-pr/**'
+      - '.github/workflows/review-toolkit-pinned.yml'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python3 -m unittest discover -s review-toolkit/tests -v
+      - run: python3 review-toolkit/tools/build_skills.py --check
+      - run: python3 review-toolkit/tools/make_distributor.py
+      - run: python3 review-tools-install.py extract "$RUNNER_TEMP/extracted-skillsmd"
+      - run: python3 "$RUNNER_TEMP/extracted-skillsmd/tools/build_skills.py" --check
+
+  pin-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.export.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: export
+        run: echo "matrix=$(python3 review-toolkit/tools/check_harnesses.py --ci-matrix)" >> "$GITHUB_OUTPUT"
+
+  cli-smoke:
+    needs: pin-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.pin-matrix.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22.19.0'}
+      - uses: oven-sh/setup-bun@v2
+        if: matrix.target == 'omp'
+        with: {bun-version: '1.4.4'}
+      - name: Install EXACT pinned harness version
+        run: npm install -g "${{ matrix.package }}@${{ matrix.version }}"
+      - name: Check installed version equals pin
+        run: python3 review-toolkit/tools/check_harnesses.py --target "${{ matrix.target }}" --strict
+      - name: Install project review resources without user configuration changes
+        run: |
+          mkdir -p "$RUNNER_TEMP/review-sandbox"
+          python3 review-toolkit/install.py install --target "${{ matrix.target }}" --scope project --project-root "$RUNNER_TEMP/review-sandbox" --with-reviewer
+          python3 review-toolkit/install.py upgrade --target "${{ matrix.target }}" --scope project --project-root "$RUNNER_TEMP/review-sandbox" --with-reviewer
+      - name: Check command/skill discovery files
+        run: python3 review-toolkit/tools/validate_layout.py --target "${{ matrix.target }}" --scope project --project-root "$RUNNER_TEMP/review-sandbox"
+
+# This workflow tests pinned CLI startup/version and installed path shape only.
+# Live interactive command invocation, authentication, and subagent orchestration
+# require separate credentialed/manual integration testing and are NOT certified here.
