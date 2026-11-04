@@ -17,14 +17,23 @@ snapshots retain their original layout and attribution.
 | Collection | Upstream | License |
 |------------|----------|---------|
 | [ai-design-skills](ai-design-skills/) | [elayadesign/ai-design-skills](https://github.com/elayadesign/ai-design-skills) | [MIT](ai-design-skills/LICENSE), copyright retained by upstream |
+| [obsidian-skills](obsidian-skills/) — includes [defuddle](obsidian-skills/skills/defuddle/SKILL.md) | [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills) | [MIT](obsidian-skills/LICENSE), copyright retained by upstream |
 
-This collection is maintained upstream, not authored by this repository. Git pins the submodule to a specific commit.
+These collections are maintained upstream, not authored by this repository. Git always records each submodule at a specific commit; `obsidian-skills` also tracks upstream `main` for explicit updates.
 
 After cloning this repository, fetch its contents with:
 
 ```bash
 git submodule update --init --recursive
 ```
+
+To update `obsidian-skills` to the latest upstream `main`:
+
+```bash
+git submodule update --init --remote obsidian-skills
+```
+
+Commit the updated submodule pointer to share that version. Ordinary submodule initialization uses the recorded commit, not the latest branch tip.
 
 ## Skills
 
@@ -35,6 +44,7 @@ git submodule update --init --recursive
 | [cook](cook/) | Composable agent orchestration — review loops, repeat passes, parallel races, vs comparisons, ralph task-list progression |
 | [ctfd](ctfd/) | Develop, debug, deploy CTFd platform — plugins, themes, Docker stack, testing |
 | [debate](debate/) | Bounded multi-agent debate for contested 2–4 position decisions — pinned debaters, steelman swap, judge synthesis |
+| [defuddle](obsidian-skills/skills/defuddle/) | Upstream skill via `obsidian-skills` — extract clean Markdown from HTML pages with Defuddle CLI |
 | [evaluating-enhancing-vulnerability-reasoning](evaluating-enhancing-vulnerability-reasoning/) | DAG-structured vulnerability reasoning (DAGVul) — causal fact/inference/sink graphs instead of linear chain-of-thought |
 | [feature-engineering](feature-engineering/) | Time series feature engineering — calendar features, cyclical encoding, rolling stats, differencing |
 | [fuzzgpt](fuzzgpt/) | History-driven LLM fuzzing (FuzzGPT-derived, arXiv:2304.02014) — mine bug history, auto-label buggy APIs, few-shot/zero-shot/retrieval edge-case generation, crash + differential oracles; target-agnostic, pairs with vuln-research |

@@ -1,3 +1,7 @@
 [submodule "ai-design-skills"]
 	path = ai-design-skills
 	url = https://github.com/elayadesign/ai-design-skills.git
+[submodule "obsidian-skills"]
+	path = obsidian-skills
+	url = https://github.com/kepano/obsidian-skills.git
+	branch = main
