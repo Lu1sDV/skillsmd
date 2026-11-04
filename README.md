@@ -85,7 +85,7 @@ git submodule update --init --recursive
 | [ssrf-testing](ssrf-testing/) | SSRF testing and prevention — detection, cloud metadata exploitation, filter bypass, defense strategies |
 | [tavily-web](tavily-web/) | Web search, extraction, crawling, and AI-powered research via Tavily API (curl only) |
 | [telethon-development](telethon-development/) | Telethon MTProto client — FloodWait handling, mocking, session management, DB integration |
-| [test-engineering](test-engineering/) | Framework-agnostic test strategy, automation planning, coverage analysis |
+| [test-engineering](test-engineering/) | Framework-agnostic test strategy and test-quality review — oracle independence, assertion strength, flaky-test triage, coverage vs. mutation |
 | [tri-model-consensus](tri-model-consensus/) | Tri-model adversarial consensus — route tasks to Claude+Codex+Gemini, cross-grade discrepancies, merge the strongest output |
 | [typescript-language-runtime](typescript-language-runtime/) | TypeScript language and runtime — nullish handling, functions/classes, modules, runtime validation and execution compatibility |
 | [typescript-type-modeling](typescript-type-modeling/) | Domain types and generic APIs — discriminated unions, narrowing, utility types, mapped/conditional types and compiler contracts |

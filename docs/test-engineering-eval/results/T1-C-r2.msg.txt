@@ -1,0 +1,14 @@
+{
+  "files_added": [
+    "tests/test_order_total_cents.py"
+  ],
+  "commands": [
+    {
+      "command": "python -m pytest -rxXs -v (cwd /tmp/te-eval/runs/T1-C-r2, uses pytest.ini)",
+      "result": "24 collected: 22 passed, 2 xfailed, 0 skipped. (The exit=0 I printed came from a tail pipe, so it is not pytest's own exit status; the summary line is the evidence.)"
+    }
+  ],
+  "not_run": "No mutation check of the passing tests. The claim that the two xfail cases pass once the code is fixed is a prediction, not run against a fixed copy.",
+  "defects": "src/pricing.py uses `quantity > 50` and `quantity > 10`, but SPEC says '10 or more' and '50 or more' (inclusive). order_total_cents(10, 100) returns 1000 (spec implies 950); order_total_cents(50, 100) returns 4750 (spec implies 4500). These two cases are committed as xfail(strict=True) with the reason stated, so they turn red once the code is fixed and the marker should then be removed. Half-up rounding arithmetic matched the spec in every case tested.",
+  "notes": "Nothing under src/ or in existing tests was modified. Expected values are hand-computed from SPEC.md."
+}

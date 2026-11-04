@@ -1,0 +1,14 @@
+{
+  "files_added": [
+    "tests/test_pricing_order_total.py"
+  ],
+  "commands": [
+    {
+      "command": "python -m pytest -q (cwd /tmp/te-eval/runs/T1-B-r1, uses project pytest.ini)",
+      "result": "3 failed, 17 passed. Failures: test_order_total_cents_ten_units_gets_five_percent_off (expected 950, got 1000); test_order_total_cents_fifty_units_gets_ten_percent_off (expected 4500, got 4750); test_order_total_cents_five_percent_exact_half_rounds_up (order_total_cents(10,5) expected 48, got 50). All three fail because of the defect below."
+    }
+  ],
+  "defects": [
+    "src/pricing.py lines 14 and 16 use `quantity > 50` and `quantity > 10`, but SPEC.md says 'or more' (10 or more -> 5%, 50 or more -> 10%). Should be `>= 50` and `>= 10`. Exactly 10 units get no discount and exactly 50 units get only 5%. Rounding logic and ValueError validation look correct. src/ was not modified; the failing tests were left failing on purpose."
+  ]
+}

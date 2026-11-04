@@ -1,0 +1,25 @@
+{
+  "files_added": [
+    "tests/test_slugify_extra.py"
+  ],
+  "nothing_modified": "No changes under src/ and no existing test file touched.",
+  "pytest_runs": [
+    {
+      "command": "python -m pytest (cwd /tmp/te-eval/runs/T5-B-r2, uses pytest.ini)",
+      "result": "baseline: 13 passed"
+    },
+    {
+      "command": "python -m pytest",
+      "result": "after adding new file, first run: 1 failed, 60 passed, 3 xfailed (my own en-dash test; hit the same defect, moved to xfail)"
+    },
+    {
+      "command": "python -m pytest",
+      "result": "final: 60 passed, 4 xfailed"
+    }
+  ],
+  "suspected_defects": [
+    "NFKD + encode('ascii','ignore') silently deletes non-ASCII chars with no decomposition: slugify('Straße') -> 'strae' (expected 'strasse'); slugify('Øre') -> 're' (expected 'ore').",
+    "Deleted non-ASCII chars are not turned into separators, so words get glued: slugify('a日b') -> 'ab' and slugify('a–b') (en dash) -> 'ab' (spec's 'run of non-alphanumeric -> one hyphen' suggests 'a-b'). The spec does not define these cases, so expected values are my reading; each has a strict xfail test.",
+    "Negative max_length is unspecified and untested: slugify('abc', -1) -> 'ab' because slug[:-1] slices from the end; probably should raise ValueError or return ''."
+  ]
+}

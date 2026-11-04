@@ -1,0 +1,15 @@
+{
+  "files_added": [
+    "tests/check_shipping.py"
+  ],
+  "commands": [
+    {
+      "cmd": "python -m pytest -q (cwd /tmp/te-eval/runs/T6-B-r2, uses project pytest.ini)",
+      "result": "first run 7 failed/19 passed (one failure was my own wrong expectation for 10000 g, corrected to 4100); final run 6 failed, 20 passed. The 6 failures are all caused by the defect below and left failing intentionally: overBase at 1001/1501/2001 g and express at 1001/1501/2001 g."
+    }
+  ],
+  "defects": [
+    "src/shipping.py: steps = extra // 500 rounds down, but SPEC says each additional 500 g 'or part of it' adds 200, so it must round up (e.g. steps = -(-extra // 500)). shipping_cents(1001) returns 500, spec requires 700; 1501 returns 700 (spec 900); 2001 returns 900 (spec 1100); express variants are wrong likewise. Correct only when weight above 1000 g is an exact multiple of 500. Express rounding (cost*3//2) is fine since base costs are always even."
+  ],
+  "notes": "Did not modify src/ or existing tests. SKILL.md is a strategy skill; applied its naming convention and boundary-value guidance, skipped its user-approval/strategy-deliverable steps as not applicable."
+}

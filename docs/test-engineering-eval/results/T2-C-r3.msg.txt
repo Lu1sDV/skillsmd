@@ -1,0 +1,17 @@
+{
+  "files_added": [
+    "tests/test_tags.py (11 tests; src/ and existing tests untouched)"
+  ],
+  "pytest": [
+    {
+      "command": "python -m pytest -v (cwd /tmp/te-eval/runs/T2-C-r3, uses project pytest.ini)",
+      "result": "11 collected, 11 passed, no skips/xfails"
+    },
+    {
+      "command": "mutation checks on a temporary copy of src/tags.py (deleted afterwards): reversed tie-break; ranked[:n+1]",
+      "result": "each: 3 failed, 8 passed — tests detect both"
+    }
+  ],
+  "not_run": "random-order/repeat runs (tests are deterministic; unordered unique_tags results compared sorted)",
+  "defects": "None found against SPEC.md. Unspecified behaviours left untested: top_tags with negative n returns ranked[:n] (drops last entries rather than empty/raise); an item with \"tags\": None raises TypeError in both functions."
+}

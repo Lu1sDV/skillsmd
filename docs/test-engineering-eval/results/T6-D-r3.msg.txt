@@ -1,0 +1,15 @@
+{
+  "files_added": [
+    "tests/check_shipping_spec.py"
+  ],
+  "pytest_runs": [
+    {
+      "command": "python -m pytest -q (cwd /tmp/te-eval/runs/T6-D-r3, uses project pytest.ini)",
+      "result": "Final run: 6 failed, 16 passed. All 6 failures are spec-derived tests that the current code fails: test_standard[1001-700], [1501-900], [2001-1100]; test_express[1001-1050], [1501-1350], [2001-1650]. The existing tests/check_basic.py passes in the same run. Earlier runs in this session: the first had a wrong expected value of mine (5000 g, which I corrected to 2100), and the second came after a bad edit of mine that I then fixed."
+    }
+  ],
+  "defects": [
+    "src/shipping.py line 14: `steps = extra // 500` rounds down, but SPEC.md says each additional 500 g 'or part of it' adds 200 cents, so it must round up (e.g. `-(-extra // 500)`). Any weight over 1000 g that is not an exact multiple of 500 is undercharged by 200 cents before the express surcharge: 1001 g returns 500 (spec 700), 1501 g returns 700 (spec 900), 2001 g returns 900 (spec 1100). Exact multiples such as 1500, 2000 and 5000 g are correct, which is why the existing test misses it.",
+    "Not a defect: the express round-down rule cannot be tested because every base cost (500 + 200k) is even, so x1.5 is always whole."
+  ]
+}

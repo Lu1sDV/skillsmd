@@ -1,0 +1,22 @@
+{
+  "files_added": [
+    "tests/test_slugify_extra.py"
+  ],
+  "nothing_modified": "No changes under src/ or to existing test files.",
+  "commands": [
+    {
+      "cmd": "python -m pytest -q (cwd /tmp/te-eval/runs/T5-B-r1, uses project pytest.ini)",
+      "result": "36 passed, 3 xfailed"
+    },
+    {
+      "cmd": "python -m pytest -q -rx",
+      "result": "36 passed, 3 xfailed; the 3 xfails are the defect below, marked xfail(strict=True)"
+    }
+  ],
+  "guidance_note": "I did not follow the guidance document's strategy workflow (inventory with user, scoring matrix, approval step). It is for producing a strategy for approval, and the task was to review and add tests.",
+  "new_coverage": "default max_length=50; max_length=0; truncation cut right after a hyphen; uppercase and combining accents; the ﬁ ligature; tabs/newlines; idempotence; output-shape invariants; non-ASCII separators between words.",
+  "defects": [
+    "src/slugify.py runs encode('ascii','ignore') before the regex step. That deletes non-ASCII punctuation and symbols with no ASCII decomposition instead of treating them as separators. slugify('foo—bar') returns 'foobar', slugify('a·b') returns 'ab' and slugify('a→b') returns 'ab'. The spec says each run of non-alphanumeric characters becomes one hyphen, so these should be 'foo-bar', 'a-b' and 'a-b'. Likely fix: apply the regex to the NFKD text first, or replace non-ASCII characters with a space rather than ignoring them. Covered by the 3 strict xfails.",
+    "Related, not tested because the spec is silent: letters with no decomposition such as ß and æ are dropped ('straße' becomes 'strae'), and a negative max_length slices from the end (slug[:-1])."
+  ]
+}

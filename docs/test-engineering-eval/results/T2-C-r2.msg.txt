@@ -1,0 +1,24 @@
+{
+  "files_added": [
+    "tests/test_tags.py (20 tests: 8 for unique_tags, 12 for top_tags; expectations from SPEC.md and hand-worked examples)"
+  ],
+  "commands_run": [
+    {
+      "command": "python -m pytest -v -rA (cwd /tmp/te-eval/runs/T2-C-r2, uses pytest.ini)",
+      "result": "20 passed in 0.02s, none skipped/xfailed. The exit code printed on this run came after a tail pipe, so it is not valid evidence."
+    },
+    {
+      "command": "python -m pytest -q -p no:cacheprovider; echo exit=$?",
+      "result": "20 passed, exit 0"
+    },
+    {
+      "command": "Mutation check on copies of src/tags.py in a temp dir (since deleted; real src untouched): ascending frequency order, reversed tie-break, [:n+1] slice, unique_tags truncated to one tag, repeats within one item collapsed in top_tags",
+      "result": "all five mutants made the suite fail (6, 2, 3, 3 and 1 failures respectively)"
+    }
+  ],
+  "possible_defects": [
+    "top_tags with negative n: ranked[:n] returns all but the last tag (e.g. n=-1) rather than empty or an error. SPEC does not define negative n, so unconfirmed; no test written.",
+    "Items with tags set to None: item.get('tags', []) only handles a missing key, so {'tags': None} raises TypeError in both unique_tags and top_tags. A defect only if 'optional' in SPEC includes None; unconfirmed, no test written.",
+    "Non-dict items raise AttributeError; probably acceptable."
+  ]
+}

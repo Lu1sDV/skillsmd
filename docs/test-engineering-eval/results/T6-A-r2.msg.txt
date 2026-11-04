@@ -1,0 +1,19 @@
+{
+  "files_added": [
+    "tests/check_shipping_cents.py"
+  ],
+  "pytest_runs": [
+    {
+      "command": "python -m pytest (cwd /tmp/te-eval/runs/T6-A-r2, project pytest.ini)",
+      "result": "5 failed, 16 passed (includes the existing check_basic.py test, which passes)"
+    }
+  ],
+  "failures": [
+    "shipping_cents(1001) -> 500, spec 700",
+    "shipping_cents(1501) -> 700, spec 900",
+    "shipping_cents(2001) -> 900, spec 1100",
+    "shipping_cents(1001, express=True) -> 750, spec 1050",
+    "shipping_cents(1501, express=True) -> 1050, spec 1350"
+  ],
+  "defect": "src/shipping.py uses steps = extra // 500 (floor). SPEC says each additional 500 g 'or part of it' adds 200, so a ceiling is needed (e.g. -(-extra // 500)). Any weight above 1000 g that is not an exact multiple of 500 g above 1000 is undercharged by one step, standard and express. Failing tests were left failing (not xfailed) to expose this. Express rounding-down is not observable since all totals are multiples of 100, so no test was written for it. Test file name uses the check_ prefix because pytest.ini only collects check_*.py. src/ and existing tests untouched."
+}

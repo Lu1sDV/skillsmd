@@ -1,0 +1,21 @@
+{
+  "files_added": [
+    "tests/test_slugify_extra.py"
+  ],
+  "pytest_runs": [
+    {
+      "command": "python -m pytest -q -p no:cacheprovider -rxs (cwd /tmp/te-eval/runs/T5-C-r2, project pytest.ini)",
+      "result": "23 passed, 4 xfailed, 0 skipped; the 13 original tests still pass"
+    },
+    {
+      "command": "python -m pytest -q -p no:cacheprovider --runxfail tests/test_slugify_extra.py",
+      "result": "the 4 xfail tests fail for the intended reason: 'ab' == 'a-b' and 'cafebar' == 'cafe-bar'"
+    }
+  ],
+  "not_run": "No mutation testing was done, because it would have required editing src/. Detection strength of the passing new tests is therefore unmeasured.",
+  "existing_tests_review": "tests/test_slugify.py is sound and was left unchanged. New tests cover distinct partitions only: default max_length=50, truncation that would leave a trailing hyphen at the default length, max_length=0, decomposed (NFD) accents, and an output-shape and idempotence check. Four strict xfail tests record the defect below.",
+  "defects": [
+    "slugify drops non-ASCII punctuation instead of turning it into a hyphen. encode('ascii','ignore') runs before the [^a-z0-9]+ substitution. slugify('a—b') returns 'ab' (SPEC wants 'a-b'); the same happens for an en dash and '€'. slugify('café•bar') returns 'cafebar' (SPEC wants 'cafe-bar'). Words are silently merged. One fix is to run the substitution on the NFKD text after stripping only combining marks.",
+    "Spec-ambiguous, not tested: undecomposable letters are dropped ('Straße' gives 'strae', 'Øre' gives 're'). A negative max_length slices off trailing characters (slug[:-1]). SPEC does not define either."
+  ]
+}

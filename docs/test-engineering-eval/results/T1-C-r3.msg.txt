@@ -1,0 +1,13 @@
+{
+  "files_added": [
+    "tests/test_order_total_cents.py"
+  ],
+  "pytest_runs": [
+    {
+      "command": "python -m pytest -rxX -q (cwd /tmp/te-eval/runs/T1-C-r3, project pytest.ini)",
+      "result": "23 passed, 2 xfailed, exit 0 (run twice, same result; nothing skipped)"
+    }
+  ],
+  "suspected_defect": "src/pricing.py uses `quantity > 50` / `quantity > 10`; SPEC says 10 or more and 50 or more, so thresholds should be >=. Exactly 10 units get no discount (1000 vs spec 950 for 10x100); exactly 50 units get 5% instead of 10% (4750 vs spec 4500 for 50x100). Covered by two strict-xfail tests (test_exactly_10_units_get_5_percent_off, test_exactly_50_units_get_10_percent_off) with spec-derived values; they will XPASS-fail once code is fixed, signalling marker removal. Fixed-version detection was not run (prediction only). Rounding half-up logic looks correct.",
+  "notes": "Expected values hand-computed from SPEC; no changes to src/ or existing tests."
+}
