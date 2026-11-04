@@ -84,8 +84,6 @@ Commit the updated submodule pointer to share that version. Ordinary submodule i
 | [skill-smell-checker](skill-smell-checker/) | Audit all 26 SKILL.md smells from arXiv:2607.01456 — 5 deterministic harness checks plus 21 evidence-backed semantic checks |
 | [sink-research-orchestrator](sink-research-orchestrator/) | Orchestrate parallel research swarms for unseen sink languages/techniques — lane decomposition, structured JSON citations, quality gates |
 | [skillsmp-search](skillsmp-search/) | Search 11,000+ community skills and install them locally |
-| [review-code](review-code/) | Evidence-first review of selected code changes — correctness, safety, P0–P3 findings, risk-aware domain reviewers, NORMAL/DEEP/ULTRA depths |
-| [review-pr](review-pr/) | PR collaboration review — production design, maintainability, architecture and evidenced regressions, with the same reporting and reviewer methodology |
 | [rust-guidelines](rust-guidelines/) | Compact Rust API and engineering checklist — topic-based disclosure, explicit contracts, opt-in memory profiles, and verification |
 | [rust-idiomatic](rust-idiomatic/) | Ownership and lifetimes, errors, iterators, strings, standard-library usage, and everyday Cargo/tooling workflows |
 | [rust-algorithms](rust-algorithms/) | Collection selection and 17 algorithm patterns with Rust-specific invariants, complexity, and boundary cases |
