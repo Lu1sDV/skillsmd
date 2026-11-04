@@ -51,6 +51,7 @@ Commit the updated submodule pointer to share that version. Ordinary submodule i
 | [feature-engineering](feature-engineering/) | Time series feature engineering — calendar features, cyclical encoding, rolling stats, differencing |
 | [fuzzgpt](fuzzgpt/) | History-driven LLM fuzzing (FuzzGPT-derived, arXiv:2304.02014) — mine bug history, auto-label buggy APIs, few-shot/zero-shot/retrieval edge-case generation, crash + differential oracles; target-agnostic, pairs with vuln-research |
 | [bug-bounty-reporting](bug-bounty-reporting/) | Write concise, human-sounding bug bounty reports with direct-impact PoCs, claim-to-evidence gates, transactional cleanup, and frozen-snapshot independent verification |
+| [bugbounty-poc-video-runner](bugbounty-poc-video-runner/) | Provisional — design a one-command, triager-friendly live security PoC video runner with staged evidence, expected-versus-actual output, negative control, optional UI pause, and cleanup proof |
 | [glitchtip](glitchtip/) | Deploy, configure, integrate GlitchTip error tracking and uptime monitoring |
 | [go-idiomatic](go-idiomatic/) | Everyday Go — value/storage semantics, errors, resources, loop captures, modules and tooling |
 | [go-algorithms](go-algorithms/) | Go collections and 14 algorithm families — invariants, complexity, Unicode, overflow and mutation boundaries |
