@@ -30,6 +30,7 @@ git submodule update --init --recursive
 
 | Skill | Description |
 |-------|-------------|
+| [agentic-spec-driven-development](agentic-spec-driven-development/) | Risk-proportionate agentic SDD — scoped authority, behavioral contracts, brownfield amendments, handoffs and evidence-based completion |
 | [codeql](codeql/) | CodeQL security analysis — interprocedural taint tracking, database build, data extensions, SARIF processing across 10 languages |
 | [cook](cook/) | Composable agent orchestration — review loops, repeat passes, parallel races, vs comparisons, ralph task-list progression |
 | [ctfd](ctfd/) | Develop, debug, deploy CTFd platform — plugins, themes, Docker stack, testing |
