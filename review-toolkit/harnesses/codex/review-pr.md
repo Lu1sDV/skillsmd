@@ -1,1 +1,0 @@
-Use the installed native `$review-pr` skill; load it in full and obey the common review protocol, risk-aware parallel allocation and reporting table. Do not edit the code. Apply these exact additional invocation arguments: $ARGUMENTS
