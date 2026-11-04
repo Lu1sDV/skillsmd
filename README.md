@@ -96,6 +96,7 @@ git submodule update --init --recursive
 | [typescript-maintainable-design](typescript-maintainable-design/) | SOLID and focused TypeScript refactoring — dependency boundaries, behavior contracts, shared state, errors and import cycles |
 | [typescript-design-patterns](typescript-design-patterns/) | Practical selection and implementation of 22 creational, structural and behavioral patterns with lifecycle checks |
 | [typescript-interview-review](typescript-interview-review/) | TypeScript interview reasoning — compiler/runtime distinctions, narrowing, variance, inference, overloads and counterexamples |
+| [ui-taste](ui-taste/) | Vendored third-party skill (Uizze, Apache-2.0 + MIT notices) — anti-ui-slop playbooks for web and iOS: research → image-first target → 1:1 build → evidence-backed visual verification, plus web/native audits |
 | [universal-research-orchestrator](universal-research-orchestrator/) | Domain-agnostic 5-phase research pipeline — parallel 8–12 lane search, synthesis, citation, validation, source archival for exhaustive research tasks |
 | [universal-skill-finder](universal-skill-finder/) | Search SkillsMP + skills.sh in one pass — merged results table with a Market column showing where each skill was found (skillsmp / skills.sh / both) |
 | [vast-experiment-ops](vast-experiment-ops/) | Operate and report Vast.ai GPU experiments — TF32 FP32-equivalence failures on CUDA, SSH-banner-corrupted JSON metrics, accurate held-out/test-scope claims |
