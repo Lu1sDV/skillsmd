@@ -1,231 +1,328 @@
-# Worked examples
+# Ten worked investigations
 
-Each example shows the moment a passive agent would start scaffolding, and the
-investigation that should come first. They follow the six steps in SKILL.md:
-1. Downstream questions: what the result must answer or do.
-2. Candidates: what already does it.
-3. Fit: one real case mapped, or the hardest query prototyped.
-4. Cost: deployment, extension points, license.
-5. Vet: trust the source.
-6. Gap: name what's missing.
+These are constructed cases with specified observations, not claims about work performed
+on a user's repository. Each reaches a decision because of those observations. Technical
+sources establish mechanisms and limits; they do not establish the fictional project's
+integration results. Check the actual version and source revision when applying a lead.
 
-Each ends the same way, by stopping the user with alternatives, a recommendation and an
-offer of deeper research on that case. The **Report** line shows it.
+The examples teach different decisions. They are not ten steps to run on every task.
+A capable agent should notice when the first plausible implementation is acquiring
+unearned responsibility, find where the difficult part has already been understood, and
+use evidence to change the work. It should use known facts without pretending ignorance.
 
-The first two are the reference examples. Match their depth.
+Code size does not measure the need for investigation. A few lines controlling a critical
+numerical or state decision can deserve more source research than a large amount of
+routine application code. Mature OSS can supply a public API, a small internal primitive,
+regression cases, or a design insight; the useful unit is not always a package.
 
-## Contents
-1. Observability platform for agent harnesses
-2. Intermediate representation of a codebase
-3. Sandbox for agent-generated commands
-4. File-edit tool for a coding agent
-5. Benchmark on real GitHub issues
-6. Exposing an internal API over MCP
-7. A million connection timeouts
-8. Matching Excel's XIRR
-9. Customer-written automation rules
-10. SQL over a custom storage format
-11. Durable multi-step agent tasks
-12. Error tracking
+## Decisions illustrated
 
-## 1. "Build an observability platform for our agent harnesses."
+| Case | Distinct takeaway |
+|---|---|
+| [1. Fair scheduling](#1-fair-scheduling-discover-the-relevant-resource-accounting) | Reason toward a mature domain, then test its accounting assumptions. |
+| [2. Bug variants](#2-bug-variants-discover-a-host-for-the-property-being-checked) | Find an existing engine that can express the actual property. |
+| [3. IR extraction](#3-ir-extraction-remove-an-unnecessary-representation) | Delete a representation whose proposed consumer does not need it. |
+| [4. Poor retrieval](#4-poor-retrieval-learn-how-the-installed-index-actually-searches) | Find the failure inside the installed component before adding another. |
+| [5. Harness observability](#5-harness-observability-discover-which-product-is-already-built) | Adopt the shared product; implement the workflow that remains specific. |
+| [6. Parallel checksums](#6-parallel-checksums-discover-a-small-algorithm-worth-porting) | Find and port a small, complete mechanism inside mature OSS. |
+| [7. Geometric failures](#7-geometric-failures-replace-exceptions-with-a-reliable-predicate) | Research a short critical primitive instead of accumulating correctness patches. |
+| [8. Raster serving](#8-raster-serving-let-a-standard-representation-remove-infrastructure) | Use a standard representation to eliminate a service architecture. |
+| [9. Calibration fitting](#9-calibration-fitting-discover-computation-the-solver-can-avoid) | Change the computation before distributing or accelerating it. |
+| [10. Assignment quotas](#10-assignment-quotas-reject-a-network-that-loses-a-constraint) | Reject an attractive borrowed model and keep a bounded custom policy. |
 
-Before scaffolding ingestion services, trace storage, and a dashboard, the agent should
-investigate how much of the requested product already exists in a platform such as
-Langfuse. Map one representative run—with parallel agents, tool calls, retries, and
-failures—into its actual data model. Inspect deployment requirements and extension points.
-If the model fits, the project may become a harness adapter and a few specialized views. If
-it fails, identify the precise missing capability before deciding to extend, fork, or build
-a subsystem. (langfuse.com)
+## 1. Fair scheduling: discover the relevant resource accounting
 
-Facts for this case:
-- Langfuse's data model is traces, observations (spans, generations, events), sessions and scores.
-- Self-hosting it means Postgres, ClickHouse, Redis and S3-compatible storage.
-- Langfuse is MIT outside its `ee/` directories. Arize Phoenix, the main alternative, is Elastic License 2.0: you can run it, but you can't offer it as a managed service.
-- Emitting OpenTelemetry GenAI spans keeps the harness backend-neutral.
+**Situation.** Bulk imports already run as resumable, bounded chunks. Two tenants get
+equal queue turns, but the one with larger chunks consumes far more of the constrained
+storage bandwidth. The first plan adds "large job" classes, urgency bonuses, and aging
+exceptions.
 
-**Report:** Langfuse plus a harness adapter (if the run maps), Phoenix, extending either
-with the missing view, or building the subsystem that neither covers. Recommend by the fit
-test. Offer to deploy the candidate locally and push one real run through it.
+**Research move.** Reformulate this as allocating a shared resource among flows with
+differently sized work units. Networking is a promising search space because packet
+schedulers face that structure. Search for fairness with variable work size, then follow
+the discovered algorithm into an implementation. In Linux's
+[DRR scheduler](https://codebrowser.dev/linux/linux/net/sched/sch_drr.c.html),
+`drr_dequeue()` compares packet length with accumulated credit and charges that length
+when serving it. The important discovery is the accounting contract, not the acronym.
 
-## 2. "Extract an intermediate representation from this codebase."
+**Deciding evidence.** Replay two backlogged tenants carrying equal total bytes in
+different chunk sizes. Measure serviced bytes, next-chunk waiting time, and idle-to-busy
+behavior. In this case, chunk boundaries and known byte costs support the transfer.
 
-"IR" is too broad to determine the implementation. The agent should first identify the
-downstream questions: locating declarations, resolving call targets, following data through
-functions, or transforming executable behavior. Prototype the hardest required query on real
-source. CodeQL's C/C++ IR and dataflow facilities are candidates for semantic analysis; a
-syntax tree with source ranges may suffice for extraction; compiler IR may suit
-transformation. That investigation should determine the representation and toolchain before
-the agent invents its own universal program model.
+**Refurbishment.** Keep the durable queue and workers; replace the priority exceptions
+with an appropriate credit-accounting selector. Use a compatible existing implementation
+or a narrow adaptation with understood provenance. Do not transplant kernel infrastructure.
 
-Facts for this case:
-- The CodeQL CLI is licensed for open-source and research use only, so a commercial product needs another engine. Candidates: Joern's code property graph (Apache-2.0), SootUp (LGPL), or the MIT-licensed `github/codeql/shared/tree-sitter-extractor` as a model of extraction.
+**Boundary.** Unknown-cost jobs that monopolize an uninterruptible GPU violate the useful
+assumptions. That workload should redirect research toward admission, concurrency, or
+decomposition. Networking was a reasoned hypothesis, not a claim about the universally
+best scheduling domain.
 
-**Report:** the downstream questions, the result of the prototype query in each candidate,
-and the representation it points to. Offer to prototype the second-hardest query before the
-toolchain is fixed.
+## 2. Bug variants: discover a host for the property being checked
 
-## 3. "Run the commands our agent generates in a sandbox."
+**Situation.** A TypeScript import endpoint crashes when a nested JSON value is null.
+After fixing it, the agent must find equivalent mistakes across the repository. An AST
+visitor is a reasonable first sketch, but it starts acquiring name resolution, wrapper
+tracking, and rules for which guards make later reads safe. The requested check is
+becoming another analysis engine.
 
-Sandboxes are never improvised. A command blocklist or a subprocess with a timeout is not
-isolation, and many excellent implementations run in production. The agent should first
-write down the threat model:
-- which paths may be written;
-- whether the network is reachable, and where;
-- which secrets must stay unreadable;
-- whether the shell is interactive.
+**Research move.** Describe the property independently of syntax: a value originates in
+parsed input and may still be null at a dereference. A check changes a fact about a
+particular value; it does not certify every value subsequently read from it. That points
+toward program analysis with state attached to value flow. Searching that vocabulary can
+lead to [CodeQL's data-flow model](https://codeql.github.com/docs/writing-codeql-queries/about-data-flow-analysis/)
+and its [flow-state extension](https://codeql.github.com/docs/codeql-language-guides/using-flow-labels-for-precise-data-flow-analysis/).
+If the engine is already known, investigate this modeling boundary directly.
 
-Then compare production implementations against that model:
-- Codex's Linux sandbox (Landlock and seccomp, `openai/codex/codex-rs/linux-sandbox`) and its macOS Seatbelt policy;
-- Anthropic's `sandbox-runtime`;
-- bubblewrap;
-- gVisor;
-- Firecracker microVMs.
+**Deciding evidence.** Build four small fixtures: an unchecked root, a checked root with
+an unchecked nullable child, a correctly checked child, and a failing path through an
+application wrapper. An initial query treating the root guard as a complete barrier
+misses the second defect. The source explains how to preserve input origin while changing
+the nullable state at guards and property reads. In this constructed investigation, that
+model distinguishes the cases; only the wrapper needs an application-specific addition.
+The selected language support, extraction setup, and usage terms fit the project.
 
-Run escape tests against each candidate: write outside the workspace, read `~/.ssh`,
-reach `169.254.169.254`, start a fork bomb. What is left to write is your harness's
-policy, not the isolation.
+**Refurbishment.** Deliver the stateful query, the wrapper model, and those fixtures.
+Discard the proposed resolver, call-graph infrastructure, and bespoke guard analysis.
+The application owns its property and models at the engine's extension boundary.
 
-**Report:** the candidates that passed the escape tests, what each costs (a daemon, a kernel
-feature, a VM per run) and which platforms it covers. Recommend one; building isolation is
-not among the options.
+**Boundary.** Passing these cases establishes a useful check, not universal completeness.
+Unsupported dynamic behavior or an unmodeled wrapper remains a coverage limit. A system
+that can represent paths but cannot represent the required property has not earned adoption.
 
-## 4. "Design the file-edit tool for our coding agent."
+## 3. IR extraction: remove an unnecessary representation
 
-This is the same reasoning as the sandbox, applied to the edit protocol. Models are trained
-on specific edit formats:
-- OpenAI documents that its models are tuned on `apply_patch`.
-- Anthropic's text-editor tool has a fixed schema.
+**Situation.** The request is to extract reusable functions from a C++ repository. The initial
+plan includes a universal IR with types, control flow, dataflow, and its own serialization
+format. None of those layers has yet been consumed by an actual extraction.
 
-The agent should check which format the target model is tuned for. Then it takes that
-format's parser and its tests (`openai/codex/codex-rs/apply-patch`, Apache-2.0) instead of
-inventing a diff dialect the model has never seen. Replay real edits from past transcripts
-through it. The failures that remain, such as matching despite whitespace drift, are the
-precise gap to fill.
+**Research move.** Follow one desired function from source to its intended standalone use.
+Identify the facts that determine the result, then search compiler interfaces, symbol
+indexes, and source-analysis tools for those facts. Useful vocabulary comes from the
+task: declaration identity, source ranges, referenced definitions, and compilation
+context. Following those needs into
+[Clang's tooling interface](https://clang.llvm.org/docs/LibTooling.html) exposes a way to
+run compiler analysis with the project's compilation database. That context matters:
+the same text can resolve differently under different include paths and definitions.
 
-**Report:** the model's native format, the replay results, and the choice between taking it
-as-is and taking it with a fuzzy-matching layer. Offer to replay a larger transcript set.
+**Deciding evidence.** In this case, the consumer needs source text and a bounded set of
+referenced declarations; the project already has a usable compiler toolchain and build
+database. Exercise an extraction with aliases, a build-defined constant, and an external
+helper. The compiler resolves the declarations under the real build context. An isolated
+build and behavior checks then expose the helper that must be retained or made an explicit
+dependency. No downstream operation consumes generic control-flow or dataflow objects.
 
-## 5. "Benchmark our coding agent on real GitHub issues."
+**Refurbishment.** Implement extraction against that interface and make the external
+dependency explicit. Drop the proposed IR schema, serializer, translators, and maintenance
+of language semantics.
 
-A task that is new but popular has often been standardized already. Before writing a script
-that clones repos and runs pytest, the agent should ask whether a benchmark format and
-harness exist.
-- SWE-bench (MIT) defines each instance: repository, base commit, gold patch, test patch, and the `FAIL_TO_PASS` and `PASS_TO_PASS` tests. It ships a Docker environment for each instance.
-- `inspect_evals` wraps SWE-bench with scoring and logs.
+**Boundary.** Macros, generated definitions, implicit global state, or ABI assumptions can
+make apparently local code inseparable. Source ranges and a successful build do not prove
+arbitrary semantic independence. If the consumer must transform executable behavior or
+query relationships the interface cannot answer, investigate an established representation
+for that demonstrated need. The decision follows the consumer, not a blanket ban on IR.
 
-Convert one of the user's own issues into a SWE-bench instance and run it through the
-harness. If it fits, the project becomes a dataset in that format plus an agent adapter,
-and the results are comparable with published numbers. Only a capability the format can't
-express, such as a multi-repo task or a live service, justifies a custom harness.
+## 4. Poor retrieval: learn how the installed index actually searches
 
-**Report:** adopt the SWE-bench format and harness, wrap it in Inspect, or build custom,
-with the instance that did or didn't convert as evidence.
+**Situation.** A RAG service proposes a query-rewriting agent and a reranker. Failures
+concentrate in small tenants: supporting documents are indexed, but a query asking for
+several neighbors sometimes returns only one authorized row.
 
-## 6. "Expose our internal API to agents over MCP."
+**Research move.** Translate the symptom into approximate nearest-neighbor search under a
+selective filter. Read the installed index's documentation for incomplete filtered results.
+[pgvector's filtering and iterative-scan guidance](https://github.com/pgvector/pgvector#filtering)
+is a concrete lead. Following it into
+[`hnswscan.c`](https://github.com/pgvector/pgvector/blob/master/src/hnswscan.c)
+shows how a scan can resume from retained candidates subject to work limits. That is a
+potential capability of the existing retrieval layer.
 
-The bright move is reading, not remembering. MCP has changed its transports and
-authorization between spec revisions, so a server written from memory targets a spec that
-no longer exists. Before coding, the agent should:
-1. Read the current specification and the SDK documentation.
-2. Check whether the SDK, or FastMCP (`PrefectHQ/fastmcp`, Apache-2.0), already generates a server from the API's OpenAPI document.
-3. Prototype one endpoint against a real MCP client.
+**Deciding evidence.** Keep the embedding, question, and tenant predicate fixed. Compare
+the normal query with an exact filtered reference and the installed version's supported
+iterative scan. Inspect plans and retrieved IDs. In this case, the latter two recover the
+passage, and bounded iterative scanning meets the latency requirement.
 
-The work that remains is curation: which operations to expose, how they are named and
-described, and how the API's auth maps to MCP's.
+**Refurbishment.** Keep the model, embeddings, database, and authorization predicate.
+Correct the retrieval configuration and retain selective-tenant regression cases.
+The proposed model calls, reranking service, and orchestration are unnecessary for this
+failure.
 
-**Report:** generated server plus curation, or a hand-written server for the few operations
-that need custom logic. Name the spec revision targeted.
+**Boundary.** If exact filtered search also misses the passage, more approximate-search
+effort is insufficient. If the passage already reaches the prompt, investigate the later
+stage. Never loosen access filtering to improve apparent recall.
 
-## 7. "Our proxy keeps a timeout for every connection; make it scale to a million."
+## 5. Harness observability: discover which product is already built
 
-Before tuning a heap of deadlines, the agent should recognize a problem the Linux kernel has
-solved for decades: the hierarchical timer wheel in `kernel/time/timer.c`. Its 2016 rework
-(Linux 4.8) is the instructive part. It stopped cascading timers between levels and
-accepted coarser expiry for long timeouts, because most timeouts are cancelled before they
-fire.
+**Situation.** The plan for comparing agent harnesses starts with ingestion, a trace
+database, search, timelines, authentication, and a dashboard. The distinctive user need
+is comparing a failed run with a successful one across harness versions.
 
-Measure whether the proxy's timers behave like that: how many there are, how precise they
-need to be, and how often they are cancelled. The kernel is GPL-2.0, so take the design and
-the commit's rationale. Take code from a permissive wheel: Netty's `HashedWheelTimer`
-(Apache-2.0) or tokio's timer (MIT).
+**Research move.** Describe that workflow before choosing the stack. Investigate distributed
+tracing, experiment tracking, and workflow-history systems, including deployments already
+available to the team. Follow feature claims into data models, ingestion APIs, and
+extension examples. An OSS platform such as
+[Langfuse](https://langfuse.com/docs/observability/overview) is a possible discovery because
+it already represents model and tool activity.
 
-**Report:** the measured timer profile, the wheel design it calls for, and port versus
-depend on the runtime's own timer. Offer a benchmark against the current heap.
+**Deciding evidence.** Import a representative run with concurrent tools, retries, and a
+failure. Follow the platform's [public data APIs](https://langfuse.com/docs/api-and-data-platform/features/public-api)
+to retrieve observations with their trace and parent identities, timestamps, and metadata.
+In this case, the deployed version preserves the required relationships. A thin comparison
+view groups corresponding scenarios by harness version while retaining individual attempt
+identities; it does not flatten concurrent branches into a fictional sequence. Complete
+the failed-versus-successful comparison using that view. Deployment, retention, and export
+requirements also fit.
 
-## 8. "Our XIRR must return exactly what Excel returns."
+**Refurbishment.** Adopt the platform, attach scenario and harness-version metadata during
+ingestion, and implement the comparison against its supported read API. Keep that view
+outside the platform's internals; no fork is needed in this case. The project owns the
+specific comparison behavior and integration, and accepts the platform's documented
+operating requirements. It no longer builds a replacement tracing backend.
 
-A passive agent writes Newton's method. It ends up off in the fourth decimal, or fails to
-converge where Excel succeeds. "Exactly what Excel returns" means the reference is another
-product's behavior, and LibreOffice Calc has spent years matching it.
+**Boundary.** A dashboard screenshot does not establish fit. Lost causal relationships,
+unexportable data, or a deployment larger than the requirement can overturn adoption.
+Reusing existing internal tracing or a narrower component may then carry less responsibility.
 
-Before coding, the agent should collect Excel outputs for the hard cases (no sign change,
-extreme rates, unsorted dates) as test vectors. Run them against LibreOffice and against the
-candidate libraries, then port the implementation that passes. LibreOffice is MPL-2.0, so
-ported files stay under the MPL; whether that fits the project is the user's call.
+## 6. Parallel checksums: discover a small algorithm worth porting
 
-**Report:** which candidates matched Excel on the vectors, the MPL consequence of porting
-LibreOffice, and the alternatives that don't match.
+**Situation.** Parallel upload workers already return each ordered chunk's length and
+CRC. A compatibility requirement also needs the whole file's CRC. The proposed solution
+streams the assembled file through a second checksum worker, adding another complete
+read and another job to recover.
 
-## 9. "Let customers script their own automation rules."
+**Research move.** Ask whether those summaries can compose before building another byte
+pipeline. Compression, archives, and parallel storage are promising places to investigate
+checksum concatenation. The [zlib manual](https://zlib.net/manual.html) documents a combine
+operation using two CRCs and the second sequence's length. Inspecting
+[`crc32.c`](https://github.com/madler/zlib/blob/develop/crc32.c) reveals the polynomial
+arithmetic and powers-of-x machinery behind the wrapper. The reusable unit includes
+those dependencies, not just the appealing public function.
 
-Before inventing a DSL or embedding `exec`, the agent should pin down what the scripts must
-do. Expressions over a record (conditions, computed fields) are a different problem from
-programs with loops and state.
+**Deciding evidence.** In this case, the deployed checksum API lacks combination and
+adding a native compression runtime would outweigh a small port. The CRC variant matches.
+Compare the complete port with an independent bytewise reference over empty chunks,
+uneven lengths, random partitions, and alternate groupings that preserve order. Check
+unsigned arithmetic and length handling, including large lengths.
 
-Collect three real rules from the user and write them in each candidate language:
-- CEL (`cel-expr` implementations) is not Turing-complete and is built for untrusted expressions; Kubernetes admission policies use it.
-- Luau is the sandboxed Lua that Roblox runs for millions of untrusted scripts.
+**Refurbishment.** Keep a reviewed combine primitive, its necessary arithmetic, provenance,
+notices, and meaningful vectors. Fold the ordered summaries. Eliminate the second data
+pass and checksum worker without importing the donor's compression subsystem.
 
-Compare the resource limits each offers. If CEL expresses the rules, it's the safer choice;
-if a rule needs loops, use Luau. The precise gap, such as one custom function, becomes an
-extension rather than a new language.
+**Boundary.** Different CRC conventions invalidate the transfer; cryptographic hashes do
+not inherit this rule. If an installed compatible combine operation exists, call it.
+Porting is justified here by the actual integration boundary, not by a preference for
+copying code.
 
-**Report:** the three rules written in each language, the one that didn't fit, and CEL
-versus Luau versus a DSL, with the threat model behind the recommendation.
+## 7. Geometric failures: replace exceptions with a reliable predicate
 
-## 10. "Add SQL querying over our custom storage format."
+**Situation.** Polygon-intersection fixes have accumulated several epsilon values.
+Nearly collinear edges fail inconsistently, and an adjustment that helps one coordinate
+scale breaks another. Another special case would continue the pattern.
 
-Before writing a parser and planner, the agent should check whether an embeddable query
-engine can sit on top of the storage:
-- Apache DataFusion supplies parsing, planning, optimization and execution once you implement a `TableProvider` for the format.
-- DuckDB's extension API is the alternative.
+**Research move.** Reduce the failures and identify the decision that flips: the sign of
+an orientation calculation near degeneracy. Search computational geometry for robust
+orientation and degeneracy handling. This leads to work such as
+[adaptive geometric predicates](https://www.cs.cmu.edu/~quake/robust.html), including
+reference code and explanations of numerical assumptions. The useful discovery is a
+systematic mechanism for that decision, not a recommendation to replace all geometry.
 
-Prototype the hardest query users need, such as a join across two tables with a filter.
-Check that the filter reaches the storage through filter pushdown instead of forcing a full
-scan. If pushdown works, the project is a table provider. If a needed operation is missing,
-that operation is the gap.
+**Deciding evidence.** A concrete reduced case has points `(0, 0)`,
+`(1000000000, 1000000001)`, and `(1999999999, 2000000001)`: the exact orientation
+determinant is `1`, while direct binary64 products subtract to `0`. Compare the reference
+mechanism on these failures, scaled inputs, and ordinary cases.
+Inspect the target platform and arithmetic assumptions. In this case, the higher-level
+intersection logic remains valid once the classification is reliable.
 
-**Report:** DataFusion versus a DuckDB extension, with the prototype query plan as evidence
-and the missing operation if there is one.
+**Refurbishment.** Use an appropriate existing predicate implementation through an installed
+library or a justified narrow extraction. Remove the compensating tolerance branches.
+Preserve the relevant upstream tests and the application's failure cases.
 
-## 11. "Make multi-step agent tasks survive crashes and retries."
+**Boundary.** Exact orientation does not define the application's policy for coincident
+edges, repair invalid topology, or make every constructed intersection coordinate exact.
+If those cause the failures, keep investigating the actual mechanism rather than treating
+"robust predicates" as a universal repair.
 
-Durable execution is an existing category. Before chaining Celery tasks around a status
-table, the agent should map one real run into a workflow engine's model:
-- parallel subagents become sub-workflows started from the parent;
-- each tool call becomes a step with a retry policy;
-- waiting for human approval becomes a durable wait on an external event.
+## 8. Raster serving: let a standard representation remove infrastructure
 
-Then compare what each engine needs to run. Temporal needs its own cluster; DBOS (MIT) keeps
-workflow state in the Postgres the project already has. If the run maps cleanly, the project
-is a set of workflow definitions. Whatever doesn't map, such as streaming partial model
-output, needs its own channel alongside the engine.
+**Situation.** A map application reads a large, mostly immutable raster to render each small
+viewport. The first plan introduces tile-generation workers, cache invalidation, retry
+queues, and another storage service.
 
-**Report:** Temporal versus DBOS versus keeping Celery, with the mapped run, the operational
-cost of each, and the part that needs its own channel.
+**Research move.** Describe the workload as spatial windows at multiple resolutions over
+large static imagery. Investigate remote sensing and geospatial data access. Searches
+for partial raster reads and overviews lead to the
+[Cloud Optimized GeoTIFF standard](https://docs.ogc.org/is/21-026/21-026.html).
+Its internal tiles, reduced-resolution images, and HTTP range access provide a mechanism
+existing readers understand. [GDAL](https://gdal.org/en/stable/drivers/raster/cog.html)
+already supplies relevant conversion and overview tooling.
 
-## 12. "Build error tracking for our apps."
+**Deciding evidence.** Convert one representative image and serve it from the intended
+endpoint. Capture actual byte ranges at several zoom levels. In this case, the reader
+uses suitable overviews and transfers the necessary regions rather than the entire image.
+Compare coordinates, nodata behavior, and visible output with the local reference.
 
-Error tracking is a product category with a de facto protocol: Sentry's SDKs exist for every
-language. The agent should establish what the backend must do (grouping, release tracking,
-alerting) and which servers accept those SDKs:
-- GlitchTip (MIT) does.
-- Self-hosted Sentry uses the Functional Source License, which allows running it internally but not offering a competing service.
+**Refurbishment.** Prepare suitable assets at ingestion and reuse the reader with the
+existing range-capable storage. Retain only required metadata, authorization, and rendering
+integration. Do not build a second image-pyramid generator or durable tile-production system.
 
-Send real events from the app through the SDK into the candidate and inspect the grouping.
-If it fits, the work is SDK setup and alert rules. If the business needs something neither
-does, such as linking errors to agent traces, that integration is the project.
+**Boundary.** Frequent updates, unsupported range access, or expensive per-request derived
+imagery can justify a different architecture. Static viewing alone has not earned it.
 
-**Report:** GlitchTip versus self-hosted Sentry versus a hosted plan, with license limits and
-the grouping result from the real events.
+## 9. Calibration fitting: discover computation the solver can avoid
+
+**Situation.** A calibration job repeatedly evaluates all residuals while perturbing one
+parameter at a time. Each measurement depends on only a local subset of parameters, but
+the first plan distributes derivative evaluations to new workers.
+
+**Research move.** Ask whether independent perturbations can share an evaluation without
+ambiguous effects. Sparse numerical differentiation leads to grouping noninterfering
+Jacobian columns, a graph-coloring connection. Follow that mechanism into the installed
+solver: [SciPy's least_squares documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html)
+and [group_columns](https://github.com/scipy/scipy/blob/main/scipy/optimize/_numdiff.py)
+are concrete artifacts. The public `jac_sparsity` option can expose existing machinery;
+the documented solver-path consequences matter too.
+
+**Deciding evidence.** Derive a structural mask from the model. Compare with dense
+differentiation on manageable instances and representative states. Count calls to the
+residual function itself, since a solver's headline counter may exclude derivative work.
+In this case, the mask is valid and the supported sparse path meets accuracy and runtime
+requirements.
+
+**Refurbishment.** Supply the model-specific sparsity information through the existing API.
+The worker coordinator, serialization, distributed cancellation, and result assembly
+disappear from the plan.
+
+**Boundary.** A derivative that happens to be zero at one state is not structurally absent.
+Global coupling can invalidate the mask. If the problem is dense, investigate analytic
+derivatives, suitable automatic differentiation, or parallel evaluation on their merits.
+
+## 10. Assignment quotas: reject a network that loses a constraint
+
+**Situation.** An offline instrument planner selects six instruments from a fixed inventory of twelve, then assigns them to six assay slots. Exhaustively enumerating assignments is wasteful. The proposed replacement models calibration quotas as capacity gates in a minimum-cost flow network.
+
+**Research move.** Recognize capacitated bipartite assignment, then inspect the actual [OR-Tools team construction](https://developers.google.com/optimization/flow/assignment_min_cost_flow). Its team gates charge a partition of workers. The application's calibration groups overlap: selecting one instrument can consume two quotas simultaneously. Check that semantic distinction before extending the graph.
+
+**Deciding evidence.** Reduce the case to groups `{A, B}` and `{B, C}`, each permitting
+one selected instrument. Fill two slots; assigning A or C to either slot costs `10`,
+while assigning B costs `0`. The copied network can route A through the first group and
+B through the second, charging only one gate for each instrument. It accepts cost `10`
+while violating the first quota. The valid selection is A plus C, costing `20`.
+The deployment bound also matters: twelve choose six is only `924` subsets.
+
+**Refurbishment.** Reject the copied flow encoding. Enumerate instrument subsets, reject them using the real quota predicates, and solve each surviving six-by-six cost matrix with the already available [linear assignment implementation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.linear_sum_assignment.html). The constructed exhaustive oracle confirms the result. Remove permutation search and the new capacity-gate machinery. The application owns a bounded selection policy, while the library owns matching.
+
+**Boundary.** The inventory bound is part of this design. A substantially larger inventory would reopen the formulation; this result establishes no general impossibility theorem about flow encodings.
+
+## Calibration boundaries
+
+A clear local boundary error or a genuinely new, small product rule should receive a
+direct implementation and focused verification. Do not manufacture a research episode.
+
+Conversely, being able to implement a component quickly does not justify owning it.
+The investigation should identify a reason to retain the chosen mechanism, not merely
+find an impressive project or a familiar algorithm name. Reuse can be the wrong answer.
+
+When revising an example, remove its product names mentally. It should still explain
+where to look, why that field is relevant, which artifact or experiment changes the
+decision, what implementation follows, what responsibility disappears, and what would
+overturn the choice. Reject examples that only say "use a library," list facts a strong
+programmer already knows, or end with an unresolved menu of possibilities.
