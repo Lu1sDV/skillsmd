@@ -39,6 +39,7 @@ separately, and avoid loading two SDD skills with conflicting governance.
 | Concern | Default |
 |---|---|
 | Contract | What changes, what remains, acceptance basis, open decisions |
+| Capabilities | IDs like `A1` (group + flow order), each with an `A1-check`, covering UX, user-read output, prerequisite state (absent/partial/present), data, interfaces, environment, dependencies and external software, failure handling, observability and hardening, so plan tasks know what to prepare first |
 | Readiness | Judged per consequential action: information, authority and required evidence kept separate; no score or status file |
 | Process depth | Consequences and uncertainty, not file counts or time estimates |
 | Approval | Actual scope and explicit holds; existing project gates still govern |

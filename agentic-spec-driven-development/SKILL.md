@@ -91,8 +91,24 @@ substitute for a general rule where the distinction matters.
 | Untrusted input or permissions | Authorized actors, invalid-input outcome, protected effects |
 | Shared state, money, retries or external effects | Invariants, effect counts, progress, failure/recovery and allowed outcome sets |
 | Brownfield change or public consumer | Observed versus intended behavior, compatibility, migration and preserved behavior |
-| Quality constraint | Measurable target, workload/environment, and who accepted that target |
+| Quality constraint (per ID where it differs) | Measurable target (latency, size, concurrency), workload/environment, and who accepted that target |
 | Several capabilities or writers | Shared contracts, dependencies, ownership and integrated acceptance |
+| User-read output or help text | Appearance only as the user reads it: wording, structure, error/empty states. Visual design only if the request refers to it |
+| User-invocable feature | UX: which actions the user can take because of this feature, and how: entry point, inputs, feedback, failure and undo |
+| Prerequisites (DB install, another feature) | Each need, its state (absent / partial / present) and who provides it |
+| Data and state | Records each ID creates, reads, changes or deletes; ownership, lifecycle, migration and rollback |
+| Interfaces and contracts | API, CLI, file format or event each ID exposes or consumes; versioning; what other IDs may rely on |
+| Environment and configuration | Settings, secrets, services, OS and versions each ID needs; defaults and where they come from |
+| Dependencies and external software | Libraries, runtimes, tools and services each ID needs: name, version, licence, source, install/upgrade path and state (absent / partial / present); adding one needs authorization |
+| Failure, recovery and error handling | What fails, what the user sees, what state remains, retry/resume/undo, error classes and messages |
+| Observability | Logs, metrics or audit trail that show an ID worked or failed, and who reads them; no secrets in them |
+| Hardening and security | What must never happen; hazards and pitfalls; applicable standards and good practices (validation, least privilege, safe defaults). Adopted from the owner or standards, not invented |
+
+Give each capability an ID: letter = group of tied features, number = order in the
+flow (`A1`, `A2`, `B1`). Prerequisites cite IDs: `A2 needs: DB install (absent), B1
+(partial: no export)`. Absent → a preparation task; partial → name the gap; present →
+verify, do not rebuild. Never renumber an ID others cite; append or amend. Each ID
+carries its own acceptance check, named `A1-check`, so verification maps back to tasks.
 
 ### 3. Resolve authority and material decisions
 
@@ -145,6 +161,9 @@ they do not authorize product implementation.
 Use the project's existing plan/task tracker. For substantial work, slice by observable
 outcomes; identify dependencies, affected contracts, allowed changes and verification.
 Track pending, completed and blocked work. A bounded change may need only one step.
+
+Tasks cite capability IDs and their prerequisite state, so each task shows what to
+prepare first, where, and in which order (`A1` before `A2`; `B1` gap before `A2`).
 
 For a remaining consequential design choice, compare credible options—including the
 current approach where still credible—against accepted outcomes and constraints. Record
