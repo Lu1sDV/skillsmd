@@ -1,7 +1,9 @@
 ---
 name: agentic-spec-driven-development
 description: >
-  Use when applying spec-driven development to agentic coding: clarifying ambiguous
+  Use when applying spec-driven development to agentic coding: reviewing, auditing or
+  validating project specs, requirements or contracts for ambiguity, gaps, conflicts or
+  readiness (alone or with user-requested subagent reviewers); clarifying ambiguous
   behavior or acceptance criteria, reconciling conflicting specs and code, changing
   an approved contract, or handing implementation to another agent or session.
   Establishes a compact authorized behavior contract and evidence-based completion.
@@ -21,6 +23,7 @@ contract, approved examples, or a short delta—not necessarily a new document.
 |---|---|
 | Request already fixes behavior and acceptance | Reuse it; no extra spec or approval ceremony |
 | Material behavior or authority is undecided | Investigate facts; ask the owner about the specific decision |
+| Reviewing specs, alone or with requested reviewers | Same scope and §2 questions for every reviewer; check under/over-specification, conflicts, open decisions. Converge by repository evidence, not vote; unresolved disagreement becomes an owner decision. Reviewers do not amend without authorization |
 | Existing spec system or contract | Amend where the obligation lives; do not create a competing SPEC.md |
 | Code and contract disagree | Distinguish observed behavior from intended behavior; assess affected consumers |
 | Work crosses agents, sessions or people | Persist scope, decisions, holds, state and next check |
