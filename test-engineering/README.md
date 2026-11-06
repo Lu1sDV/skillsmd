@@ -6,6 +6,8 @@ Claude Code skill for deciding which evidence a change needs and whether the tes
 
 - Task stage (regression augmentation, bug discovery, bug repair, characterization) and what a new failing test means in each
 - Test-quality gate: independent oracles, real runs, detection evidence, no change just to get green, cheapest faithful check, which new tests to keep
+- Security TDD integrated into ordinary test planning and red–green–refactor: security invariants, negative/abuse cases, real-boundary checks, permanent vulnerability regressions and risk-based CI gates
+- Safe execution, versioned OWASP/NIST traceability, scanner findings kept separate from behavioral evidence, and explicit residual risk
 - Coverage versus adequacy, mutation and fault injection
 - Flaky-test procedure
 - Strategy workflow, automate-or-manual questions, output template
@@ -19,7 +21,8 @@ test-engineering/
 ├── SKILL.md                      router, task stages, quality gate, strategy workflow
 └── references/
     ├── test-review.md            buggy/fixed outcomes, oracles, assertion strength, doubles, properties, mutation
-    └── flaky-tests.md            policy, triggers, procedure, causes
+    ├── flaky-tests.md            policy, triggers, procedure, causes
+    └── security-tdd.md           threats, invariants, TDD, test levels, safe execution, gates, evidence, examples, standards
 ```
 
 ## Install
@@ -45,6 +48,11 @@ npx skills add Lu1sDV/skillsmd
 | Test doubles: default real, named exceptions, no strict ranking | A stub injects rare faults and a mock fits "sent at most once". A strict real > fake > stub > mock ladder is wrong for those cases |
 | Rejected: universal mutation, universal reruns, an above-unit minimum, a "must pass first run" retention filter, one assertion per test | No source supports them as universal rules, and each adds work without a stated trigger. Flaky checks and mutation have named triggers; one behavior per test is the better rule than one assertion |
 | Kept exploratory testing as a bounded charter | An agent can state expected result, risk, entrypoint, isolation and exit condition and turn confirmed defects into regression checks |
+| Treat security tests as first-class citizens across test layers | Security failures belong in the same risk-based strategy and quality gate as functional failures; tool-specific scanner configuration is separate from security verification strategy |
+| Make security relevance mandatory to assess; select individual tests by actual threats | Avoids both optional end-of-development scanning and blanket security checklists or redundant test quotas |
+| Keep Security TDD details in a linked reference, with planning, generation and reporting hooks in the entrypoint | Makes the workflow reachable without loading detailed security guidance for unrelated testing tasks; language skills retain runner and fixture ownership |
+| Use SAMM for the testing lifecycle, ASVS for web requirements, WSTG for techniques, Cheat Sheets for controls and NIST for process/complementary verification | Reuses established guidance without claiming that the standards prescribe this exact TDD cycle; ASVS L2 is a risk-adjustable skill default |
+| Pin reference baselines and verify requirement IDs; do not repeat an undated “latest stable” claim | Requirement numbering and release status change; coverage is not compliance or proof of security |
 | Rejected from the research corpus: framework API recipes, TDD discipline variants, product-specific workflows, vendor marketing, fuzzing handbooks, accessibility/visual/mobile/web3 niches | Duplicated by the language skills, tied to one product, or unactionable as a check |
 | Description triggers on test review and flaky triage; entrypoint tells the model to load the language TDD skill first | The four language skills scope test-engineering to system-wide strategy; this version also adds language-neutral review and flaky policy, so the overlap needs an explicit tie-break |
 
@@ -64,9 +72,13 @@ Checked against the paper's own text or abstract while writing this version:
 
 Taken from a research corpus's per-skill rule extracts and article summaries (the corpus is kept locally outside the skill directory and is not published), not re-read from the original files: the `test-guard`, `assertion-quality`, `writing-unit-tests`, `testing-changes`, `property-based-testing`, `test-collaboration` and `rea-ci-tests-audit` skills it describes; the Tanzu and Enterprise Craftsmanship test-double articles; the coverage-versus-mutation "Mind the Gap" paper. Rules drawn from these are phrased as defaults, not universal requirements.
 
+Security guidance and primary sources are linked in [Security TDD — Reference policy](references/security-tdd.md#reference-policy). ASVS 5.0.0, WSTG 4.2 and SSDF 1.1 were checked against official release/publication pages on 2026-11-06; they are explicit baselines, not self-updating “latest” claims. The operational TDD cycle is this skill's integration of the guidance, not a claim that each standard mandates TDD.
+
 ## Validation status
 
-Not measured. The earlier version is in git history (`git show HEAD:test-engineering/SKILL.md`). Suggested comparison before treating this as an improvement: the earlier version, a cleanup-only version (contradictory and unsourced numbers removed), and this version, on tasks that include correct code, a wrongly-pinned expectation, an integration failure hidden by a stub, behavior already covered, and a blocked environment. Score defective/fixed outcomes separately, repeat agent runs, and record cost.
+Security TDD update (2026-11-06): the five static skill checks passed without findings or parser warnings; local skill-document links/anchors, code fences and table-row delimiters passed structural checks. A prompt smoke using the entrypoint and security reference exercised six planning scenarios: cross-tenant invoice access, reset-token replay, concurrent voucher redemption, documentation-only change, a failing mandatory security gate, and unsafe third-party reproduction. Outputs selected real-boundary checks, preserved blocking failures, avoided unnecessary tests for the documentation-only case, and did not invent execution evidence. This is guidance smoke evidence, not application-security verification, compliance evidence or a measured agent-effectiveness comparison.
+
+Agent-effectiveness comparison not measured. The earlier version is in git history (`git show HEAD:test-engineering/SKILL.md`). Suggested comparison before treating this as an improvement: the earlier version, a cleanup-only version (contradictory and unsourced numbers removed), and this version, on tasks that include correct code, a wrongly-pinned expectation, an integration failure hidden by a stub, behavior already covered, and a blocked environment. Score defective/fixed outcomes separately, repeat agent runs, and record cost.
 
 ## Credits
 
@@ -76,4 +88,4 @@ Merged from community skills:
 
 ## Triggers
 
-Activates when designing test strategies, deciding which tests a change needs, reviewing or generating tests for weak or self-confirming assertions, triaging flaky tests, or interpreting coverage and mutation results.
+Activates when designing test strategies, deciding which tests a change needs, applying Security TDD, planning security regression or abuse tests, reviewing or generating tests for weak or self-confirming assertions, triaging flaky tests, or interpreting coverage and mutation results.

@@ -2,8 +2,9 @@
 name: test-engineering
 description: >
   Use when designing a test strategy, deciding what to automate or which tests a
-  change needs, reviewing or generating tests (especially AI-written ones) for weak
-  or self-confirming assertions, triaging flaky tests, diagnosing slow suites or
+  change needs, applying Security TDD or planning security regression and abuse
+  tests, reviewing or generating tests (especially AI-written ones) for weak or
+  self-confirming assertions, triaging flaky tests, diagnosing slow suites or
   coverage gaps, or interpreting coverage and mutation results. Framework-agnostic;
   language-specific test writing hands off to go-tdd, python-tdd, rust-tdd or
   typescript-tooling-tdd.
@@ -13,18 +14,21 @@ description: >
 
 Decide which evidence a change needs and whether the tests provide it. Discover the project's runner, existing tests, CI and conventions before recommending anything. In a language covered by go-tdd, python-tdd, rust-tdd or typescript-tooling-tdd, load that skill for red-green, runners and fixtures; use this one for the task stage, oracle, detection and flaky policy, and strategy.
 
+Treat security tests as first-class citizens, not an optional follow-up. Plan, implement, run, review and maintain them alongside functional tests, with the same test-quality gate and risk-based prioritization. Assess security relevance whenever planning or generating tests; for relevant changes, load [Security TDD](references/security-tdd.md). Scanner configuration is out of scope, not security verification strategy.
+
 ## Quick Reference
 
 | Situation | Do | Detail |
 |---|---|---|
 | Plan tests for a feature or system | Strategy workflow below | — |
 | Write or review tests, especially AI-generated | Name the task stage, then apply the quality gate | [test-review.md](references/test-review.md) |
+| Security-sensitive change, vulnerability fix, negative or abuse cases | Security TDD below; retain the language skill for runner and fixtures | [security-tdd.md](references/security-tdd.md) |
 | Fails intermittently, order-dependent, "passes on rerun" | Flaky procedure | [flaky-tests.md](references/flaky-tests.md) |
 | Coverage is high but bugs ship; mutation scores | Coverage section | [test-review.md](references/test-review.md) |
 | Mocks, stubs, fakes; property tests | Doubles and properties sections | [test-review.md](references/test-review.md) |
 | Suite too slow | Slow suites section | — |
 | Explore/debug a running browser app | Hand off | `webapp-testing` |
-| Browser CI E2E tooling, load testing, security scanning | Out of scope | Playwright/Cypress docs, k6/Artillery, SAST/DAST |
+| Browser CI E2E tooling, load testing, scanner configuration | Tool-specific handoff | Playwright/Cypress docs, k6/Artillery, SAST/DAST |
 
 ## Name the task stage
 
@@ -51,6 +55,18 @@ Apply to every test you write or review.
 5. **Cheapest faithful check.** Pick the cheapest test that keeps the failure mechanism intact and can observe it. SQL, serialization, config, wiring, transactions and cascading deletes cannot fail inside a test that stubs that layer; use the real boundary. Reuse existing coverage you can point to: name the test that already covers the behavior. Adding no test is valid when none adds evidence and the user did not ask for one.
 6. **New tests earn their place.** Keep one that adds a distinct input partition, state, failure mechanism, or materially faster diagnosis. Drop an exact duplicate of another test's partition and observation. A test that still passes after the project's own code is deleted checks the framework, not the project. A test that only asserts a default value can still be a contract (default-deny permissions); keep it then.
 
+## Security TDD
+
+Mandatory consideration, conditional tests: assess every feature, modification and vulnerability fix for changed trust boundaries, permissions, sensitive data, state transitions and resource limits. Record relevant risks and why considered categories do not apply; do not force every category onto every change.
+
+For security-relevant work, load [security-tdd.md](references/security-tdd.md) and:
+
+1. Define an independent security invariant, the threat, expected outcome and forbidden side effects. Use applicable versioned ASVS requirements for web applications; adapt to the platform.
+2. Consider permitted, prohibited and bypass cases. Apply red–green–refactor through the existing TDD workflow; vulnerability repairs need failing-before/passing-after regression evidence when safe and reasonably automatable. Otherwise document the constraint, closest safe evidence and remaining verification; never claim unobserved red.
+3. Use the cheapest faithful layer without mocking away the security boundary. Keep fast deterministic checks in ordinary suites and CI; isolate expensive or intrusive verification with explicit authorization.
+4. Block on confirmed mandatory-invariant failures. Unresolved high-impact findings need explicit review and documented risk acceptance; never silently skip, quarantine or suppress a security failure to get green.
+5. Report requirement/version, threat, test level, execution and regression evidence, gaps and residual risk separately from scanner findings. A green suite is neither comprehensive security nor compliance certification.
+
 ## Coverage
 
 Coverage shows which code ran, not which behavior was checked. When coverage is high and bugs still ship, ask what behavior was not executed, not observed (no assertion), or observed against the wrong expectation. For "would these tests notice a defect here?", use mutation testing or fault injection scoped to the changed code. Scores compare only within one tool and operator set. A mutant timeout is inconclusive, and equivalent mutants exist. Do not add or raise a numeric coverage target or pyramid ratio, and leave an existing gate in place unless asked to change it. A coverage drop on changed lines is a prompt to look.
@@ -73,7 +89,7 @@ Test Strategy Progress:
 
 1. **Discover.** Test runner config, existing tests, CI, coverage reports, language and framework, test count, and whether the suite currently passes.
 2. **Inventory.** Ask the user which features are business-critical and which change often. List endpoints, user flows, data pipelines.
-3. **Failure mechanisms.** For each item, name the failure that matters and the cheapest faithful check (gate rule 5). Include error paths, boundary values (empty, null, min, max) and concurrent access where they are part of the contract. Typical layers:
+3. **Failure mechanisms.** For each item, name the failure that matters and the cheapest faithful check (gate rule 5). Include error paths, boundary values (empty, null, min, max) and concurrent access where they are part of the contract. Perform the security-relevance assessment above; derive invariants and negative/abuse scenarios where applicable. Typical layers:
 
 | Layer | Observes | Use for |
 |---|---|---|
@@ -103,6 +119,11 @@ Test Strategy Progress:
 
 ## Test Scenarios
 [Behavior-named scenarios]
+
+## Security Coverage and Residual Risk
+- Security-relevance assessment, including considered non-applicable risks and reasons
+- For relevant work, use the evidence record in [security-tdd.md](references/security-tdd.md#10-report-security-evidence)
+- Keep scanner findings separate; list unrun checks, gaps, exceptions and specialist verification needed
 
 ## Adequacy Checks (only where a check claims to detect a specific defect)
 - How the check will be shown able to fail (reproducer, negative control, mutation on changed lines)
