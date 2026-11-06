@@ -80,6 +80,7 @@ Commit the updated submodule pointer to share that version. Ordinary submodule i
 | [python-tdd](python-tdd/) | Test-first Python — red-green-refactor, pytest/unittest, fixtures/doubles, properties, real boundaries and test CI |
 | [python-system-design](python-system-design/) | Python application architecture — packages/workspaces, durable jobs, transactions, configuration, deployment and operations |
 | [python-exploitation](python-exploitation/) | Offensive Python & CTF — pyjail/sandbox escape, builtins recovery, import/char blacklist bypass, pickle/marshal RCE, Jinja2/RestrictedPython SSTI, PEP 578 audit-hook bypass, bytecode crafting, 3.8–3.13 internals |
+| [refurbisher](refurbisher/) | Investigate before adding machinery — question implementation premises, discover mature approaches across domains, test fit, and deliver the outcome with less code and operational responsibility; reuse existing capabilities, extract or adopt where justified, and keep bounded local changes local |
 | [security-fix-oracle](security-fix-oracle/) | Mine a repo's git history into a labeled, leakage-free security-fix dataset — Haiku/Sonnet triage, merge-safe diff fetch, gold/weak tiers, CVSS 3.1 (LLM vector + procedural score), SZZ vulnerability-introducer attribution + skill-gap; runnable harness included |
 | [scrape-code-vulnerability-corpus](scrape-code-vulnerability-corpus/) | Collect a deduplicated, non-academic vulnerability-writeup corpus for one named language (no language, no scan) — SQLite store with constraint-enforced provenance, CWE claimed vs mapped, link and pinned-source recovery, blind review sampling, SSRF-guarded fetch, tool-less reader against prompt injection, leak-free training export; runnable `corpus.py` with offline `selfcheck` included |
 | [skill-smell-checker](skill-smell-checker/) | Audit all 26 SKILL.md smells from arXiv:2607.01456 — 5 deterministic harness checks plus 21 evidence-backed semantic checks |
@@ -99,7 +100,7 @@ Commit the updated submodule pointer to share that version. Ordinary submodule i
 | [ssrf-testing](ssrf-testing/) | SSRF testing and prevention — detection, cloud metadata exploitation, filter bypass, defense strategies |
 | [tavily-web](tavily-web/) | Web search, extraction, crawling, and AI-powered research via Tavily API (curl only) |
 | [telethon-development](telethon-development/) | Telethon MTProto client — FloodWait handling, mocking, session management, DB integration |
-| [test-engineering](test-engineering/) | Framework-agnostic test strategy, automation planning, coverage analysis |
+| [test-engineering](test-engineering/) | Framework-agnostic test strategy and test-quality review — oracle independence, assertion strength, flaky-test triage, coverage vs. mutation |
 | [tri-model-consensus](tri-model-consensus/) | Tri-model adversarial consensus — route tasks to Claude+Codex+Gemini, cross-grade discrepancies, merge the strongest output |
 | [typescript-language-runtime](typescript-language-runtime/) | TypeScript language and runtime — nullish handling, functions/classes, modules, runtime validation and execution compatibility |
 | [typescript-type-modeling](typescript-type-modeling/) | Domain types and generic APIs — discriminated unions, narrowing, utility types, mapped/conditional types and compiler contracts |
@@ -110,6 +111,7 @@ Commit the updated submodule pointer to share that version. Ordinary submodule i
 | [typescript-maintainable-design](typescript-maintainable-design/) | SOLID and focused TypeScript refactoring — dependency boundaries, behavior contracts, shared state, errors and import cycles |
 | [typescript-design-patterns](typescript-design-patterns/) | Practical selection and implementation of 22 creational, structural and behavioral patterns with lifecycle checks |
 | [typescript-interview-review](typescript-interview-review/) | TypeScript interview reasoning — compiler/runtime distinctions, narrowing, variance, inference, overloads and counterexamples |
+| [ui-taste](ui-taste/) | Vendored third-party skill (Uizze, Apache-2.0 + MIT notices) — anti-ui-slop playbooks for web and iOS: research → image-first target → 1:1 build → evidence-backed visual verification, plus web/native audits |
 | [universal-research-orchestrator](universal-research-orchestrator/) | Domain-agnostic 5-phase research pipeline — parallel 8–12 lane search, synthesis, citation, validation, source archival for exhaustive research tasks |
 | [universal-skill-finder](universal-skill-finder/) | Search SkillsMP + skills.sh in one pass — merged results table with a Market column showing where each skill was found (skillsmp / skills.sh / both) |
 | [vast-experiment-ops](vast-experiment-ops/) | Operate and report Vast.ai GPU experiments — TF32 FP32-equivalence failures on CUDA, SSH-banner-corrupted JSON metrics, accurate held-out/test-scope claims |

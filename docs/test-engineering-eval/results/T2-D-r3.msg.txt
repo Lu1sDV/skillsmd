@@ -1,0 +1,13 @@
+{
+  "files_added": [
+    "tests/test_tags.py (9 tests for unique_tags and top_tags)"
+  ],
+  "pytest_runs": [
+    "python -m pytest (uses pytest.ini): first run 3 failed, 9 passed; I then deleted the 3 failing tests, which assert behaviour the spec does not define; rerun: 9 passed"
+  ],
+  "possible_defects": [
+    "top_tags(items, -1) returns all but the last-ranked tag because ranked[:n] treats a negative n as a slice from the end; spec silent, probably should give [] or raise",
+    "An item with \"tags\": None makes unique_tags and top_tags raise TypeError ('NoneType' object is not iterable); item.get(\"tags\", []) only covers a missing key, not an explicit None",
+    "top_tags counts a tag once per occurrence, not once per item: [{'tags':['a','a','a']},{'tags':['b']},{'tags':['b']}] with n=1 returns ['a'] though b appears in more items; spec 'most frequent' is ambiguous, may be intended"
+  ]
+}

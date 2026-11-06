@@ -1,0 +1,13 @@
+{
+  "files_added": [
+    "tests/test_slugify_extra.py"
+  ],
+  "pytest_commands": [
+    "`python -m pytest` (run from /tmp/te-eval/runs/T5-D-r2, picks up pytest.ini): 4 failed, 34 passed. The 4 failures are intentional and show the defects below. The 30 existing and new tests that match the spec pass."
+  ],
+  "defects": [
+    "Non-ASCII punctuation and symbols are deleted instead of becoming a hyphen. The code encodes to ASCII with errors='ignore' before the regex runs, so the separator disappears. The spec says each run of non-alphanumeric characters becomes one hyphen. slugify('a\\u2014b') returns 'ab' (expected 'a-b'), 'price\\u20acfive' returns 'pricefive', and 'foo\\u2022bar' returns 'foobar'. Failing tests: test_non_ascii_separators_become_hyphen for the em dash, euro sign and bullet cases. A likely fix is to replace non-ASCII characters that have no NFKD ASCII decomposition with a space or hyphen, rather than dropping them.",
+    "Letters that NFKD does not decompose are silently dropped, e.g. ß, ø, æ, đ. 'Straße' becomes 'strae', which merges or corrupts the word. I did not add a test for this because the spec does not say what these letters should map to.",
+    "A negative max_length slices from the end: slugify('abcdef', -1) returns 'abcde'. The spec does not cover negative values, but this is surprising. The test test_negative_max_length_does_not_chop_from_end fails, and it expects '', which is my guess at the right behaviour. Treat it as a judgment call."
+  ]
+}

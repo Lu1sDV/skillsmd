@@ -1,0 +1,69 @@
+{
+  "key": "urlsanitizer-sanitize",
+  "symbol": "Gitlab::UrlSanitizer.sanitize",
+  "located": true,
+  "real_file": "/home/x/Personal_Projects/find-ctfs/gitlab/lib/gitlab/url_sanitizer.rb:36 (sanitize), :21 URI_REGEXP, :47 sanitize_unencoded",
+  "guard_summary": "sanitize() runs two passes. (1) sanitize_unencoded() only fires when caller passes user:/password: and does a literal Regexp.escape(user)':'(?)Regexp.escape(password)'@' replace. (2) The main pass is content.gsub(URI_REGEXP){ new(url).masked_url }. URI_REGEXP = %r{(?!.*?(\\*{5}$|...))#{URI::REGEXP::PATTERN::USERINFO}@(?!#{HOST}:(?!\\b\\d+\\b))#{HOSTPORT}}x where USERINFO = (?:[\\-_.!~*'()a-zA-Z\\d;:&=+$,]|%[a-fA-F\\d]{2})*. Because USERINFO is a restricted charset and gsub only rewrites the MATCHED substring (the longest valid-userinfo run immediately preceding @host), any character outside that charset in the credential ends the leftward extent of the match, so the credential PREFIX before the first illegal char survives unmasked.",
+  "downstream_sink": "app/models/remote_mirror.rb:170 self.last_error = sanitize(error_message, user:, password:) -> stored in DB column remote_mirror.last_error and rendered in mirror settings UI; app/models/project_import_state.rb:190 sanitized_failure_message (NO user/password passed); ee/app/models/ee/project_import_state.rb:246; app/models/bulk_imports/configuration.rb:29; lib/gitlab/legacy_github_import/importer.rb:178+; app/models/import/source_user.rb:213; app/models/jira_import_state.rb:114; lib/observability/o11y_provisioning_client.rb:69. All store/display the 'sanitized' string.",
+  "vectors": [
+    {
+      "technique": "USERINFO-charset prefix leak (password contains a char outside [\\-_.!~*'()a-zA-Z\\d;:&=+$,]/%hh)",
+      "input": "Import/clone error text: \"fatal: unable to access 'https://user:p\\\\a55w0rd@gitlab.com/x.git'\" (password p\\a55w0rd contains a backslash)",
+      "why_passes": "URI::REGEXP::PATTERN::USERINFO does not include '\\\\'. gsub matches only the run 'a55w0rd@gitlab.com' (the valid-userinfo suffix touching @host); the part before the backslash 'user:p\\\\' is not part of the match, so masked_url is applied only to the suffix. Output: 'https://user:p\\\\*****:*****@gitlab.com'. The plaintext 'p' (and any longer prefix before the first illegal char) of the secret leaks. With longer secrets and an early illegal char the bulk of the credential leaks (e.g. 'oauth2:my long token@' -> leaks 'oauth2:my long ').",
+      "impact": "Credential disclosure: partial/leading bytes of password or PAT written to remote_mirror.last_error / import error messages stored in DB and shown in UI to project members; for short or low-entropy secrets this is full compromise, for PATs it narrows brute-force / confirms token.",
+      "likelihood": "high",
+      "test_idea": "Gitlab::UrlSanitizer.sanitize(\"fatal: https://user:p\\\\a55w0rd@gitlab.com/x.git failed\") in rails console / irb with the real regex -> observe 'p\\\\' surviving before *****."
+    },
+    {
+      "technique": "Whitespace / control char in credential ends the match early",
+      "input": "\"remote: https://oauth2:my secret token@gitlab.com/x.git\" (PAT or password containing a space), or \"https://user:secret\\npart@host\" (embedded newline/control)",
+      "why_passes": "Space, tab, newline, and other control chars are not in USERINFO. The regex match starts after the last whitespace before @host, so 'oauth2:my secret ' survives. Output: 'https://oauth2:my secret *****:*****@gitlab.com/x.git' — almost the entire secret leaks. project_import_state.rb:190 passes no user/password so sanitize_unencoded never runs and only this regex pass applies.",
+      "impact": "Credential disclosure of the leading (often majority) portion of password/token in stored+displayed import/mirror error.",
+      "likelihood": "high",
+      "test_idea": "Gitlab::UrlSanitizer.sanitize(\"https://oauth2:my secret token@gitlab.com/x\") -> 'oauth2:my secret ' leaks."
+    },
+    {
+      "technique": "Unicode / non-ASCII byte in userinfo ends match early",
+      "input": "\"https://üser:secret@host.com\" or \"https://usér:pwd@host.com\"",
+      "why_passes": "USERINFO is ASCII-only ([a-zA-Z\\d] + a fixed punctuation set + %hh). A multibyte/non-ASCII char in the user terminates the leftward match. Output: 'https://ü*****:*****@host.com' — the ASCII prefix of the username before the unicode byte leaks; if the unicode is later in the string the password fully leaks up to it.",
+      "impact": "Partial username/credential disclosure into stored/displayed error (lower impact than password leak but confirms account identity / leaks token prefix).",
+      "likelihood": "medium",
+      "test_idea": "sanitize(\"https://üser:secret@host.com\") -> observe ü-prefixed leak."
+    },
+    {
+      "technique": "Bare '%' not followed by two hex digits breaks pct-encoding rule",
+      "input": "\"https://user:pa%ZZss@host.com\" (password contains a literal % that is not a valid percent-escape)",
+      "why_passes": "USERINFO only accepts '%' as part of %[a-fA-F\\d]{2}. '%ZZ' is not a valid escape, so the alternation cannot consume 'pa%', the match begins at 'ss@host'. Output: 'https://user:pa%*****:*****@host.com' leaks 'user:pa%'. Real passwords frequently contain literal % signs.",
+      "impact": "Credential prefix disclosure into stored/displayed error.",
+      "likelihood": "high",
+      "test_idea": "sanitize(\"https://user:pa%ZZss@host.com\") -> 'user:pa%' leaks."
+    },
+    {
+      "technique": "Other common password punctuation outside the allowlist (| \" [ ] { } < > # / ? backtick space)",
+      "input": "\"https://user:pa|ss@host\", \"https://user:Secr#tABC@host\", \"https://user:pa/ss@host\"",
+      "why_passes": "None of | \" [ ] { } < > # / ? are in USERINFO. (For # / ? the RFC delimiter behavior also detaches them.) The match starts at the valid suffix touching @host, leaking everything before the first such char: 'user:pa|', 'user:Secr#', 'user:pa/'. These are extremely common in generated passwords and tokens.",
+      "impact": "Credential prefix disclosure; for high-complexity passwords the special char often appears late, so most of the secret leaks.",
+      "likelihood": "high",
+      "test_idea": "sanitize(\"https://user:Secr#tABC@host.com\") -> 'user:Secr#' survives."
+    },
+    {
+      "technique": "Callers that pass no user/password rely solely on the lossy regex",
+      "input": "Any of the above strings reaching project_import_state.rb:190, bulk_imports/configuration.rb:29, legacy_github_import/importer.rb, jira_import_state.rb:114, source_user.rb:213, o11y_provisioning_client.rb:69",
+      "why_passes": "sanitize_unencoded returns content unchanged when user/password are nil (return content unless user.present? || password.present?). So the exact-literal masking that could catch odd-charset secrets never runs; only URI_REGEXP (with all the gaps above) applies. The leak surface is the union of all the above vectors with no compensating exact-match guard.",
+      "impact": "Same credential-prefix disclosure, but the compensating sanitize_unencoded layer is absent, so every charset gap above is fully live in import/jira/observability/bulk-import error storage.",
+      "likelihood": "high",
+      "test_idea": "Confirm caller arity: project_import_state.rb:190 sanitize(error_message) with no kwargs; then sanitize(\"https://user:pa ss@host\") leaks 'user:pa '."
+    },
+    {
+      "technique": "Multiple-@ confusion mis-masks structure (parser differential surface)",
+      "input": "\"https://a@b@host.com/r\"",
+      "why_passes": "USERINFO does not include '@', so the regex produces TWO separate matches ('a@b' and '@host.com') rather than treating 'a@b' as a single userinfo (which is what URI.parse / a git client would do, taking the last @ as the userinfo delimiter). The masking is applied piecewise and does not faithfully reproduce parse_url's last-@ semantics, leaving 'a@b' partially intact. Demonstrates the sanitizer and the eventual git/Net::HTTP fetcher disagree on userinfo boundaries.",
+      "impact": "Userinfo fragment survives mis-masked; lower direct impact but evidences sanitizer-vs-fetcher parser differential that compounds the leaks above.",
+      "likelihood": "low",
+      "test_idea": "sanitize(\"https://a@b@host.com/r\") -> 'a@b' region not cleanly collapsed to a single *****."
+    }
+  ],
+  "best_likelihood": "high",
+  "introduces_vuln": true,
+  "notes": "Root cause: URI_REGEXP relies on URI::REGEXP::PATTERN::USERINFO, a restricted ASCII charset, and sanitize() rewrites only the matched substring. Because the leftward extent of the match stops at the first character not in that charset (space, backslash, |, \\\", [, ], {, }, <, >, #, /, ?, bare %, control chars, any non-ASCII/unicode), the prefix of the credential before that character is emitted UNMASKED. Real-world passwords and PATs routinely contain such characters, so the 'sanitized' value disclosed into remote_mirror.last_error (stored in DB + rendered in mirror UI to project members) and import/jira/bulk-import/observability error logs leaks leading credential bytes. The sanitize_unencoded exact-match layer only mitigates when (a) the caller passes the exact user/password AND (b) the error text contains them in identical unencoded form; most callers (project_import_state:190, bulk_imports, legacy_github_import, jira, source_user, o11y) pass nothing, so the lossy regex is the only guard. Verified empirically against the real URI::REGEXP patterns (ruby). This matches the documented historical weakness class of Gitlab::UrlSanitizer credential masking. SSRF angle is weaker: sanitize() is for masking display/log output, not for fetch-target validation (valid?/valid_web? + strip_userinfo guard the fetch path), so the primary realized impact here is credential disclosure rather than SSRF."
+}

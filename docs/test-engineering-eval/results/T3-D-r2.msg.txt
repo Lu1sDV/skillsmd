@@ -1,0 +1,12 @@
+{
+  "files_added": [
+    "tests/test_update_address.py (9 tests x 2 stores = 18 cases; nothing under src/ or existing tests touched)"
+  ],
+  "pytest_runs": [
+    "`python -m pytest` in /tmp/te-eval/runs/T3-D-r2 (uses project pytest.ini): 15 passed, 3 failed. Re-ran with `-q` to list failures.",
+    "Failures, all SqliteOrderStore: test_items_unchanged (items [] instead of ['a','b','a']), test_returns_updated_order (returned dict has items but get_order does not), test_repeated_updates (address updated, items lost)."
+  ],
+  "defects": [
+    "SqliteOrderStore.save_order uses `INSERT OR REPLACE INTO orders`. SQLite implements REPLACE as delete+insert; with PRAGMA foreign_keys=ON the delete cascades via items.order_id ON DELETE CASCADE, so all the order's items are silently deleted. update_address on the SQLite store therefore violates SPEC.md (items must be unchanged) and returns an order whose items are no longer stored. Suggested fix (not applied, per constraints): `UPDATE orders SET address=?, status=? WHERE id=?` in save_order."
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "files_added": [
+    "tests/test_pricing.py"
+  ],
+  "pytest_commands": [
+    {
+      "command": "python -m pytest -q (cwd /tmp/te-eval/runs/T1-D-r1, uses project pytest.ini)",
+      "result": "7 failed, 20 passed (first run before adding 3 non-boundary rounding cases: 7 failed, 17 passed)"
+    }
+  ],
+  "failing_tests": [
+    "(10,100) expected 950 got 1000",
+    "(50,100) expected 4500 got 4750",
+    "(10,3) expected 29 got 30",
+    "(10,7) expected 67 got 70",
+    "(10,5) expected 48 got 50",
+    "(50,1) expected 45 got 48",
+    "(50,11) expected 495 got 523"
+  ],
+  "defects": "src/pricing.py lines 14 and 16 use `quantity > 50` and `quantity > 10`, but SPEC.md says 'of 10 or more' and 'of 50 or more'; should be `>= 50` and `>= 10`. Exactly 10 units get no discount (should be 5%) and exactly 50 units get 5% (should be 10%). Tests follow the spec, so they fail until the code is fixed. All other tests (9/11/49/51 units, half-up rounding away from boundaries, ValueError cases, int return) pass. src/ was not modified."
+}

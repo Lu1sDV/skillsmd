@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "skill-smell-checker": {
+      "source": "Lu1sDV/skillsmd",
+      "sourceType": "github",
+      "skillPath": "skill-smell-checker/SKILL.md",
+      "computedHash": "7cfebbb8a216d33ae4bc22f9c5bd79a15d587f7c41afe4e36bc0f2e5f7fc78b0"
+    },
+    "universal-research-orchestrator": {
+      "source": "Lu1sDV/skillsmd",
+      "sourceType": "github",
+      "skillPath": "universal-research-orchestrator/SKILL.md",
+      "computedHash": "69f66f4c3460ffc55c8213b657e32018d89ab07b650384c80b9655775a34f66a"
+    }
+  }
+}

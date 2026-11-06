@@ -1,249 +1,125 @@
 ---
 name: test-engineering
 description: >
-  Use when designing test strategies, planning coverage across the test pyramid,
-  evaluating automation candidates, or improving test quality. Also use when
-  diagnosing flaky tests, slow test suites, or coverage gaps.
-  Framework-agnostic strategy and automation planning.
+  Use when designing a test strategy, deciding what to automate or which tests a
+  change needs, reviewing or generating tests (especially AI-written ones) for weak
+  or self-confirming assertions, triaging flaky tests, diagnosing slow suites or
+  coverage gaps, or interpreting coverage and mutation results. Framework-agnostic;
+  language-specific test writing hands off to go-tdd, python-tdd, rust-tdd or
+  typescript-tooling-tdd.
 ---
 
 # Test Engineering
 
-You are a test strategist. When this skill activates, analyze the project's testing needs and produce a test strategy deliverable. Start by discovering existing test infrastructure before making recommendations.
+Decide which evidence a change needs and whether the tests provide it. Discover the project's runner, existing tests, CI and conventions before recommending anything. In a language covered by go-tdd, python-tdd, rust-tdd or typescript-tooling-tdd, load that skill for red-green, runners and fixtures; use this one for the task stage, oracle, detection and flaky policy, and strategy.
 
 ## Quick Reference
 
-| Aspect | Detail |
-|--------|--------|
-| Purpose | Design test strategies, plan automation, evaluate coverage gaps |
-| Input | Feature/system description, existing test inventory (if any) |
-| Output | Test strategy with pyramid allocation, automation candidates, metrics |
-| Key tools | Test Pyramid, Automation Decision Quadrant, Selection Criteria Matrix |
-| Complements | TDD skill (write tests), `webapp-testing` (drive a running app with Playwright), Playwright/Cypress docs (CI E2E suites) |
+| Situation | Do | Detail |
+|---|---|---|
+| Plan tests for a feature or system | Strategy workflow below | — |
+| Write or review tests, especially AI-generated | Name the task stage, then apply the quality gate | [test-review.md](references/test-review.md) |
+| Fails intermittently, order-dependent, "passes on rerun" | Flaky procedure | [flaky-tests.md](references/flaky-tests.md) |
+| Coverage is high but bugs ship; mutation scores | Coverage section | [test-review.md](references/test-review.md) |
+| Mocks, stubs, fakes; property tests | Doubles and properties sections | [test-review.md](references/test-review.md) |
+| Suite too slow | Slow suites section | — |
+| Explore/debug a running browser app | Hand off | `webapp-testing` |
+| Browser CI E2E tooling, load testing, security scanning | Out of scope | Playwright/Cypress docs, k6/Artillery, SAST/DAST |
 
-## When to Use
+## Name the task stage
 
-- Designing a testing strategy for a feature or system
-- Evaluating what to automate vs. keep manual
-- Planning test coverage across the pyramid
-- Reviewing test quality and identifying gaps
-- Calculating automation ROI
+Do this when judging a new or failing test. A failing new test means different things by stage.
 
-## When NOT to Use
+| Stage | A new failing test means |
+|---|---|
+| New behavior (code absent) | Expected red; write it first (see the language TDD skill) |
+| Regression augmentation (code believed correct) | Test is wrong or a real bug: check the spec before changing either |
+| Bug discovery | Possible finding: confirm against the contract and report it. Do not commit a red test unless CI expects it; mark it expected-fail with a reason or report it uncommitted |
+| Bug repair | Reproducer must fail before the fix for the reported reason, pass after |
+| Characterization (legacy code) | Records current behavior; name it or comment it "characterization". A pass says nothing about correctness |
 
-- Writing specific test code (hand off to TDD skill)
-- E2E browser automation setup (hand off to `webapp-testing` to drive/inspect a running app, or Playwright/Cypress docs for a CI E2E suite)
-- Performance/load testing (use k6, Artillery, or dedicated tools)
-- Security testing (use SAST/DAST tools)
+Dropping every test that fails on first run is valid only for regression augmentation, where a tool cannot tell a bug from a wrong assertion. Applied to bug discovery it discards the findings.
 
-## Workflow
+## Test-quality gate
 
-Copy this checklist and track progress:
+Apply to every test you write or review.
+
+1. **Independent oracle.** Expected values come from the spec, a worked example, an independent calculation, or a simpler reference model. Except in a labelled characterization test, never run the code and paste its output, and never reuse the production formula or helper. LLM-written assertions mostly capture actual behavior, so a test written from buggy code usually passes on the bug. Changing an expected value needs a stated cause (the requirement changed, or the test asserted the old wrong behavior), not "it now returns X". Assert caller-visible behavior, not internals or call sequences, unless the interaction is the contract.
+2. **Real run.** Confirm the intended tests were selected (more than zero), ran against the changed source rather than an installed copy or stale build, and the exit status is not masked. List skips and xfails. Say which checks you did not run, and mark predicted results as predictions.
+3. **Detection evidence.** When you claim a test catches or reproduces a defect, show it failing on the defective version for the intended reason and passing on the fixed one, or revert or mutate the behavior under test and confirm red. A compile or setup failure is not red. When you call an existing assertion weak, name a realistic wrong result it would still accept; with no such result, leave it alone. A test with no assertion, or an unawaited async assertion, is assertion-free.
+4. **No change just to get green.** Skipping, retrying, raising a timeout, weakening or deleting an assertion, or regenerating a snapshot or golden file each needs a stated cause. Legitimate causes: a wrong fixture, a moved selector, a changed requirement. A passing retry is not a root cause.
+5. **Cheapest faithful check.** Pick the cheapest test that keeps the failure mechanism intact and can observe it. SQL, serialization, config, wiring, transactions and cascading deletes cannot fail inside a test that stubs that layer; use the real boundary. Reuse existing coverage you can point to: name the test that already covers the behavior. Adding no test is valid when none adds evidence and the user did not ask for one.
+6. **New tests earn their place.** Keep one that adds a distinct input partition, state, failure mechanism, or materially faster diagnosis. Drop an exact duplicate of another test's partition and observation. A test that still passes after the project's own code is deleted checks the framework, not the project. A test that only asserts a default value can still be a contract (default-deny permissions); keep it then.
+
+## Coverage
+
+Coverage shows which code ran, not which behavior was checked. When coverage is high and bugs still ship, ask what behavior was not executed, not observed (no assertion), or observed against the wrong expectation. For "would these tests notice a defect here?", use mutation testing or fault injection scoped to the changed code. Scores compare only within one tool and operator set. A mutant timeout is inconclusive, and equivalent mutants exist. Do not add or raise a numeric coverage target or pyramid ratio, and leave an existing gate in place unless asked to change it. A coverage drop on changed lines is a prompt to look.
+
+## Flaky tests
+
+A flaky test is red: fix it, or quarantine it visibly with a reason, an owner and an exit date. Rerunning until green silences the detector. Check a new or changed test for flakiness when it touches async work, time, randomness, ordering, shared state, the network, or unordered collections. Sequence: scan for nondeterminism, run in random order where the runner supports it, pin the suspect variable and rerun, reproduce before fixing. Details and numbers: [flaky-tests.md](references/flaky-tests.md).
+
+## Slow suites
+
+Profile first; find the slowest tests and what each uniquely protects. Move an E2E check down a layer only if the lower test still observes the failure mechanism. Parallelize only isolated tests. A faster run that skips a case or weakens an assertion is not an improvement; compare equivalent completed work before claiming a speedup.
+
+## Strategy workflow
 
 ```
 Test Strategy Progress:
-- [ ] Step 1: Discover existing test infrastructure
-- [ ] Step 2: Inventory testable surfaces with user
-- [ ] Step 3: Classify each into pyramid layers
-- [ ] Step 4: Score automation candidates (selection matrix)
-- [ ] Step 5: Design test scenarios (BDD naming)
-- [ ] Step 6: Present strategy deliverable for approval
+- [ ] 1 Discover   - [ ] 2 Inventory   - [ ] 3 Failure mechanisms
+- [ ] 4 Automate or manual   - [ ] 5 Scenarios   - [ ] 6 Present for approval
 ```
 
-**Step 1: Discover**
-Examine project structure for: test runner config, existing test files, CI pipeline, coverage reports. Note the language, framework, and current test count.
+1. **Discover.** Test runner config, existing tests, CI, coverage reports, language and framework, test count, and whether the suite currently passes.
+2. **Inventory.** Ask the user which features are business-critical and which change often. List endpoints, user flows, data pipelines.
+3. **Failure mechanisms.** For each item, name the failure that matters and the cheapest faithful check (gate rule 5). Include error paths, boundary values (empty, null, min, max) and concurrent access where they are part of the contract. Typical layers:
 
-**Step 2: Inventory**
-Ask the user: "Which features are business-critical? Which change frequently?" List all endpoints, user flows, and data pipelines.
+| Layer | Observes | Use for |
+|---|---|---|
+| Unit | A rule inside one function or type | Pure logic, validators, transforms, boundary values |
+| Integration | Interaction with a database, serializer, framework or service | Queries, routes, config, wiring, cascades |
+| E2E | A full user journey | A few critical journeys; edge cases belong lower |
+| Property | An invariant over many inputs | Functions with an independent property; see [test-review.md](references/test-review.md) |
+| Contract | Consumer and provider compatibility | Multi-team or multi-service APIs |
 
-**Step 3: Classify**
-Assign each item a pyramid layer using the Test Pyramid below. Default to unit unless crossing service boundaries (integration) or testing full user flows (E2E).
-
-**Step 4: Score**
-Apply the Selection Criteria Matrix. Present results as a table. Items >= 4.0: automate first. Items 3.0-3.9: defer. Items < 3.0: keep manual.
-
-**Step 5: Design**
-For automation candidates, write test scenario names:
-`test_[unit]_[scenario]_[expectedResult]`
-
-**Step 6: Deliver**
-Present the test strategy using the Output Template below. Wait for user approval before handing off to implementation.
-
-## Test Pyramid
-
-```
-         E2E Tests (10%)
-        /              \
-   Integration Tests (30%)
-      /                \
-   Unit Tests (60%)
-```
-
-| Layer | Speed | Confidence | Cost | Examples |
-|-------|-------|------------|------|----------|
-| Unit | Fast (<100ms) | Low (isolated) | Low | Pure functions, validators, transforms |
-| Integration | Medium (~1s) | Medium | Medium | API routes, DB queries, service calls |
-| E2E | Slow (5-30s) | High (realistic) | High | User workflows, checkout, auth flows |
-
-## Automation Decision Quadrant
-
-```
-                    High Business Value
-                           |
-        +------------------+------------------+
-        |   AUTOMATE       |   AUTOMATE       |
-        |   FIRST          |   (careful ROI)  |
-        |   (High ROI)     |                  |
-  Low   +------------------+------------------+  High
-Effort  |   AUTOMATE       |   CONSIDER       |  Effort
-        |   (Low effort)   |   MANUAL         |
-        |                  |   (Low ROI)      |
-        +------------------+------------------+
-                    Low Business Value
-```
-
-| Automate | Keep Manual |
-|----------|-------------|
-| Smoke/sanity tests | Exploratory testing |
-| Regression suites | Usability/UX testing |
-| Data-driven tests | One-time verifications |
-| API contract tests | Rapidly changing features |
-| Performance baselines | Visual design judgment |
-| Security scans | Edge cases rarely executed |
-
-## Selection Criteria Matrix
-
-| Criterion | Weight | Score Guide |
-|-----------|--------|-------------|
-| Execution frequency | 25% | 5=Daily, 3=Weekly, 1=Quarterly |
-| Business criticality | 25% | 5=Revenue-critical, 1=Rarely used |
-| Stability (low change) | 20% | 5=Stable, 1=Changes weekly |
-| Complexity to automate | 15% | 5=Trivial, 1=Very complex |
-| Data availability | 15% | 5=Static/easy, 1=Unavailable |
-
-**Decision:** Score >= 4.0: Prioritize | 3.0-3.9: Defer | < 3.0: Keep manual
-
-## ROI Quick Estimation
-
-| Test Type | Automation Cost (x manual time) |
-|-----------|-------------------------------|
-| API tests | 1-2x |
-| Simple UI | 3-5x |
-| Complex UI | 8-15x |
-| Database | 2-3x |
-| Performance | 5-10x |
-
-**Example:** 30 min manual API test x 1.5 = 45 min to automate. Run 52x/year = 26 hrs saved. Breakeven after 2 runs.
-
-## Testing Types
-
-| Type | Purpose | Best For |
-|------|---------|----------|
-| Unit | Isolate individual functions | Pure logic, validators, transforms |
-| Integration | Verify component interactions | API routes, DB queries, service calls |
-| E2E | Full user workflows | Critical paths: auth, checkout, onboarding |
-| Property-Based | Random inputs, verify invariants | Pure functions with defined contracts |
-| Contract | API compatibility (consumer+provider) | Microservices, multi-team APIs |
-
-## Naming Convention
-
-```
-test_[unit]_[scenario]_[expectedResult]
-
-Example:
-test_calculatePricing_withVolumeDiscount_appliesTierRate
-test_loginUser_withInvalidPassword_returns401
-```
-
-## Quality Metrics
-
-| Metric | Healthy | Warning | Critical |
-|--------|---------|---------|----------|
-| Pass rate | > 98% | 95-98% | < 95% |
-| Flaky test rate | < 2% | 2-5% | > 5% |
-| Suite execution time | < 10 min | 10-30 min | > 30 min |
-| Maintenance hrs/week | < 4 hrs | 4-8 hrs | > 8 hrs |
-| Code coverage | > 80% | 60-80% | < 60% |
-
-**Coverage goals:** 80%+ line coverage as baseline (adjust per domain risk). 100% on critical paths: auth, payments, data validation. Branch coverage matters more than line coverage. Don't game metrics — meaningful tests over numbers.
-
-## Anti-Patterns
-
-| Anti-Pattern | Problem | Fix |
-|-------------|---------|-----|
-| Sleep/wait hardcoding | Flaky, slow | Explicit waits / polling |
-| XPath over data-testid | Brittle selectors | Stable test attributes |
-| Test interdependence | Order-dependent failures | Isolated setup per test |
-| Shared mutable state | Race conditions | Fresh state per test |
-| Too many E2E tests | Slow pipeline | Push down the pyramid |
-| Testing implementation details | Breaks on refactor | Test behavior, not internals |
-| Ignoring error paths | False confidence | Test failures + edge cases |
-| Ignoring flaky tests | Erodes trust in suite | Fix or quarantine immediately |
-| Missing boundary values | Off-by-one, null bugs | Test empty, null, min, max |
-| No concurrency tests | Race conditions in prod | Test parallel access paths |
-
-## Common Mistakes
-
-| Mistake | Fix |
-|---------|-----|
-| Testing implementation details instead of behavior | Assert on outputs and side effects, not internal state |
-| 100% coverage target | Diminishing returns past 80%; focus on critical paths |
-| E2E tests for edge cases | Use unit tests for edge cases; E2E for happy paths |
-| No test naming convention | Use pattern: `should <expected> when <condition>` |
-| Flaky tests left in suite | Quarantine immediately, fix within sprint, or delete |
-| Mocking everything in integration tests | Integration tests should use real dependencies where feasible |
-| Skipping test pyramid review | Audit distribution quarterly: 70% unit / 20% integration / 10% E2E |
-
-## Troubleshooting
-
-| Problem | Solution |
-|---------|----------|
-| Cannot decide unit vs integration boundary | If test needs external service/DB, it is integration. If it can run with mocks only, it is unit |
-| Test suite too slow for CI | Profile slowest tests. Push E2E down to integration where possible. Parallelize |
-| Coverage high but bugs still ship | Check branch coverage, not just line. Verify tests assert behavior, not implementation |
-| Flaky test rate climbing | Quarantine flaky tests immediately. Root-cause: shared state, timing, or external deps |
-| Stakeholders question automation ROI | Use Selection Criteria Matrix with weighted scores. Present saved hours/year calculation |
+4. **Automate or manual.** Answer four questions per item, asking the user where the code cannot tell: how serious is the failure, how often will the check run or the failure recur, what adequate evidence already exists, and what does another check cost to build, run, diagnose and maintain. Candidates that usually pay off: smoke and regression checks, data-driven cases, API contracts. Keep manual: usability, visual judgment, one-off checks, fast-changing features. For unclear or UI behavior, write a bounded exploratory charter (expected result, risk, entrypoint, isolation, exit condition) before probing, and turn confirmed defects into regression checks.
+5. **Scenarios.** Follow the project's naming convention; otherwise name behavior as unit, scenario, expected result. Never name by delivery order, ticket key or phase.
+6. **Present** using the template below. Wait for approval before handing off to implementation.
 
 ## Output Template
 
-Present the test strategy in this format:
-
 ```markdown
-# Test Strategy: [Project/Feature Name]
+# Test Strategy: [Project/Feature]
 
 ## Current State
-- Language/Framework: [detected]
-- Existing tests: [count by type]
-- Current coverage: [if available]
+- Language/framework, runner, CI; existing tests by type; suite status; coverage (informational)
 
-## Pyramid Distribution
-| Layer | Count | Target % | Actual % |
-|-------|-------|----------|----------|
+## Failure Mechanisms and Checks
+| Behavior / risk | Failure that matters | Cheapest faithful check | Layer | Already covered? |
 
-## Automation Candidates
-| Feature | Score | Decision | Layer | Est. ROI |
-|---------|-------|----------|-------|----------|
+## Automate or Manual
+| Item | Consequence | Recurrence | Existing evidence | Cost | Decision |
 
 ## Test Scenarios
-[List of test names in BDD naming convention]
+[Behavior-named scenarios]
 
-## Coverage Goals
-- Baseline: [X]% line coverage
-- Critical paths (100%): [list]
+## Adequacy Checks (only where a check claims to detect a specific defect)
+- How the check will be shown able to fail (reproducer, negative control, mutation on changed lines)
 
 ## Next Steps
-- [ ] Implement [N] unit tests
-- [ ] Implement [N] integration tests
-- [ ] Configure CI pipeline
+- [ ] Implement [N] checks at [layer]
+- [ ] Configure CI
 ```
 
 ## Handoffs
 
 | When | Hand off to |
-|------|-------------|
-| Strategy approved, ready to write tests | **REQUIRED SUB-SKILL:** TDD skill with test scenario list |
+|---|---|
+| Strategy approved, write tests | go-tdd, python-tdd, rust-tdd or typescript-tooling-tdd by language; otherwise the project's own conventions |
 | E2E browser tests needed | `webapp-testing` skill for exploring/debugging a running local app; Playwright/Cypress framework docs for a CI E2E suite |
-| Performance baselines needed | Load testing tools (k6, Artillery) |
-| CI pipeline configuration | Project's CI config file |
+| Performance baselines | k6, Artillery |
+| History-driven LLM fuzzing of a target | fuzzgpt |
+| CI pipeline changes | The project's CI config |
 
 <!-- Credits: Merged from testing-strategies by @1Mangesh1 and automation-strategy by @melodic-software -->

@@ -1,0 +1,14 @@
+{
+  "files_added": [
+    "tests/test_tags.py"
+  ],
+  "pytest_commands": [
+    {
+      "command": "python -m pytest -q (cwd /tmp/te-eval/runs/T2-A-r3, uses pytest.ini)",
+      "result": "21 passed in 0.02s"
+    }
+  ],
+  "defects": [
+    "No spec violation found. Unspecified edge cases (not tested): top_tags with negative n returns ranked[:-1] (drops last tag) instead of [] or raising; items with 'tags': None raise TypeError in both functions (only a missing key is handled); top_tags counts duplicate tags within a single item as multiple occurrences (spec ambiguous on whether frequency is occurrences or items)."
+  ]
+}

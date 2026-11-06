@@ -1,0 +1,16 @@
+{
+  "files_added": [
+    "tests/test_tags.py"
+  ],
+  "pytest_runs": [
+    {
+      "command": "python -m pytest (cwd /tmp/te-eval/runs/T2-A-r2, uses pytest.ini)",
+      "result": "19 passed in 0.02s"
+    }
+  ],
+  "suspected_defects": [
+    "top_tags(items, n) with negative n slices ranked[:n], so top_tags([{'tags':['a','b','c']}], -1) returns ['a','b'] (drops the last-ranked tag) instead of an empty list or an error. The spec does not define negative n, so no test was written for it.",
+    "An item with 'tags': None raises TypeError in both unique_tags and top_tags, because dict.get('tags', []) only falls back to [] when the key is missing. The spec says 'optional tags list', so this may be intended; no test was written for it."
+  ],
+  "notes": "Nothing under src/ or any existing test file was changed. The skill is strategy-oriented, so only its test naming convention test_[unit]_[scenario]_[expectedResult] was applied."
+}

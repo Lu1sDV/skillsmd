@@ -1,0 +1,19 @@
+{
+  "files_added": [
+    "tests/test_bizdays_end_exclusive.py"
+  ],
+  "description": "One test, test_end_date_is_excluded_when_it_is_a_weekday, asserting business_days_between(date(2024,3,1), date(2024,3,4)) == 1. The expected value comes from the SPEC's half-open [start, end) range: Friday counts, Saturday and Sunday don't, and Monday (the end) is excluded. It is marked xfail(strict=True) with a reason, following the guidance's bug-discovery stage, so the suite stays green while the bug is unfixed. Because the marker is strict, the test will report XPASS (a failure) once the code is fixed, which is the cue to remove the marker.",
+  "pytest_commands": [
+    {
+      "command": "python -m pytest -rxX",
+      "cwd": "/tmp/te-eval/runs/T4-C-r2",
+      "result": "1 collected, 1 xfailed, exit 0 (expected-fail because the bug is unfixed)"
+    },
+    {
+      "command": "python -m pytest --runxfail",
+      "cwd": "/tmp/te-eval/runs/T4-C-r2",
+      "result": "1 failed with `assert 2 == 1`, exit 1. This shows the reproducer is red for the reported reason. Not run against a fixed version."
+    }
+  ],
+  "defects_in_code_under_test": "src/bizdays.py line 14 loops with `while day <= end`, so the end date is counted. The docstring and SPEC say [start, end), so it should be `day < end`. The reporter's expected value of 1 is correct per the SPEC; the code returns 2."
+}

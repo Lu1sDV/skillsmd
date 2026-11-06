@@ -1,0 +1,62 @@
+{
+  "key": "urlsanitizer-sanitize",
+  "holds": false,
+  "vuln_class": "credential-disclosure",
+  "severity_guess": "low",
+  "confidence": 0.86,
+  "guard": "Gitlab::UrlSanitizer.sanitize (lib/gitlab/url_sanitizer.rb:35)",
+  "head_commit": "0ca7654f296e89c570e36eb6ff388cd5f472abc4",
+  "claimed_technique": "USERINFO-charset prefix leak (password contains char outside USERINFO allowlist)",
+  "verdict_summary": "The regex prefix-leak mechanism is REAL on the sanitize-only code path, but every sink the researcher named is defeated downstream. The headline sink (remote_mirror.last_error) and the EE import path BOTH pass user:/password: so sanitize_unencoded does a literal Regexp.escape(password) replace and fully masks the secret. The only un-defeated path is CE-only (free self-managed) project_import_state#190 via ImportFailureService, and even there the leak is a partial prefix of a non-token password, shown only to a project admin viewing the project's own credential.",
+  "mechanism_confirmed": {
+    "evidence": "Gitlab::UrlSanitizer.sanitize(\"fatal: https://user:p\\\\a55w0rd@gitlab.com/x.git\") => \"fatal: https://user:p\\\\*****@gitlab.com/x.git\" — URI_REGEXP matched only 'a55w0rd@gitlab.com'; everything left of the backslash ('user:p\\\\') survives unmasked.",
+    "leak_extent": "Only the credential prefix up to the FIRST char outside USERINFO [\\-_.!~*'()a-zA-Z\\d;:&=+$,]/%hh. With backslash early in password, leak is 'user:p\\\\' (username + 1 char)."
+  },
+  "why_it_does_not_hold": [
+    {
+      "sink": "app/models/remote_mirror.rb:170",
+      "status": "DEFEATED",
+      "reason": "update_error_message passes user: user, password: password. sanitize_unencoded runs first: gsub(/Regexp.escape(user):Regexp.escape(password)@/, '*****:*****@'). Backslash is escaped literally so the real password matches and is fully masked. Verified: output 'https://*****:*****@gitlab.com'."
+    },
+    {
+      "sink": "ee/app/models/ee/project_import_state.rb:246",
+      "status": "DEFEATED",
+      "reason": "EE override of sanitized_failure_message passes user/password (from project.import_data). Same sanitize_unencoded full-mask. Covers gitlab.com and all EE self-managed (the EE module is prepended via ProjectImportState.prepend_mod_with)."
+    },
+    {
+      "sink": "app/models/import/source_user.rb:213",
+      "status": "DEFEATED",
+      "reason": "reassignment_error= chains a SECOND sanitizer: ::Projects::ImportErrorFilter.filter_message after sanitize. ERROR_MESSAGE_FILTER=/[^\\s]*/[^\\s]*(?=(\\s|\\z))/ replaces any non-whitespace token containing '/' with [FILTERED]; every URL token contains '://' so the whole 'https://user:p\\\\*****@host...' becomes [FILTERED]. Verified."
+    },
+    {
+      "sink": "lib/gitlab/legacy_github_import/importer.rb:178+ and app/services/projects/import_service.rb:42",
+      "status": "DEFEATED",
+      "reason": "import_service applies ImportErrorFilter.filter_message to e.message BEFORE it reaches the sanitizer, and renders project.safe_import_url (already masked) not raw creds. Whole URL token -> [FILTERED]."
+    },
+    {
+      "sink": "app/models/jira_import_state.rb:114",
+      "status": "NOT_A_SANITIZER_BYPASS",
+      "reason": "sanitized_message is computed but do_fail stores the RAW error_message; sanitized value is only used inside the rescue logger. The sanitizer is not the guard for the stored/rendered value here."
+    },
+    {
+      "sink": "lib/observability/o11y_provisioning_client.rb:69 / app/models/bulk_imports/configuration.rb:29",
+      "status": "WEAK/NOT_CONFIRMED",
+      "reason": "o11y logs the message (not a member-facing render); bulk_imports configuration.safe_url sanitizes the configured URL but bulk-import creds are tokens (within USERINFO charset) so fully masked."
+    }
+  ],
+  "only_residual_path": {
+    "sink": "app/models/project_import_state.rb:190 (CE) via lib/gitlab/import/import_failure_service.rb:72 -> mark_as_failed(exception.message)",
+    "status": "SURVIVES but marginal",
+    "preconditions": [
+      "CE / free self-managed only (EE override at ee/project_import_state.rb:246 passes creds and fully masks)",
+      "exception.message must contain the cleartext credential (raw git/import error embeds full clone URL incl userinfo)",
+      "import/mirror password must contain a char OUTSIDE USERINFO allowlist (backslash, space, <, >, ^, |, {, }, double-quote, [, ], #, ?, /, @, or bare %). Standard PATs/tokens (ghp_, glpat-, oauth2, alphanumerics, _ - ! $ , ;) are ENTIRELY within USERINFO and get FULLY masked -> no leak. Verified.",
+      "no ImportErrorFilter in this specific chain (project_import_state#mark_as_failed lines 127-133 call sanitized_failure_message only)"
+    ],
+    "leaked_value": "Partial prefix only: username + the password bytes up to the first non-USERINFO char (often just the username and 0-1 password chars).",
+    "audience": "Rendered via project import_error which is gated by :read_import_error / user_can_admin_project (api/entities/project.rb:110-111, _importing_alert.haml, detailed_import_status_type). Viewer is a project admin/maintainer viewing the project's OWN stored credential -> minimal real-world impact."
+  },
+  "reachability_unprivileged": false,
+  "browser_execution": "N/A (not XSS; last_error is html_escaped at views/projects/mirrors/_remote_mirror.html.haml:15 via html_escape).",
+  "reason": "The USERINFO prefix-leak is real on the bare sanitize() path, but the named primary sinks (remote_mirror.last_error, EE import_state) pass user:/password: so sanitize_unencoded literal-escapes and fully masks the secret; the importer paths chain ImportErrorFilter which collapses the whole URL token to [FILTERED]. The single un-defeated path is CE-only, requires a non-token password with a special char, leaks only a short prefix, and surfaces only to a project admin viewing the project's own credential. The claimed broad credential disclosure does not reach a meaningful sink end-to-end."
+}

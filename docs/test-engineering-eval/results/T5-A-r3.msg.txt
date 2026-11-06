@@ -1,0 +1,21 @@
+{
+  "files_added": [
+    "tests/test_slugify_extra.py"
+  ],
+  "commands": [
+    {
+      "cmd": "python -m pytest -q",
+      "result": "45 passed, 5 xfailed"
+    },
+    {
+      "cmd": "python -m pytest -q --runxfail",
+      "result": "5 failed, 45 passed (the 5 failures are exactly the spec-violation cases)"
+    }
+  ],
+  "notes": "Skill is a strategy-deliverable workflow; I used only its boundary/edge-case and naming guidance. Spec-violation tests are xfail(strict=True) so the default run is green and flips loudly when fixed. Did not modify src/ or tests/test_slugify.py.",
+  "suspected_defects": [
+    "Non-ASCII chars with no ASCII decomposition are deleted by encode('ascii','ignore') instead of acting as separators, merging words: slugify('foo—bar')=='foobar', slugify('foo–bar')=='foobar', slugify('a€b')=='ab', slugify('a日b')=='ab', slugify('a🙂b')=='ab'. SPEC says each run of non-alphanumeric chars becomes one hyphen, so expected 'foo-bar'/'a-b'.",
+    "Letters like ß and Ø are silently dropped (Straße->'strae', Øl->'l'); spec only mentions accent stripping, so possibly intended; untested.",
+    "Negative max_length is unvalidated: slugify('abc',-1)=='ab' (slice drops from the end); spec silent; untested."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "files_added": [
+    "tests/test_bizdays_end_exclusive.py"
+  ],
+  "pytest_runs": [
+    {
+      "command": "pytest (cwd /tmp/te-eval/runs/T4-D-r1, uses pytest.ini)",
+      "result": "2 failed in 0.02s; both tests got 2 where 1 was expected. The reported Fri 2024-03-01 to Mon 2024-03-04 case reproduces the bug. The failure is intended, since the bug is unfixed."
+    }
+  ],
+  "suspected_defects": [
+    "src/bizdays.py line 14: `while day <= end:` includes the end date. The spec says the range is half-open [start, end), so it should be `while day < end:`. Any range ending on a weekday is overcounted by one."
+  ],
+  "notes": "Nothing under src/ and no existing test file was modified."
+}

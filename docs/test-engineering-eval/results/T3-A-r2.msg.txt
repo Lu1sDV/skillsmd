@@ -1,0 +1,15 @@
+{
+  "files_added": [
+    "tests/test_update_address.py"
+  ],
+  "pytest_commands": [
+    {
+      "command": "python -m pytest -q (cwd /tmp/te-eval/runs/T3-A-r2, project pytest.ini)",
+      "result": "4 failed, 16 passed; failures are all sqlite variants: test_update_address_returns_updated_order, test_update_address_keeps_items_in_order, test_update_address_same_address_is_noop, test_update_address_twice_last_wins (items come back [] instead of ['a','b','c'])"
+    }
+  ],
+  "suspected_defects": [
+    "SqliteOrderStore.save_order uses INSERT OR REPLACE INTO orders. SQLite implements REPLACE as delete+insert, and with PRAGMA foreign_keys=ON and items.order_id ON DELETE CASCADE, the delete wipes the order's items. So update_address on a SQLite store loses all items, violating the SPEC (items unchanged). InMemoryOrderStore is unaffected. Likely fix: UPDATE orders SET address=?, status=? WHERE id=? (also matches the docstring 'existing order')."
+  ],
+  "notes": "SKILL.md is test-strategy guidance and defers test writing to a TDD skill; only its naming convention was applied. No existing files modified. Failing tests are left in place because they assert the SPEC."
+}

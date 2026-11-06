@@ -1,0 +1,12 @@
+{
+  "files_added": [
+    "tests/test_bizdays_end_exclusive.py"
+  ],
+  "pytest_commands": [
+    {
+      "command": "python -m pytest (cwd /tmp/te-eval/runs/T4-B-r2, uses project pytest.ini)",
+      "result": "2 failed, 2 passed. Failing: test_business_days_between_friday_to_monday_counts_only_friday (assert 2 == 1, reproduces the bug report) and test_business_days_between_end_on_weekday_is_excluded (assert 3 == 2). Passing: start-included and end-equals-start boundary tests."
+    }
+  ],
+  "suspected_defect": "src/bizdays.py business_days_between loop uses `while day <= end:`; it should be `while day < end:`. As written, end is counted when it falls on a weekday, contradicting the spec's half-open range [start, end), so results are one too high in those cases."
+}

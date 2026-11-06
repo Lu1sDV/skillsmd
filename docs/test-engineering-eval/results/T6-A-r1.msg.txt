@@ -1,0 +1,14 @@
+{
+  "files_added": [
+    "tests/check_shipping_spec.py"
+  ],
+  "pytest_commands": [
+    {
+      "command": "python -m pytest (cwd /tmp/te-eval/runs/T6-A-r1, uses project pytest.ini)",
+      "result": "6 failed, 12 passed; existing check_basic.py test passes"
+    }
+  ],
+  "failures": "Standard and express prices at 1001, 1501 and 2001 g: expected 700/1050, 900/1350, 1100/1650; actual 500/750, 700/1050, 900/1350.",
+  "suspected_defect": "src/shipping.py line 14: `steps = extra // 500` rounds down, but SPEC.md says each additional 500 g 'or part of it' adds 200 cents, so it needs to round up (e.g. `-(-extra // 500)`). Parcels slightly over each 500 g step are under-charged by 200 cents (300 with express). Not fixed, since src/ must not be modified.",
+  "notes": "Test file must be named check_*.py per pytest.ini python_files. No express round-down test was written because every base price is a multiple of 100, so 1.5x is always whole."
+}

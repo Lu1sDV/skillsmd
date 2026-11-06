@@ -1,0 +1,23 @@
+{
+  "files_added": [
+    "tests/test_tags.py (18 tests: 6 for unique_tags, 12 for top_tags)"
+  ],
+  "pytest_runs": [
+    {
+      "command": "cd /tmp/te-eval/runs/T2-B-r1 && python -m pytest -q",
+      "config": "project pytest.ini",
+      "result": "18 passed in 0.01s"
+    },
+    {
+      "command": "throwaway python -c probe of edge cases (not a test): n=-1, tags None, tags as string",
+      "result": "see defects below"
+    }
+  ],
+  "skill_note": "SKILL.md is a strategy guide that defers test writing to a TDD skill; I only applied its naming convention and boundary/error-path advice, and skipped its approval-gated strategy workflow because the task asked directly for tests.",
+  "possible_defects": [
+    "top_tags with negative n: ranked[:n] silently drops trailing elements, e.g. top_tags([{'tags':['a','b','c']}], -1) returns ['a','b'] instead of [] or raising.",
+    "Items with \"tags\": None raise TypeError ('NoneType' object is not iterable) in both unique_tags and top_tags; item.get('tags', []) only handles a missing key. A defect only if 'optional tags' is meant to include None.",
+    "tags given as a string (e.g. 'ab') is treated as the tags ['a','b']; SPEC says tags is a list, so this is only missing validation."
+  ],
+  "spec_conformance": "Behaviour specified in SPEC.md is implemented correctly; the above are unspecified edge cases and are not asserted in the tests."
+}

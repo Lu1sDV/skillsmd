@@ -1,0 +1,18 @@
+{
+  "files_added": [
+    "tests/test_order_total_cents.py (25 cases: tier boundaries 9/10/11 and 49/50/51, half-up rounding, int return type, ValueError for quantity<1 and unit_price_cents<0)"
+  ],
+  "pytest_runs": [
+    {
+      "command": "python -m pytest -q (cwd /tmp/te-eval/runs/T1-D-r2, uses project pytest.ini)",
+      "result": "10 failed, 15 passed; all 10 failures are caused by the defect below"
+    },
+    {
+      "command": "same suite against a temporary copy of pricing.py in a temp dir with the thresholds changed to >= (src/ not modified), run via pytest -o pythonpath=<tmpdir> tests",
+      "result": "25 passed, so the tests are consistent with SPEC.md"
+    }
+  ],
+  "defects": [
+    "src/pricing.py uses `quantity > 50` and `quantity > 10`; SPEC.md says '10 or more' and '50 or more', so these should be `>=`. Orders of exactly 10 units get no discount (order_total_cents(10,100) returns 1000, expected 950) and exactly 50 units get 5% instead of 10% (order_total_cents(50,100) returns 4750, expected 4500). The half-up rounding formula itself is correct."
+  ]
+}
