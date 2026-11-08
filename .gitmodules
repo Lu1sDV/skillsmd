@@ -9,3 +9,6 @@
 	path = anthropics-skills
 	url = https://github.com/anthropics/skills.git
 	branch = main
+[submodule "vibe-skills"]
+	path = vibe-skills
+	url = https://github.com/foryourhealth111-pixel/Vibe-Skills.git

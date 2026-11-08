@@ -44,6 +44,8 @@ separately, and avoid loading two SDD skills with conflicting governance.
 | Process depth | Consequences and uncertainty, not file counts or time estimates |
 | Approval | Actual scope and explicit holds; existing project gates still govern |
 | Existing specs | Amend the contract of record, not a duplicate SPEC.md |
+| Layout | Where no spec system exists: `spec.md` (approved contract) + `implementation.md` (plan, guidelines, checklist); optional |
+| Closeout | After implementation, every checklist item checked verbatim against the delivered state, none omitted |
 | Delegation | Shared decisions, ownership, durable handoff and integrated evidence |
 | Verification | Stage-relative, delivered-state evidence with actual check status |
 | Persistence | Existing project model; otherwise a dated change record |
@@ -58,6 +60,7 @@ investigation need not repair the defect, but must not report defective software
 - [Contracts and examples](references/contracts-and-examples.md): optional compact form,
   login trust decision, concurrent refunds, retention amendment, a new project, a vague
   performance request, cutover versus mixed versions and a design choice.
+- [Default layout](references/default-layout.md): two-file layout, checklist and closeout table.
 - [Lifecycle and handoffs](references/lifecycle-and-handoffs.md): approvals, conflicts,
   existing spec tools, amendments, resumption and maintained versus historical records.
 - [Verification](references/verification.md): oracle provenance, stage distinctions,

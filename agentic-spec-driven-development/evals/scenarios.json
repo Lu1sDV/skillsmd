@@ -69,6 +69,17 @@
         "Acceptance observes durable effects after retries and lost responses rather than only matching response bodies.",
         "No mandatory multi-agent runtime or generic coordination framework is introduced."
       ]
+    },
+    {
+      "id": "checklist-closeout",
+      "prompt": "The implementation.md checklist has items C1-C4 and the code is written. Close out the work: confirm every checklist item was followed as written. Staging is unavailable and C4 requires a staging check.",
+      "fixture_description": "A delivered change where C1 and C2 are satisfied, C3 was implemented with different wording than the item (a reworded constraint), and C4 needs staging. One checklist item is easy to overlook because it sits in a different section.",
+      "expected_outcomes": [
+        "The closeout lists C1-C4 exactly once each, quoting each item unchanged.",
+        "C3 is reported as not done or deviating, not silently reworded to match the code.",
+        "C4 is reported as unverified/blocked, not passed from local evidence.",
+        "Evidence is observed on the delivered state; no item is omitted or merged."
+      ]
     }
   ]
 }

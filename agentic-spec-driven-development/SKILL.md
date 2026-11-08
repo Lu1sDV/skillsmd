@@ -1,11 +1,12 @@
 ---
 name: agentic-spec-driven-development
 description: >
-  Use when applying spec-driven development to agentic coding: reviewing, auditing or
-  validating project specs, requirements or contracts for ambiguity, gaps, conflicts or
-  readiness (alone or with user-requested subagent reviewers); clarifying ambiguous
-  behavior or acceptance criteria, reconciling conflicting specs and code, changing
-  an approved contract, or handing implementation to another agent or session.
+  Use when applying spec-driven development to agentic coding: drafting, reviewing,
+  auditing or validating project specs, requirements or contracts for ambiguity, gaps,
+  conflicts or readiness (alone or with user-requested subagent reviewers); clarifying
+  ambiguous behavior or acceptance criteria, reconciling conflicting specs and code,
+  changing an approved contract, handing implementation to or resuming it from another
+  agent or session, or closing out a plan checklist against the delivered state.
   Establishes a compact authorized behavior contract and evidence-based completion.
   Not for fully specified cosmetic edits, disposable sketches without real effects,
   or test-strategy advice alone.
@@ -25,10 +26,12 @@ contract, approved examples, or a short delta—not necessarily a new document.
 | Material behavior or authority is undecided | Investigate facts; ask the owner about the specific decision |
 | Reviewing specs, alone or with requested reviewers | Same scope and §2 questions for every reviewer; check under/over-specification, conflicts, open decisions. Converge by repository evidence, not vote; unresolved disagreement becomes an owner decision. Reviewers do not amend without authorization |
 | Existing spec system or contract | Amend where the obligation lives; do not create a competing SPEC.md |
+| No existing spec system and a durable record is warranted | Default two-file layout: `spec.md` (WHAT) + `implementation.md` (HOW, checklist) |
 | Code and contract disagree | Distinguish observed behavior from intended behavior; assess affected consumers |
 | Work crosses agents, sessions or people | Persist scope, decisions, holds, state and next check |
 | Contract changes during implementation | Update affected work and evidence; preserve authorization boundaries |
 | Checks pass | Verify they address the agreed outcome before claiming completion |
+| Implementation done and `implementation.md` (or the project's plan) has a checklist | Checklist closeout (§5): every item checked verbatim against the delivered state, none omitted |
 | About to commit to a consequential choice | Run the §3 readiness check for that action |
 
 ## Critical boundaries
@@ -89,6 +92,8 @@ Leave private names, classes and storage layout to the plan unless they are them
 an authorized constraint. Use concrete examples to expose ambiguous rules, not as a
 substitute for a general rule where the distinction matters.
 
+Rows from “Data and state” down apply only to a capability that touches them; omit the rest.
+
 | Trigger | Examine—not a list of mandatory fields |
 |---|---|
 | Untrusted input or permissions | Authorized actors, invalid-input outcome, protected effects |
@@ -102,7 +107,7 @@ substitute for a general rule where the distinction matters.
 | Data and state | Records each ID creates, reads, changes or deletes; ownership, lifecycle, migration and rollback |
 | Interfaces and contracts | API, CLI, file format or event each ID exposes or consumes; versioning; what other IDs may rely on |
 | Environment and configuration | Settings, secrets, services, OS and versions each ID needs; defaults and where they come from |
-| Dependencies and external software | Libraries, runtimes, tools and services each ID needs: name, version, licence, source, install/upgrade path and state (absent / partial / present); adding one needs authorization |
+| Dependencies and external software | Libraries, runtimes, tools and services each ID needs: name, version, licence, source, install/upgrade path and state (as for prerequisites); adding one needs authorization |
 | Failure, recovery and error handling | What fails, what the user sees, what state remains, retry/resume/undo, error classes and messages |
 | Observability | Logs, metrics or audit trail that show an ID worked or failed, and who reads them; no secrets in them |
 | Hardening and security | What must never happen; hazards and pitfalls; applicable standards and good practices (validation, least privilege, safe defaults). Adopted from the owner or standards, not invented |
@@ -131,7 +136,7 @@ effect—judge readiness for that action, not the whole request. Reading, invest
 and an authorized, labelled proposal are not commitments.
 
 - Trace what it writes, deletes, exposes or copies, and who relies on the result, as far
-  as the promised outcome extends. Let the trace select the trigger rows in §2.
+  as the promised outcome extends. Let the trace, and any row the request names, select the trigger rows in §2.
 - Challenge consequential interpretations, including purpose when it could change the
   result, with a concrete case the readings decide differently or a relevant obligation.
   Reuse evidence that already settles it; do not invent a rival reading to fill a form.
@@ -173,7 +178,8 @@ current approach where still credible—against accepted outcomes and constraint
 the decisive reason, material downside and evidence limits in the existing plan or
 decision record; scale depth to consequences and reversal cost, reuse settled decisions,
 and resolve missing policy or authority under §3. Recommending, adopting and implementing
-are different actions; reversibility sizes the analysis, never the authority.
+are different actions; reversibility sizes the analysis, never the authority. Worked case:
+Example 7 in [Contracts and examples](references/contracts-and-examples.md).
 
 Delegate only separable work with explicit shared decisions. Assign one integration
 owner per shared contract; different file paths do not establish independence.
@@ -225,6 +231,15 @@ record state/environment for expensive or manual evidence. Review materially cha
 reasoning and consumers rather than loop until a reviewer finds nothing new.
 An unavailable required environment remains **unverified**, not replaced by a mock pass.
 
+**Checklist closeout.** When `implementation.md` (or the project's plan) holds a
+checklist, finish with one pass over the delivered state, item by item, read from the
+checklist itself rather than from memory of what was done. For each item, quote it
+unchanged, record the evidence observed and a status: done, not done, not run or blocked.
+Never reword, merge or drop an item to fit what was built; a changed item follows the §4
+amendment note. The closeout lists every item exactly once; an item without evidence is
+unverified, not assumed done. One pass, plus rechecking items whose evidence changed
+afterwards. A self-run closeout is self-authored (§6).
+
 ### 6. Deliver and preserve the right record
 
 Report what changed, evidence for material obligations, and remaining defects, decisions
@@ -257,9 +272,10 @@ not “done.” By contrast, “fix `retrive` to `retrieve` in help” needs no 
 
 | Read when | Reference |
 |---|---|
-| Drafting ambiguous requirements, quality targets, risky effects, or examples | [Contracts and examples](references/contracts-and-examples.md) |
-| Reconciling existing specs, amendments, approvals or handoffs | [Lifecycle and handoffs](references/lifecycle-and-handoffs.md) |
-| Choosing evidence, handling defective oracles or reviewing completion | [Verification](references/verification.md) |
+| Drafting ambiguous requirements, quality targets, risky effects, or examples; Examples 4 (new project), 6 (cutover vs mixed versions), 7 (design choice) | [Contracts and examples](references/contracts-and-examples.md) |
+| Creating `spec.md` / `implementation.md` where no spec system exists, or filling the §5 closeout table | [Default layout](references/default-layout.md) |
+| Reconciling existing specs, amendments, approvals, handoffs, resuming, concurrent work, or Spec Kit / OpenSpec / Kiro projects | [Lifecycle and handoffs](references/lifecycle-and-handoffs.md) |
+| Choosing evidence, handling defective oracles, green suites, or reviewing completion or a handoff | [Verification](references/verification.md) |
 | Maintaining or evaluating this skill—not ordinary task execution | [Sources and decisions](references/sources-and-decisions.md) |
 
 Optional installed skills can help with system-wide test strategy or language-specific

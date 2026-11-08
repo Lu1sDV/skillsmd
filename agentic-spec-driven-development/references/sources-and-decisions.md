@@ -76,6 +76,9 @@ bundle is the “best” or improves delivered software.
 | Reject duration, file-count or description-phrase triggers | Consequence and coupling, not minutes or file count, determine process depth. No new-project, architecture or duration phrase has selection evidence |
 | Teach through examples 4–7; require inline only what is a rule | Greenfield, vague quality, version-skew and design-comparison cases were the missing teaching; any required rule stays in SKILL.md |
 | Do not change repository licensing | Original prose and public citations; no imported licensed template needing a new repo-wide decision |
+| Adopt an optional two-file default layout (`spec.md` + `implementation.md`) | Applies only where no spec system exists, so "no mandatory file layout" holds. Split by authority: owner approves WHAT; agent maintains HOW. Matches Spec Kit/Kiro separation; benefit unmeasured |
+| Adopt a checklist closeout (§5) | User-requested: after implementation, each checklist item is verified verbatim, none omitted. One pass over delivered state, one row per item; self-authored unless an independent reviewer was requested. Not a loop-until-clean rule and not a gate agent |
+| Name drafting, resuming and checklist closeout in the description; mark §2 rows from “Data and state” down as conditional | Routing probe (simulated, one model, 2 samples) lost these body capabilities to plain-verb rival skills; the always-matching rows contradicted “smallest form”. Effect of the new wording unmeasured. Not a duration/file-count/new-project phrase |
 
 ## Evaluate claims separately
 
