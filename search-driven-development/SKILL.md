@@ -1,5 +1,5 @@
 ---
-name: search-first-development
+name: search-driven-development
 description: >
   Use when existing code or engineering knowledge could change what gets built:
   understanding, debugging, extending, or migrating an existing system; finding reusable

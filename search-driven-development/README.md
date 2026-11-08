@@ -1,4 +1,4 @@
-# search-first-development
+# search-driven-development
 
 A coding-agent skill for deciding when and how to learn from existing code before building.
 
@@ -14,7 +14,7 @@ See [SKILL.md](SKILL.md).
 ## Installation
 
 ```bash
-npx skills add Lu1sDV/skillsmd search-first-development
+npx skills add Lu1sDV/skillsmd search-driven-development
 # or manually
-cp -r search-first-development ~/.claude/skills/
+cp -r search-driven-development ~/.claude/skills/
 ```
