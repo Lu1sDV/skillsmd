@@ -127,6 +127,14 @@ Evidence levels: search result/README = candidate exists; source + tests + regre
 
 For a substantial subsystem, keep a short prior-art ledger in the project's existing doc conventions: *inspected (source@revision) · borrowed · rejected and why · residual risk*. For small fixes, a line of notes suffices.
 
+### Reuse tracking (token-lean)
+
+Log every reuse the moment it happens, one line: `what · source (path@rev | pkg@ver) · level (config/API/module/mechanism/design) · why`. Rejected candidates: `✗ name · reason`. Paths and refs only — no snippets, no re-reading to summarize.
+
+- **Specs/docs exist** (spec.md, ADRs, CHANGELOG, `docs/`): append the lines to the existing doc that tracks changes, in its conventions.
+- **None:** append to a temp file (`${TMPDIR:-/tmp}/sdd-reuse-<task>.md`) across the whole agentic task, subagents included; never create repo files for it. Delete after the final report.
+- **End of task:** report every reuse from the log (dedupe, one line each, then rejected). Nothing reused → say so in one line.
+
 ### Evaluation criteria
 
 Prioritize criteria according to the problem, constraints, and risk profile; not every criterion has equal importance in every task.
