@@ -19,6 +19,7 @@ snapshots retain their original layout and attribution.
 | [ai-design-skills](ai-design-skills/) | [elayadesign/ai-design-skills](https://github.com/elayadesign/ai-design-skills) | [MIT](ai-design-skills/LICENSE), copyright retained by upstream |
 | [obsidian-skills](obsidian-skills/) — includes [defuddle](obsidian-skills/skills/defuddle/SKILL.md) | [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills) | [MIT](obsidian-skills/LICENSE), copyright retained by upstream |
 | [anthropics-skills](anthropics-skills/) — includes [webapp-testing](anthropics-skills/skills/webapp-testing/SKILL.md) | [anthropics/skills](https://github.com/anthropics/skills) | Per skill; [webapp-testing](anthropics-skills/skills/webapp-testing/LICENSE.txt) is Apache-2.0, copyright retained by upstream |
+| [vibe-skills](vibe-skills/) — includes [citation-management](vibe-skills/bundled/skills/citation-management/SKILL.md) | [foryourhealth111-pixel/Vibe-Skills](https://github.com/foryourhealth111-pixel/Vibe-Skills) | [Apache-2.0](vibe-skills/LICENSE) repository license, copyright retained by upstream; `citation-management` declares MIT in its frontmatter |
 
 These collections are maintained upstream, not authored by this repository. Git always records each submodule at a specific commit; `obsidian-skills` and `anthropics-skills` also track upstream `main` for explicit updates.
 
@@ -41,6 +42,8 @@ Commit the updated submodule pointer to share that version. Ordinary submodule i
 | Skill | Description |
 |-------|-------------|
 | [agentic-spec-driven-development](agentic-spec-driven-development/) | Risk-proportionate agentic SDD — scoped authority, behavioral contracts, brownfield amendments, handoffs and evidence-based completion |
+| [architect-greenfield-codebase](architect-greenfield-codebase/) | Greenfield architecture scaled by consequence tiers T0-T2 — reversibility classes, ADR-lite, gates, stack/data/policy decisions, validation, repo foundations and a walking skeleton |
+| [citation-management](vibe-skills/bundled/skills/citation-management/) | Upstream skill via `vibe-skills` — resolve DOI/PMID/arXiv IDs to BibTeX, validate metadata, deduplicate references, and format citations for scientific writing |
 | [codeql](codeql/) | CodeQL security analysis — interprocedural taint tracking, database build, data extensions, SARIF processing across 10 languages |
 | [cook](cook/) | Composable agent orchestration — review loops, repeat passes, parallel races, vs comparisons, ralph task-list progression |
 | [ctfd](ctfd/) | Develop, debug, deploy CTFd platform — plugins, themes, Docker stack, testing |
@@ -87,6 +90,7 @@ Commit the updated submodule pointer to share that version. Ordinary submodule i
 | [react-testing-a11y](react-testing-a11y/) | React Testing Library, user-event, MSW, `act`, Playwright handoff, plus accessible semantics, ARIA, focus management, axe limits and WCAG 2.2 |
 | [reuse-first-swe-research](reuse-first-swe-research/) | Reuse-first software engineering research — adaptive new/existing-system investigation, verified implementation discovery, weighted FI/CR/LR/CoR evaluation, and minimum-reinvention solution planning |
 | [search-driven-development](search-driven-development/) | Search before building — challenge the premise, search by problem structure across domains, reuse at the smallest complete mechanism, test transfer with decision-changing evidence, and pick the option with the least long-term ownership |
+| [search-driven-development-augment](search-driven-development-augment/) | Write repository index entries for search-driven-development — fixed five-paragraph format, source-verified facts, routing tests, and a pipeline for building a whole index |
 | [security-fix-oracle](security-fix-oracle/) | Mine a repo's git history into a labeled, leakage-free security-fix dataset — Haiku/Sonnet triage, merge-safe diff fetch, gold/weak tiers, CVSS 3.1 (LLM vector + procedural score), SZZ vulnerability-introducer attribution + skill-gap; runnable harness included |
 | [scrape-code-vulnerability-corpus](scrape-code-vulnerability-corpus/) | Collect a deduplicated, non-academic vulnerability-writeup corpus for one named language (no language, no scan) — SQLite store with constraint-enforced provenance, CWE claimed vs mapped, link and pinned-source recovery, blind review sampling, SSRF-guarded fetch, tool-less reader against prompt injection, leak-free training export; runnable `corpus.py` with offline `selfcheck` included |
 | [skill-smell-checker](skill-smell-checker/) | Audit all 26 SKILL.md smells from arXiv:2607.01456 — 5 deterministic harness checks plus 21 evidence-backed semantic checks |
