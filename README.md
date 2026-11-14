@@ -20,8 +20,9 @@ snapshots retain their original layout and attribution.
 | [obsidian-skills](obsidian-skills/) — includes [defuddle](obsidian-skills/skills/defuddle/SKILL.md) | [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills) | [MIT](obsidian-skills/LICENSE), copyright retained by upstream |
 | [anthropics-skills](anthropics-skills/) — includes [webapp-testing](anthropics-skills/skills/webapp-testing/SKILL.md) | [anthropics/skills](https://github.com/anthropics/skills) | Per skill; [webapp-testing](anthropics-skills/skills/webapp-testing/LICENSE.txt) is Apache-2.0, copyright retained by upstream |
 | [vibe-skills](vibe-skills/) — includes [citation-management](vibe-skills/bundled/skills/citation-management/SKILL.md) | [foryourhealth111-pixel/Vibe-Skills](https://github.com/foryourhealth111-pixel/Vibe-Skills) | [Apache-2.0](vibe-skills/LICENSE) repository license, copyright retained by upstream; `citation-management` declares MIT in its frontmatter |
+| [modern-web-guidance](modern-web-guidance/) — includes [modern-web-guidance](modern-web-guidance/skills/modern-web-guidance/SKILL.md) | [GoogleChrome/modern-web-guidance](https://github.com/GoogleChrome/modern-web-guidance) | [Apache-2.0](modern-web-guidance/LICENSE), copyright retained by upstream |
 
-These collections are maintained upstream, not authored by this repository. Git always records each submodule at a specific commit; `obsidian-skills` and `anthropics-skills` also track upstream `main` for explicit updates.
+These collections are maintained upstream, not authored by this repository. Git always records each submodule at a specific commit; `obsidian-skills`, `anthropics-skills`, and `modern-web-guidance` also track upstream `main` for explicit updates.
 
 After cloning this repository, fetch its contents with:
 
@@ -29,10 +30,10 @@ After cloning this repository, fetch its contents with:
 git submodule update --init --recursive
 ```
 
-To update `obsidian-skills` or `anthropics-skills` to the latest upstream `main`:
+To update `obsidian-skills`, `anthropics-skills`, or `modern-web-guidance` to the latest upstream `main`:
 
 ```bash
-git submodule update --init --remote obsidian-skills anthropics-skills
+git submodule update --init --remote obsidian-skills anthropics-skills modern-web-guidance
 ```
 
 Commit the updated submodule pointer to share that version. Ordinary submodule initialization uses the recorded commit, not the latest branch tip.
@@ -66,8 +67,10 @@ Commit the updated submodule pointer to share that version. Ordinary submodule i
 | [joern](joern/) | Joern CPG analysis — interprocedural dataflow, blast-radius mapping, sink hunting, callgraph queries across 14+ languages |
 | [hermes-mr-watch](hermes-mr-watch/) | Safely configure remote Hermes GitLab MR lifecycle watchers over SSH |
 | [hermes-self-evolution](hermes-self-evolution/) | Hermes Agent-style self-evolving loop — memory, session recall, skill creation, and skill patching |
+| [huggingface](huggingface/) | Hugging Face Hub — condensed `hf` CLI reference and benchmark-driven best-model finder with device-fit filtering (derived from huggingface/skills, Apache-2.0) |
 | [jev](jev/) | Write Jev judgment-model programs — noul/choice/score selection, instruction and criteria craft, minimal state, full HTTP API (POST /v1/systemone), confidence-gated composition, symptom-to-fix revision table |
 | [llm-domain-speedrun](llm-domain-speedrun/) | LLM-assisted domain speedrun learning — structured protocol for rapidly bridging knowledge gaps |
+| [modern-web-guidance](modern-web-guidance/skills/modern-web-guidance/) | Upstream skill via `modern-web-guidance` — search and retrieve Baseline-aware modern web best practices (HTML/CSS/client-side JS) before implementing UI features |
 | [oauth-audit](oauth-audit/) | OAuth 2.0/OIDC security audits — RFC 9700 checklist, PKCE/state/redirect handling, JWT claim review |
 | [obsidian-spaced-repetition](obsidian-spaced-repetition/) | Manage Obsidian Spaced Repetition through the official CLI — flashcards, decks, review commands, and scheduling-safe note edits |
 | [ofelia](ofelia/) | Docker job scheduler — cron for containers via INI files or Docker labels |
