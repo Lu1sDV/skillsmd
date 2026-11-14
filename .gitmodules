@@ -12,3 +12,7 @@
 [submodule "vibe-skills"]
 	path = vibe-skills
 	url = https://github.com/foryourhealth111-pixel/Vibe-Skills.git
+[submodule "modern-web-guidance"]
+	path = modern-web-guidance
+	url = https://github.com/GoogleChrome/modern-web-guidance.git
+	branch = main
