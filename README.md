@@ -70,6 +70,17 @@ Commit the updated submodule pointer to share that version. Ordinary submodule i
 | [huggingface](huggingface/) | Hugging Face Hub — condensed `hf` CLI reference and benchmark-driven best-model finder with device-fit filtering (derived from huggingface/skills, Apache-2.0) |
 | [jev](jev/) | Write Jev judgment-model programs — noul/choice/score selection, instruction and criteria craft, minimal state, full HTTP API (POST /v1/systemone), confidence-gated composition, symptom-to-fix revision table |
 | [llm-domain-speedrun](llm-domain-speedrun/) | LLM-assisted domain speedrun learning — structured protocol for rapidly bridging knowledge gaps |
+| [ml-agents-rag-structured](ml-agents-rag-structured/) | ML agents, RAG & structured prompting — LangChain, LlamaIndex, CrewAI, AutoGPT, A-Evolve, Chroma, FAISS, Pinecone, Qdrant, Sentence Transformers, DSPy, Instructor, Outlines, Guidance (MIT, AI-Research-SKILLs) |
+| [ml-architecture-data](ml-architecture-data/) | Model architectures, tokenization & data curation — LitGPT, TorchTitan, NanoGPT, Mamba, RWKV, HF Tokenizers, SentencePiece, NeMo Curator, Ray Data (MIT, AI-Research-SKILLs) |
+| [ml-distributed-infra](ml-distributed-infra/) | Distributed training & GPU cloud infra — Accelerate, DeepSpeed, FSDP2, Megatron-Core, Lightning, Ray Train, Modal, SkyPilot, Lambda Labs (MIT, AI-Research-SKILLs) |
+| [ml-emerging-techniques](ml-emerging-techniques/) | Emerging scaling & compression — MoE training, long-context RoPE/Ring Attention, knowledge distillation, model merging, pruning, speculative decoding (MIT, AI-Research-SKILLs) |
+| [ml-eval-safety](ml-eval-safety/) | LLM evaluation & safety alignment — lm-eval, bigcode-eval, NeMo Evaluator, Prompt Guard, LlamaGuard, NeMo Guardrails, Constitutional AI (MIT, AI-Research-SKILLs) |
+| [ml-finetuning-rl](ml-finetuning-rl/) | LLM fine-tuning & RL post-training — PEFT, Unsloth, Axolotl, LLaMA-Factory, TRL, GRPO, SimPO, OpenRLHF, veRL, Miles, Slime, TorchForge (MIT, AI-Research-SKILLs) |
+| [ml-inference-optimization](ml-inference-optimization/) | Quantization, kernels & inference serving — AWQ, GPTQ, GGUF, bitsandbytes, HQQ, FlashAttention, vLLM, SGLang, TensorRT-LLM, llama.cpp (MIT, AI-Research-SKILLs) |
+| [ml-interpretability](ml-interpretability/) | Mechanistic interpretability — TransformerLens, nnsight, pyvene activation patching/hooks, SAELens sparse autoencoders (MIT, AI-Research-SKILLs) |
+| [ml-mlops-observability](ml-mlops-observability/) | ML experiment tracking & LLM observability — W&B, MLflow, TensorBoard, SwanLab, LangSmith, Arize Phoenix (MIT, AI-Research-SKILLs) |
+| [ml-multimodal-robotics](ml-multimodal-robotics/) | Multimodal vision/audio & robotics VLA — CLIP, BLIP-2, LLaVA, SAM, Stable Diffusion, Whisper, AudioCraft, OpenPI, OpenVLA-OFT, Cosmos Policy (MIT, AI-Research-SKILLs) |
+| [ml-research-workflow](ml-research-workflow/) | ML research lifecycle — autoresearch loop, ideation, ML/systems paper writing, academic plotting, conference talks, agent-native research artifacts (MIT, AI-Research-SKILLs) |
 | [modern-web-guidance](modern-web-guidance/skills/modern-web-guidance/) | Upstream skill via `modern-web-guidance` — search and retrieve Baseline-aware modern web best practices (HTML/CSS/client-side JS) before implementing UI features |
 | [oauth-audit](oauth-audit/) | OAuth 2.0/OIDC security audits — RFC 9700 checklist, PKCE/state/redirect handling, JWT claim review |
 | [obsidian-spaced-repetition](obsidian-spaced-repetition/) | Manage Obsidian Spaced Repetition through the official CLI — flashcards, decks, review commands, and scheduling-safe note edits |
@@ -624,6 +635,24 @@ These checks establish package integrity and representative skill behavior. They
 ### TypeScript attribution
 
 Adapted from [StructWeave-Algorithms](https://github.com/nirajkvinit/StructWeave-Algorithms), copyright (c) 2024-2025 StructWeave Contributors, distributed under the MIT License. The upstream license is included in each skill folder so attribution travels with an independently copied skill.
+
+## ML Research skill suite
+
+Eleven domain-clustered skills consolidate all 98 upstream skills from [Orchestra-Research/AI-Research-SKILLs](https://github.com/Orchestra-Research/AI-Research-SKILLs), pinned at commit `773a52944ba4747a18bd4ae9ade53fff041adcbc` (MIT License). Each bundle installs independently with a concise orchestrator `SKILL.md`, focused `references/*.md`, installation/usage `README.md`, and `LICENSE.upstream`.
+
+| Cluster | Skill | Upstream categories consolidated |
+|---|---|---|
+| Architecture, tokenization & data | [ml-architecture-data](ml-architecture-data/) | `01-model-architecture` (5), `02-tokenization` (2), `05-data-processing` (2) |
+| Fine-tuning & post-training RL | [ml-finetuning-rl](ml-finetuning-rl/) | `03-fine-tuning` (4), `06-post-training` (8) |
+| Distributed training & cloud infra | [ml-distributed-infra](ml-distributed-infra/) | `08-distributed-training` (6), `09-infrastructure` (3) |
+| Quantization, kernels & serving | [ml-inference-optimization](ml-inference-optimization/) | `10-optimization` (7), `12-inference-serving` (4) |
+| Evaluation & safety guardrails | [ml-eval-safety](ml-eval-safety/) | `11-evaluation` (3), `07-safety-alignment` (4) |
+| Mechanistic interpretability | [ml-interpretability](ml-interpretability/) | `04-mechanistic-interpretability` (4) |
+| MLOps & LLM observability | [ml-mlops-observability](ml-mlops-observability/) | `13-mlops` (4), `17-observability` (2) |
+| Agents, RAG & structured prompting | [ml-agents-rag-structured](ml-agents-rag-structured/) | `14-agents` (5), `15-rag` (5), `16-prompt-engineering` (4) |
+| Multimodal & robotics VLA | [ml-multimodal-robotics](ml-multimodal-robotics/) | `18-multimodal` (10) |
+| Scaling, merging & compression | [ml-emerging-techniques](ml-emerging-techniques/) | `19-emerging-techniques` (6) |
+| Research ideation, writing & artifacts | [ml-research-workflow](ml-research-workflow/) | `0-autoresearch-skill` (1), `20-ml-paper-writing` (4), `21-research-ideation` (2), `22-agent-native-research-artifact` (3) |
 
 ## Commands
 
