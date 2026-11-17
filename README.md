@@ -50,6 +50,13 @@ Commit the updated submodule pointer to share that version. Ordinary submodule i
 | [ctfd](ctfd/) | Develop, debug, deploy CTFd platform — plugins, themes, Docker stack, testing |
 | [debate](debate/) | Bounded multi-agent debate for contested 2–4 position decisions — pinned debaters, steelman swap, judge synthesis |
 | [defuddle](obsidian-skills/skills/defuddle/) | Upstream skill via `obsidian-skills` — extract clean Markdown from HTML pages with Defuddle CLI |
+| [ds-data-compute](ds-data-compute/) | Data engineering, out-of-core scaling & GPU/cloud compute — Polars, Dask, Vaex, Zarr, CUDA/RAPIDS (`optimize-for-gpu`), Modal, host resource planning, DataLad (MIT, scientific-agent-skills) |
+| [ds-eda-explainability](ds-eda-explainability/) | EDA, dimensionality reduction, explainability & graphs — exploratory profiling/audits, UMAP, SHAP, NetworkX (MIT, scientific-agent-skills) |
+| [ds-ml-discovery](ds-ml-discovery/) | ML discovery, iteration & hypothesis search — Hugging Science, Arbor hypothesis tree refinement, HypoGeniC (MIT, scientific-agent-skills) |
+| [ds-ml-frameworks](ds-ml-frameworks/) | Core ML & deep learning frameworks — scikit-learn, PyTorch Lightning, Hugging Face Transformers, PyTorch Geometric (MIT, scientific-agent-skills) |
+| [ds-specialized-ml](ds-specialized-ml/) | Specialized ML paradigms — aeon, TimesFM, scikit-survival, Stable Baselines3, PufferLib, pymoo, PennyLane (MIT, scientific-agent-skills) |
+| [ds-stats-bayesian](ds-stats-bayesian/) | Statistical modeling, Bayesian inference & experimentation — statsmodels, PyMC, statistical analysis, power analysis, experimental design (MIT, scientific-agent-skills) |
+| [ds-visualization](ds-visualization/) | Data & scientific visualization — Matplotlib, Seaborn, publication-ready multi-panel figures and audits (MIT, scientific-agent-skills) |
 | [webapp-testing](anthropics-skills/skills/webapp-testing/) | Upstream skill via `anthropics-skills` — drive and inspect a running local web app with Playwright (screenshots, DOM, console logs); pairs with test-engineering |
 | [evaluating-enhancing-vulnerability-reasoning](evaluating-enhancing-vulnerability-reasoning/) | DAG-structured vulnerability reasoning (DAGVul) — causal fact/inference/sink graphs instead of linear chain-of-thought |
 | [feature-engineering](feature-engineering/) | Time series feature engineering — calendar features, cyclical encoding, rolling stats, differencing |
@@ -653,6 +660,20 @@ Eleven domain-clustered skills consolidate all 98 upstream skills from [Orchestr
 | Multimodal & robotics VLA | [ml-multimodal-robotics](ml-multimodal-robotics/) | `18-multimodal` (10) |
 | Scaling, merging & compression | [ml-emerging-techniques](ml-emerging-techniques/) | `19-emerging-techniques` (6) |
 | Research ideation, writing & artifacts | [ml-research-workflow](ml-research-workflow/) | `0-autoresearch-skill` (1), `20-ml-paper-writing` (4), `21-research-ideation` (2), `22-agent-native-research-artifact` (3) |
+
+## Data Science & ML skill suite
+
+Seven domain-clustered skills consolidate 34 DS and ML upstream skills from [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills), pinned at commit `ec59a29a03d5c40f73ab40878df04860bc00e876` (MIT License). Each bundle installs independently with a concise orchestrator `SKILL.md`, focused `references/*.md`, installation/usage `README.md`, and `LICENSE.upstream`.
+
+| Cluster | Skill | Upstream skills consolidated |
+|---|---|---|
+| Core ML & deep learning frameworks | [ds-ml-frameworks](ds-ml-frameworks/) | `scikit-learn`, `pytorch-lightning`, `transformers`, `torch-geometric` (4) |
+| Specialized ML paradigms | [ds-specialized-ml](ds-specialized-ml/) | `aeon`, `timesfm-forecasting`, `scikit-survival`, `stable-baselines3`, `pufferlib`, `pymoo`, `pennylane` (7) |
+| Statistical modeling & Bayesian inference | [ds-stats-bayesian](ds-stats-bayesian/) | `statsmodels`, `pymc`, `statistical-analysis`, `statistical-power`, `experimental-design` (5) |
+| EDA, dim reduction & explainability | [ds-eda-explainability](ds-eda-explainability/) | `exploratory-data-analysis`, `umap-learn`, `shap`, `networkx` (4) |
+| Data engineering, scaling & GPU/cloud compute | [ds-data-compute](ds-data-compute/) | `polars`, `dask`, `vaex`, `zarr-python`, `optimize-for-gpu`, `modal`, `get-available-resources`, `datalad` (8) |
+| Data & scientific visualization | [ds-visualization](ds-visualization/) | `matplotlib`, `seaborn`, `scientific-visualization` (3) |
+| ML discovery & hypothesis search | [ds-ml-discovery](ds-ml-discovery/) | `hugging-science`, `arbor`, `hypogenic` (3) |
 
 ## Commands
 
