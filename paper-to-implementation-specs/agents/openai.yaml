@@ -1,0 +1,14 @@
+interface:
+  display_name: Paper to Implementation Specs
+  short_description: Turn research methods into reviewed implementation plans
+  default_prompt: Use $paper-to-implementation-specs to turn this paper into a source-grounded
+    implementation specification and reviewed execution checklist for my application.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true
